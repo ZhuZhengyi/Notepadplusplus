@@ -35,12 +35,16 @@
 static bool isInList(generic_string word, const vector<generic_string> & wordArray)
 {
 	for (size_t i = 0, len = wordArray.size(); i < len; ++i)
+	{
 		if (wordArray[i] == word)
 			return true;
+	}
+
 	return false;
 };
 
-bool AutoCompletion::showAutoComplete() {
+bool AutoCompletion::showAutoComplete()
+{
 	if (!_funcCompletionActive)
 		return false;
 
@@ -59,13 +63,16 @@ bool AutoCompletion::showAutoComplete() {
 	while (offset>=0)
 	{
 		c = lineBuffer[offset];
-		if (isalnum(c) || c == '_') {
+		if (isalnum(c) || c == '_')
+		{
 			++nrChars;
-		} else {
+		}
+		else
+		{
 			break;
 		}
+
 		--offset;
-		
 	}
 	startWordPos = curPos-nrChars;
 
@@ -154,7 +161,9 @@ static bool getPathsForPathCompletion(generic_string input, generic_string &rawP
 		locale loc;
 		size_t last_occurrence = rawPath.rfind(L"\\");
 		if(last_occurrence == std::string::npos) // No match.
+		{
 			return false;
+		}
 		else
 		{
 			rawPath_out = rawPath;
@@ -223,7 +232,9 @@ void AutoCompletion::showPathCompletion()
 			::FindClose(hFind);
 		}
 		else
+		{
 			return;
+		}
 	}
 
 	// Show autocompletion box.
@@ -276,12 +287,16 @@ bool AutoCompletion::showWordComplete(bool autoInsert)
 			_pEditView->getGenericText(w, bufSize, wordStart, wordEnd);
 
 			if (lstrcmp(w, beginChars) != 0)
+			{
 				if (!isInList(w, wordArray))
 					wordArray.push_back(w);
+			}
 		}
 		posFind = _pEditView->searchInTarget(expr.c_str(), expr.length(), wordEnd, docLength);
 	}
-	if (wordArray.size() == 0) return false;
+
+	if (wordArray.size() == 0)
+		return false;
 
 	if (wordArray.size() == 1 && autoInsert) 
 	{
@@ -309,14 +324,17 @@ bool AutoCompletion::showWordComplete(bool autoInsert)
 	return true;
 }
 
-bool AutoCompletion::showFunctionComplete() {
+bool AutoCompletion::showFunctionComplete()
+{
 	if (!_funcCompletionActive)
 		return false;
 
-	if (_funcCalltip.updateCalltip(0, true)) {
+	if (_funcCalltip.updateCalltip(0, true))
+	{
 		_activeCompletion = CompletionFunc;
 		return true;
 	}
+
 	return false;
 }
 
@@ -425,10 +443,12 @@ void AutoCompletion::update(int character)
 	if (!_funcCompletionActive && nppGUI._autocStatus == nppGUI.autoc_func)
 		return;
 
-	if (nppGUI._funcParams || _funcCalltip.isVisible()) {
-		if (_funcCalltip.updateCalltip(character)) {	//calltip visible because triggered by autocomplete, set mode
+	if (nppGUI._funcParams || _funcCalltip.isVisible())
+	{
+		if (_funcCalltip.updateCalltip(character)) // calltip visible because triggered by autocomplete, set mode
+		{
 			_activeCompletion = CompletionFunc;
-			return;	//only return in case of success, else autocomplete
+			return; // Only return in case of success, else autocomplete
 		}
 	}
 
@@ -470,18 +490,23 @@ void AutoCompletion::update(int character)
 	}
 }
 
-void AutoCompletion::callTipClick(int direction) {
+void AutoCompletion::callTipClick(int direction)
+{
 	if (!_funcCompletionActive)
 		return;
 
-	if (direction == 1) {
+	if (direction == 1)
+	{
 		_funcCalltip.showPrevOverload();
-	} else if (direction == 2) {
+	}
+	else if (direction == 2)
+	{
 		_funcCalltip.showNextOverload();
 	}
 }
 
-bool AutoCompletion::setLanguage(LangType language) {
+bool AutoCompletion::setLanguage(LangType language)
+{
 	if (_curLang == language)
 		return true;
 	_curLang = language;
@@ -500,7 +525,8 @@ bool AutoCompletion::setLanguage(LangType language) {
 	_funcCompletionActive = _pXmlFile->LoadFile();
 
 	TiXmlNode * pAutoNode = NULL;
-	if (_funcCompletionActive) {
+	if (_funcCompletionActive)
+	{
 		_funcCompletionActive = false;	//safety
 		TiXmlNode * pNode = _pXmlFile->FirstChild(TEXT("NotepadPlus"));
 		if (!pNode)
@@ -518,7 +544,7 @@ bool AutoCompletion::setLanguage(LangType language) {
 	}
 
 	if(_funcCompletionActive) //try setting up environment
-    {
+	{
 		//setup defaults
 		_ignoreCase = true;
 		_funcCalltip._start = '(';
@@ -526,14 +552,15 @@ bool AutoCompletion::setLanguage(LangType language) {
 		_funcCalltip._param = ',';
 		_funcCalltip._terminal = ';';
 		_funcCalltip._ignoreCase = true;
-        _funcCalltip._additionalWordChar = TEXT("");
+		_funcCalltip._additionalWordChar = TEXT("");
 
 		TiXmlElement * pElem = pAutoNode->FirstChildElement(TEXT("Environment"));
 		if (pElem) 
-        {	
+		{
 			const TCHAR * val = 0;
 			val = pElem->Attribute(TEXT("ignoreCase"));
-			if (val && !lstrcmp(val, TEXT("no"))) {
+			if (val && !lstrcmp(val, TEXT("no")))
+			{
 				_ignoreCase = false;
 				_funcCalltip._ignoreCase = false;
 			}
@@ -551,24 +578,25 @@ bool AutoCompletion::setLanguage(LangType language) {
 				_funcCalltip._terminal = val[0];
 			val = pElem->Attribute(TEXT("additionalWordChar"));
 			if (val && val[0])
-                _funcCalltip._additionalWordChar = val;
+				_funcCalltip._additionalWordChar = val;
 		}
 	}
 
-	if (_funcCompletionActive) {
+	if (_funcCompletionActive)
 		_funcCalltip.setLanguageXML(_pXmlKeyword);
-	} else {
+	else
 		_funcCalltip.setLanguageXML(NULL);
-	}
 
 	_keyWords = TEXT("");
-	if (_funcCompletionActive) {	//Cache the keywords
-		//Iterate through all keywords
+	if (_funcCompletionActive) // Cache the keywords
+	{
+		// Iterate through all keywords
 		TiXmlElement *funcNode = _pXmlKeyword;
 		const TCHAR * name = NULL;
-		for (; funcNode; funcNode = funcNode->NextSiblingElement(TEXT("KeyWord")) ) {
+		for (; funcNode; funcNode = funcNode->NextSiblingElement(TEXT("KeyWord")) )
+		{
 			name = funcNode->Attribute(TEXT("name"));
-			if (!name)		//malformed node
+			if (!name) // Malformed node
 				continue;
 			_keyWords.append(name);
 			_keyWords.append(TEXT("\n"));
@@ -577,7 +605,8 @@ bool AutoCompletion::setLanguage(LangType language) {
 	return _funcCompletionActive;
 }
 
-const TCHAR * AutoCompletion::getApiFileName() {
+const TCHAR * AutoCompletion::getApiFileName()
+{
 	if (_curLang == L_USER)
 	{
 		Buffer * currentBuf = _pEditView->getCurrentBuffer();
@@ -591,8 +620,7 @@ const TCHAR * AutoCompletion::getApiFileName() {
 		return NppParameters::getInstance()->getELCFromIndex(_curLang - L_EXTERNAL)._name;
 
 	if (_curLang > L_EXTERNAL)
-        _curLang = L_TEXT;
+		_curLang = L_TEXT;
 
 	return ScintillaEditView::langNames[_curLang].lexerName;
-
 }
