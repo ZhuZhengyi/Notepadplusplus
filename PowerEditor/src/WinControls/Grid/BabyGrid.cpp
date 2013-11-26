@@ -1975,6 +1975,7 @@ LRESULT CALLBACK GridProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			{
 				BGHS[SelfIndex].textcolor = RGB(0, 0, 0);
 			}
+			break;
 
 		case WM_MOUSEMOVE:
 			int x = LOWORD(lParam);
