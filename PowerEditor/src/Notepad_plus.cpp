@@ -1216,7 +1216,9 @@ void Notepad_plus::wsTabConvert(spaceTab whichWay)
 							}
 						}
 						else
+						{
 							++counter;
+						}
 					}
 					
 					if (nextChar == true)
@@ -1306,7 +1308,10 @@ void Notepad_plus::doTrim(trimOp whichPart)
 		env._str2Search = TEXT("[	 ]+$");
 	}
 	else
+	{
 		return;
+	}
+
 	env._str4Replace = TEXT("");
 	env._searchType = FindRegex;
 	_findReplaceDlg.processAll(ProcessReplaceAll, &env, true);
@@ -2546,12 +2551,14 @@ enum LangType Notepad_plus::menuID2LangType(int cmdID)
 
 		case IDM_LANG_USER :
 			return L_USER;
-		default: {
+		default:
+		{
 			if (cmdID >= IDM_LANG_USER && cmdID <= IDM_LANG_USER_LIMIT)
 			{
 				return L_USER;
 			}
-			break; }
+			break;
+		}
 	}
 	return L_EXTERNAL;
 }
@@ -2676,8 +2683,11 @@ size_t Notepad_plus::getSelectedCharNumber(UniMode u)
 
 			result -= line2;
 		}
-		if (u != uni8Bit && u != uni7Bit) result *= 2;
+
+		if (u != uni8Bit && u != uni7Bit)
+			result *= 2;
 	}
+
 	return result;
 }
 
@@ -2770,6 +2780,7 @@ int Notepad_plus::getSelectedAreas()
 	int numSel = _pEditView->execute(SCI_GETSELECTIONS);
 	if (numSel == 1) // either 0 or 1 selection
 		return (_pEditView->execute(SCI_GETSELECTIONNSTART, 0) == _pEditView->execute(SCI_GETSELECTIONNEND, 0)) ? 0 : 1;
+
 	return (_pEditView->execute(SCI_SELECTIONISRECTANGLE)) ? 1 : numSel;
 }
 
@@ -2777,8 +2788,12 @@ size_t Notepad_plus::getSelectedBytes()
 {
 	int numSel = _pEditView->execute(SCI_GETSELECTIONS);
 	size_t result = 0;
+
 	for (int i = 0; i < numSel; ++i)
+	{
 		result += (_pEditView->execute(SCI_GETSELECTIONNEND, i) - _pEditView->execute(SCI_GETSELECTIONNSTART, i));
+	}
+
 	return result;
 }
 
@@ -2887,8 +2902,8 @@ void Notepad_plus::showView(int whichOne)
 
 	if (_mainWindowStatus & WindowUserActive)
 	{
-		 _pMainSplitter->setWin0(&_subSplitter);
-		 _pMainWindow = _pMainSplitter;
+		_pMainSplitter->setWin0(&_subSplitter);
+		_pMainWindow = _pMainSplitter;
 	}
 	else
 	{
@@ -2969,9 +2984,9 @@ bool Notepad_plus::loadStyles()
 bool Notepad_plus::canHideView(int whichOne)
 {
 	if (!viewVisible(whichOne))
-		return false;	//cannot hide hidden view
+		return false;   // Cannot hide hidden view
 	if (!bothActive())
-		return false;	//cannot hide only window
+		return false;   // Cannot hide only window
 
 	DocTabView * tabToCheck = (whichOne == MAIN_VIEW)?&_mainDocTab:&_subDocTab;
 	Buffer * buf = MainFileManager->getBufferByID(tabToCheck->getBufferByIndex(0));
@@ -3022,14 +3037,14 @@ bool Notepad_plus::removeBufferFromView(BufferID id, int whichOne)
 	DocTabView * tabToClose = (whichOne == MAIN_VIEW)?&_mainDocTab:&_subDocTab;
 	ScintillaEditView * viewToClose = (whichOne == MAIN_VIEW)?&_mainEditView:&_subEditView;
 
-	//check if buffer exists
+	// Check if buffer exists
 	int index = tabToClose->getIndexByBuffer(id);
-	if (index == -1)	//doesn't exist, done
+	if (index == -1)    // Doesn't exist, done
 		return false;
 
 	Buffer * buf = MainFileManager->getBufferByID(id);
 
-	//Cannot close doc if last and clean
+	// Cannot close doc if last and clean
 	if (tabToClose->nbItem() == 1)
 	{
 		if (!buf->isDirty() && buf->isUntitled())
@@ -3039,26 +3054,26 @@ bool Notepad_plus::removeBufferFromView(BufferID id, int whichOne)
 	}
 
 	int active = tabToClose->getCurrentTabIndex();
-	if (active == index) //need an alternative (close real doc, put empty one back)
+	if (active == index) // Need an alternative (close real doc, put empty one back)
 	{
 		if (tabToClose->nbItem() == 1) 	//need alternative doc, add new one. Use special logic to prevent flicker of adding new tab then closing other
 		{
 			BufferID newID = MainFileManager->newEmptyDocument();
 			MainFileManager->addBufferReference(newID, viewToClose);
-			tabToClose->setBuffer(0, newID);	//can safely use id 0, last (only) tab open
-			activateBuffer(newID, whichOne);	//activate. DocTab already activated but not a problem
+			tabToClose->setBuffer(0, newID);    // Can safely use id 0, last (only) tab open
+			activateBuffer(newID, whichOne);    // Activate. DocTab already activated but not a problem
 		}
 		else
 		{
 			int toActivate = 0;
-			//activate next doc, otherwise prev if not possible
+			// Activate next doc, otherwise prev if not possible
 			if (active == tabToClose->nbItem() - 1) //prev
 			{
 				toActivate = active - 1;
 			}
 			else
 			{
-				toActivate = active;	//activate the 'active' index. Since we remove the tab first, the indices shift (on the right side)
+				toActivate = active;    // Activate the 'active' index. Since we remove the tab first, the indices shift (on the right side)
 			}
 			tabToClose->deletItemAt((size_t)index);	//delete first
 			activateBuffer(tabToClose->getBufferByIndex(toActivate), whichOne);	//then activate. The prevent jumpy tab behaviour
@@ -3075,12 +3090,14 @@ bool Notepad_plus::removeBufferFromView(BufferID id, int whichOne)
 
 int Notepad_plus::switchEditViewTo(int gid)
 {
-	if (currentView() == gid) {	//make sure focus is ok, then leave
-		_pEditView->getFocus();	//set the focus
+	if (currentView() == gid)   // Make sure focus is ok, then leave
+	{
+		_pEditView->getFocus(); // Set the focus
 		return gid;
 	}
+
 	if (!viewVisible(gid))
-		return currentView();	//cannot activate invisible view
+		return currentView();   // Cannot activate invisible view
 
 	int oldView = currentView();
 	int newView = otherView();
@@ -3253,7 +3270,7 @@ void Notepad_plus::docGotoAnotherEditView(FileTransferMode mode)
 
 bool Notepad_plus::activateBuffer(BufferID id, int whichOne)
 {
-	//scnN.nmhdr.code = NPPN_DOCSWITCHINGOFF;		//superseeded by NPPN_BUFFERACTIVATED
+	//scnN.nmhdr.code = NPPN_DOCSWITCHINGOFF;		// superseded by NPPN_BUFFERACTIVATED
 	Buffer * pBuf = MainFileManager->getBufferByID(id);
 	bool reload = pBuf->getNeedReload();
 	if (reload)
@@ -3283,7 +3300,7 @@ bool Notepad_plus::activateBuffer(BufferID id, int whichOne)
 
 	notifyBufferActivated(id, whichOne);
 
-	//scnN.nmhdr.code = NPPN_DOCSWITCHINGIN;		//superseeded by NPPN_BUFFERACTIVATED
+	//scnN.nmhdr.code = NPPN_DOCSWITCHINGIN;		// superseded by NPPN_BUFFERACTIVATED
 	return true;
 }
 
@@ -3309,12 +3326,12 @@ void Notepad_plus::bookmarkNext(bool forwardScan)
 {
 	int lineno = _pEditView->getCurrentLineNumber();
 	int sci_marker = SCI_MARKERNEXT;
-	int lineStart = lineno + 1;	//Scan starting from next line
-	int lineRetry = 0;				//If not found, try from the beginning
+	int lineStart = lineno + 1; // Scan starting from next line
+	int lineRetry = 0;          // If not found, try from the beginning
 	if (!forwardScan)
 	{
-		lineStart = lineno - 1;		//Scan starting from previous line
-		lineRetry = int(_pEditView->execute(SCI_GETLINECOUNT));	//If not found, try from the end
+		lineStart = lineno - 1; // Scan starting from previous line
+		lineRetry = int(_pEditView->execute(SCI_GETLINECOUNT)); // If not found, try from the end
 		sci_marker = SCI_MARKERPREVIOUS;
 	}
 	int nextLine = int(_pEditView->execute(sci_marker, lineStart, 1 << MARK_BOOKMARK));
