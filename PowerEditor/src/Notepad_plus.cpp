@@ -3482,10 +3482,10 @@ bool Notepad_plus::doBlockComment(comment_mode currCommentMode)
 		commentEnd = buf->getCommentEnd();
 	}
 
-	if ((!commentLineSymbol) || (!commentLineSymbol[0]) || (commentLineSymbol == NULL)) 
+	if ((commentLineSymbol == NULL) || (!commentLineSymbol[0])) 
 	{
 	//--FLS: BlockToStreamComment: If there is no block-comment symbol, try the stream comment:
-		if (!(!commentStart || !commentStart[0] || commentStart == NULL || !commentEnd || !commentEnd[0] || commentEnd == NULL)) 
+		if ((commentStart != NULL && commentStart[0]) || (commentEnd != NULL && commentEnd[0])) 
 		{
 			if ((currCommentMode == cm_comment)) 
 			{
@@ -3646,8 +3646,8 @@ bool Notepad_plus::doStreamComment()
 	// if ((!commentEnd) || (!commentEnd[0]))
 	// 		return false;
 	//--FLS: BlockToStreamComment: If there is no stream-comment symbol, try the block comment:
-	if ((!commentStart) || (!commentStart[0]) || (commentStart == NULL) || (!commentEnd) || (!commentEnd[0]) || (commentEnd == NULL)) {
-		if (!(!commentLineSymbol || !commentLineSymbol[0] || commentLineSymbol == NULL)) 
+	if ((commentStart == NULL) || (!commentStart[0]) || (commentEnd == NULL) || (!commentEnd[0])) {
+		if (commentLineSymbol != NULL && commentLineSymbol[0]) 
 			return doBlockComment(cm_comment);
 		else
 			return false;
