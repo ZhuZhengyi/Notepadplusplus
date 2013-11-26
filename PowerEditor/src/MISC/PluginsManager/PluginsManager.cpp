@@ -188,7 +188,7 @@ int PluginsManager::loadPlugin(const TCHAR *pluginFilePath, vector<generic_strin
 		_pluginInfos.push_back(pi);
 		return (_pluginInfos.size() - 1);
 	}
-	catch(std::exception e)
+	catch(std::exception& e)
 	{
 		::MessageBoxA(NULL, e.what(), "Exception", MB_OK);
 		return -1;
@@ -325,10 +325,10 @@ void PluginsManager::addInMenuFromPMIndex(int i)
 			itemName += TEXT("\t");
 			itemName += pcs.toString();
 		}
-		else
-		{	//no ShortcutKey is provided, add an disabled shortcut (so it can still be mapped, Paramaters class can still index any changes and the toolbar wont funk out
+		else //no ShortcutKey is provided, add an disabled shortcut (so it can still be mapped, Paramaters class can still index any changes and the toolbar wont funk out
+		{
 			Shortcut sc(itemName.c_str(), false, false, false, 0x00);
-			PluginCmdShortcut pcs(sc, cmdID, _pluginInfos[i]->_moduleName.c_str(), j);	//VK_NULL and everything disabled, the menu name is left alone
+			PluginCmdShortcut pcs(sc, cmdID, _pluginInfos[i]->_moduleName.c_str(), j); //VK_NULL and everything disabled, the menu name is left alone
 			pluginCmdSCList.push_back(pcs);
 		}
 		::InsertMenu(_pluginInfos[i]->_pluginMenu, j, MF_BYPOSITION, cmdID, itemName.c_str());
@@ -376,7 +376,7 @@ void PluginsManager::runPluginCommand(size_t i)
 			{
 				_pluginsCommands[i]._pFunc();
 			}
-			catch(std::exception e)
+			catch(std::exception& e)
 			{
 				::MessageBoxA(NULL, e.what(), "PluginsManager::runPluginCommand Exception", MB_OK);
 			}
@@ -403,7 +403,7 @@ void PluginsManager::runPluginCommand(const TCHAR *pluginName, int commandID)
 				{
 					_pluginsCommands[i]._pFunc();
 				}
-				catch(std::exception e)
+				catch(std::exception& e)
 				{
 					::MessageBoxA(NULL, e.what(), "Exception", MB_OK);
 				}
@@ -431,7 +431,7 @@ void PluginsManager::notify(SCNotification *notification)
 			{
 				_pluginInfos[i]->_pBeNotified(&scNotif);
 			}
-			catch(std::exception e)
+			catch(std::exception& e)
 			{
 				::MessageBoxA(NULL, e.what(), "Exception", MB_OK);
 			}
@@ -456,7 +456,7 @@ void PluginsManager::relayNppMessages(UINT Message, WPARAM wParam, LPARAM lParam
 			{
 				_pluginInfos[i]->_pMessageProc(Message, wParam, lParam);
 			}
-			catch(std::exception e)
+			catch(std::exception& e)
 			{
 				::MessageBoxA(NULL, e.what(), "Exception", MB_OK);
 			}
@@ -486,7 +486,7 @@ bool PluginsManager::relayPluginMessages(UINT Message, WPARAM wParam, LPARAM lPa
 				{
 					_pluginInfos[i]->_pMessageProc(Message, wParam, lParam);
 				}
-				catch(std::exception e)
+				catch(std::exception& e)
 				{
 					::MessageBoxA(NULL, e.what(), "Exception", MB_OK);
 				}
