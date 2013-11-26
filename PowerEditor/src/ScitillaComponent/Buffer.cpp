@@ -424,7 +424,7 @@ void FileManager::init(Notepad_plus * pNotepadPlus, ScintillaEditView * pscratch
 {
 	_pNotepadPlus = pNotepadPlus;
 	_pscratchTilla = pscratchTilla;
-	_pscratchTilla->execute(SCI_SETUNDOCOLLECTION, false);	//dont store any undo information
+	_pscratchTilla->execute(SCI_SETUNDOCOLLECTION, false); //don't store any undo information
 	_scratchDocDefault = (Document)_pscratchTilla->execute(SCI_GETDOCPOINTER);
 	_pscratchTilla->execute(SCI_ADDREFDOCUMENT, 0, _scratchDocDefault);
 }
@@ -480,7 +480,7 @@ void FileManager::closeBuffer(BufferID id, ScintillaEditView * identifier)
 
 	if (!refs) // Buffer can be deallocated
 	{
-		_pscratchTilla->execute(SCI_RELEASEDOCUMENT, 0, buf->_doc);	//release for FileManager, Document is now gone
+		_pscratchTilla->execute(SCI_RELEASEDOCUMENT, 0, buf->_doc); //release for FileManager, Document is now gone
 		_buffers.erase(_buffers.begin() + index);
 		delete buf;
 		_nrBufs--;
@@ -560,7 +560,7 @@ BufferID FileManager::loadFile(const TCHAR * filename, Document doc, int encodin
 	else //failed loading, release document
 	{
 		if (ownDoc)
-			_pscratchTilla->execute(SCI_RELEASEDOCUMENT, 0, doc);	//Failure, so release document
+			_pscratchTilla->execute(SCI_RELEASEDOCUMENT, 0, doc); //Failure, so release document
 		return BUFFER_INVALID;
 	}
 }
@@ -684,10 +684,10 @@ bool FileManager::saveBuffer(BufferID id, const TCHAR * filename, bool isCopy, g
 	FILE *fp = UnicodeConvertor.fopen(fullpath, TEXT("wb"));
 	if (fp)
 	{
-		_pscratchTilla->execute(SCI_SETDOCPOINTER, 0, buffer->_doc);	//generate new document
+		_pscratchTilla->execute(SCI_SETDOCPOINTER, 0, buffer->_doc); //generate new document
 
 		int lengthDoc = _pscratchTilla->getCurrentDocLen();
-		char* buf = (char*)_pscratchTilla->execute(SCI_GETCHARACTERPOINTER);	//to get characters directly from Scintilla buffer
+		char* buf = (char*)_pscratchTilla->execute(SCI_GETCHARACTERPOINTER); //to get characters directly from Scintilla buffer
 		size_t items_written = 0;
 		if (encoding == -1) //no special encoding; can be handled directly by Utf8_16_Write
 		{
@@ -859,7 +859,8 @@ bool FileManager::loadFileData(Document doc, const TCHAR * filename, Utf8_16_Rea
 		do
 		{
 			lenFile = fread(data+incompleteMultibyteChar, 1, blockSize-incompleteMultibyteChar, fp) + incompleteMultibyteChar;
-			if (lenFile <= 0) break;
+			if (lenFile <= 0)
+				break;
 
 			// check if file contain any BOM
 			if (isFirstTime)
@@ -896,7 +897,9 @@ bool FileManager::loadFileData(Document doc, const TCHAR * filename, Utf8_16_Rea
 				lenConvert = UnicodeConvertor->convert(data, lenFile);
 				_pscratchTilla->execute(SCI_APPENDTEXT, lenConvert, (LPARAM)(UnicodeConvertor->getNewBuf()));
 			}
-			if(_pscratchTilla->execute(SCI_GETSTATUS) != SC_STATUS_OK) throw;
+
+			if(_pscratchTilla->execute(SCI_GETSTATUS) != SC_STATUS_OK)
+				throw;
 
 			if(incompleteMultibyteChar != 0)
 			{
@@ -932,11 +935,13 @@ BufferID FileManager::getBufferFromName(const TCHAR * name)
 	TCHAR fullpath[MAX_PATH];
 	::GetFullPathName(name, MAX_PATH, fullpath, NULL);
 	::GetLongPathName(fullpath, fullpath, MAX_PATH);
+
 	for(size_t i = 0; i < _buffers.size(); i++)
 	{
 		if (!lstrcmpi(name, _buffers.at(i)->getFullPathName()))
 			return _buffers.at(i)->getID();
 	}
+
 	return BUFFER_INVALID;
 }
 
