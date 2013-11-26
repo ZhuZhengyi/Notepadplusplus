@@ -5,9 +5,8 @@
 #include <algorithm>
 
 #ifndef RGBA
-#define RGBA(r,g,b,a)        ((COLORREF)( (((DWORD)(BYTE)(a))<<24) |     RGB(r,g,b) ))
+#define RGBA(r,g,b,a)  ((COLORREF)( (((DWORD)(BYTE)(a))<<24) |     RGB(r,g,b) ))
 #endif
-
 
 
 //---------------------------------------------------------------------------
@@ -59,64 +58,78 @@ void InvalidateIcon(HICON * iconSmall, HICON * iconLarge);
 #endif
 
 
-
 //Types
-struct DOREGSTRUCT {
-	HKEY	hRootKey;
-	LPCTSTR	szSubKey;
-	LPCTSTR	lpszValueName;
-	DWORD	type;
-	LPCTSTR	szData;
+struct DOREGSTRUCT
+{
+	HKEY    hRootKey;
+	LPCTSTR szSubKey;
+	LPCTSTR lpszValueName;
+	DWORD   type;
+	LPCTSTR szData;
 };
 
 //---------------------------------------------------------------------------
 // DllMain
 //---------------------------------------------------------------------------
-int APIENTRY DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/) {
-	if (dwReason == DLL_PROCESS_ATTACH) {
+int APIENTRY DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+{
+	if (dwReason == DLL_PROCESS_ATTACH)
+	{
 		_hModule = hInstance;
 	}
+
 	return TRUE;
 }
 
 //---------------------------------------------------------------------------
 // DllCanUnloadNow
 //---------------------------------------------------------------------------
-STDAPI DllCanUnloadNow(void) {
+STDAPI DllCanUnloadNow(void)
+{
 	return (_cRef == 0 ? S_OK : S_FALSE);
 }
 
 //---------------------------------------------------------------------------
 // DllGetClassObject
 //---------------------------------------------------------------------------
-STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppvOut) {
+STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppvOut)
+{
 	*ppvOut = NULL;
-	if (IsEqualIID(rclsid, CLSID_ShellExtension)) {
+
+	if (IsEqualIID(rclsid, CLSID_ShellExtension))
+	{
 		CShellExtClassFactory *pcf = new CShellExtClassFactory;
 		return pcf->QueryInterface(riid, ppvOut);
 	}
+
 	return CLASS_E_CLASSNOTAVAILABLE;
 }
 
 //---------------------------------------------------------------------------
 // DllRegisterServer
 //---------------------------------------------------------------------------
-STDAPI DllRegisterServer(void) {
+STDAPI DllRegisterServer(void)
+{
 	return (RegisterServer() ? S_OK : E_FAIL);
 }
 
 //---------------------------------------------------------------------------
 // DllUnregisterServer
 //---------------------------------------------------------------------------
-STDAPI DllUnregisterServer(void) {
+STDAPI DllUnregisterServer(void)
+{
 	return (UnregisterServer() ? S_OK : E_FAIL);
 }
 
-STDAPI DllInstall(BOOL bInstall, LPCWSTR /*pszCmdLine*/) {
-	if (bInstall) {
+STDAPI DllInstall(BOOL bInstall, LPCWSTR /*pszCmdLine*/)
+{
+	if (bInstall)
+	{
 		DialogBox(_hModule, MAKEINTRESOURCE(IDD_DIALOG_SETTINGS), NULL, (DLGPROC)&DlgProcSettings);
 		return S_OK;
-	} else {
+	}
+	else
+	{
 		MsgBoxError(TEXT("Uninstalling not supported, use DllUnregisterServer instead"));
 		return E_NOTIMPL;
 	}
@@ -126,7 +139,8 @@ STDAPI DllInstall(BOOL bInstall, LPCWSTR /*pszCmdLine*/) {
 // RegisterServer
 // Create registry entries and setup the shell extension
 //---------------------------------------------------------------------------
-BOOL RegisterServer() {
+BOOL RegisterServer()
+{
 	int      i;
 	HKEY     hKey;
 	LRESULT  lResult;
@@ -141,7 +155,8 @@ BOOL RegisterServer() {
 	pDest[0] = 0;
 	lstrcat(szDefaultPath, szNppName);
 
-	if (!CheckNpp(szDefaultPath)) {
+	if (!CheckNpp(szDefaultPath))
+	{
 		MsgBoxError(TEXT("To register the Notepad++ shell extension properly,\r\nplace NppShell.dll in the same directory as the Notepad++ executable."));
 		//return FALSE;
 	}
@@ -177,30 +192,39 @@ BOOL RegisterServer() {
 	UnregisterServer();
 
 	// Register the CLSID entries
-	for(i = 0; ClsidEntries[i].hRootKey; i++) {
+	for(i = 0; ClsidEntries[i].hRootKey; i++)
+	{
 		wsprintf(szSubKey, ClsidEntries[i].szSubKey, szGUID);
 		lResult = RegCreateKeyEx(ClsidEntries[i].hRootKey, szSubKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKey, &dwDisp);
-		if (NOERROR == lResult) {
+		if (NOERROR == lResult)
+		{
 			TCHAR szData[MAX_PATH];
 			// If necessary, create the value string
-			if (ClsidEntries[i].type == REG_SZ) {
+			if (ClsidEntries[i].type == REG_SZ)
+			{
 				wsprintf(szData, ClsidEntries[i].szData, szModule);
 				lResult = RegSetValueEx(hKey, ClsidEntries[i].lpszValueName, 0, ClsidEntries[i].type, (LPBYTE)szData, (lstrlen(szData) + 1) * sizeof(TCHAR));
-			} else {
+			}
+			else
+			{
 				lResult = RegSetValueEx(hKey, ClsidEntries[i].lpszValueName, 0, ClsidEntries[i].type, (LPBYTE)ClsidEntries[i].szData, sizeof(DWORD));
 			}
 			RegCloseKey(hKey);
 		}
 		else
+		{
 			return FALSE;
+		}
 	}
+
 	return TRUE;
 }
 
 //---------------------------------------------------------------------------
 // UnregisterServer
 //---------------------------------------------------------------------------
-BOOL UnregisterServer() {
+BOOL UnregisterServer()
+{
 	TCHAR szKeyTemp[MAX_PATH + GUID_STRING_SIZE];
 
 	RegDeleteKey(HKEY_CLASSES_ROOT, szShellExtensionKey);
@@ -223,41 +247,42 @@ BOOL UnregisterServer() {
 //---------------------------------------------------------------------------
 // MsgBox
 //---------------------------------------------------------------------------
-void MsgBox(LPCTSTR lpszMsg) {
-	MessageBox(NULL,
-		lpszMsg,
-		TEXT("Notepad++ Extension"),
-		MB_OK);
+void MsgBox(LPCTSTR lpszMsg)
+{
+	MessageBox(NULL, lpszMsg, TEXT("Notepad++ Extension"), MB_OK);
 }
 
 //---------------------------------------------------------------------------
 // MsgBoxError
 //---------------------------------------------------------------------------
-void MsgBoxError(LPCTSTR lpszMsg) {
-	MessageBox(NULL,
-		lpszMsg,
-		TEXT("Notepad++ Extension: Error"),
-		MB_OK | MB_ICONWARNING);
+void MsgBoxError(LPCTSTR lpszMsg)
+{
+	MessageBox(NULL, lpszMsg, TEXT("Notepad++ Extension: Error"), MB_OK | MB_ICONWARNING);
 }
 
 //---------------------------------------------------------------------------
 // CheckNpp
 // Check if the shell handler resides in the same directory as notepad++
 //---------------------------------------------------------------------------
-BOOL CheckNpp(LPCTSTR path) {
+BOOL CheckNpp(LPCTSTR path)
+{
 	WIN32_FIND_DATA fd;
-	HANDLE findHandle;
 
-	findHandle = FindFirstFile(path, &fd);
-	if (findHandle == INVALID_HANDLE_VALUE) {
+	HANDLE findHandle = FindFirstFile(path, &fd);
+	if (findHandle == INVALID_HANDLE_VALUE)
+	{
 		return FALSE;
-	} else {
+	}
+	else
+	{
 		FindClose(findHandle);
 	}
+
 	return TRUE;
 }
 
-INT_PTR CALLBACK DlgProcSettings(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+INT_PTR CALLBACK DlgProcSettings(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
 	static TCHAR customCommand[MAX_PATH] = {0};
 	static TCHAR customText[TITLE_SIZE] = {0};
 	static TCHAR szKeyTemp[MAX_PATH + GUID_STRING_SIZE];
@@ -269,32 +294,39 @@ INT_PTR CALLBACK DlgProcSettings(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 	LONG result;
 	DWORD size = 0;
 
-	switch(uMsg) {
-		case WM_INITDIALOG: {
+	switch(uMsg)
+	{
+		case WM_INITDIALOG:
+		{
 			wsprintf(szKeyTemp, TEXT("CLSID\\%s\\Settings"), szGUID);
 			result = RegOpenKeyEx(HKEY_CLASSES_ROOT, szKeyTemp, 0, KEY_READ, &settingKey);
-			if (result == ERROR_SUCCESS) {
+			if (result == ERROR_SUCCESS)
+			{
 				size = sizeof(TCHAR)*TITLE_SIZE;
 				result = RegQueryValueEx(settingKey, TEXT("Title"), NULL, NULL, (LPBYTE)(customText), &size);
-				if (result != ERROR_SUCCESS) {
+				if (result != ERROR_SUCCESS)
+				{
 					lstrcpyn(customText, szDefaultMenutext, TITLE_SIZE);
 				}
 
 				size = sizeof(TCHAR)*MAX_PATH;
 				result = RegQueryValueEx(settingKey, TEXT("Custom"), NULL, NULL, (LPBYTE)(customCommand), &size);
-				if (result != ERROR_SUCCESS) {
+				if (result != ERROR_SUCCESS)
+				{
 					lstrcpyn(customCommand, TEXT(""), MAX_PATH);
 				}
 
 				size = sizeof(DWORD);
 				result = RegQueryValueEx(settingKey, TEXT("Dynamic"), NULL, NULL, (BYTE*)(&isDynamic), &size);
-				if (result != ERROR_SUCCESS) {
+				if (result != ERROR_SUCCESS)
+				{
 					isDynamic = 1;
 				}
 
 				size = sizeof(DWORD);
 				result = RegQueryValueEx(settingKey, TEXT("ShowIcon"), NULL, NULL, (BYTE*)(&useMenuIcon), &size);
-				if (result != ERROR_SUCCESS) {
+				if (result != ERROR_SUCCESS)
+				{
 					useMenuIcon = 1;
 				}
 
@@ -311,10 +343,15 @@ INT_PTR CALLBACK DlgProcSettings(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 			SetDlgItemText(hwndDlg, IDC_EDIT_COMMAND, customCommand);
 
 			return TRUE;
-			break; }
-		case WM_COMMAND: {
-			switch(LOWORD(wParam)) {
-				case IDOK: {
+			break;
+		}
+
+		case WM_COMMAND:
+		{
+			switch(LOWORD(wParam))
+			{
+				case IDOK:
+				{
 					//Store settings
 					GetDlgItemText(hwndDlg, IDC_EDIT_MENU, customText, TITLE_SIZE);
 					GetDlgItemText(hwndDlg, IDC_EDIT_COMMAND, customCommand, MAX_PATH);
@@ -323,8 +360,8 @@ INT_PTR CALLBACK DlgProcSettings(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 
 					wsprintf(szKeyTemp, TEXT("CLSID\\%s\\Settings"), szGUID);
 					result = RegCreateKeyEx(HKEY_CLASSES_ROOT, szKeyTemp, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &settingKey, NULL);
-					if (result == ERROR_SUCCESS) {
-
+					if (result == ERROR_SUCCESS)
+					{
 						result = RegSetValueEx(settingKey, TEXT("Title"), 0,REG_SZ, (LPBYTE)customText, (textLen+1)*sizeof(TCHAR));
 						result = RegSetValueEx(settingKey, TEXT("Custom"), 0,REG_SZ, (LPBYTE)customCommand, (commandLen+1)*sizeof(TCHAR));
 
@@ -334,30 +371,41 @@ INT_PTR CALLBACK DlgProcSettings(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 						RegCloseKey(settingKey);
 					}
 
-					if (showMenu == 1) {
+					if (showMenu == 1)
+					{
 						result = RegCreateKeyEx(HKEY_CLASSES_ROOT, szShellExtensionKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &settingKey, NULL);
-						if (result == ERROR_SUCCESS) {
+						if (result == ERROR_SUCCESS)
+						{
 							result = RegSetValueEx(settingKey, NULL, 0,REG_SZ, (LPBYTE)szGUID, (lstrlen(szGUID)+1)*sizeof(TCHAR));
 							RegCloseKey(settingKey);
 						}
-					} else if (showMenu == 0) {
+					}
+					else if (showMenu == 0)
+					{
 						RegDeleteKey(HKEY_CLASSES_ROOT, szShellExtensionKey);
 					}
 
-					if (showIcon == 1) {
+					if (showIcon == 1)
+					{
 						result = RegCreateKeyEx(HKEY_CLASSES_ROOT, TEXT("Notepad++_file\\shellex\\IconHandler"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &settingKey, NULL);
-						if (result == ERROR_SUCCESS) {
+						if (result == ERROR_SUCCESS)
+						{
 							result = RegSetValueEx(settingKey, NULL, 0,REG_SZ, (LPBYTE)szGUID, (lstrlen(szGUID)+1)*sizeof(TCHAR));
 							RegCloseKey(settingKey);
 						}
-					} else if (showIcon == 0) {
+					}
+					else if (showIcon == 0)
+					{
 						RegDeleteKey(HKEY_CLASSES_ROOT, TEXT("Notepad++_file\\shellex\\IconHandler"));
 						RegDeleteKey(HKEY_CLASSES_ROOT, TEXT("Notepad++_file\\shellex"));
 					}
 
 					PostMessage(hwndDlg, WM_CLOSE, 0, 0);
-					break; }
-				case IDC_CHECK_USECONTEXT: {
+					break;
+				}
+
+				case IDC_CHECK_USECONTEXT:
+				{
 					int state = Button_GetCheck((HWND)lParam);
 					if (state == BST_CHECKED)
 						showMenu = 1;
@@ -365,8 +413,11 @@ INT_PTR CALLBACK DlgProcSettings(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 						showMenu = 0;
 					else
 						showMenu = 2;
-					break; }
-				case IDC_CHECK_USEICON: {
+					break;
+				}
+
+				case IDC_CHECK_USEICON:
+				{
 					int state = Button_GetCheck((HWND)lParam);
 					if (state == BST_CHECKED)
 						showIcon = 1;
@@ -374,31 +425,41 @@ INT_PTR CALLBACK DlgProcSettings(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 						showIcon = 0;
 					else
 						showIcon = 2;
-					break; }
-				case IDC_CHECK_CONTEXTICON: {
+					break;
+				}
+
+				case IDC_CHECK_CONTEXTICON:
+				{
 					int state = Button_GetCheck((HWND)lParam);
 					if (state == BST_CHECKED)
 						useMenuIcon = 1;
 					else
 						useMenuIcon = 0;
-					break; }
-				case IDC_CHECK_ISDYNAMIC: {
+					break;
+				}
+
+				case IDC_CHECK_ISDYNAMIC:
+				{
 					int state = Button_GetCheck((HWND)lParam);
 					if (state == BST_CHECKED)
 						isDynamic = 1;
 					else
 						isDynamic = 0;
-					break; }
+					break;
+				}
+
 				default:
 					break;
 			}
 
 			return TRUE;
-			break; }
-		case WM_CLOSE: {
+			break;
+		}
+
+		case WM_CLOSE:
 			EndDialog(hwndDlg, 0);
 			return TRUE;
-			break; }
+
 		default:
 			break;
 	}
@@ -413,22 +474,28 @@ CShellExtClassFactory::CShellExtClassFactory() :
 	_cRef++;
 }
 
-CShellExtClassFactory::~CShellExtClassFactory() {
+CShellExtClassFactory::~CShellExtClassFactory()
+{
 	_cRef--;
 }
 
 // *** IUnknown methods ***
-STDMETHODIMP CShellExtClassFactory::QueryInterface(REFIID riid, LPVOID FAR *ppv) {
+STDMETHODIMP CShellExtClassFactory::QueryInterface(REFIID riid, LPVOID FAR *ppv)
+{
 	*ppv = NULL;
-	if (IsEqualIID(riid, IID_IUnknown) || IsEqualIID(riid, IID_IClassFactory)) {
+
+	if (IsEqualIID(riid, IID_IUnknown) || IsEqualIID(riid, IID_IClassFactory))
+	{
 		*ppv = (LPCLASSFACTORY)this;
 		AddRef();
 		return NOERROR;
 	}
+
 	return E_NOINTERFACE;
 }
 
-STDMETHODIMP_(ULONG) CShellExtClassFactory::AddRef() {
+STDMETHODIMP_(ULONG) CShellExtClassFactory::AddRef()
+{
 	return ++m_cRef;
 }
 
@@ -436,22 +503,27 @@ STDMETHODIMP_(ULONG) CShellExtClassFactory::Release()
 {
 	if (--m_cRef)
 		return m_cRef;
+
 	delete this;
 	return 0L;
 }
 
 // *** IClassFactory methods ***
-STDMETHODIMP CShellExtClassFactory::CreateInstance(LPUNKNOWN pUnkOuter, REFIID riid, LPVOID *ppvObj) {
+STDMETHODIMP CShellExtClassFactory::CreateInstance(LPUNKNOWN pUnkOuter, REFIID riid, LPVOID *ppvObj)
+{
 	*ppvObj = NULL;
 	if (pUnkOuter)
 		return CLASS_E_NOAGGREGATION;
+
 	CShellExt * pShellExt = new CShellExt();
 	if (!pShellExt)
 		return E_OUTOFMEMORY;
+
 	return pShellExt->QueryInterface(riid, ppvObj);
 }
 
-STDMETHODIMP CShellExtClassFactory::LockServer(BOOL /*fLock*/) {
+STDMETHODIMP CShellExtClassFactory::LockServer(BOOL /*fLock*/)
+{
 	return NOERROR;
 }
 
@@ -477,11 +549,12 @@ CShellExt::CShellExt() :
 
 	OSVERSIONINFOEX inf;
 	ZeroMemory(&inf, sizeof(OSVERSIONINFOEX));
-    inf.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-    GetVersionEx((OSVERSIONINFO *)&inf);
+	inf.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+	GetVersionEx((OSVERSIONINFO *)&inf);
 	m_winVer = MAKEWORD(inf.dwMinorVersion, inf.dwMajorVersion);
 
-	if (m_winVer >= WINVER_VISTA) {
+	if (m_winVer >= WINVER_VISTA)
+	{
 		InitTheming();
 	}
 
@@ -492,33 +565,39 @@ CShellExt::CShellExt() :
 
 	wsprintf(szKeyTemp, TEXT("CLSID\\%s\\Settings"), szGUID);
 	result = RegOpenKeyEx(HKEY_CLASSES_ROOT, szKeyTemp, 0, KEY_READ, &settingKey);
-	if (result == ERROR_SUCCESS) {
+	if (result == ERROR_SUCCESS)
+	{
 		size = sizeof(TCHAR)*TITLE_SIZE;
 		result = RegQueryValueEx(settingKey, TEXT("Title"), NULL, NULL, (LPBYTE)(m_szMenuTitle), &size);
-		if (result != ERROR_SUCCESS) {
+		if (result != ERROR_SUCCESS)
+		{
 			lstrcpyn(m_szMenuTitle, szDefaultMenutext, TITLE_SIZE);
 		}
 
 		size = sizeof(DWORD);
 		result = RegQueryValueEx(settingKey, TEXT("Dynamic"), NULL, NULL, (BYTE*)(&dyn), &size);
-		if (result == ERROR_SUCCESS && dyn != 0) {
+		if (result == ERROR_SUCCESS && dyn != 0)
+		{
 			m_isDynamic = true;
 		}
 
 		size = sizeof(DWORD);
 		result = RegQueryValueEx(settingKey, TEXT("Maxtext"), NULL, NULL, (BYTE*)(&siz), &size);
-		if (result == ERROR_SUCCESS) {
+		if (result == ERROR_SUCCESS)
+		{
 			m_nameMaxLength = std::max((DWORD)0,siz);
 		}
 
 		size = sizeof(DWORD);
 		result = RegQueryValueEx(settingKey, TEXT("ShowIcon"), NULL, NULL, (BYTE*)(&showicon), &size);
-		if (result == ERROR_SUCCESS) {
+		if (result == ERROR_SUCCESS)
+		{
 			m_showIcon = (showicon != 0);
 		}
 
 		result = RegQueryValueEx(settingKey, TEXT("CustomIcon"), NULL, NULL, NULL, NULL);
-		if (result == ERROR_SUCCESS) {
+		if (result == ERROR_SUCCESS)
+		{
 			m_useCustom = true;
 			size = MAX_PATH;
 			RegQueryValueEx(settingKey, TEXT("CustomIcon"), NULL, NULL, (BYTE*)m_szCustomPath, &size);
@@ -528,8 +607,10 @@ CShellExt::CShellExt() :
 	}
 }
 
-CShellExt::~CShellExt() {
-	if (m_winVer >= WINVER_VISTA) {
+CShellExt::~CShellExt()
+{
+	if (m_winVer >= WINVER_VISTA)
+	{
 		DeinitTheming();
 	}
 
@@ -538,9 +619,11 @@ CShellExt::~CShellExt() {
 	_cRef--;
 }
 // *** IUnknown methods ***
-STDMETHODIMP CShellExt::QueryInterface(REFIID riid, LPVOID FAR *ppv) {
+STDMETHODIMP CShellExt::QueryInterface(REFIID riid, LPVOID FAR *ppv)
+{
 	*ppv = NULL;
-	if (IsEqualIID(riid, IID_IUnknown)) {
+	if (IsEqualIID(riid, IID_IUnknown))
+	{
 		//*ppv = (LPUNKNOWN)this;
 		*ppv = (LPSHELLEXTINIT)this;
 	} else if (IsEqualIID(riid, IID_IShellExtInit)) {
@@ -556,18 +639,23 @@ STDMETHODIMP CShellExt::QueryInterface(REFIID riid, LPVOID FAR *ppv) {
 	} else if (IsEqualIID(riid, IID_IExtractIcon)) {
 		*ppv = (LPEXTRACTICON)this;
 	}
-	if (*ppv) {
+
+	if (*ppv)
+	{
 		AddRef();
 		return NOERROR;
 	}
+
 	return E_NOINTERFACE;
 }
 
-STDMETHODIMP_(ULONG) CShellExt::AddRef() {
+STDMETHODIMP_(ULONG) CShellExt::AddRef()
+{
 	return ++m_cRef;
 }
 
-STDMETHODIMP_(ULONG) CShellExt::Release() {
+STDMETHODIMP_(ULONG) CShellExt::Release()
+{
 	if (--m_cRef)
 		return m_cRef;
 	delete this;
@@ -575,20 +663,26 @@ STDMETHODIMP_(ULONG) CShellExt::Release() {
 }
 
 // *** IShellExtInit methods ***
-STDMETHODIMP CShellExt::Initialize(LPCITEMIDLIST /*pIDFolder*/, LPDATAOBJECT pDataObj, HKEY /*hRegKey*/) {
-	if (m_pDataObj) {
+STDMETHODIMP CShellExt::Initialize(LPCITEMIDLIST /*pIDFolder*/, LPDATAOBJECT pDataObj, HKEY /*hRegKey*/)
+{
+	if (m_pDataObj)
+	{
 		m_pDataObj->Release();
 		m_pDataObj = NULL;
 	}
-	if (pDataObj) {
+
+	if (pDataObj)
+	{
 		m_pDataObj = pDataObj;
 		pDataObj->AddRef();
 	}
+
 	return NOERROR;
 }
 
 // *** IContextMenu methods ***
-STDMETHODIMP CShellExt::QueryContextMenu(HMENU hMenu, UINT indexMenu, UINT idCmdFirst, UINT /*idCmdLast*/, UINT /*uFlags*/) {
+STDMETHODIMP CShellExt::QueryContextMenu(HMENU hMenu, UINT indexMenu, UINT idCmdFirst, UINT /*idCmdLast*/, UINT /*uFlags*/)
+{
 	UINT idCmd = idCmdFirst;
 
 	FORMATETC fmte = {
@@ -601,7 +695,8 @@ STDMETHODIMP CShellExt::QueryContextMenu(HMENU hMenu, UINT indexMenu, UINT idCmd
 
 	HRESULT hres = m_pDataObj->GetData(&fmte, &m_stgMedium);
 
-	if (SUCCEEDED(hres)) {
+	if (SUCCEEDED(hres))
+	{
 		if (m_stgMedium.hGlobal)
 			m_cbFiles = DragQueryFile((HDROP)m_stgMedium.hGlobal, (UINT)-1, 0, 0);
 	}
@@ -610,24 +705,29 @@ STDMETHODIMP CShellExt::QueryContextMenu(HMENU hMenu, UINT indexMenu, UINT idCmd
 
 	InsertMenu(hMenu, nIndex, MF_STRING|MF_BYPOSITION, idCmd++, m_szMenuTitle);
 
-
-	if (m_showIcon) {
+	if (m_showIcon)
+	{
 		HBITMAP icon = NULL;
-		if (m_winVer >= WINVER_VISTA) {
+		if (m_winVer >= WINVER_VISTA)
+		{
 			icon = NULL;
 			HICON hicon;
 			DWORD menuIconWidth = GetSystemMetrics(SM_CXMENUCHECK);
 			DWORD menuIconHeight = GetSystemMetrics(SM_CYMENUCHECK);
 			HRESULT hr = LoadShellIcon(menuIconWidth, menuIconHeight, &hicon);
-			if (SUCCEEDED(hr)) {
+			if (SUCCEEDED(hr))
+			{
 				icon = IconToBitmapPARGB32(hicon, menuIconWidth, menuIconHeight);
 				DestroyIcon(hicon);
 			}
-		} else {
+		}
+		else
+		{
 			icon = HBMMENU_CALLBACK;
 		}
 
-		if (icon != NULL) {
+		if (icon != NULL)
+		{
 			MENUITEMINFO mii;
 			ZeroMemory(&mii, sizeof(mii));
 			mii.cbSize = sizeof(mii);
@@ -638,7 +738,8 @@ STDMETHODIMP CShellExt::QueryContextMenu(HMENU hMenu, UINT indexMenu, UINT idCmd
 
 			SetMenuItemInfo(hMenu, nIndex, MF_BYPOSITION, &mii);
 
-			if (m_winVer >= WINVER_VISTA) {
+			if (m_winVer >= WINVER_VISTA)
+			{
 				MENUINFO MenuInfo;
 				MenuInfo.cbSize = sizeof(MenuInfo);
 				MenuInfo.fMask = MIM_STYLE;
@@ -646,7 +747,6 @@ STDMETHODIMP CShellExt::QueryContextMenu(HMENU hMenu, UINT indexMenu, UINT idCmd
 
 				SetMenuInfo(hMenu, &MenuInfo);
 			}
-
 		}
 	}
 
@@ -656,15 +756,19 @@ STDMETHODIMP CShellExt::QueryContextMenu(HMENU hMenu, UINT indexMenu, UINT idCmd
 	return ResultFromShort(idCmd-idCmdFirst);
 }
 
-STDMETHODIMP CShellExt::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi) {
+STDMETHODIMP CShellExt::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi)
+{
 	HRESULT hr = E_INVALIDARG;
 
-	if (!HIWORD(lpcmi->lpVerb)) {
+	if (!HIWORD(lpcmi->lpVerb))
+	{
 		UINT idCmd = LOWORD(lpcmi->lpVerb);
-		switch(idCmd) {
+		switch(idCmd)
+		{
 			case 0:
 				hr = InvokeNPP(lpcmi->hwnd, lpcmi->lpDirectory, lpcmi->lpVerb, lpcmi->lpParameters, lpcmi->nShow);
 				break;
+
 			default:
 				break;
 		}
@@ -672,33 +776,41 @@ STDMETHODIMP CShellExt::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi) {
 	return hr;
 }
 
-STDMETHODIMP CShellExt::GetCommandString(UINT_PTR, UINT uFlags, UINT FAR *, LPSTR pszName, UINT cchMax) {
+STDMETHODIMP CShellExt::GetCommandString(UINT_PTR, UINT uFlags, UINT FAR *, LPSTR pszName, UINT cchMax)
+{
 	LPWSTR wBuffer = (LPWSTR) pszName;
-	if (uFlags == GCS_HELPTEXTA) {
+	if (uFlags == GCS_HELPTEXTA)
+	{
 		lstrcpynA(pszName, szHelpTextA, cchMax);
 		return S_OK;
-	} else if (uFlags == GCS_HELPTEXTW) {
+	}
+	else if (uFlags == GCS_HELPTEXTW)
+	{
 		lstrcpynW(wBuffer, szHelpTextW, cchMax);
 		return S_OK;
 	}
+
 	return E_NOTIMPL;
 }
 
-STDMETHODIMP CShellExt::HandleMenuMsg2(UINT uMsg, WPARAM /*wParam*/, LPARAM lParam, LRESULT *plResult) {
-
+STDMETHODIMP CShellExt::HandleMenuMsg2(UINT uMsg, WPARAM /*wParam*/, LPARAM lParam, LRESULT *plResult)
+{
 	//Setup popup menu stuff (ownerdrawn)
 	DWORD menuIconWidth = GetSystemMetrics(SM_CXMENUCHECK);
 	DWORD menuIconHeight = GetSystemMetrics(SM_CYMENUCHECK);
 	DWORD menuIconPadding = 2;	//+1 pixels on each side, is this fixed?
 
-	switch(uMsg) {
-		case WM_MEASUREITEM: {	//for owner drawn menu
+	switch(uMsg)
+	{
+		case WM_MEASUREITEM: //for owner drawn menu
+		{
 			MEASUREITEMSTRUCT * lpdis = (MEASUREITEMSTRUCT*) lParam;
 
 			if (lpdis == NULL)// || lpdis->itemID != m_menuID)
 				break;
 
-			if (m_showIcon) {
+			if (m_showIcon)
+			{
 				lpdis->itemWidth = 0;	//0 seems to work for 98 and up
 				if (lpdis->itemHeight < menuIconHeight)
 					lpdis->itemHeight = menuIconHeight;
@@ -706,19 +818,24 @@ STDMETHODIMP CShellExt::HandleMenuMsg2(UINT uMsg, WPARAM /*wParam*/, LPARAM lPar
 
 			if (plResult)
 				*plResult = TRUE;
-			break; }
-		case WM_DRAWITEM: {		//for owner drawn menu
+			break;
+		}
+
+		case WM_DRAWITEM: //for owner drawn menu
+		{
 			//Assumes proper font already been set
 			DRAWITEMSTRUCT * lpdis = (DRAWITEMSTRUCT*) lParam;
 			if ((lpdis == NULL) || (lpdis->CtlType != ODT_MENU))
 				break;
 
-			if (m_showIcon) {
+			if (m_showIcon)
+			{
 				HICON nppIcon = NULL;
 
 				HRESULT hr = LoadShellIcon(menuIconWidth, menuIconHeight, &nppIcon);
 
-				if (SUCCEEDED(hr)) {
+				if (SUCCEEDED(hr))
+				{
 					DrawIconEx(lpdis->hDC, menuIconPadding, menuIconPadding, nppIcon, menuIconWidth, menuIconHeight, 0, NULL, DI_NORMAL);
 					DestroyIcon(nppIcon);
 				}
@@ -727,7 +844,9 @@ STDMETHODIMP CShellExt::HandleMenuMsg2(UINT uMsg, WPARAM /*wParam*/, LPARAM lPar
 			if (plResult)
 				*plResult = TRUE;
 
-			break; }
+			break;
+		}
+
 		default:
 			break;
 	}
@@ -736,7 +855,8 @@ STDMETHODIMP CShellExt::HandleMenuMsg2(UINT uMsg, WPARAM /*wParam*/, LPARAM lPar
 }
 
 // *** IPersistFile methods ***
-HRESULT STDMETHODCALLTYPE CShellExt::Load(LPCOLESTR pszFileName, DWORD /*dwMode*/) {
+HRESULT STDMETHODCALLTYPE CShellExt::Load(LPCOLESTR pszFileName, DWORD /*dwMode*/)
+{
 	LPTSTR file[MAX_PATH];
 #ifdef UNICODE
 	lstrcpyn((LPWSTR)file, pszFileName, MAX_PATH);
@@ -746,10 +866,11 @@ HRESULT STDMETHODCALLTYPE CShellExt::Load(LPCOLESTR pszFileName, DWORD /*dwMode*
 	m_szFilePath[0] = 0;
 
 	LPTSTR ext = PathFindExtension((LPTSTR)file);
-	if (ext[0] == '.') {
+	if (ext[0] == '.')
+	{
 		ext++;
 	}
-	int copySize = std::min(m_nameMaxLength+1, MAX_PATH);	//+1 to take zero terminator in account
+	int copySize = std::min(m_nameMaxLength+1, MAX_PATH); //+1 to take zero terminator in account
 	lstrcpyn(m_szFilePath, ext, copySize);
 	m_nameLength = lstrlen(m_szFilePath);
 	CharUpperBuff(m_szFilePath, m_nameLength);
@@ -757,35 +878,43 @@ HRESULT STDMETHODCALLTYPE CShellExt::Load(LPCOLESTR pszFileName, DWORD /*dwMode*
 }
 
 // *** IExtractIcon methods ***
-STDMETHODIMP CShellExt::GetIconLocation(UINT uFlags, LPTSTR szIconFile, UINT cchMax, int * piIndex, UINT * pwFlags) {
+STDMETHODIMP CShellExt::GetIconLocation(UINT uFlags, LPTSTR szIconFile, UINT cchMax, int * piIndex, UINT * pwFlags)
+{
 	*pwFlags = 0;
-	if (uFlags & GIL_DEFAULTICON || m_szFilePath[0] == 0 || !m_isDynamic) {	//return regular N++ icon if requested OR the extension is bad OR static icon
-		if (!m_useCustom) {
+	if (uFlags & GIL_DEFAULTICON || m_szFilePath[0] == 0 || !m_isDynamic) //return regular N++ icon if requested OR the extension is bad OR static icon
+	{
+		if (!m_useCustom)
+		{
 			lstrcpyn(szIconFile, m_szModule, cchMax);
 			*piIndex = 0;
-		} else {
+		}
+		else
+		{
 			lstrcpyn(szIconFile, m_szCustomPath, cchMax);
 			*piIndex = 0;
 		}
+
 		return S_OK;
 	}
 
-	if(cchMax > 0) {
+	if(cchMax > 0)
+	{
 		lstrcpyn(szIconFile, TEXT("NppShellIcon"), cchMax);
 		int len = lstrlen(szIconFile);
 		lstrcpyn(szIconFile, m_szFilePath, cchMax-len);
 	}
+
 	*piIndex = 0;
 	*pwFlags |= GIL_NOTFILENAME;//|GIL_DONTCACHE|GIL_PERINSTANCE;
 
 	return S_OK;
 }
 
-STDMETHODIMP CShellExt::Extract(LPCTSTR /*pszFile*/, UINT /*nIconIndex*/, HICON * phiconLarge, HICON * phiconSmall, UINT nIconSize) {
+STDMETHODIMP CShellExt::Extract(LPCTSTR /*pszFile*/, UINT /*nIconIndex*/, HICON * phiconLarge, HICON * phiconSmall, UINT nIconSize)
+{
 	WORD sizeSmall = HIWORD(nIconSize);
 	WORD sizeLarge = LOWORD(nIconSize);
 	ICONINFO iconinfo;
-	BOOL res;
 	HRESULT hrSmall = S_OK, hrLarge = S_OK;
 
 	if (phiconSmall)
@@ -793,25 +922,18 @@ STDMETHODIMP CShellExt::Extract(LPCTSTR /*pszFile*/, UINT /*nIconIndex*/, HICON 
 	if (phiconLarge)
 		hrLarge = LoadShellIcon(sizeLarge, sizeLarge, phiconLarge);
 
-	if (FAILED(hrSmall) || FAILED(hrLarge)) {
+	if (FAILED(hrSmall) || FAILED(hrLarge))
+	{
 		InvalidateIcon(phiconSmall, phiconLarge);
 		return S_FALSE;
 	}
 
-	if (!m_isDynamic || !phiconLarge || sizeLarge < 32)	//No modifications required
+	if (!m_isDynamic || !phiconLarge || sizeLarge < 32) //No modifications required
 		return S_OK;
 
-	HDC dcEditColor, dcEditMask, dcEditTemp;
-	HFONT font;
-	HBRUSH brush;
-	HPEN pen;
-	BITMAPINFO bmi;
-    HBITMAP hbm;
-    LPDWORD pPix;
-
-	res = GetIconInfo(*phiconLarge, &iconinfo);
+	BOOL res = GetIconInfo(*phiconLarge, &iconinfo);
 	if (!res)
-		return S_OK;	//abort, the icon is still valid
+		return S_OK; //abort, the icon is still valid
 
 	res = DestroyIcon(*phiconLarge);
 	if (!res)
@@ -819,20 +941,22 @@ STDMETHODIMP CShellExt::Extract(LPCTSTR /*pszFile*/, UINT /*nIconIndex*/, HICON 
 	else
 		*phiconLarge = NULL;
 
-	dcEditColor = CreateCompatibleDC(GetDC(0));
-	dcEditMask = CreateCompatibleDC(GetDC(0));
-	dcEditTemp = CreateCompatibleDC(GetDC(0));
+	HDC dcEditColor = CreateCompatibleDC(GetDC(0));
+	HDC dcEditMask = CreateCompatibleDC(GetDC(0));
+	HDC dcEditTemp = CreateCompatibleDC(GetDC(0));
 
-    // Create temp bitmap to render rectangle to
-    ZeroMemory(&bmi, sizeof(bmi));
-    bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-    bmi.bmiHeader.biWidth = sizeLarge;
-    bmi.bmiHeader.biHeight = sizeLarge;
-    bmi.bmiHeader.biPlanes = 1;
-    bmi.bmiHeader.biBitCount = 32;
-    bmi.bmiHeader.biCompression = BI_RGB;
-    hbm = CreateDIBSection(dcEditTemp, &bmi, DIB_RGB_COLORS, (VOID**)&pPix, NULL, 0);
-    memset(pPix, 0x00FFFFFF, sizeof(DWORD)*sizeLarge*sizeLarge);	//initialize to white pixels, no alpha
+	// Create temp bitmap to render rectangle to
+	LPDWORD pPix;
+	BITMAPINFO bmi;
+	ZeroMemory(&bmi, sizeof(bmi));
+	bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+	bmi.bmiHeader.biWidth = sizeLarge;
+	bmi.bmiHeader.biHeight = sizeLarge;
+	bmi.bmiHeader.biPlanes = 1;
+	bmi.bmiHeader.biBitCount = 32;
+	bmi.bmiHeader.biCompression = BI_RGB;
+	HBITMAP hbm = CreateDIBSection(dcEditTemp, &bmi, DIB_RGB_COLORS, (VOID**)&pPix, NULL, 0);
+	memset(pPix, 0x00FFFFFF, sizeof(DWORD)*sizeLarge*sizeLarge); //initialize to white pixels, no alpha
 
 	SelectObject(dcEditColor, iconinfo.hbmColor);
 	SelectObject(dcEditMask, iconinfo.hbmMask);
@@ -850,9 +974,9 @@ STDMETHODIMP CShellExt::Extract(LPCTSTR /*pszFile*/, UINT /*nIconIndex*/, HICON 
 	COLORREF backGround = RGB(1, 1, 60);
 	COLORREF textColor = RGB(250,250,250);
 
-	font = CreateFontIndirect(&lf);
-	brush = CreateSolidBrush(backGround);
-	pen = CreatePen(PS_NULL, 0, backGround);
+	HFONT font = CreateFontIndirect(&lf);
+	HBRUSH brush = CreateSolidBrush(backGround);
+	HPEN pen = CreatePen(PS_NULL, 0, backGround);
 	SelectObject(dcEditTemp, font);
 	SelectObject(dcEditTemp, brush);
 	SelectObject(dcEditTemp, pen);
@@ -886,8 +1010,10 @@ STDMETHODIMP CShellExt::Extract(LPCTSTR /*pszFile*/, UINT /*nIconIndex*/, HICON 
 	//premultiply alpha
 	//Fill in the mask bitmap (anything not 100% alpha is transparent)
 	int red, green, blue, alpha;
-	for(int y = 0; y < sizeLarge; y++) {
-		for(int x = 0; x < sizeLarge; x++) {
+	for(int y = 0; y < sizeLarge; y++)
+	{
+		for(int x = 0; x < sizeLarge; x++)
+		{
 			DWORD * pix = pPix+(y*sizeLarge+x);
 			red = *pix & 0xFF;
 			green = *pix >> 8 & 0xFF;
@@ -932,7 +1058,8 @@ STDMETHODIMP CShellExt::Extract(LPCTSTR /*pszFile*/, UINT /*nIconIndex*/, HICON 
 	DeleteBitmap(iconinfo.hbmColor);
 	DeleteBitmap(iconinfo.hbmMask);
 
-	if (*phiconLarge == NULL) {
+	if (*phiconLarge == NULL)
+	{
 		InvalidateIcon(phiconSmall, phiconLarge);
 		return S_FALSE;
 	}
@@ -940,19 +1067,24 @@ STDMETHODIMP CShellExt::Extract(LPCTSTR /*pszFile*/, UINT /*nIconIndex*/, HICON 
 	return S_OK;
 }
 
-void InvalidateIcon(HICON * iconSmall, HICON * iconLarge) {
-	if (iconSmall && *iconSmall) {
+void InvalidateIcon(HICON * iconSmall, HICON * iconLarge)
+{
+	if (iconSmall && *iconSmall)
+	{
 		DestroyIcon(*iconSmall);
 		*iconSmall = NULL;
 	}
-	if (iconLarge && *iconLarge) {
+
+	if (iconLarge && *iconLarge)
+	{
 		DestroyIcon(*iconLarge);
 		*iconLarge = NULL;
 	}
 }
 
 // *** Private methods ***
-STDMETHODIMP CShellExt::InvokeNPP(HWND /*hParent*/, LPCSTR /*pszWorkingDir*/, LPCSTR /*pszCmd*/, LPCSTR /*pszParam*/, int iShowCmd) {
+STDMETHODIMP CShellExt::InvokeNPP(HWND /*hParent*/, LPCSTR /*pszWorkingDir*/, LPCSTR /*pszCmd*/, LPCSTR /*pszParam*/, int iShowCmd)
+{
 	TCHAR szFilename[MAX_PATH];
 	TCHAR szCustom[MAX_PATH];
 	LPTSTR pszCommand;
@@ -966,33 +1098,40 @@ STDMETHODIMP CShellExt::InvokeNPP(HWND /*hParent*/, LPCSTR /*pszWorkingDir*/, LP
 
 	wsprintf(szKeyTemp, TEXT("CLSID\\%s\\Settings"), szGUID);
 	result = RegOpenKeyEx(HKEY_CLASSES_ROOT, szKeyTemp, 0, KEY_READ, &settingKey);
-	if (result != ERROR_SUCCESS) {
+	if (result != ERROR_SUCCESS)
+	{
 		MsgBoxError(TEXT("Unable to open registry key."));
 		return E_FAIL;
 	}
 
 	result = RegQueryValueEx(settingKey, TEXT("Path"), NULL, NULL, NULL, &regSize);
-	if (result == ERROR_SUCCESS) {
+	if (result == ERROR_SUCCESS)
+	{
 		bytesRequired += regSize+2;
-	} else {
+	}
+	else
+	{
 		MsgBoxError(TEXT("Cannot read path to executable."));
 		RegCloseKey(settingKey);
 		return E_FAIL;
 	}
 
 	result = RegQueryValueEx(settingKey, TEXT("Custom"), NULL, NULL, NULL, &regSize);
-	if (result == ERROR_SUCCESS) {
+	if (result == ERROR_SUCCESS)
+	{
 		bytesRequired += regSize;
 	}
 
-	for (UINT i = 0; i < m_cbFiles; i++) {
+	for (UINT i = 0; i < m_cbFiles; i++)
+	{
 		bytesRequired += DragQueryFile((HDROP)m_stgMedium.hGlobal, i, NULL, 0);
 		bytesRequired += 3;
 	}
 
 	bytesRequired *= sizeof(TCHAR);
 	pszCommand = (LPTSTR)CoTaskMemAlloc(bytesRequired);
-	if (!pszCommand) {
+	if (!pszCommand)
+	{
 		MsgBoxError(TEXT("Insufficient memory available."));
 		RegCloseKey(settingKey);
 		return E_FAIL;
@@ -1006,13 +1145,15 @@ STDMETHODIMP CShellExt::InvokeNPP(HWND /*hParent*/, LPCSTR /*pszWorkingDir*/, LP
 	lstrcat(pszCommand, szFilename);
 	lstrcat(pszCommand, TEXT("\""));
 	result = RegQueryValueEx(settingKey, TEXT("Custom"), NULL, NULL, (LPBYTE)(szCustom), &pathSize);
-	if (result == ERROR_SUCCESS) {
+	if (result == ERROR_SUCCESS)
+	{
 		lstrcat(pszCommand, TEXT(" "));
 		lstrcat(pszCommand, szCustom);
 	}
 	RegCloseKey(settingKey);
 
-	for (UINT i = 0; i < m_cbFiles; i++) {
+	for (UINT i = 0; i < m_cbFiles; i++)
+	{
 		DragQueryFile((HDROP)m_stgMedium.hGlobal, i, szFilename, MAX_PATH);
 		lstrcat(pszCommand, TEXT(" \""));
 		lstrcat(pszCommand, szFilename);
@@ -1024,20 +1165,26 @@ STDMETHODIMP CShellExt::InvokeNPP(HWND /*hParent*/, LPCSTR /*pszWorkingDir*/, LP
 	ZeroMemory(&si, sizeof(si));
 	si.cb = sizeof(si);
 	si.dwFlags = STARTF_USESHOWWINDOW;
-	si.wShowWindow = (WORD)iShowCmd;	//SW_RESTORE;
-	if (!CreateProcess (NULL, pszCommand, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi)) {
+	si.wShowWindow = (WORD)iShowCmd; //SW_RESTORE;
+	if (!CreateProcess (NULL, pszCommand, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi))
+	{
 		DWORD errorCode = GetLastError();
-		if (errorCode == ERROR_ELEVATION_REQUIRED) {	//Fallback to shellexecute
+		if (errorCode == ERROR_ELEVATION_REQUIRED) //Fallback to shellexecute
+		{
 			CoInitializeEx(NULL, 0);
 			HINSTANCE execVal = ShellExecute(NULL, TEXT("runas"), pszCommand, NULL, NULL, iShowCmd);
 			CoUninitialize();
-			if (execVal <= (HINSTANCE)32) {
+
+			if (execVal <= (HINSTANCE)32)
+			{
 				TCHAR * message = new TCHAR[512+bytesRequired];
 				wsprintf(message, TEXT("ShellExecute failed (%d): Is this command correct?\r\n%s"), execVal, pszCommand);
 				MsgBoxError(message);
 				delete [] message;
 			}
-		} else {
+		}
+		else
+		{
 			TCHAR * message = new TCHAR[512+bytesRequired];
 			wsprintf(message, TEXT("Error in CreateProcess (%d): Is this command correct?\r\n%s"), errorCode, pszCommand);
 			MsgBoxError(message);
@@ -1045,29 +1192,33 @@ STDMETHODIMP CShellExt::InvokeNPP(HWND /*hParent*/, LPCSTR /*pszWorkingDir*/, LP
 		}
 	}
 
-
-
 	CoTaskMemFree(pszCommand);
 	return NOERROR;
 }
 
-STDMETHODIMP CShellExt::LoadShellIcon(int cx, int cy, HICON * phicon) {
+STDMETHODIMP CShellExt::LoadShellIcon(int cx, int cy, HICON * phicon)
+{
 	HRESULT hr = E_OUTOFMEMORY;
 	HICON hicon = NULL;
 
-	if (m_useCustom) {
+	if (m_useCustom)
+	{
 		hicon = (HICON)LoadImage(NULL, m_szCustomPath, IMAGE_ICON, cx, cy, LR_DEFAULTCOLOR|LR_LOADFROMFILE);
 	}
 
 	//Either no custom defined, or failed and use fallback
-	if (hicon == NULL) {
+	if (hicon == NULL)
+	{
 		hicon = (HICON)LoadImage(_hModule, MAKEINTRESOURCE(IDI_ICON_NPP), IMAGE_ICON, cx, cy, LR_DEFAULTCOLOR);
 	}
 
-	if (hicon == NULL) {
+	if (hicon == NULL)
+	{
 		hr = E_OUTOFMEMORY;
 		*phicon = NULL;
-	} else {
+	}
+	else
+	{
 		hr = S_OK;
 		*phicon = hicon;
 	}
