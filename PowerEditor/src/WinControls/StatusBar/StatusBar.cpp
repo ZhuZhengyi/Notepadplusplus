@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -36,7 +36,7 @@ const int defaultPartWidth = 5;
 void StatusBar::init(HINSTANCE hInst, HWND hPere, int nbParts)
 {
 	Window::init(hInst, hPere);
-    InitCommonControls();
+	InitCommonControls();
 
 	_hSelf = //CreateStatusWindow(WS_CHILD | WS_CLIPSIBLINGS, NULL, _hParent, IDC_STATUSBAR);
 	::CreateWindowEx(
@@ -46,7 +46,7 @@ void StatusBar::init(HINSTANCE hInst, HWND hPere, int nbParts)
 	               WS_CHILD | SBARS_SIZEGRIP ,
 	               0, 0, 0, 0,
 	               _hParent,
-				   NULL,
+	               NULL,
 	               _hInst,
 	               0);
 
@@ -55,16 +55,16 @@ void StatusBar::init(HINSTANCE hInst, HWND hPere, int nbParts)
 		throw std::runtime_error("StatusBar::init : CreateWindowEx() function return null");
 	}
 
-    _nbParts = nbParts;
-    _partWidthArray = new int[_nbParts];
+	_nbParts = nbParts;
+	_partWidthArray = new int[_nbParts];
 
 	// Set the default width
 	for (int i = 0 ; i < _nbParts ; ++i)
 		_partWidthArray[i] = defaultPartWidth;
 
-    // Allocate an array for holding the right edge coordinates.
-    _hloc = ::LocalAlloc(LHND, sizeof(int) * _nbParts);
-    _lpParts = (LPINT)::LocalLock(_hloc);
+	// Allocate an array for holding the right edge coordinates.
+	_hloc = ::LocalAlloc(LHND, sizeof(int) * _nbParts);
+	_lpParts = (LPINT)::LocalLock(_hloc);
 
 	RECT rc;
 	::GetClientRect(_hParent, &rc);
@@ -73,15 +73,15 @@ void StatusBar::init(HINSTANCE hInst, HWND hPere, int nbParts)
 
 void StatusBar::adjustParts(int clientWidth)
 {
-    // Calculate the right edge coordinate for each part, and
-    // copy the coordinates to the array.
-    int nWidth = clientWidth - 20;
-    for (int i = _nbParts - 1 ; i >= 0 ; i--) 
-    { 
-       _lpParts[i] = nWidth;
-       nWidth -= _partWidthArray[i];
-    }
+	// Calculate the right edge coordinate for each part, and
+	// copy the coordinates to the array.
+	int nWidth = clientWidth - 20;
+	for (int i = _nbParts - 1 ; i >= 0 ; i--) 
+	{
+		_lpParts[i] = nWidth;
+		nWidth -= _partWidthArray[i];
+	}
 
-    // Tell the status bar to create the window parts.
-    ::SendMessage(_hSelf, SB_SETPARTS, (WPARAM)_nbParts, (LPARAM)_lpParts);
+	// Tell the status bar to create the window parts.
+	::SendMessage(_hSelf, SB_SETPARTS, (WPARAM)_nbParts, (LPARAM)_lpParts);
 }

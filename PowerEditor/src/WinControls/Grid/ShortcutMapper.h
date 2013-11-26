@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -47,9 +47,11 @@
 
 enum GridState {STATE_MENU, STATE_MACRO, STATE_USER, STATE_PLUGIN, STATE_SCINTILLA};
 
-class ShortcutMapper : public StaticDialog {
+class ShortcutMapper : public StaticDialog
+{
 public:
-	ShortcutMapper() : _currentState(STATE_MENU), StaticDialog() {
+	ShortcutMapper() : _currentState(STATE_MENU), StaticDialog() 
+	{
 		generic_strncpy(tabNames[0], TEXT("Main menu"), maxTabName);
 		generic_strncpy(tabNames[1], TEXT("Macros"), maxTabName);
 		generic_strncpy(tabNames[2], TEXT("Run commands"), maxTabName);
@@ -58,13 +60,16 @@ public:
 	};
 	~ShortcutMapper() {};
 
-	void init(HINSTANCE hInst, HWND parent, GridState initState = STATE_MENU) {
-        Window::init(hInst, parent);
-        _currentState = initState;
-    };
+	void init(HINSTANCE hInst, HWND parent, GridState initState = STATE_MENU)
+	{
+		Window::init(hInst, parent);
+		_currentState = initState;
+	};
 
 	void destroy() {};
-	void doDialog(bool isRTL = false) {
+
+	void doDialog(bool isRTL = false)
+	{
 		if (isRTL)
 		{
 			DLGTEMPLATE *pMyDlgTemplate = NULL;
@@ -75,7 +80,9 @@ public:
 		else
 			::DialogBoxParam(_hInst, MAKEINTRESOURCE(IDD_SHORTCUTMAPPER_DLG), _hParent, (DLGPROC)dlgProc, (LPARAM)this);
 	};
-	void getClientRect(RECT & rc) const {
+
+	void getClientRect(RECT & rc) const
+	{
 		Window::getClientRect(rc);
 		rc.top += 40;
 		rc.bottom -= 20;

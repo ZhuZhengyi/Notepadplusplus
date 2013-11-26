@@ -17,7 +17,8 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-namespace Utf8 { // could be a static class, instead of a namespace, if it needs private members
+namespace Utf8 // could be a static class, instead of a namespace, if it needs private members
+{
 	// basic classification of UTF-8 bytes
 	inline static bool isSingleByte(UCHAR c)       { return c < 0x80; }
 	inline static bool isPartOfMultibyte(UCHAR c)  { return c >= 0x80; }
@@ -26,13 +27,15 @@ namespace Utf8 { // could be a static class, instead of a namespace, if it needs
 	inline static bool isValid(UCHAR c)            { return c < 0xC0 || isFirstOfMultibyte(c); }	// validates a byte, out of context
 
 	// number of continuation bytes for a given valid first character (0 for single byte characters)
-	inline static int  continuationBytes(UCHAR c)  {
+	inline static int  continuationBytes(UCHAR c)
+	{
 		static const char _len[] = { 1,1,2,3 };
 		return (c < 0xC0) ? 0 : _len[(c & 0x30) >>  4];
 	} 
 
 	// validates a full character
-	inline static bool isValid(const char* buf, int buflen) {
+	inline static bool isValid(const char* buf, int buflen)
+	{
 		if(isSingleByte(buf[0])) return true; // single byte is valid
 		if(!isFirstOfMultibyte(buf[0])) return false; // not single byte, nor valid multi-byte first byte
 		int charContinuationBytes = continuationBytes(buf[0]);
@@ -43,10 +46,11 @@ namespace Utf8 { // could be a static class, instead of a namespace, if it needs
 	}
 
 	// rewinds to the first byte of a multi-byte character for any valid UTF-8 (and will not rewind too much on any other input)
-	inline static int characterStart(const char* buf, int startingIndex) {
+	inline static int characterStart(const char* buf, int startingIndex)
+	{
 		int charContinuationBytes = 0;
-		while(charContinuationBytes < startingIndex	// rewind past start of buffer?
-			&& charContinuationBytes < 5	// UTF-8 support up to 5 continuation bytes (but valid sequences currently do not have more than 3)
+		while(charContinuationBytes < startingIndex // rewind past start of buffer?
+			&& charContinuationBytes < 5            // UTF-8 support up to 5 continuation bytes (but valid sequences currently do not have more than 3)
 			&& isContinuation(buf[startingIndex-charContinuationBytes])
 			)
 			++charContinuationBytes;

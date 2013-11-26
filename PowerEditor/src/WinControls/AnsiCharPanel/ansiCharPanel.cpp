@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -38,17 +38,17 @@ void AnsiCharPanel::switchEncoding()
 
 BOOL CALLBACK AnsiCharPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
-    switch (message)
-    {
-        case WM_INITDIALOG :
-        {
+	switch (message)
+	{
+		case WM_INITDIALOG :
+		{
 			_listView.init(_hInst, _hSelf);
 			int codepage = (*_ppEditView)->getCurrentBuffer()->getEncoding();
 			_listView.setValues(codepage==-1?0:codepage);
 			_listView.display();
 
-            return TRUE;
-        }
+			return TRUE;
+		}
 
 		case WM_NOTIFY:
 		{
@@ -92,27 +92,27 @@ BOOL CALLBACK AnsiCharPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPa
 		}
 		return TRUE;
 
-        case WM_SIZE:
-        {
-            int width = LOWORD(lParam);
-            int height = HIWORD(lParam);
+		case WM_SIZE:
+		{
+			int width = LOWORD(lParam);
+			int height = HIWORD(lParam);
 			::MoveWindow(_listView.getHSelf(), 0, 0, width, height, TRUE);
-            break;
-        }
+			break;
+		}
 
-        default :
-            return DockingDlgInterface::run_dlgProc(message, wParam, lParam);
-    }
+		default :
+			return DockingDlgInterface::run_dlgProc(message, wParam, lParam);
+	}
 	return DockingDlgInterface::run_dlgProc(message, wParam, lParam);
 }
 
 void AnsiCharPanel::insertChar(unsigned char char2insert) const
 {
-    char charStr[2];
-    charStr[0] = char2insert;
-    charStr[1] = '\0';
-    wchar_t wCharStr[10];
-    char multiByteStr[10];
+	char charStr[2];
+	charStr[0] = char2insert;
+	charStr[1] = '\0';
+	wchar_t wCharStr[10];
+	char multiByteStr[10];
 	int codepage = (*_ppEditView)->getCurrentBuffer()->getEncoding();
 	if (codepage == -1)
 	{
@@ -135,6 +135,6 @@ void AnsiCharPanel::insertChar(unsigned char char2insert) const
 	}
 	(*_ppEditView)->execute(SCI_REPLACESEL, 0, (LPARAM)"");
 	int len = (char2insert < 128)?1:strlen(multiByteStr);
-    (*_ppEditView)->execute(SCI_ADDTEXT, len, (LPARAM)multiByteStr);
+	(*_ppEditView)->execute(SCI_ADDTEXT, len, (LPARAM)multiByteStr);
 	(*_ppEditView)->getFocus();
 }

@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -43,30 +43,37 @@
 class ColourPopup : public Window
 {
 public :
-    ColourPopup() : Window(), isColourChooserLaunched(false) {};
+	ColourPopup() : Window(), isColourChooserLaunched(false) {};
 	ColourPopup(COLORREF defaultColor) : Window(), isColourChooserLaunched(false), _colour(defaultColor) {};
 	~ColourPopup(){};
-	
-	bool isCreated() const {
+
+	bool isCreated() const
+	{
 		return (_hSelf != NULL);
 	};
-	
+
 	void create(int dialogID);
 
-        void doDialog(POINT p) {
-            if (!isCreated())
-                create(IDD_COLOUR_POPUP);
-            ::SetWindowPos(_hSelf, HWND_TOP, p.x, p.y, _rc.right - _rc.left, _rc.bottom - _rc.top, SWP_SHOWWINDOW);
+	void doDialog(POINT p)
+	{
+		if (!isCreated())
+			create(IDD_COLOUR_POPUP);
+		::SetWindowPos(_hSelf, HWND_TOP, p.x, p.y, _rc.right - _rc.left, _rc.bottom - _rc.top, SWP_SHOWWINDOW);
 	};
 
-    virtual void destroy() {
-	    ::DestroyWindow(_hSelf);
+	virtual void destroy()
+	{
+		::DestroyWindow(_hSelf);
 	};
-    COLORREF getSelColour(){return _colour;};
+
+	COLORREF getSelColour()
+	{
+		return _colour;
+	};
 
 private :
 	RECT _rc;
-    COLORREF _colour;
+	COLORREF _colour;
 	bool isColourChooserLaunched;
 
 	static BOOL CALLBACK dlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);

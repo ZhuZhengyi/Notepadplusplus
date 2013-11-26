@@ -29,17 +29,18 @@ const Utf8_16::utf8 Utf8_16::k_Boms[][3] = {
 
 // ==================================================================
 
-Utf8_16_Read::Utf8_16_Read() {
-	m_eEncoding		= uni8Bit;
-	m_nBufSize		= 0;
-	m_pNewBuf		= NULL;
-	m_bFirstRead	= true;
+Utf8_16_Read::Utf8_16_Read()
+{
+	m_eEncoding  = uni8Bit;
+	m_nBufSize   = 0;
+	m_pNewBuf    = NULL;
+	m_bFirstRead = true;
 }
 
 Utf8_16_Read::~Utf8_16_Read()
 {
 	if ((m_eEncoding == uni16BE) || (m_eEncoding == uni16LE) || (m_eEncoding == uni16BE_NoBOM) || (m_eEncoding == uni16LE_NoBOM))
-    {
+	{
 		delete [] m_pNewBuf;
 		m_pNewBuf = NULL;
 	}
@@ -53,49 +54,51 @@ u78 Utf8_16_Read::utf8_7bits_8bits()
 {
 	int rv = 1;
 	int ASCII7only = 1;
-	utf8 *sx	= (utf8 *)m_pBuf;
-	utf8 *endx	= sx + m_nLen;
+	utf8 *sx   = (utf8 *)m_pBuf;
+	utf8 *endx = sx + m_nLen;
 
 	while (sx<endx)
 	{
-		if (!*sx)
-		{											// For detection, we'll say that NUL means not UTF8
+		if (!*sx) // For detection, we'll say that NUL means not UTF8
+		{
 			ASCII7only = 0;
 			rv = 0;
 			break;
 		} 
-		else if (*sx < 0x80)
-		{			// 0nnnnnnn If the byte's first hex code begins with 0-7, it is an ASCII character.
+		else if (*sx < 0x80) // 0nnnnnnn If the byte's first hex code begins with 0-7, it is an ASCII character.
+		{
 			++sx;
 		} 
-		else if (*sx < (0x80 + 0x40)) 
-		{											  // 10nnnnnn 8 through B cannot be first hex codes
+		else if (*sx < (0x80 + 0x40)) // 10nnnnnn 8 through B cannot be first hex codes
+		{
 			ASCII7only=0;
 			rv=0;
 			break;
 		} 
-		else if (*sx < (0x80 + 0x40 + 0x20))
-		{					  // 110xxxvv 10nnnnnn  If it begins with C or D, it is an 11 bit character
+		else if (*sx < (0x80 + 0x40 + 0x20)) // 110xxxvv 10nnnnnn  If it begins with C or D, it is an 11 bit character
+		{
 			ASCII7only=0;
 			if (sx>=endx-1) 
 				break;
-			if ((*sx & 0xC0) != 0xC0 || (sx[1]&(0x80+0x40)) != 0x80) {
+			if ((*sx & 0xC0) != 0xC0 || (sx[1]&(0x80+0x40)) != 0x80)
+			{
 				rv=0; break;
 			}
 			sx+=2;
 		} 
-		else if (*sx < (0x80 + 0x40 + 0x20 + 0x10))
-		{								// 1110qqqq 10xxxxvv 10nnnnnn If it begins with E, it is 16 bit
+		else if (*sx < (0x80 + 0x40 + 0x20 + 0x10)) // 1110qqqq 10xxxxvv 10nnnnnn If it begins with E, it is 16 bit
+		{
 			ASCII7only=0;
 			if (sx>=endx-2) 
 				break;
-			if ((*sx & 0xE0) != 0xE0 || (sx[1]&(0x80+0x40)) != 0x80 || (sx[2]&(0x80+0x40)) != 0x80) {
+			if ((*sx & 0xE0) != 0xE0 || (sx[1]&(0x80+0x40)) != 0x80 || (sx[2]&(0x80+0x40)) != 0x80)
+			{
 				rv=0; break;
 			}
 			sx+=3;
 		} 
-		else 
-		{													  // more than 16 bits are not allowed here
+		else // more than 16 bits are not allowed here
+		{
 			ASCII7only=0;
 			rv=0;
 			break;
@@ -111,67 +114,73 @@ u78 Utf8_16_Read::utf8_7bits_8bits()
 size_t Utf8_16_Read::convert(char* buf, size_t len)
 {
 	// bugfix by Jens Lorenz
-	static	size_t nSkip = 0;
+	static size_t nSkip = 0;
 
-    size_t  ret = 0;
-    
+	size_t ret = 0;
+
 	m_pBuf = (ubyte*)buf;
 	m_nLen = len;
 
 	if (m_bFirstRead == true)
-    {
+	{
 		determineEncoding();
 		nSkip = m_nSkip;
 		m_bFirstRead = false;
 	}
 
-    switch (m_eEncoding)
-    {
+	switch (m_eEncoding)
+	{
 		case uni7Bit:
-        case uni8Bit:
-        case uniCookie: {
-            // Do nothing, pass through
-            m_nBufSize = 0;
-            m_pNewBuf = m_pBuf;
-            ret = len;
-            break;
-        }
-        case uniUTF8: {
-            // Pass through after BOM
-            m_nBufSize = 0;
-            m_pNewBuf = m_pBuf + nSkip;
-            ret = len - nSkip;
-            break;
-        }    
-        case uni16BE_NoBOM:
-        case uni16LE_NoBOM:
-        case uni16BE:
-        case uni16LE: {
-            size_t newSize = len + len / 2 + 1;
-            
-            if (m_nBufSize != newSize)
-            {
+		case uni8Bit:
+		case uniCookie:
+		{
+			// Do nothing, pass through
+			m_nBufSize = 0;
+			m_pNewBuf = m_pBuf;
+			ret = len;
+			break;
+		}
+
+		case uniUTF8:
+		{
+			// Pass through after BOM
+			m_nBufSize = 0;
+			m_pNewBuf = m_pBuf + nSkip;
+			ret = len - nSkip;
+			break;
+		}
+
+		case uni16BE_NoBOM:
+		case uni16LE_NoBOM:
+		case uni16BE:
+		case uni16LE:
+		{
+			size_t newSize = len + len / 2 + 1;
+			
+			if (m_nBufSize != newSize)
+			{
 				if (m_pNewBuf)
 					delete [] m_pNewBuf;
-                m_pNewBuf  = NULL;
-                m_pNewBuf  = new ubyte[newSize];
-                m_nBufSize = newSize;
-            }
-            
-            ubyte* pCur = m_pNewBuf;
-            
-            m_Iter16.set(m_pBuf + nSkip, len - nSkip, m_eEncoding);
+				m_pNewBuf  = NULL;
+				m_pNewBuf  = new ubyte[newSize];
+				m_nBufSize = newSize;
+			}
+			
+			ubyte* pCur = m_pNewBuf;
+			
+			m_Iter16.set(m_pBuf + nSkip, len - nSkip, m_eEncoding);
 
-            for (; m_Iter16; ++m_Iter16)
-            {
-                *pCur++ = m_Iter16.get();
-            }
-            ret = pCur - m_pNewBuf;
-            break;
-        }
-        default:
-            break;
-    }
+			for (; m_Iter16; ++m_Iter16)
+			{
+				*pCur++ = m_Iter16.get();
+			}
+			ret = pCur - m_pNewBuf;
+			break;
+		}
+
+		default:
+			break;
+	}
 
 	// necessary for second calls and more
 	nSkip = 0;
@@ -186,19 +195,19 @@ void Utf8_16_Read::determineEncoding()
 	m_eEncoding = uni8Bit;
 	m_nSkip = 0;
 
-    // detect UTF-16 big-endian with BOM
+	// detect UTF-16 big-endian with BOM
 	if (m_nLen > 1 && m_pBuf[0] == k_Boms[uni16BE][0] && m_pBuf[1] == k_Boms[uni16BE][1])
 	{
 		m_eEncoding = uni16BE;
 		m_nSkip = 2;
 	}
-    // detect UTF-16 little-endian with BOM
+	// detect UTF-16 little-endian with BOM
 	else if (m_nLen > 1 && m_pBuf[0] == k_Boms[uni16LE][0] && m_pBuf[1] == k_Boms[uni16LE][1])
 	{
 		m_eEncoding = uni16LE;
 		m_nSkip = 2;
 	}
-    // detect UTF-8 with BOM
+	// detect UTF-8 with BOM
 	else if (m_nLen > 2 && m_pBuf[0] == k_Boms[uniUTF8][0] && 
 		m_pBuf[1] == k_Boms[uniUTF8][1] && m_pBuf[2] == k_Boms[uniUTF8][2])
 	{
@@ -212,8 +221,8 @@ void Utf8_16_Read::determineEncoding()
 		m_nSkip = 0;
 	}
 	/* UTF-16 big-endian without BOM detection is taken away scince this detection is very week
-    // try to detect UTF-16 big-endian without BOM
-    else if (m_nLen > 1 && m_pBuf[0] == NULL && m_pBuf[1] != NULL)
+	// try to detect UTF-16 big-endian without BOM
+	else if (m_nLen > 1 && m_pBuf[0] == NULL && m_pBuf[1] != NULL)
 	{
 		m_eEncoding = uni16BE_NoBOM;
 		m_nSkip = 0;
@@ -234,26 +243,26 @@ void Utf8_16_Read::determineEncoding()
 
 UniMode Utf8_16_Read::determineEncoding(const unsigned char *buf, int bufLen)
 {
-    // detect UTF-16 big-endian with BOM
+	// detect UTF-16 big-endian with BOM
 	if (bufLen > 1 && buf[0] == k_Boms[uni16BE][0] && buf[1] == k_Boms[uni16BE][1])
 	{
 		return uni16BE;
 	}
-    
-    // detect UTF-16 little-endian with BOM
-    if (bufLen > 1 && buf[0] == k_Boms[uni16LE][0] && buf[1] == k_Boms[uni16LE][1])
+	
+	// detect UTF-16 little-endian with BOM
+	if (bufLen > 1 && buf[0] == k_Boms[uni16LE][0] && buf[1] == k_Boms[uni16LE][1])
 	{
 		return uni16LE;
 	}
-    
-    // detect UTF-8 with BOM
+	
+	// detect UTF-8 with BOM
 	if (bufLen > 2 && buf[0] == k_Boms[uniUTF8][0] && 
 		buf[1] == k_Boms[uniUTF8][1] && buf[2] == k_Boms[uniUTF8][2])
 	{
 		return uniUTF8;
 	}
 
-    return uni8Bit;
+	return uni8Bit;
 }
 
 
@@ -284,132 +293,152 @@ FILE * Utf8_16_Write::fopen(const TCHAR *_name, const TCHAR *_type)
 
 size_t Utf8_16_Write::fwrite(const void* p, size_t _size)
 {
-    // no file open
+	// no file open
 	if (!m_pFile)
-    {
+	{
 		return 0;
 	}
 
-    size_t  ret = 0;
-    
+	size_t  ret = 0;
+
 	if (m_bFirstWrite)
-    {
-        switch (m_eEncoding)
-        {
-            case uniUTF8: {
-                ::fwrite(k_Boms[m_eEncoding], 3, 1, m_pFile);
-                break;
-            }    
-            case uni16BE:
-            case uni16LE:
-                ::fwrite(k_Boms[m_eEncoding], 2, 1, m_pFile);
-                break;
-            default:
-                // nothing to do
-                break;
-        }
+	{
+		switch (m_eEncoding)
+		{
+			case uniUTF8:
+			{
+				::fwrite(k_Boms[m_eEncoding], 3, 1, m_pFile);
+				break;
+			}
+
+			case uni16BE:
+			case uni16LE:
+				::fwrite(k_Boms[m_eEncoding], 2, 1, m_pFile);
+				break;
+
+			default:
+				// nothing to do
+				break;
+		}
 		m_bFirstWrite = false;
-    }
-    
-    switch (m_eEncoding)
-    {
+	}
+
+	switch (m_eEncoding)
+	{
 		case uni7Bit:
-        case uni8Bit:
-        case uniCookie:
-        case uniUTF8: {
-            // Normal write
-            ret = ::fwrite(p, _size, 1, m_pFile);
-            break;
-        }
-        case uni16BE_NoBOM:
-        case uni16LE_NoBOM:
-        case uni16BE:
-        case uni16LE: {
+		case uni8Bit:
+		case uniCookie:
+		case uniUTF8:
+		{
+			// Normal write
+			ret = ::fwrite(p, _size, 1, m_pFile);
+			break;
+		}
+
+		case uni16BE_NoBOM:
+		case uni16LE_NoBOM:
+		case uni16BE:
+		case uni16LE:
+		{
 			static const int bufSize = 64*1024;
 			utf16 buf[bufSize];
-            
-            Utf8_Iter iter8;
-            iter8.set(static_cast<const ubyte*>(p), _size, m_eEncoding);
-            
-            int bufIndex = 0;
-            while (iter8) {
-                if (iter8.canGet()) {
-                    buf[bufIndex++] = iter8.get();
-                }
+			
+			Utf8_Iter iter8;
+			iter8.set(static_cast<const ubyte*>(p), _size, m_eEncoding);
+			
+			int bufIndex = 0;
+			while (iter8)
+			{
+				if (iter8.canGet())
+				{
+					buf[bufIndex++] = iter8.get();
+				}
 				++iter8;
-				if(bufIndex == bufSize || !iter8) {
+				if(bufIndex == bufSize || !iter8)
+				{
 					if(!::fwrite(buf, bufIndex*sizeof(utf16), 1, m_pFile)) return 0;
 					bufIndex = 0;
 				}
-            }
-            ret = 1;
-            break;
-        }    
-        default:
-            break;
-    }
-    
-    return ret;
+			}
+			ret = 1;
+			break;
+		}
+
+		default:
+			break;
+	}
+
+	return ret;
 }
 
 
 size_t Utf8_16_Write::convert(char* p, size_t _size)
 {
 	if (m_pNewBuf)
-    {
+	{
 		delete [] m_pNewBuf;
 	}
 
-    switch (m_eEncoding)
-    {
+	switch (m_eEncoding)
+	{
 		case uni7Bit:
-        case uni8Bit:
-        case uniCookie: {
-            // Normal write
-            m_nBufSize = _size;
-            m_pNewBuf = (ubyte*)new ubyte[m_nBufSize];
-            memcpy(m_pNewBuf, p, _size);
-            break;
-        }
-        case uniUTF8: {
-            m_nBufSize = _size + 3;
-            m_pNewBuf = (ubyte*)new ubyte[m_nBufSize];
-            memcpy(m_pNewBuf, k_Boms[m_eEncoding], 3);
-            memcpy(&m_pNewBuf[3], p, _size);
-            break;
-        }
-        case uni16BE_NoBOM:
-        case uni16LE_NoBOM:
-        case uni16BE:
-        case uni16LE:
+		case uni8Bit:
+		case uniCookie:
+		{
+			// Normal write
+			m_nBufSize = _size;
+			m_pNewBuf = (ubyte*)new ubyte[m_nBufSize];
+			memcpy(m_pNewBuf, p, _size);
+			break;
+		}
+
+		case uniUTF8:
+		{
+			m_nBufSize = _size + 3;
+			m_pNewBuf = (ubyte*)new ubyte[m_nBufSize];
+			memcpy(m_pNewBuf, k_Boms[m_eEncoding], 3);
+			memcpy(&m_pNewBuf[3], p, _size);
+			break;
+		}
+
+		case uni16BE_NoBOM:
+		case uni16LE_NoBOM:
+		case uni16BE:
+		case uni16LE:
 		{
 			utf16* pCur = NULL;
-            
-            if (m_eEncoding == uni16BE || m_eEncoding == uni16LE) {
-                // Write the BOM
+			
+			if (m_eEncoding == uni16BE || m_eEncoding == uni16LE)
+			{
+				// Write the BOM
 				m_pNewBuf = (ubyte*)new ubyte[sizeof(utf16) * (_size + 1)];
-                memcpy(m_pNewBuf, k_Boms[m_eEncoding], 2);
-	            pCur = (utf16*)&m_pNewBuf[2];
-            } else {
+				memcpy(m_pNewBuf, k_Boms[m_eEncoding], 2);
+				pCur = (utf16*)&m_pNewBuf[2];
+			}
+			else
+			{
 				m_pNewBuf = (ubyte*)new ubyte[sizeof(utf16) * _size];
-	            pCur = (utf16*)m_pNewBuf;
+				pCur = (utf16*)m_pNewBuf;
 			}
 
-            Utf8_Iter iter8;
-            iter8.set(reinterpret_cast<const ubyte*>(p), _size, m_eEncoding);
-            
-            for (; iter8; ++iter8) {
-                if (iter8.canGet()) {
-                    *pCur++ = iter8.get();
-                }
-            }
-            m_nBufSize = (const char*)pCur - (const char*)m_pNewBuf;
+			Utf8_Iter iter8;
+			iter8.set(reinterpret_cast<const ubyte*>(p), _size, m_eEncoding);
+			
+			for (; iter8; ++iter8)
+			{
+				if (iter8.canGet())
+				{
+					*pCur++ = iter8.get();
+				}
+			}
+			m_nBufSize = (const char*)pCur - (const char*)m_pNewBuf;
 			break;
-        }
-        default:
-            break;
-    }
-    
+		}
+
+		default:
+			break;
+	}
+	
 	return m_nBufSize;
 }
 
@@ -460,28 +489,35 @@ void Utf8_Iter::set(const ubyte* pBuf, size_t nLen, UniMode eEncoding)
 void Utf8_Iter::operator++()
 {
 	switch (m_eState)
-    {
-        case eStart:
-            if (*m_pRead < 0x80) {
-                m_nCur = *m_pRead;
-                toStart();
-            } else if (*m_pRead < 0xE0) {
-                m_nCur = static_cast<utf16>((0x1F & *m_pRead) << 6);
-                m_eState = e2Bytes_Byte2;
-            } else {
-                m_nCur = static_cast<utf16>((0xF & *m_pRead) << 12);
-                m_eState = e3Bytes_Byte2;
-            }
-            break;
-        case e2Bytes_Byte2:
-        case e3Bytes_Byte3:
-            m_nCur |= static_cast<utf8>(0x3F & *m_pRead);
-            toStart();
-            break;
-        case e3Bytes_Byte2:
-            m_nCur |= static_cast<utf16>((0x3F & *m_pRead) << 6);
-            m_eState = e3Bytes_Byte3;
-            break;
+	{
+		case eStart:
+			if (*m_pRead < 0x80)
+			{
+				m_nCur = *m_pRead;
+				toStart();
+			}
+			else if (*m_pRead < 0xE0)
+			{
+				m_nCur = static_cast<utf16>((0x1F & *m_pRead) << 6);
+				m_eState = e2Bytes_Byte2;
+			}
+			else
+			{
+				m_nCur = static_cast<utf16>((0xF & *m_pRead) << 12);
+				m_eState = e3Bytes_Byte2;
+			}
+			break;
+
+		case e2Bytes_Byte2:
+		case e3Bytes_Byte3:
+			m_nCur |= static_cast<utf8>(0x3F & *m_pRead);
+			toStart();
+			break;
+
+		case e3Bytes_Byte2:
+			m_nCur |= static_cast<utf16>((0x3F & *m_pRead) << 6);
+			m_eState = e3Bytes_Byte3;
+			break;
 	}
 	++m_pRead;
 }
@@ -490,7 +526,7 @@ void Utf8_Iter::toStart()
 {
 	m_eState = eStart;
 	if (m_eEncoding == uni16BE || m_eEncoding == uni16BE_NoBOM)
-    {
+	{
 		swap();
 	}
 }
@@ -537,41 +573,48 @@ void Utf16_Iter::set(const ubyte* pBuf, size_t nLen, UniMode eEncoding)
 void Utf16_Iter::operator++()
 {
 	switch (m_eState)
-    {
-        case eStart:
-            if (m_eEncoding == uni16LE || m_eEncoding == uni16LE_NoBOM) 
-            {
-                m_nCur16 = *m_pRead++;
-                m_nCur16 |= static_cast<utf16>(*m_pRead << 8);
-            }
-            else //(m_eEncoding == uni16BE || m_eEncoding == uni16BE_NoBOM)
-            {
-                m_nCur16 = static_cast<utf16>(*m_pRead++ << 8);
-                m_nCur16 |= *m_pRead;
-            }
-            ++m_pRead;
-            
-            if (m_nCur16 < 0x80) {
-                m_nCur = static_cast<ubyte>(m_nCur16 & 0xFF);
-                m_eState = eStart;
-            } else if (m_nCur16 < 0x800) {
-                m_nCur = static_cast<ubyte>(0xC0 | m_nCur16 >> 6);
-                m_eState = e2Bytes2;
-            } else {
-                m_nCur = static_cast<ubyte>(0xE0 | m_nCur16 >> 12);
-                m_eState = e3Bytes2;
-            }
-            break;
-        case e2Bytes2:
-        case e3Bytes3:
-            m_nCur = static_cast<ubyte>(0x80 | m_nCur16 & 0x3F);
-            m_eState = eStart;
-            break;
-        case e3Bytes2:
-            m_nCur = static_cast<ubyte>(0x80 | ((m_nCur16 >> 6) & 0x3F));
-            m_eState = e3Bytes3;
-            break;
-    }
+	{
+		case eStart:
+			if (m_eEncoding == uni16LE || m_eEncoding == uni16LE_NoBOM) 
+			{
+				m_nCur16 = *m_pRead++;
+				m_nCur16 |= static_cast<utf16>(*m_pRead << 8);
+			}
+			else //(m_eEncoding == uni16BE || m_eEncoding == uni16BE_NoBOM)
+			{
+				m_nCur16 = static_cast<utf16>(*m_pRead++ << 8);
+				m_nCur16 |= *m_pRead;
+			}
+			++m_pRead;
+			
+			if (m_nCur16 < 0x80)
+			{
+				m_nCur = static_cast<ubyte>(m_nCur16 & 0xFF);
+				m_eState = eStart;
+			}
+			else if (m_nCur16 < 0x800)
+			{
+				m_nCur = static_cast<ubyte>(0xC0 | m_nCur16 >> 6);
+				m_eState = e2Bytes2;
+			}
+			else
+			{
+				m_nCur = static_cast<ubyte>(0xE0 | m_nCur16 >> 12);
+				m_eState = e3Bytes2;
+			}
+			break;
+
+		case e2Bytes2:
+		case e3Bytes3:
+			m_nCur = static_cast<ubyte>(0x80 | m_nCur16 & 0x3F);
+			m_eState = eStart;
+			break;
+
+		case e3Bytes2:
+			m_nCur = static_cast<ubyte>(0x80 | ((m_nCur16 >> 6) & 0x3F));
+			m_eState = e3Bytes3;
+			break;
+	}
 }
 
 

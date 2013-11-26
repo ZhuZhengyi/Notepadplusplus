@@ -643,7 +643,6 @@ void DrawCursor(HWND hWnd, int SI)
 	GetClientRect(hWnd, &rect);
 
 	rect = GetCellRect(hWnd, SI, BGHS[SI].cursorrow, BGHS[SI].cursorcol);
-	RECT rectwhole = rect;
 	HDC gdc = GetDC(hWnd);
 	BGHS[SI].activecellrect = rect;
 	int rop = GetROP2(gdc);
@@ -1249,7 +1248,6 @@ LRESULT CALLBACK GridProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	static int ASCII;
 
 	int SelfIndex = FindGrid((UINT)GetMenu(hWnd));
-	UINT SelfMenu = BGHS[SelfIndex].gridmenu;
 
 	//update the grid width and height variable
 	{
@@ -1978,6 +1976,7 @@ LRESULT CALLBACK GridProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			break;
 
 		case WM_MOUSEMOVE:
+		{
 			int x = LOWORD(lParam);
 			int y = HIWORD(lParam);
 			int r = GetRowOfMouse(SelfIndex, y);
@@ -2015,6 +2014,7 @@ LRESULT CALLBACK GridProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				}
 			}
 			break;
+		}
 
 		case WM_LBUTTONUP:
 			if (BGHS[SelfIndex].COLUMNSIZING)
@@ -2587,9 +2587,11 @@ LRESULT CALLBACK GridProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			break;
 
 		case WM_MOUSEWHEEL:
+		{
 			short zDelta = (short)HIWORD(wParam);
 			::SendMessage(hWnd, WM_VSCROLL, zDelta < 0 ? SB_LINEDOWN : SB_LINEUP, 0);
 			return TRUE;
+		}
 
 		case WM_VSCROLL:
 			SetFocus(hWnd);

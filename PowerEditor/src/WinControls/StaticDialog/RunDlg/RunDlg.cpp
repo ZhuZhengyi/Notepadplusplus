@@ -59,7 +59,9 @@ void Command::extractArgs(TCHAR *cmd2Exec, TCHAR *args, const TCHAR *cmdEntier)
 
 	}
 	else
+	{
 		args[0] = '\0';
+	}
 }
 
 
@@ -135,7 +137,9 @@ void expandNppEnvironmentStrs(const TCHAR *strSrc, TCHAR *stringDest, size_t str
 						wsprintf(expandedStr, TEXT("%d"), lineNumber);
 					}
 					else
+					{
 						::SendMessage(hWnd, RUNCOMMAND_USER + internalVar, CURRENTWORD_MAXLENGTH, (LPARAM)expandedStr);
+					}
 
 					for (size_t p = 0, len3 = size_t(lstrlen(expandedStr)); p < len3; ++p)
 					{
@@ -156,10 +160,12 @@ void expandNppEnvironmentStrs(const TCHAR *strSrc, TCHAR *stringDest, size_t str
 			}
 		}
 		else
-			if (j < (strDestLen-1))
+		{
+			if (j < (strDestLen - 1))
 				stringDest[j++] = strSrc[i];
 			else
 				break;
+		}
 	}
 	stringDest[j] = '\0';
 }
@@ -250,17 +256,17 @@ BOOL CALLBACK RunDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 						theUserCmds.push_back(uc);
 						::InsertMenu(hRunMenu, posBase + nbCmd, MF_BYPOSITION, cmdID, uc.toMenuItemString().c_str());
 
-                        if (nbCmd == 0)
-                        {
-                            // Insert the separator and modify/delete command
-			                ::InsertMenu(hRunMenu, posBase + nbCmd + 1, MF_BYPOSITION, (unsigned int)-1, 0);
+						if (nbCmd == 0)
+						{
+							// Insert the separator and modify/delete command
+							::InsertMenu(hRunMenu, posBase + nbCmd + 1, MF_BYPOSITION, (unsigned int)-1, 0);
 							NativeLangSpeaker *pNativeLangSpeaker = (NppParameters::getInstance())->getNativeLangSpeaker();
 							generic_string nativeLangShortcutMapperMacro = pNativeLangSpeaker->getNativeLangMenuString(IDM_SETTING_SHORTCUT_MAPPER_MACRO);
 							if (nativeLangShortcutMapperMacro == TEXT(""))
 								nativeLangShortcutMapperMacro = TEXT("Modify Shortcut/Delete Command...");
 
 							::InsertMenu(hRunMenu, posBase + nbCmd + 2, MF_BYCOMMAND, IDM_SETTING_SHORTCUT_MAPPER_RUN, nativeLangShortcutMapperMacro.c_str());
-                        }
+						}
 						(NppParameters::getInstance())->getAccelerator()->updateShortcuts();
 					}
 					return TRUE;
@@ -293,7 +299,7 @@ BOOL CALLBACK RunDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 			}
 		}
 	}
-	return FALSE;	
+	return FALSE;
 }
 
 void RunDlg::addTextToCombo(const TCHAR *txt2Add) const
@@ -318,7 +324,7 @@ void RunDlg::doDialog(bool isRTL)
 	if (!isCreated())
 		create(IDD_RUN_DLG, isRTL);
 
-    // Adjust the position in the center
+	// Adjust the position in the center
 	goToCenter();
 	::SetFocus(::GetDlgItem(_hSelf, IDC_COMBO_RUN_PATH));
 };

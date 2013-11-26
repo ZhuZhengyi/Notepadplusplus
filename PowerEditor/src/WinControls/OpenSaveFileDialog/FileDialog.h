@@ -36,30 +36,31 @@ using namespace std;
 
 typedef vector<generic_string> stringVector;
 
-struct OPENFILENAMENPP {
-   DWORD        lStructSize;
-   HWND         hwndOwner;
-   HINSTANCE    hInstance;
-   LPCTSTR      lpstrFilter;
-   LPTSTR       lpstrCustomFilter;
-   DWORD        nMaxCustFilter;
-   DWORD        nFilterIndex;
-   LPTSTR       lpstrFile;
-   DWORD        nMaxFile;
-   LPTSTR       lpstrFileTitle;
-   DWORD        nMaxFileTitle;
-   LPCTSTR      lpstrInitialDir;
-   LPCTSTR      lpstrTitle;
-   DWORD        Flags;
-   WORD         nFileOffset;
-   WORD         nFileExtension;
-   LPCTSTR      lpstrDefExt;
-   LPARAM       lCustData;
-   LPOFNHOOKPROC lpfnHook;
-   LPCTSTR      lpTemplateName;
-   void *		pvReserved;
-   DWORD        dwReserved;
-   DWORD        FlagsEx;
+struct OPENFILENAMENPP
+{
+	DWORD        lStructSize;
+	HWND         hwndOwner;
+	HINSTANCE    hInstance;
+	LPCTSTR      lpstrFilter;
+	LPTSTR       lpstrCustomFilter;
+	DWORD        nMaxCustFilter;
+	DWORD        nFilterIndex;
+	LPTSTR       lpstrFile;
+	DWORD        nMaxFile;
+	LPTSTR       lpstrFileTitle;
+	DWORD        nMaxFileTitle;
+	LPCTSTR      lpstrInitialDir;
+	LPCTSTR      lpstrTitle;
+	DWORD        Flags;
+	WORD         nFileOffset;
+	WORD         nFileExtension;
+	LPCTSTR      lpstrDefExt;
+	LPARAM       lCustData;
+	LPOFNHOOKPROC lpfnHook;
+	LPCTSTR      lpTemplateName;
+	void *       pvReserved;
+	DWORD        dwReserved;
+	DWORD        FlagsEx;
 };
 
 
@@ -81,12 +82,12 @@ public:
 	stringVector * doOpenMultiFilesDlg();
 	TCHAR * doOpenSingleFileDlg();
 	bool isReadOnly() {return _ofn.Flags & OFN_READONLY;};
-    void setExtIndex(int extTypeIndex) {_extTypeIndex = extTypeIndex;};
+	void setExtIndex(int extTypeIndex) {_extTypeIndex = extTypeIndex;};
 
 	static int _dialogFileBoxId;
 protected :
-    static UINT_PTR CALLBACK OFNHookProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-    BOOL APIENTRY run(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+	static UINT_PTR CALLBACK OFNHookProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+	BOOL APIENTRY run(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 private:
 	TCHAR _fileName[MAX_PATH*8];
@@ -100,10 +101,10 @@ private:
 	winVer _winVersion;
 	
 
-    //TCHAR _extArray[nbExtMax][extLenMax];
-    int _nbExt;
-    int _extTypeIndex;
-    static FileDialog *staticThis;
+	//TCHAR _extArray[nbExtMax][extLenMax];
+	int _nbExt;
+	int _extTypeIndex;
+	static FileDialog *staticThis;
 };
 
 #endif //FILE_DIALOG_H

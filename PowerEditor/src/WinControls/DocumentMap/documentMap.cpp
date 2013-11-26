@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -219,7 +219,7 @@ void DocumentMap::scrollMap()
 		}
 
 		// Update view zone in map
-		_vzDlg.drawZone(higherY, lowerY);		
+		_vzDlg.drawZone(higherY, lowerY);
 	}
 }
 
@@ -256,10 +256,10 @@ void DocumentMap::scrollMap(bool direction, moveMode whichMode)
 
 BOOL CALLBACK DocumentMap::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
-    switch (message)
-    {
-        case WM_INITDIALOG :
-        {
+	switch (message)
+	{
+		case WM_INITDIALOG :
+		{
 			HWND hwndScintilla = (HWND)::SendMessage(_hParent, NPPM_CREATESCINTILLAHANDLE, 0, (LPARAM)_hSelf);
 			_pScintillaEditView = (ScintillaEditView *)::SendMessage(_hParent, NPPM_INTERNAL_GETSCINTEDTVIEW, 0, (LPARAM)hwndScintilla);
 			_pScintillaEditView->execute(SCI_SETZOOM, (WPARAM)-10, 0);
@@ -268,7 +268,7 @@ BOOL CALLBACK DocumentMap::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPara
 
 			_pScintillaEditView->showIndentGuideLine(false);
 			_pScintillaEditView->display();
-			
+
 			reloadMap();
 
 			_vzDlg.init(::GetModuleHandle(NULL), _hSelf);
@@ -276,17 +276,17 @@ BOOL CALLBACK DocumentMap::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPara
 			(NppParameters::getInstance())->SetTransparent(_vzDlg.getHSelf(), 50); // 0 <= transparancy < 256
 
 			setSyntaxLiliting();
-			
+
 			_pScintillaEditView->showMargin(0, false);
 			_pScintillaEditView->showMargin(1, false);
 			_pScintillaEditView->showMargin(2, false);
 			_pScintillaEditView->showMargin(3, false);
-			
-            return TRUE;
-        }
 
-        case WM_SIZE:
-        {
+			return TRUE;
+		}
+
+		case WM_SIZE:
+		{
 			if (_pScintillaEditView)
 			{
 				int width = LOWORD(lParam);
@@ -298,12 +298,12 @@ BOOL CALLBACK DocumentMap::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPara
 					::ClientToScreen(_hSelf, &pt);
 					if (!_pScintillaEditView->isWrap())
 						::MoveWindow(_pScintillaEditView->getHSelf(), 0, 0, width, height, TRUE);
-						
+
 					::MoveWindow(_vzDlg.getHSelf(), pt.x, pt.y, width, height, TRUE);
 				}
 			}
-            break;
-        }
+			break;
+		}
 
 		case WM_NOTIFY:
 		{
@@ -354,9 +354,7 @@ BOOL CALLBACK DocumentMap::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPara
 
 				default:
 					break;
-				
 			}
-	
 		}
 		return TRUE;
 
@@ -387,11 +385,9 @@ BOOL CALLBACK DocumentMap::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPara
 		}
 		return TRUE;
 
-
-
-        default :
-            return DockingDlgInterface::run_dlgProc(message, wParam, lParam);
-    }
+		default :
+			return DockingDlgInterface::run_dlgProc(message, wParam, lParam);
+	}
 	return DockingDlgInterface::run_dlgProc(message, wParam, lParam);
 }
 
@@ -402,7 +398,7 @@ void ViewZoneDlg::drawPreviewZone(DRAWITEMSTRUCT *pdis)
 	const COLORREF orange = RGB(0xFF, 0x80, 0x00);
 	const COLORREF white = RGB(0xFF, 0xFF, 0xFF);
 	HBRUSH hbrushFg = CreateSolidBrush(orange);
-	HBRUSH hbrushBg = CreateSolidBrush(white);					
+	HBRUSH hbrushBg = CreateSolidBrush(white);
 	FillRect(pdis->hDC, &rc, hbrushBg);
 
 	rc.top = _higherY;
@@ -417,6 +413,7 @@ void ViewZoneDlg::doDialog()
 {
 	if (!isCreated())
 		create(IDD_VIEWZONE);
+
 	display();
 };
 
@@ -424,7 +421,7 @@ BOOL CALLBACK ViewZoneDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPara
 {
 	switch (message) 
 	{
-        case WM_INITDIALOG :
+		case WM_INITDIALOG :
 		{
 			_viewZoneCanvas = ::GetDlgItem(_hSelf, IDC_VIEWZONECANVAS);
 			::SetWindowLongPtrW(_viewZoneCanvas, GWL_USERDATA, reinterpret_cast<LONG>(this));
@@ -452,15 +449,15 @@ BOOL CALLBACK ViewZoneDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPara
 		}
 
 		case WM_SIZE:
-        {
+		{
 			if (_viewZoneCanvas)
 			{
 				int width = LOWORD(lParam);
 				int height = HIWORD(lParam);
 				::MoveWindow(_viewZoneCanvas, 0, 0, width , height, TRUE);
 			}
-            break;
-        }
+			break;
+		}
 
 		case WM_MOUSEWHEEL :
 		{
@@ -488,12 +485,12 @@ BOOL CALLBACK ViewZoneDlg::canvasStaticProc(HWND hwnd, UINT message, WPARAM wPar
 BOOL CALLBACK ViewZoneDlg::canvas_runProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
-    {
+	{
 		case WM_DESTROY:
 		{
 			//::MessageBoxA(NULL,"Destroy","",MB_OK);
+			return TRUE;
 		}
-		return TRUE;
 
 		case WM_KEYDOWN:
 			if (wParam == VK_UP)
@@ -514,18 +511,19 @@ BOOL CALLBACK ViewZoneDlg::canvas_runProc(HWND hwnd, UINT message, WPARAM wParam
 			}
 			break;
 
-        case WM_SIZE:
-        {
-            break;
-        }
+		case WM_SIZE:
+		{
+			break;
+		}
 
 		case WM_NOTIFY:
 		{
+			return TRUE;
 		}
-		return TRUE;
 
-        default :
-            return _canvasDefaultProc(hwnd, message, wParam, lParam);
-    }
+		default :
+			return _canvasDefaultProc(hwnd, message, wParam, lParam);
+	}
+
 	return _canvasDefaultProc(hwnd, message, wParam, lParam);
 }

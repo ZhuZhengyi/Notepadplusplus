@@ -47,7 +47,8 @@ public :
 	DocTabView():TabBarPlus(), _pView(NULL) {};
 	virtual ~DocTabView(){};
 	
-	virtual void destroy() {
+	virtual void destroy()
+	{
 		TabBarPlus::destroy();
 	};
 
@@ -74,13 +75,15 @@ public :
 
 	void setBuffer(int index, BufferID id);
 
-	static bool setHideTabBarStatus(bool hideOrNot) {
+	static bool setHideTabBarStatus(bool hideOrNot)
+	{
 		bool temp = _hideTabBarStatus;
 		_hideTabBarStatus = hideOrNot;
 		return temp;
 	};
 
-	static bool getHideTabBarStatus() {
+	static bool getHideTabBarStatus()
+	{
 		return _hideTabBarStatus;
 	};
 

@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -115,6 +115,7 @@ BOOL CALLBACK ValueDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)
 					return FALSE;
 			}
 		}
+
 		default :
 			return FALSE;
 	}
@@ -137,24 +138,24 @@ BOOL CALLBACK ButtonDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)
 			{
 				case IDC_RESTORE_BUTTON :
 				{
-                    int bs = getButtonStatus();
-                    bool isFullScreen = (bs & buttonStatus_fullscreen) != 0;
-                    bool isPostIt = (bs & buttonStatus_postit) != 0;
-                    int cmd = 0;
-                    if (isFullScreen && isPostIt)
-                    {
-                        // remove postit firstly
-                        cmd = IDM_VIEW_POSTIT;
-                    }
-                    else if (isFullScreen)
-                    {
-                        cmd = IDM_VIEW_FULLSCREENTOGGLE;
-                    }
-                    else if (isPostIt)
-                    {
-                        cmd = IDM_VIEW_POSTIT;
-                    }
-                    ::SendMessage(_hParent, WM_COMMAND, cmd, 0);
+					int bs = getButtonStatus();
+					bool isFullScreen = (bs & buttonStatus_fullscreen) != 0;
+					bool isPostIt = (bs & buttonStatus_postit) != 0;
+					int cmd = 0;
+					if (isFullScreen && isPostIt)
+					{
+						// remove postit firstly
+						cmd = IDM_VIEW_POSTIT;
+					}
+					else if (isFullScreen)
+					{
+						cmd = IDM_VIEW_FULLSCREENTOGGLE;
+					}
+					else if (isPostIt)
+					{
+						cmd = IDM_VIEW_POSTIT;
+					}
+					::SendMessage(_hParent, WM_COMMAND, cmd, 0);
 					display(false);
 					return TRUE;
 				}
@@ -173,7 +174,8 @@ BOOL CALLBACK ButtonDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)
 
 void ButtonDlg::doDialog(bool isRTL) 
 {
-    if (!isCreated())
-			create(IDD_BUTTON_DLG, isRTL);
+	if (!isCreated())
+		create(IDD_BUTTON_DLG, isRTL);
+
 	display();
 }

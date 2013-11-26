@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -42,7 +42,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 	ScintillaEditView * notifyView = isFromPrimary?&_mainEditView:&_subEditView;
 	DocTabView *notifyDocTab = isFromPrimary?&_mainDocTab:&_subDocTab;
 	TBHDR * tabNotification = (TBHDR*) notification;
-	switch (notification->nmhdr.code) 
+	switch (notification->nmhdr.code)
 	{
 		case SCN_MODIFIED:
 		{
@@ -57,7 +57,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 
 			if (notification->modificationType & SC_MOD_CHANGEFOLD)
 			{
-				if (prevWasEdit) 
+				if (prevWasEdit)
 				{
 					notifyView->foldChanged(notification->line,
 							notification->foldLevelNow, notification->foldLevelPrev);
@@ -97,7 +97,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 			}
 			bool isDirty = notification->nmhdr.code == SCN_SAVEPOINTLEFT;
 			buf->setDirty(isDirty);
-			break; 
+			break;
 		}
 
 		case  SCN_MODIFYATTEMPTRO :
@@ -116,7 +116,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 		{
 			POINT p = sender->getDraggingPoint();
 
-			//It's the coordinate of screen, so we can call 
+			//It's the coordinate of screen, so we can call
 			//"WindowFromPoint" function without converting the point
 			HWND hWin = ::WindowFromPoint(p);
 			if (hWin == _pEditView->getHSelf()) // In the same view group
@@ -133,14 +133,14 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 				}
 				_tabPopupDropMenu.display(p);
 			}
-			else if ((hWin == _pNonDocTab->getHSelf()) || 
+			else if ((hWin == _pNonDocTab->getHSelf()) ||
 				     (hWin == _pNonEditView->getHSelf())) // In the another view group
 			{
 				docGotoAnotherEditView(isInCtrlStat?TransferClone:TransferMove);
 			}/*
 			else if ((hWin == _pProjectPanel_1->getTreeHandle()))
 			{
-				
+
 				//printStr(TEXT("IN!!!"));
 			}*/
 			else
@@ -170,7 +170,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 					BufferID bufferToClose = notifyDocTab->getBufferByIndex(index);
 					Buffer * buf = MainFileManager->getBufferByID(bufferToClose);
 					int iView = isFromPrimary?MAIN_VIEW:SUB_VIEW;
-					if (buf->isDirty()) 
+					if (buf->isDirty())
 					{
 						generic_string msg, title;
 						_nativeLangSpeaker.messageBox("CannotMoveDoc",
@@ -243,7 +243,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 		BufferID bufid = _pDocTab->getBufferByIndex(_pDocTab->getCurrentTabIndex());
 		if (bufid != BUFFER_INVALID)
 			activateBuffer(bufid, iView);
-		
+
 		break;
 	}
 
@@ -361,7 +361,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 
 		bool isEnable = ((::GetMenuState(_mainMenuHandle, IDM_FILE_SAVE, MF_BYCOMMAND)&MF_DISABLED) == 0);
 		_tabPopupMenu.enableItem(IDM_FILE_SAVE, isEnable);
-		
+
 		Buffer * buf = _pEditView->getCurrentBuffer();
 		bool isUserReadOnly = buf->getUserReadOnly();
 		_tabPopupMenu.checkItem(IDM_EDIT_SETREADONLY, isUserReadOnly);
@@ -412,7 +412,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 		|| (notification->nmhdr.hwndFrom == _subEditView.getHSelf()))
 		{
 			int lineClicked = notification->line;
-			
+
 			if (!_isFolding)
 			{
 				int urlAction = (NppParameters::getInstance())->getNppGUI()._styleURL;
@@ -432,9 +432,9 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 		bool indentMaintain = nppGui._maitainIndent;
 		if (indentMaintain)
 			MaintainIndentation(static_cast<TCHAR>(notification->ch));
-		
+
 		AutoCompletion * autoC = isFromPrimary?&_autoCompleteMain:&_autoCompleteSub;
-		
+
 		if (nppGui._matchedPairConf.hasAnyPairsPair())
 			autoC->insertMatchedChars(notification->ch, nppGui._matchedPairConf);
 		autoC->update(notification->ch);
@@ -455,7 +455,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 			{
 				char *buf;
 				int length;
-				
+
 				if(nppGUI._delimiterSelectionOnEntireDocument)
 				{
 					// Get entire document.
@@ -618,7 +618,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 
 		if (notification->nmhdr.hwndFrom != _pEditView->getHSelf())
 			break;
-		
+
 		braceMatch();
 
 		NppGUI & nppGui = (NppGUI &)nppParam->getNppGUI();
@@ -628,7 +628,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 			XmlMatchedTagsHighlighter xmlTagMatchHiliter(_pEditView);
 			xmlTagMatchHiliter.tagMatch(nppGui._enableTagAttrsHilite);
 		}
-		
+
 		if (nppGui._enableSmartHilite)
 		{
 			if (nppGui._disableSmartHiliteTmp)
@@ -648,10 +648,10 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 	{
 		try
 		{
-			LPTOOLTIPTEXT lpttt = (LPTOOLTIPTEXT)notification; 
+			LPTOOLTIPTEXT lpttt = (LPTOOLTIPTEXT)notification;
 
 			//Joce's fix
-			lpttt->hinst = NULL; 
+			lpttt->hinst = NULL;
 
 			POINT p;
 			::GetCursorPos(&p);
@@ -732,11 +732,11 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 			_subEditView.setWrapRestoreNeeded(false);
 		}
 		notifyView->updateLineNumberWidth();
-		if (_syncInfo.doSync()) 
+		if (_syncInfo.doSync())
 			doSynScorll(HWND(notification->nmhdr.hwndFrom));
 
 		NppParameters *nppParam = NppParameters::getInstance();
-		
+
 		// if it's searching/replacing, then do nothing
 		if ((_linkTriggered && !nppParam->_isFindReplacing) || notification->wParam == LINKTRIGGERED)
 		{
@@ -757,14 +757,14 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 	case SCN_HOTSPOTDOUBLECLICK :
 	{
 		notifyView->execute(SCI_SETWORDCHARS, 0, (LPARAM)"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-+.,:?&@=/%#()");
-		
+
 		int pos = notifyView->execute(SCI_GETCURRENTPOS);
 		int startPos = static_cast<int>(notifyView->execute(SCI_WORDSTARTPOSITION, pos, false));
 		int endPos = static_cast<int>(notifyView->execute(SCI_WORDENDPOSITION, pos, false));
 
 		notifyView->execute(SCI_SETTARGETSTART, startPos);
 		notifyView->execute(SCI_SETTARGETEND, endPos);
-	
+
 		int posFound = notifyView->execute(SCI_SEARCHINTARGET, strlen(URL_REG_EXPR), (LPARAM)URL_REG_EXPR);
 		if (posFound != -1)
 		{
@@ -825,7 +825,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 		//If N++ ID, use proper object
 		switch(lpnm->wID)
 		{
-			case REBAR_BAR_TOOLBAR: 
+			case REBAR_BAR_TOOLBAR:
 				POINT pt;
 				pt.x = lpnm->rc.left;
 				pt.y = lpnm->rc.bottom;

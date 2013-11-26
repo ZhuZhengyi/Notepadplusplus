@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -31,8 +31,7 @@
 
 bool SplitterContainer::_isRegistered = false;
 
-void SplitterContainer::create(Window *pWin0, Window *pWin1, int splitterSize,
-                               SplitterMode mode, int ratio, bool isVertical)
+void SplitterContainer::create(Window *pWin0, Window *pWin1, int splitterSize, SplitterMode mode, int ratio, bool isVertical)
 {
 	//Window::init(hInst, parent);
 	_pWin0 = pWin0;
@@ -41,9 +40,9 @@ void SplitterContainer::create(Window *pWin0, Window *pWin1, int splitterSize,
 	_splitterMode = mode;
 	_ratio = ratio;
 	_dwSplitterStyle |= isVertical?SV_VERTICAL:SV_HORIZONTAL;
-    if (_splitterMode != DYNAMIC)
+	if (_splitterMode != DYNAMIC)
 	{
-        _dwSplitterStyle |= SV_FIXED;
+		_dwSplitterStyle |= SV_FIXED;
 		_dwSplitterStyle &= ~SV_RESIZEWTHPERCNT;
 	}
 	if (!_isRegistered)
@@ -140,7 +139,7 @@ LRESULT SplitterContainer::runProc(UINT message, WPARAM wParam, LPARAM lParam)
 		case WM_CREATE :
 			_splitter.init(_hInst, _hSelf, _splitterSize, _ratio, _dwSplitterStyle);
 			return TRUE;
-		
+
 		case WM_COMMAND :
 		{
 			switch (LOWORD(wParam)) 
@@ -154,6 +153,7 @@ LRESULT SplitterContainer::runProc(UINT message, WPARAM wParam, LPARAM lParam)
 			}
 			return TRUE;
 		}
+
 		case WM_RESIZE_CONTAINER :
 		{
 			RECT rc0, rc1;
@@ -190,7 +190,7 @@ LRESULT SplitterContainer::runProc(UINT message, WPARAM wParam, LPARAM lParam)
 			::InvalidateRect(_splitter.getHSelf(), NULL, TRUE);
 			return TRUE;
 		}
-		
+
 		case WM_DOPOPUPMENU :
 		{
 			if ((_splitterMode != LEFT_FIX) && (_splitterMode != RIGHT_FIX) )
@@ -213,38 +213,45 @@ LRESULT SplitterContainer::runProc(UINT message, WPARAM wParam, LPARAM lParam)
 		}
 
 		case WM_GETSPLITTER_X :
-        {
-            if (_splitterMode == LEFT_FIX)
-                return MAKELONG(_pWin0->getWidth(), LEFT_FIX);
-            else if (_splitterMode == RIGHT_FIX)
-            {
-                int x = getWidth()-_pWin1->getWidth();
-                if (x < 0)
-                    x = 0;
-                return MAKELONG(x, RIGHT_FIX);
-            }
-            else
-			    return MAKELONG(0, DYNAMIC);
-         
-        }
+		{
+			if (_splitterMode == LEFT_FIX)
+			{
+				return MAKELONG(_pWin0->getWidth(), LEFT_FIX);
+			}
+			else if (_splitterMode == RIGHT_FIX)
+			{
+				int x = getWidth() - _pWin1->getWidth();
+				if (x < 0)
+					x = 0;
+				return MAKELONG(x, RIGHT_FIX);
+			}
+			else
+			{
+				return MAKELONG(0, DYNAMIC);
+			}
+		}
 
-		case WM_GETSPLITTER_Y :
-        {
-            if (_splitterMode == LEFT_FIX)
-                return MAKELONG(_pWin0->getHeight(), LEFT_FIX);
-            else if (_splitterMode == RIGHT_FIX)
-            {
-                int y = getHeight()-_pWin1->getHeight();
-                if (y < 0)
-                    y = 0;
-                return MAKELONG(y, RIGHT_FIX);
-            }
-            else
-			    return MAKELONG(0, DYNAMIC);
-        }
+		case WM_GETSPLITTER_Y:
+		{
+			if (_splitterMode == LEFT_FIX)
+			{
+				return MAKELONG(_pWin0->getHeight(), LEFT_FIX);
+			}
+			else if (_splitterMode == RIGHT_FIX)
+			{
+				int y = getHeight() - _pWin1->getHeight();
+				if (y < 0)
+					y = 0;
+				return MAKELONG(y, RIGHT_FIX);
+			}
+			else
+			{
+				return MAKELONG(0, DYNAMIC);
+			}
+		}
 
 		case WM_LBUTTONDBLCLK:
-		{			
+		{
 			POINT pt;
 			::GetCursorPos(&pt);
 			::ScreenToClient(_splitter.getHSelf(), &pt);

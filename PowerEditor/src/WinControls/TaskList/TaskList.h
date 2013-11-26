@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -36,7 +36,8 @@
 class TaskList : public Window
 {
 public:
-	TaskList() : Window(), _currentIndex(0), _hFont(NULL), _hFontSelected(NULL) {
+	TaskList() : Window(), _currentIndex(0), _hFont(NULL), _hFontSelected(NULL)
+	{
 		_rc.left = 0;
 		_rc.top = 0;
 		_rc.right = 150;
@@ -51,7 +52,8 @@ public:
 	int getCurrentIndex() const {return _currentIndex;}
 	int updateCurrentIndex();
 
-	HIMAGELIST getImgLst() const {
+	HIMAGELIST getImgLst() const
+	{
 		return ListView_GetImageList(_hSelf, LVSIL_SMALL);
 	};
 
@@ -62,7 +64,8 @@ protected:
 	WNDPROC _defaultProc;
 	LRESULT runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam);
 
-	static LRESULT CALLBACK staticProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) {
+	static LRESULT CALLBACK staticProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
+	{
 		return (((TaskList *)(::GetWindowLongPtr(hwnd, GWL_USERDATA)))->runProc(hwnd, Message, wParam, lParam));
 	};
 

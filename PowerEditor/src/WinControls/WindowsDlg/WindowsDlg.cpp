@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -43,14 +43,17 @@
 static const TCHAR *readonlyString = TEXT(" [Read Only]");
 const UINT WDN_NOTIFY = RegisterWindowMessage(TEXT("WDN_NOTIFY"));
 
-inline static DWORD GetStyle(HWND hWnd) { 
-	return (DWORD)GetWindowLongPtr(hWnd, GWL_STYLE); 
+inline static DWORD GetStyle(HWND hWnd)
+{ 
+	return (DWORD)GetWindowLongPtr(hWnd, GWL_STYLE);
 }
-inline static DWORD GetExStyle(HWND hWnd) { 
-	return (DWORD)GetWindowLongPtr(hWnd, GWL_EXSTYLE); 
+inline static DWORD GetExStyle(HWND hWnd)
+{ 
+	return (DWORD)GetWindowLongPtr(hWnd, GWL_EXSTYLE);
 }
 
-inline static BOOL ModifyStyle(HWND hWnd, DWORD dwRemove, DWORD dwAdd) {
+inline static BOOL ModifyStyle(HWND hWnd, DWORD dwRemove, DWORD dwAdd)
+{
 	DWORD dwStyle = ::GetWindowLongPtr(hWnd, GWL_STYLE);
 	DWORD dwNewStyle = (dwStyle & ~dwRemove) | dwAdd;
 	if(dwStyle == dwNewStyle)
@@ -59,7 +62,8 @@ inline static BOOL ModifyStyle(HWND hWnd, DWORD dwRemove, DWORD dwAdd) {
 	return TRUE;
 }
 
-inline static BOOL ModifyStyleEx(HWND hWnd, DWORD dwRemove, DWORD dwAdd) {
+inline static BOOL ModifyStyleEx(HWND hWnd, DWORD dwRemove, DWORD dwAdd)
+{
 	DWORD dwStyle = ::GetWindowLongPtr(hWnd, GWL_EXSTYLE);
 	DWORD dwNewStyle = (dwStyle & ~dwRemove) | dwAdd;
 	if(dwStyle == dwNewStyle)
@@ -72,7 +76,10 @@ inline static BOOL ModifyStyleEx(HWND hWnd, DWORD dwRemove, DWORD dwAdd) {
 struct NumericStringEquivalence
 {
 	bool operator()(const TCHAR* s1, const TCHAR* s2) const
-	{ return numstrcmp(s1, s2) < 0; }
+	{ 
+		return numstrcmp(s1, s2) < 0;
+	}
+
 	static inline int numstrcmp_get(const TCHAR **str, int *length)
 	{
 		const TCHAR *p = *str;
@@ -82,6 +89,7 @@ struct NumericStringEquivalence
 		*str = p;
 		return (value);
 	}
+
 	static int numstrcmp(const TCHAR *str1, const TCHAR *str2)
 	{
 		TCHAR *p1, *p2;
@@ -89,10 +97,12 @@ struct NumericStringEquivalence
 		for(;;)
 		{
 			c1 = tolower(*str1), c2 = tolower(*str2);
-			if ( c1 == 0 || c2 == 0 )
+			if (c1 == 0 || c2 == 0)
+			{
 				break;
+			}
 			else if (isdigit(c1) && isdigit(c2))
-			{			
+			{
 				lcmp = generic_strtol(str1, &p1, 10) - generic_strtol(str2, &p2, 10);
 				if ( lcmp == 0 )
 					lcmp = (p2 - str2) - (p1 - str1);
@@ -252,7 +262,7 @@ BOOL CALLBACK WindowsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 			return TRUE;
 
 		case WM_NOTIFY :
-		{		
+		{
 			if (wParam == IDC_WINDOWS_LIST)
 			{
 				NMHDR* pNMHDR = (NMHDR*)lParam;
@@ -299,7 +309,8 @@ BOOL CALLBACK WindowsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 							const TCHAR *fullName = buf->getFullPathName();
 							const TCHAR *fileName = buf->getFileName();
 							int len = lstrlen(fullName)-lstrlen(fileName);
-							if (!len) {
+							if (!len)
+							{
 								len = 1;
 								fullName = TEXT("");
 							}
@@ -313,7 +324,7 @@ BOOL CALLBACK WindowsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 							int len = pLvdi->item.cchTextMax;
 							NppParameters *pNppParameters = NppParameters::getInstance();
 							Lang *lang = pNppParameters->getLangFromID(buf->getLangType());
-							if (NULL != lang)
+							if (lang != NULL)
 							{
 								generic_strncpy(pLvdi->item.pszText, lang->getLangName(), len-1);
 							}
@@ -411,7 +422,8 @@ int WindowsDlg::doDialog(TiXmlNodeA *dlgNode)
 
 bool WindowsDlg::changeDlgLang()
 {
-	if (!_dlgNode) return false;
+	if (!_dlgNode)
+		return false;
 
 #ifdef UNICODE
 	WcharMbcsConvertor *wmc = WcharMbcsConvertor::getInstance();
@@ -531,7 +543,8 @@ void WindowsDlg::onGetMinMaxInfo(MINMAXINFO* lpMMI)
 LRESULT WindowsDlg::onWinMgr(WPARAM wp, LPARAM lp)
 {
 	NMWINMGR &nmw = *(NMWINMGR *)lp;
-	if (nmw.code==NMWINMGR::GET_SIZEINFO) {
+	if (nmw.code==NMWINMGR::GET_SIZEINFO)
+	{
 		switch(wp)
 		{
 		case IDOK:
@@ -547,7 +560,7 @@ LRESULT WindowsDlg::onWinMgr(WPARAM wp, LPARAM lp)
 			nmw.sizeinfo.szMin = _szMinListCtrl;
 			nmw.processed = TRUE;
 			return TRUE;
-		}	
+		}
 	}
 	return MyBaseClass::onWinMgr(wp, lp);
 }
@@ -624,11 +637,16 @@ void WindowsDlg::doSave()
 	nmdlg.code = WDN_NOTIFY;
 	nmdlg.nItems = ListView_GetSelectedCount(_hList);
 	nmdlg.Items = new UINT[nmdlg.nItems];
-	for (int i=-1, j=0;;++j) {
+
+	for (int i=-1, j=0;;++j)
+	{
 		i = ListView_GetNextItem(_hList, i, LVNI_SELECTED); 
-		if (i == -1) break;						
+		if (i == -1)
+			break;
+
 		nmdlg.Items[j] = _idxMap[i];
 	}
+
 	SendMessage(_hParent, WDN_NOTIFY, 0, LPARAM(&nmdlg));
 	delete[] nmdlg.Items;
 	::InvalidateRect(_hList, &_rc, FALSE);
@@ -666,7 +684,8 @@ void WindowsDlg::doClose()
 	NMWINDLG nmdlg;
 	nmdlg.type = WDT_CLOSE;
 	int index = ListView_GetNextItem(_hList, -1, LVNI_ALL|LVNI_SELECTED);
-	if (index == -1) return;
+	if (index == -1)
+		return;
 	
 	nmdlg.curSel = _idxMap[index];
 	nmdlg.hwndFrom = _hSelf;
@@ -675,13 +694,18 @@ void WindowsDlg::doClose()
 	nmdlg.Items = new UINT[nmdlg.nItems];
 	vector<int> key;
 	key.resize(n, 0x7fffffff);
-	for(int i=-1, j=0;; ++j) {
+
+	for(int i=-1, j=0;; ++j)
+	{
 		i = ListView_GetNextItem(_hList, i, LVNI_SELECTED); 
-		if (i == -1) break;
+		if (i == -1)
+			break;
+
 		ListView_SetItemState(_hList, i, 0, LVIS_SELECTED); // deselect
 		nmdlg.Items[j] = _idxMap[i];
 		key[j] = i;
 	}
+
 	SendMessage(_hParent, WDN_NOTIFY, 0, LPARAM(&nmdlg));
 	if (nmdlg.processed)
 	{
@@ -694,8 +718,10 @@ void WindowsDlg::doClose()
 				int oldVal = _idxMap[*kitr];
 				_idxMap[*kitr] = -1;
 				for (vector<int>::iterator itr = _idxMap.begin(), end = _idxMap.end(); itr != end; ++itr)
+				{
 					if (*itr > oldVal)
 						--(*itr);
+				}
 			}
 		}
 		_idxMap.erase(std::remove_if(_idxMap.begin(), _idxMap.end(), bind2nd(equal_to<int>(), -1)), _idxMap.end());
@@ -734,9 +760,13 @@ void WindowsDlg::doSortToTabs()
 	nmdlg.Items = new UINT[nmdlg.nItems];
 	vector<int> key;
 	key.resize(n, 0x7fffffff);
-	for(int i=-1, j=0;; ++j) {
+
+	for(int i=-1, j=0;; ++j)
+	{
 		i = ListView_GetNextItem(_hList, i, LVNI_ALL); 
-		if (i == -1) break;
+		if (i == -1)
+			break;
+
 		nmdlg.Items[j] = _idxMap[i];
 		if (i == curSel)
 			nmdlg.curSel = j;
@@ -827,6 +857,7 @@ void WindowsMenu::initPopupMenu(HMENU hMenu, DocTabView *pTab)
 			else
 				SetMenuItemInfo(hMenu, id, FALSE, &mii);
 		}
+
 		for ( ; id<=IDM_WINDOW_MRU_LIMIT; ++id)
 		{
 			DeleteMenu(hMenu, id, FALSE);

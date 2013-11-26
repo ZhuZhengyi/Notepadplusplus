@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -48,18 +48,20 @@
 #define	TASKLIST_USER    (WM_USER + 8000)
 	#define WM_GETTASKLISTINFO (TASKLIST_USER + 01)
 
-struct TaskLstFnStatus {
+struct TaskLstFnStatus
+{
 	int _iView;
 	int _docIndex;
 	generic_string _fn;
 	int _status;
 	void *_bufID;
 	TaskLstFnStatus(generic_string str, int status) : _fn(str), _status(status){};
-	TaskLstFnStatus(int iView, int docIndex, generic_string str, int status, void *bufID) : 
+	TaskLstFnStatus(int iView, int docIndex, generic_string str, int status, void *bufID) :
 	_iView(iView), _docIndex(docIndex), _fn(str), _status(status), _bufID(bufID) {};
 };
 
-struct TaskListInfo {
+struct TaskListInfo
+{
 	std::vector<TaskLstFnStatus> _tlfsLst;
 	int _currentIndex;
 };
@@ -71,14 +73,15 @@ static LRESULT CALLBACK hookProc(UINT nCode, WPARAM wParam, LPARAM lParam);
 
 class TaskListDlg : public StaticDialog
 {
-public :	
-        TaskListDlg() : StaticDialog() {};
-		void init(HINSTANCE hInst, HWND parent, HIMAGELIST hImgLst, bool dir) {
-            Window::init(hInst, parent);
+public :
+		TaskListDlg() : StaticDialog() {};
+		void init(HINSTANCE hInst, HWND parent, HIMAGELIST hImgLst, bool dir)
+		{
+			Window::init(hInst, parent);
 			_hImalist = hImgLst;
 			_initDir = dir;
-        };
-        int doDialog(bool isRTL = false);
+		};
+		int doDialog(bool isRTL = false);
 		virtual void destroy() {};
 
 protected :

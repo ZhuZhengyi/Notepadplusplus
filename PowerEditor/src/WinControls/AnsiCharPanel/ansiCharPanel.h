@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -37,26 +37,30 @@
 #include "ansiCharPanel_rc.h"
 #include "ListView.h"
 
-#define AI_PROJECTPANELTITLE		TEXT("ASCII Insertion Panel")
+#define AI_PROJECTPANELTITLE    TEXT("ASCII Insertion Panel")
 
 class ScintillaEditView;
 
-class AnsiCharPanel : public DockingDlgInterface {
+class AnsiCharPanel : public DockingDlgInterface
+{
 public:
 	AnsiCharPanel(): DockingDlgInterface(IDD_ANSIASCII_PANEL) {};
 
-	void init(HINSTANCE hInst, HWND hPere, ScintillaEditView **ppEditView) {
+	void init(HINSTANCE hInst, HWND hPere, ScintillaEditView **ppEditView)
+	{
 		DockingDlgInterface::init(hInst, hPere);
 		_ppEditView = ppEditView;
 	};
 
-    virtual void display(bool toShow = true) const {
-        DockingDlgInterface::display(toShow);
-    };
+	virtual void display(bool toShow = true) const
+	{
+		DockingDlgInterface::display(toShow);
+	};
 
-    void setParent(HWND parent2set){
-        _hParent = parent2set;
-    };
+	void setParent(HWND parent2set)
+	{
+		_hParent = parent2set;
+	};
 
 	void switchEncoding();
 	void insertChar(unsigned char char2insert) const;

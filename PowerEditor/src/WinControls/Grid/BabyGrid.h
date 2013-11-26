@@ -43,8 +43,6 @@
 #define BGN_CELLDBCLICKED 0x001A
 #define BGN_CELLRCLICKED 0x001B
 
-
-
 #define BGM_PROTECTCELL BABYGRID_USER + 1
 #define BGM_SETPROTECT  BABYGRID_USER + 2
 #define BGM_SETCELLDATA BABYGRID_USER + 3
@@ -91,10 +89,11 @@
 #define BGM_SETTITLEFONT BABYGRID_USER + 43
 #define BGM_SETHEADINGFONT BABYGRID_USER + 44
 
-  struct _BGCELL {
-         int row;
-         int col;
-    };
+	struct _BGCELL
+	{
+		int row;
+		int col;
+	};
 
 
 //function forward declarations

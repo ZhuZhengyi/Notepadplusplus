@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -34,424 +34,427 @@
 #include "localization.h"
 #include "UserDefineDialog.h"
 
-struct WinMenuKeyDefinition {	//more or less matches accelerator table definition, easy copy/paste
-	//const TCHAR * name;	//name retrieved from menu?
+struct WinMenuKeyDefinition //more or less matches accelerator table definition, easy copy/paste
+{
+	//const TCHAR * name; //name retrieved from menu?
 	int vKey;
 	int functionId;
 	bool isCtrl;
 	bool isAlt;
 	bool isShift;
-	TCHAR * specialName;		//Used when no real menu name exists (in case of toggle for example)
+	TCHAR * specialName; //Used when no real menu name exists (in case of toggle for example)
 };
 
 
-struct ScintillaKeyDefinition {
+struct ScintillaKeyDefinition
+{
 	const TCHAR * name;
 	int functionId;
 	bool isCtrl;
 	bool isAlt;
 	bool isShift;
 	int vKey;
-	int redirFunctionId;	//this gets set  when a function is being redirected through Notepad++ if Scintilla doesnt do it properly :)
+	int redirFunctionId;    //this gets set  when a function is being redirected through Notepad++ if Scintilla doesnt do it properly :)
 };
 
 WinMenuKeyDefinition winKeyDefs[] = {
 //array of accelerator keys for all std menu items, values can be 0 for vKey, which means its unused
 //================================================================================
-//  {V_KEY,		COMMAND_ID,				 			Ctrl,  Alt,   Shift, cmdName},
+//  {V_KEY,     COMMAND_ID,                         Ctrl,  Alt,   Shift, cmdName},
 //================================================================================
-	{VK_N,		IDM_FILE_NEW,			 			true,  false, false, NULL},
-	{VK_O,		IDM_FILE_OPEN,						true,  false, false, NULL},
-	{VK_NULL,	IDM_FILE_RELOAD,					false, false, false, NULL},
-	{VK_S,		IDM_FILE_SAVE,						true,  false, false, NULL},
-	{VK_S,		IDM_FILE_SAVEAS,					true,  true,  false, NULL},
-	{VK_NULL,	IDM_FILE_SAVECOPYAS,				false, false, false, NULL},
-	{VK_S,		IDM_FILE_SAVEALL,					true,  false, true,  NULL},
-	{VK_W,	 	IDM_FILE_CLOSE,						true,  false, false, NULL},
-	{VK_NULL,	IDM_FILE_CLOSEALL,					false, false, false, NULL},
-	{VK_NULL,	IDM_FILE_CLOSEALL_BUT_CURRENT,		false, false, false, NULL},
-	{VK_NULL,	IDM_FILE_CLOSEALL_TOLEFT,			false, false, false, NULL},
-	{VK_NULL,	IDM_FILE_CLOSEALL_TORIGHT,			false, false, false, NULL},
-	{VK_NULL,	IDM_FILE_DELETE,					false, false, false, NULL},
-	{VK_NULL,	IDM_FILE_RENAME,					false, false, false, NULL},
-	{VK_NULL,	IDM_FILE_LOADSESSION,				false, false, false, NULL},
-	{VK_NULL,	IDM_FILE_SAVESESSION,				false, false, false, NULL},
-	{VK_P,		IDM_FILE_PRINT,						true,  false, false, NULL},
-	{VK_NULL,	IDM_FILE_PRINTNOW,					false, false, false, NULL},
-	{VK_F4,		IDM_FILE_EXIT,						false, true,  false, NULL},
+	{VK_N,      IDM_FILE_NEW,                       true,  false, false, NULL},
+	{VK_O,      IDM_FILE_OPEN,                      true,  false, false, NULL},
+	{VK_NULL,   IDM_FILE_RELOAD,                    false, false, false, NULL},
+	{VK_S,      IDM_FILE_SAVE,                      true,  false, false, NULL},
+	{VK_S,      IDM_FILE_SAVEAS,                    true,  true,  false, NULL},
+	{VK_NULL,   IDM_FILE_SAVECOPYAS,                false, false, false, NULL},
+	{VK_S,      IDM_FILE_SAVEALL,                   true,  false, true,  NULL},
+	{VK_W,      IDM_FILE_CLOSE,                     true,  false, false, NULL},
+	{VK_NULL,   IDM_FILE_CLOSEALL,                  false, false, false, NULL},
+	{VK_NULL,   IDM_FILE_CLOSEALL_BUT_CURRENT,      false, false, false, NULL},
+	{VK_NULL,   IDM_FILE_CLOSEALL_TOLEFT,           false, false, false, NULL},
+	{VK_NULL,   IDM_FILE_CLOSEALL_TORIGHT,          false, false, false, NULL},
+	{VK_NULL,   IDM_FILE_DELETE,                    false, false, false, NULL},
+	{VK_NULL,   IDM_FILE_RENAME,                    false, false, false, NULL},
+	{VK_NULL,   IDM_FILE_LOADSESSION,               false, false, false, NULL},
+	{VK_NULL,   IDM_FILE_SAVESESSION,               false, false, false, NULL},
+	{VK_P,      IDM_FILE_PRINT,                     true,  false, false, NULL},
+	{VK_NULL,   IDM_FILE_PRINTNOW,                  false, false, false, NULL},
+	{VK_F4,     IDM_FILE_EXIT,                      false, true,  false, NULL},
 
-//	{VK_NULL,	IDM_EDIT_UNDO,		 				false, false, false, NULL},
-//	{VK_NULL,	IDM_EDIT_REDO,		 				false, false, false, NULL},
-//	{VK_NULL,	IDM_EDIT_CUT,		 				false, false, false, NULL},
-//	{VK_NULL,	IDM_EDIT_COPY,		 				false, false, false, NULL},
-//	{VK_NULL,	IDM_EDIT_PASTE,		 				false, false, false, NULL},
-//	{VK_NULL,	IDM_EDIT_DELETE,	 				false, false, false, NULL},
-//	{VK_NULL,	IDM_EDIT_SELECTALL,					false, false, false, NULL},
+//  {VK_NULL,   IDM_EDIT_UNDO,                      false, false, false, NULL},
+//  {VK_NULL,   IDM_EDIT_REDO,                      false, false, false, NULL},
+//  {VK_NULL,   IDM_EDIT_CUT,                       false, false, false, NULL},
+//  {VK_NULL,   IDM_EDIT_COPY,                      false, false, false, NULL},
+//  {VK_NULL,   IDM_EDIT_PASTE,                     false, false, false, NULL},
+//  {VK_NULL,   IDM_EDIT_DELETE,                    false, false, false, NULL},
+//  {VK_NULL,   IDM_EDIT_SELECTALL,                 false, false, false, NULL},
 
-	{VK_NULL,	IDM_EDIT_SETREADONLY,				false, false, false, NULL},
-	{VK_NULL,	IDM_EDIT_CLEARREADONLY,				false, false, false, NULL},
-	{VK_NULL,	IDM_EDIT_FULLPATHTOCLIP,			false, false, false, NULL},
-	{VK_NULL,	IDM_EDIT_FILENAMETOCLIP,			false, false, false, NULL},
-	{VK_NULL,	IDM_EDIT_CURRENTDIRTOCLIP,			false, false, false, NULL},
-//	{VK_NULL,	IDM_EDIT_INS_TAB,					false, false, false, NULL},
-//	{VK_NULL,	IDM_EDIT_RMV_TAB,					false, false, false, NULL},
-//	{VK_NULL,	IDM_EDIT_DUP_LINE,					false, false, false, NULL},
-	{VK_I,		IDM_EDIT_SPLIT_LINES,		 		true,  false, false, NULL},
-	{VK_J,		IDM_EDIT_JOIN_LINES,		 		true,  false, false, NULL},
-	{VK_UP,		IDM_EDIT_LINE_UP,					true,  false, true,  NULL},
-	{VK_DOWN,	IDM_EDIT_LINE_DOWN,					true,  false, true,  NULL},
-	{VK_NULL,	IDM_EDIT_TRIMTRAILING,		 		false, false, false, NULL},
-	{VK_NULL,	IDM_EDIT_TRIMLINEHEAD,		 		false, false, false, NULL},
-	{VK_NULL,	IDM_EDIT_TRIM_BOTH,			 		false, false, false, NULL},
-	{VK_NULL,	IDM_EDIT_EOL2WS,			 		false, false, false, NULL},
-	{VK_NULL,	IDM_EDIT_TRIMALL,			 		false, false, false, NULL},
-	{VK_NULL,	IDM_EDIT_TAB2SW,			 		false, false, false, NULL},
-	{VK_NULL,	IDM_EDIT_SW2TAB_ALL,		 		false, false, false, NULL},
-	{VK_NULL,	IDM_EDIT_SW2TAB_LEADING,	 		false, false, false, NULL},
-	{VK_NULL,	IDM_EDIT_BEGINENDSELECT,	 		false, false, false, NULL},
+	{VK_NULL,   IDM_EDIT_SETREADONLY,               false, false, false, NULL},
+	{VK_NULL,   IDM_EDIT_CLEARREADONLY,             false, false, false, NULL},
+	{VK_NULL,   IDM_EDIT_FULLPATHTOCLIP,            false, false, false, NULL},
+	{VK_NULL,   IDM_EDIT_FILENAMETOCLIP,            false, false, false, NULL},
+	{VK_NULL,   IDM_EDIT_CURRENTDIRTOCLIP,          false, false, false, NULL},
+//  {VK_NULL,   IDM_EDIT_INS_TAB,                   false, false, false, NULL},
+//  {VK_NULL,   IDM_EDIT_RMV_TAB,                   false, false, false, NULL},
+//  {VK_NULL,   IDM_EDIT_DUP_LINE,                  false, false, false, NULL},
+	{VK_I,      IDM_EDIT_SPLIT_LINES,               true,  false, false, NULL},
+	{VK_J,      IDM_EDIT_JOIN_LINES,                true,  false, false, NULL},
+	{VK_UP,     IDM_EDIT_LINE_UP,                   true,  false, true,  NULL},
+	{VK_DOWN,   IDM_EDIT_LINE_DOWN,                 true,  false, true,  NULL},
+	{VK_NULL,   IDM_EDIT_TRIMTRAILING,              false, false, false, NULL},
+	{VK_NULL,   IDM_EDIT_TRIMLINEHEAD,              false, false, false, NULL},
+	{VK_NULL,   IDM_EDIT_TRIM_BOTH,                 false, false, false, NULL},
+	{VK_NULL,   IDM_EDIT_EOL2WS,                    false, false, false, NULL},
+	{VK_NULL,   IDM_EDIT_TRIMALL,                   false, false, false, NULL},
+	{VK_NULL,   IDM_EDIT_TAB2SW,                    false, false, false, NULL},
+	{VK_NULL,   IDM_EDIT_SW2TAB_ALL,                false, false, false, NULL},
+	{VK_NULL,   IDM_EDIT_SW2TAB_LEADING,            false, false, false, NULL},
+	{VK_NULL,   IDM_EDIT_BEGINENDSELECT,            false, false, false, NULL},
 
-	{VK_C,		IDM_EDIT_COLUMNMODE,				false, true,  false, NULL},
-	{VK_U, 		IDM_EDIT_UPPERCASE,					true,  false, true,  NULL},
-	{VK_U, 		IDM_EDIT_LOWERCASE,					true,  false, false, NULL},
-	{VK_Q,		IDM_EDIT_BLOCK_COMMENT,				true,  false, false, NULL},
-	{VK_K,		IDM_EDIT_BLOCK_COMMENT_SET,			true,  false, false, NULL},
-	{VK_K,		IDM_EDIT_BLOCK_UNCOMMENT,			true,  false, true,  NULL},
-	{VK_Q,		IDM_EDIT_STREAM_COMMENT, 			true,  false, true,  NULL},
-	{VK_SPACE,	IDM_EDIT_AUTOCOMPLETE,				true,  false, false, NULL},
-	{VK_SPACE,	IDM_EDIT_AUTOCOMPLETE_PATH,			true,  true, false, NULL},
-	{VK_RETURN,	IDM_EDIT_AUTOCOMPLETE_CURRENTFILE,	true,  false, false, NULL},
-	{VK_SPACE,	IDM_EDIT_FUNCCALLTIP,				true,  false, true,  NULL},
-	{VK_R,		IDM_EDIT_RTL,						true,  true,  false, NULL},
-	{VK_L,		IDM_EDIT_LTR,						true,  true,  false, NULL},
-	{VK_NULL,	IDM_EDIT_SORTLINES,					false, false, false, NULL},
-	{VK_NULL,	IDM_EDIT_SORTLINESREVERSE,			false, false, false,  NULL},
-	{VK_RETURN,	IDM_EDIT_BLANKLINEABOVECURRENT,		true,  true, false, NULL},
-	{VK_RETURN,	IDM_EDIT_BLANKLINEBELOWCURRENT,		true,  true, true,  NULL},
-	{VK_F,		IDM_SEARCH_FIND,					true,  false, false, NULL},
-	{VK_F,		IDM_SEARCH_FINDINFILES,				true,  false, true,  NULL},
-	{VK_F3,		IDM_SEARCH_FINDNEXT,				false, false, false, NULL},
-	{VK_F3,		IDM_SEARCH_FINDPREV,				false, false, true,  NULL},
-	{VK_F3,		IDM_SEARCH_VOLATILE_FINDNEXT,		true,  true, false, NULL},
-	{VK_F3,		IDM_SEARCH_VOLATILE_FINDPREV,		true,  true, true,  NULL},
-    {VK_F3,		IDM_SEARCH_SETANDFINDNEXT,          true,  false, false, NULL},
-	{VK_F3,		IDM_SEARCH_SETANDFINDPREV,          true,  false, true,  NULL},
-	{VK_F4,		IDM_SEARCH_GOTONEXTFOUND,           false, false, false, NULL},
-	{VK_F4,		IDM_SEARCH_GOTOPREVFOUND,           false, false, true,  NULL},
-	{VK_F7,		IDM_FOCUS_ON_FOUND_RESULTS,         false, false, false, NULL},
-	{VK_H,		IDM_SEARCH_REPLACE,					true,  false, false, NULL},
-	{VK_I,		IDM_SEARCH_FINDINCREMENT,			true,  true,  false, NULL},
-	{VK_G,		IDM_SEARCH_GOTOLINE,		 		true,  false, false, NULL},
-	{VK_B,		IDM_SEARCH_GOTOMATCHINGBRACE,		true,  false, false, NULL},
-	{VK_B,		IDM_SEARCH_SELECTMATCHINGBRACES,	true,  true,  false, NULL},
-	{VK_F2,		IDM_SEARCH_TOGGLE_BOOKMARK,			true,  false, false, NULL},
-	{VK_F2,		IDM_SEARCH_NEXT_BOOKMARK, 			false, false, false, NULL},
-	{VK_F2,		IDM_SEARCH_PREV_BOOKMARK, 			false, false, true,  NULL},
-	{VK_NULL,	IDM_SEARCH_CLEAR_BOOKMARKS, 		false, false, false, NULL},
-	{VK_NULL,	IDM_SEARCH_CUTMARKEDLINES, 			false, false, false, NULL},
-	{VK_NULL,	IDM_SEARCH_COPYMARKEDLINES, 		false, false, false, NULL},
-	{VK_NULL,	IDM_SEARCH_PASTEMARKEDLINES, 		false, false, false, NULL},
-	{VK_NULL,	IDM_SEARCH_DELETEMARKEDLINES, 		false, false, false, NULL},
-	{VK_NULL,	IDM_SEARCH_MARKALLEXT1,			    false, false, false, NULL},
-	{VK_NULL,	IDM_SEARCH_MARKALLEXT2,		    	false, false, false, NULL},
-	{VK_NULL,	IDM_SEARCH_MARKALLEXT3,			    false, false, false, NULL},
-	{VK_NULL,	IDM_SEARCH_MARKALLEXT4, 			false, false, false, NULL},
-	{VK_NULL,	IDM_SEARCH_MARKALLEXT5,	    		false, false, false, NULL},
-	{VK_NULL,	IDM_SEARCH_UNMARKALLEXT1,	    	false, false, false, NULL},
-	{VK_NULL,	IDM_SEARCH_UNMARKALLEXT2,			false, false, false, NULL},
-	{VK_NULL,	IDM_SEARCH_UNMARKALLEXT3,			false, false, false, NULL},
-	{VK_NULL,	IDM_SEARCH_UNMARKALLEXT4,			false, false, false, NULL},
-	{VK_NULL,	IDM_SEARCH_UNMARKALLEXT5,			false, false, false, NULL},
-	{VK_NULL,	IDM_SEARCH_CLEARALLMARKS,			false, false, false, NULL},
-	{VK_1,		IDM_SEARCH_GOPREVMARKER1,			true,  false, true,  NULL},
-	{VK_2,		IDM_SEARCH_GOPREVMARKER2,			true,  false, true,  NULL},
-	{VK_3,		IDM_SEARCH_GOPREVMARKER3,			true,  false, true,  NULL},
-	{VK_4,		IDM_SEARCH_GOPREVMARKER4,			true,  false, true,  NULL},
-	{VK_5,		IDM_SEARCH_GOPREVMARKER5,			true,  false, true,  NULL},
-	{VK_0,		IDM_SEARCH_GOPREVMARKER_DEF,		true,  false, true,  NULL},
+	{VK_C,      IDM_EDIT_COLUMNMODE,                false, true,  false, NULL},
+	{VK_U,      IDM_EDIT_UPPERCASE,                 true,  false, true,  NULL},
+	{VK_U,      IDM_EDIT_LOWERCASE,                 true,  false, false, NULL},
+	{VK_Q,      IDM_EDIT_BLOCK_COMMENT,             true,  false, false, NULL},
+	{VK_K,      IDM_EDIT_BLOCK_COMMENT_SET,         true,  false, false, NULL},
+	{VK_K,      IDM_EDIT_BLOCK_UNCOMMENT,           true,  false, true,  NULL},
+	{VK_Q,      IDM_EDIT_STREAM_COMMENT,            true,  false, true,  NULL},
+	{VK_SPACE,  IDM_EDIT_AUTOCOMPLETE,              true,  false, false, NULL},
+	{VK_SPACE,  IDM_EDIT_AUTOCOMPLETE_PATH,         true,  true, false, NULL},
+	{VK_RETURN, IDM_EDIT_AUTOCOMPLETE_CURRENTFILE,  true,  false, false, NULL},
+	{VK_SPACE,  IDM_EDIT_FUNCCALLTIP,               true,  false, true,  NULL},
+	{VK_R,      IDM_EDIT_RTL,                       true,  true,  false, NULL},
+	{VK_L,      IDM_EDIT_LTR,                       true,  true,  false, NULL},
+	{VK_NULL,   IDM_EDIT_SORTLINES,                 false, false, false, NULL},
+	{VK_NULL,   IDM_EDIT_SORTLINESREVERSE,          false, false, false,  NULL},
+	{VK_RETURN, IDM_EDIT_BLANKLINEABOVECURRENT,     true,  true, false, NULL},
+	{VK_RETURN, IDM_EDIT_BLANKLINEBELOWCURRENT,     true,  true, true,  NULL},
+	{VK_F,      IDM_SEARCH_FIND,                    true,  false, false, NULL},
+	{VK_F,      IDM_SEARCH_FINDINFILES,             true,  false, true,  NULL},
+	{VK_F3,     IDM_SEARCH_FINDNEXT,                false, false, false, NULL},
+	{VK_F3,     IDM_SEARCH_FINDPREV,                false, false, true,  NULL},
+	{VK_F3,     IDM_SEARCH_VOLATILE_FINDNEXT,       true,  true, false, NULL},
+	{VK_F3,     IDM_SEARCH_VOLATILE_FINDPREV,       true,  true, true,  NULL},
+	{VK_F3,     IDM_SEARCH_SETANDFINDNEXT,          true,  false, false, NULL},
+	{VK_F3,     IDM_SEARCH_SETANDFINDPREV,          true,  false, true,  NULL},
+	{VK_F4,     IDM_SEARCH_GOTONEXTFOUND,           false, false, false, NULL},
+	{VK_F4,     IDM_SEARCH_GOTOPREVFOUND,           false, false, true,  NULL},
+	{VK_F7,     IDM_FOCUS_ON_FOUND_RESULTS,         false, false, false, NULL},
+	{VK_H,      IDM_SEARCH_REPLACE,                 true,  false, false, NULL},
+	{VK_I,      IDM_SEARCH_FINDINCREMENT,           true,  true,  false, NULL},
+	{VK_G,      IDM_SEARCH_GOTOLINE,                true,  false, false, NULL},
+	{VK_B,      IDM_SEARCH_GOTOMATCHINGBRACE,       true,  false, false, NULL},
+	{VK_B,      IDM_SEARCH_SELECTMATCHINGBRACES,    true,  true,  false, NULL},
+	{VK_F2,     IDM_SEARCH_TOGGLE_BOOKMARK,         true,  false, false, NULL},
+	{VK_F2,     IDM_SEARCH_NEXT_BOOKMARK,           false, false, false, NULL},
+	{VK_F2,     IDM_SEARCH_PREV_BOOKMARK,           false, false, true,  NULL},
+	{VK_NULL,   IDM_SEARCH_CLEAR_BOOKMARKS,         false, false, false, NULL},
+	{VK_NULL,   IDM_SEARCH_CUTMARKEDLINES,          false, false, false, NULL},
+	{VK_NULL,   IDM_SEARCH_COPYMARKEDLINES,         false, false, false, NULL},
+	{VK_NULL,   IDM_SEARCH_PASTEMARKEDLINES,        false, false, false, NULL},
+	{VK_NULL,   IDM_SEARCH_DELETEMARKEDLINES,       false, false, false, NULL},
+	{VK_NULL,   IDM_SEARCH_MARKALLEXT1,             false, false, false, NULL},
+	{VK_NULL,   IDM_SEARCH_MARKALLEXT2,             false, false, false, NULL},
+	{VK_NULL,   IDM_SEARCH_MARKALLEXT3,             false, false, false, NULL},
+	{VK_NULL,   IDM_SEARCH_MARKALLEXT4,             false, false, false, NULL},
+	{VK_NULL,   IDM_SEARCH_MARKALLEXT5,             false, false, false, NULL},
+	{VK_NULL,   IDM_SEARCH_UNMARKALLEXT1,           false, false, false, NULL},
+	{VK_NULL,   IDM_SEARCH_UNMARKALLEXT2,           false, false, false, NULL},
+	{VK_NULL,   IDM_SEARCH_UNMARKALLEXT3,           false, false, false, NULL},
+	{VK_NULL,   IDM_SEARCH_UNMARKALLEXT4,           false, false, false, NULL},
+	{VK_NULL,   IDM_SEARCH_UNMARKALLEXT5,           false, false, false, NULL},
+	{VK_NULL,   IDM_SEARCH_CLEARALLMARKS,           false, false, false, NULL},
+	{VK_1,      IDM_SEARCH_GOPREVMARKER1,           true,  false, true,  NULL},
+	{VK_2,      IDM_SEARCH_GOPREVMARKER2,           true,  false, true,  NULL},
+	{VK_3,      IDM_SEARCH_GOPREVMARKER3,           true,  false, true,  NULL},
+	{VK_4,      IDM_SEARCH_GOPREVMARKER4,           true,  false, true,  NULL},
+	{VK_5,      IDM_SEARCH_GOPREVMARKER5,           true,  false, true,  NULL},
+	{VK_0,      IDM_SEARCH_GOPREVMARKER_DEF,        true,  false, true,  NULL},
 
-	{VK_F11,	IDM_VIEW_FULLSCREENTOGGLE,			false, false, false, NULL},
-	{VK_NULL,	IDM_VIEW_ALWAYSONTOP,				false, false, false, NULL},
-	{VK_F12,	IDM_VIEW_POSTIT,					false, false, false, NULL},
-	{VK_NULL,	IDM_VIEW_TAB_SPACE,					false, false, false, NULL},
-	{VK_NULL,	IDM_VIEW_EOL,						false, false, false, NULL},
-	{VK_NULL,	IDM_VIEW_ALL_CHARACTERS,			false, false, false, NULL},
-	{VK_NULL,	IDM_VIEW_INDENT_GUIDE,				false, false, false, NULL},
-	{VK_NULL,	IDM_VIEW_WRAP,						false, false, false, NULL},
-	{VK_NULL,	IDM_VIEW_WRAP_SYMBOL,				false, false, false, NULL},
-	{VK_NULL,	IDM_LANG_USER_DLG,					false, false, false, NULL},
-	// {VK_NULL,	IDM_VIEW_ZOOMIN,					false, false, false, NULL},
-	// {VK_NULL,	IDM_VIEW_ZOOMOUT,					false, false, false, NULL},
-	// {VK_NULL,	IDM_VIEW_ZOOMRESTORE,				false, false, false, NULL},
-	{VK_0,		IDM_VIEW_TOGGLE_FOLDALL, 			false, true,  false, NULL},
-	{VK_F,		IDM_VIEW_FOLD_CURRENT,				true,  true,  false, NULL},
-	{VK_1,		IDM_VIEW_FOLD_1, 					false, true,  false, NULL},
-	{VK_2,		IDM_VIEW_FOLD_2, 					false, true,  false, NULL},
-	{VK_3,		IDM_VIEW_FOLD_3, 					false, true,  false, NULL},
-	{VK_4,		IDM_VIEW_FOLD_4, 					false, true,  false, NULL},
-	{VK_5,		IDM_VIEW_FOLD_5, 					false, true,  false, NULL},
-	{VK_6,		IDM_VIEW_FOLD_6, 					false, true,  false, NULL},
-	{VK_7,		IDM_VIEW_FOLD_7, 					false, true,  false, NULL},
-	{VK_8,		IDM_VIEW_FOLD_8, 					false, true,  false, NULL},
-	{VK_F,		IDM_VIEW_UNFOLD_CURRENT,			true,  true,  true,  NULL},
-	{VK_1,		IDM_VIEW_UNFOLD_1,					false, true,  true,  NULL},
-	{VK_2,		IDM_VIEW_UNFOLD_2,					false, true,  true,  NULL},
-	{VK_3,		IDM_VIEW_UNFOLD_3,					false, true,  true,  NULL},
-	{VK_4,		IDM_VIEW_UNFOLD_4,					false, true,  true,  NULL},
-	{VK_5,		IDM_VIEW_UNFOLD_5,					false, true,  true,  NULL},
-	{VK_6,		IDM_VIEW_UNFOLD_6,					false, true,  true,  NULL},
-	{VK_7,		IDM_VIEW_UNFOLD_7,					false, true,  true,  NULL},
-	{VK_8,		IDM_VIEW_UNFOLD_8,					false, true,  true,  NULL},
-	{VK_0,		IDM_VIEW_TOGGLE_UNFOLDALL,			false, true,  true,  NULL},
-	{VK_H,		IDM_VIEW_HIDELINES,					false, true,  false, NULL},
-	{VK_NULL,	IDM_VIEW_GOTO_ANOTHER_VIEW,			false, false, false, NULL},
-	{VK_NULL,	IDM_VIEW_CLONE_TO_ANOTHER_VIEW,		false, false, false, NULL},
-	{VK_NULL,	IDM_VIEW_SYNSCROLLV,				false, false, false, NULL},
-	{VK_NULL,	IDM_VIEW_SYNSCROLLH,				false, false, false, NULL},
-	{VK_F8,		IDM_VIEW_SWITCHTO_OTHER_VIEW,		false, false, false, NULL},
-	{VK_NUMPAD1,IDM_VIEW_TAB1,						true,  false, false, NULL},
-	{VK_NUMPAD2,IDM_VIEW_TAB2,						true,  false, false, NULL},
-	{VK_NUMPAD3,IDM_VIEW_TAB3,						true,  false, false, NULL},
-	{VK_NUMPAD4,IDM_VIEW_TAB4,						true,  false, false, NULL},
-	{VK_NUMPAD5,IDM_VIEW_TAB5,						true,  false, false, NULL},
-	{VK_NUMPAD6,IDM_VIEW_TAB6,						true,  false, false, NULL},
-	{VK_NUMPAD7,IDM_VIEW_TAB7,						true,  false, false, NULL},
-	{VK_NUMPAD8,IDM_VIEW_TAB8,						true,  false, false, NULL},
-	{VK_NUMPAD9,IDM_VIEW_TAB9,						true,  false, false, NULL},
-	{VK_NEXT,	IDM_VIEW_TAB_NEXT,					true,  false, false, NULL},
-	{VK_PRIOR,  IDM_VIEW_TAB_PREV,					true,  false, false, NULL},
+	{VK_F11,    IDM_VIEW_FULLSCREENTOGGLE,          false, false, false, NULL},
+	{VK_NULL,   IDM_VIEW_ALWAYSONTOP,               false, false, false, NULL},
+	{VK_F12,    IDM_VIEW_POSTIT,                    false, false, false, NULL},
+	{VK_NULL,   IDM_VIEW_TAB_SPACE,                 false, false, false, NULL},
+	{VK_NULL,   IDM_VIEW_EOL,                       false, false, false, NULL},
+	{VK_NULL,   IDM_VIEW_ALL_CHARACTERS,            false, false, false, NULL},
+	{VK_NULL,   IDM_VIEW_INDENT_GUIDE,              false, false, false, NULL},
+	{VK_NULL,   IDM_VIEW_WRAP,                      false, false, false, NULL},
+	{VK_NULL,   IDM_VIEW_WRAP_SYMBOL,               false, false, false, NULL},
+	{VK_NULL,   IDM_LANG_USER_DLG,                  false, false, false, NULL},
+	// {VK_NULL,    IDM_VIEW_ZOOMIN,                   false, false, false, NULL},
+	// {VK_NULL,    IDM_VIEW_ZOOMOUT,                  false, false, false, NULL},
+	// {VK_NULL,    IDM_VIEW_ZOOMRESTORE,              false, false, false, NULL},
+	{VK_0,      IDM_VIEW_TOGGLE_FOLDALL,            false, true,  false, NULL},
+	{VK_F,      IDM_VIEW_FOLD_CURRENT,              true,  true,  false, NULL},
+	{VK_1,      IDM_VIEW_FOLD_1,                    false, true,  false, NULL},
+	{VK_2,      IDM_VIEW_FOLD_2,                    false, true,  false, NULL},
+	{VK_3,      IDM_VIEW_FOLD_3,                    false, true,  false, NULL},
+	{VK_4,      IDM_VIEW_FOLD_4,                    false, true,  false, NULL},
+	{VK_5,      IDM_VIEW_FOLD_5,                    false, true,  false, NULL},
+	{VK_6,      IDM_VIEW_FOLD_6,                    false, true,  false, NULL},
+	{VK_7,      IDM_VIEW_FOLD_7,                    false, true,  false, NULL},
+	{VK_8,      IDM_VIEW_FOLD_8,                    false, true,  false, NULL},
+	{VK_F,      IDM_VIEW_UNFOLD_CURRENT,            true,  true,  true,  NULL},
+	{VK_1,      IDM_VIEW_UNFOLD_1,                  false, true,  true,  NULL},
+	{VK_2,      IDM_VIEW_UNFOLD_2,                  false, true,  true,  NULL},
+	{VK_3,      IDM_VIEW_UNFOLD_3,                  false, true,  true,  NULL},
+	{VK_4,      IDM_VIEW_UNFOLD_4,                  false, true,  true,  NULL},
+	{VK_5,      IDM_VIEW_UNFOLD_5,                  false, true,  true,  NULL},
+	{VK_6,      IDM_VIEW_UNFOLD_6,                  false, true,  true,  NULL},
+	{VK_7,      IDM_VIEW_UNFOLD_7,                  false, true,  true,  NULL},
+	{VK_8,      IDM_VIEW_UNFOLD_8,                  false, true,  true,  NULL},
+	{VK_0,      IDM_VIEW_TOGGLE_UNFOLDALL,          false, true,  true,  NULL},
+	{VK_H,      IDM_VIEW_HIDELINES,                 false, true,  false, NULL},
+	{VK_NULL,   IDM_VIEW_GOTO_ANOTHER_VIEW,         false, false, false, NULL},
+	{VK_NULL,   IDM_VIEW_CLONE_TO_ANOTHER_VIEW,     false, false, false, NULL},
+	{VK_NULL,   IDM_VIEW_SYNSCROLLV,                false, false, false, NULL},
+	{VK_NULL,   IDM_VIEW_SYNSCROLLH,                false, false, false, NULL},
+	{VK_F8,     IDM_VIEW_SWITCHTO_OTHER_VIEW,       false, false, false, NULL},
+	{VK_NUMPAD1,IDM_VIEW_TAB1,                      true,  false, false, NULL},
+	{VK_NUMPAD2,IDM_VIEW_TAB2,                      true,  false, false, NULL},
+	{VK_NUMPAD3,IDM_VIEW_TAB3,                      true,  false, false, NULL},
+	{VK_NUMPAD4,IDM_VIEW_TAB4,                      true,  false, false, NULL},
+	{VK_NUMPAD5,IDM_VIEW_TAB5,                      true,  false, false, NULL},
+	{VK_NUMPAD6,IDM_VIEW_TAB6,                      true,  false, false, NULL},
+	{VK_NUMPAD7,IDM_VIEW_TAB7,                      true,  false, false, NULL},
+	{VK_NUMPAD8,IDM_VIEW_TAB8,                      true,  false, false, NULL},
+	{VK_NUMPAD9,IDM_VIEW_TAB9,                      true,  false, false, NULL},
+	{VK_NEXT,   IDM_VIEW_TAB_NEXT,                  true,  false, false, NULL},
+	{VK_PRIOR,  IDM_VIEW_TAB_PREV,                  true,  false, false, NULL},
 
-	{VK_NULL, 	IDM_FORMAT_TODOS,					false, false, false, NULL},
-	{VK_NULL, 	IDM_FORMAT_TOUNIX,					false, false, false, NULL},
-	{VK_NULL, 	IDM_FORMAT_TOMAC,					false, false, false, NULL},
-	{VK_NULL, 	IDM_FORMAT_ANSI,					false, false, false, NULL},
-	{VK_NULL, 	IDM_FORMAT_UTF_8,					false, false, false, NULL},
-	{VK_NULL, 	IDM_FORMAT_AS_UTF_8,				false, false, false, NULL},
-	{VK_NULL, 	IDM_FORMAT_UCS_2BE,					false, false, false, NULL},
-	{VK_NULL, 	IDM_FORMAT_UCS_2LE,					false, false, false, NULL},
-	{VK_NULL, 	IDM_FORMAT_CONV2_ANSI,				false, false, false, NULL},
-	{VK_NULL, 	IDM_FORMAT_CONV2_AS_UTF_8,			false, false, false, NULL},
-	{VK_NULL, 	IDM_FORMAT_CONV2_UTF_8,				false, false, false, NULL},
-	{VK_NULL, 	IDM_FORMAT_CONV2_UCS_2BE,			false, false, false, NULL},
-	{VK_NULL, 	IDM_FORMAT_CONV2_UCS_2LE,			false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_ISO_8859_6,              false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_WIN_1256,                false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_ISO_8859_13,             false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_WIN_1257,                false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_ISO_8859_14,             false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_ISO_8859_5,              false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_MAC_CYRILLIC,            false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_KOI8R_CYRILLIC,          false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_KOI8U_CYRILLIC,          false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_WIN_1251,                false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_WIN_1250,                false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_DOS_437,                 false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_DOS_720,                 false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_DOS_737,                 false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_DOS_775,                 false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_DOS_850,                 false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_DOS_852,                 false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_DOS_855,                 false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_DOS_857,                 false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_DOS_858,                 false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_DOS_860,                 false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_DOS_861,                 false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_DOS_862,                 false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_DOS_863,                 false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_DOS_865,                 false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_DOS_866,                 false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_DOS_869,                 false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_BIG5,                    false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_GB2312,                  false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_ISO_8859_2,              false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_ISO_8859_7,              false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_WIN_1253,                false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_ISO_8859_8,              false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_WIN_1255,                false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_SHIFT_JIS,               false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_EUC_KR,                  false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_ISO_8859_10,             false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_ISO_8859_15,             false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_ISO_8859_4,              false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_ISO_8859_16,             false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_ISO_8859_3,              false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_ISO_8859_11,             false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_TIS_620,                 false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_ISO_8859_9,              false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_WIN_1254,                false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_WIN_1252,                false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_ISO_8859_1,              false, false, false, NULL},
-    {VK_NULL,   IDM_FORMAT_WIN_1258,                false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_TODOS,                   false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_TOUNIX,                  false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_TOMAC,                   false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_ANSI,                    false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_UTF_8,                   false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_AS_UTF_8,                false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_UCS_2BE,                 false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_UCS_2LE,                 false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_CONV2_ANSI,              false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_CONV2_AS_UTF_8,          false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_CONV2_UTF_8,             false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_CONV2_UCS_2BE,           false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_CONV2_UCS_2LE,           false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_ISO_8859_6,              false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_WIN_1256,                false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_ISO_8859_13,             false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_WIN_1257,                false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_ISO_8859_14,             false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_ISO_8859_5,              false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_MAC_CYRILLIC,            false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_KOI8R_CYRILLIC,          false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_KOI8U_CYRILLIC,          false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_WIN_1251,                false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_WIN_1250,                false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_DOS_437,                 false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_DOS_720,                 false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_DOS_737,                 false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_DOS_775,                 false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_DOS_850,                 false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_DOS_852,                 false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_DOS_855,                 false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_DOS_857,                 false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_DOS_858,                 false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_DOS_860,                 false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_DOS_861,                 false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_DOS_862,                 false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_DOS_863,                 false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_DOS_865,                 false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_DOS_866,                 false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_DOS_869,                 false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_BIG5,                    false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_GB2312,                  false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_ISO_8859_2,              false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_ISO_8859_7,              false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_WIN_1253,                false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_ISO_8859_8,              false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_WIN_1255,                false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_SHIFT_JIS,               false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_EUC_KR,                  false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_ISO_8859_10,             false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_ISO_8859_15,             false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_ISO_8859_4,              false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_ISO_8859_16,             false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_ISO_8859_3,              false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_ISO_8859_11,             false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_TIS_620,                 false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_ISO_8859_9,              false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_WIN_1254,                false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_WIN_1252,                false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_ISO_8859_1,              false, false, false, NULL},
+	{VK_NULL,   IDM_FORMAT_WIN_1258,                false, false, false, NULL},
 
-	{VK_NULL, 	IDM_SETTING_PREFERECE,				false, false, false, NULL},
-	{VK_NULL, 	IDM_LANGSTYLE_CONFIG_DLG,			false, false, false, NULL},
-	{VK_NULL, 	IDM_SETTING_SHORTCUT_MAPPER,		false, false, false, NULL},
+	{VK_NULL,   IDM_SETTING_PREFERECE,              false, false, false, NULL},
+	{VK_NULL,   IDM_LANGSTYLE_CONFIG_DLG,           false, false, false, NULL},
+	{VK_NULL,   IDM_SETTING_SHORTCUT_MAPPER,        false, false, false, NULL},
 
-	{VK_R,		IDC_EDIT_TOGGLEMACRORECORDING,		true,  false, true,  TEXT("Toggle macro record")},
-	{VK_P,		IDM_MACRO_PLAYBACKRECORDEDMACRO, 	true,  false, true,  NULL},
-	{VK_NULL,	IDM_MACRO_SAVECURRENTMACRO, 		false, false, false, NULL},
-	{VK_NULL,	IDM_MACRO_RUNMULTIMACRODLG, 		false, false, false, NULL},
+	{VK_R,      IDC_EDIT_TOGGLEMACRORECORDING,      true,  false, true,  TEXT("Toggle macro record")},
+	{VK_P,      IDM_MACRO_PLAYBACKRECORDEDMACRO,    true,  false, true,  NULL},
+	{VK_NULL,   IDM_MACRO_SAVECURRENTMACRO,         false, false, false, NULL},
+	{VK_NULL,   IDM_MACRO_RUNMULTIMACRODLG,         false, false, false, NULL},
 
-	{VK_F5,		IDM_EXECUTE,						false, false, false, NULL},
+	{VK_F5,     IDM_EXECUTE,                        false, false, false, NULL},
 
-	{VK_NULL,	IDM_HOMESWEETHOME, 					false, false, false, NULL},
-	{VK_NULL,	IDM_PROJECTPAGE, 					false, false, false, NULL},
-	{VK_NULL,	IDM_ONLINEHELP, 					false, false, false, NULL},
-	{VK_NULL,	IDM_FORUM, 							false, false, false, NULL},
-	{VK_NULL,	IDM_PLUGINSHOME, 					false, false, false, NULL},
-	{VK_F1,		IDM_ABOUT, 							false, false, false, NULL},
-	{VK_F1,		IDM_HELP, 							false, false, true,  NULL},
+	{VK_NULL,   IDM_HOMESWEETHOME,                  false, false, false, NULL},
+	{VK_NULL,   IDM_PROJECTPAGE,                    false, false, false, NULL},
+	{VK_NULL,   IDM_ONLINEHELP,                     false, false, false, NULL},
+	{VK_NULL,   IDM_FORUM,                          false, false, false, NULL},
+	{VK_NULL,   IDM_PLUGINSHOME,                    false, false, false, NULL},
+	{VK_F1,     IDM_ABOUT,                          false, false, false, NULL},
+	{VK_F1,     IDM_HELP,                           false, false, true,  NULL},
 
-	{VK_TAB,	IDC_PREV_DOC,						true,  false, true, TEXT("Switch to previous document")},
-	{VK_TAB,	IDC_NEXT_DOC,						true,  false, false, TEXT("Switch to next document")},
+	{VK_TAB,    IDC_PREV_DOC,                       true,  false, true, TEXT("Switch to previous document")},
+	{VK_TAB,    IDC_NEXT_DOC,                       true,  false, false, TEXT("Switch to next document")},
 
-	{VK_1,		IDM_SEARCH_GONEXTMARKER1,			true,  false, false, NULL},
-	{VK_2,		IDM_SEARCH_GONEXTMARKER2,			true,  false, false, NULL},
-	{VK_3,		IDM_SEARCH_GONEXTMARKER3,			true,  false, false, NULL},
-	{VK_4,		IDM_SEARCH_GONEXTMARKER4,			true,  false, false, NULL},
-	{VK_5,		IDM_SEARCH_GONEXTMARKER5,			true,  false, false, NULL},
-	{VK_0,		IDM_SEARCH_GONEXTMARKER_DEF,		true,  false, false, NULL}
+	{VK_1,      IDM_SEARCH_GONEXTMARKER1,           true,  false, false, NULL},
+	{VK_2,      IDM_SEARCH_GONEXTMARKER2,           true,  false, false, NULL},
+	{VK_3,      IDM_SEARCH_GONEXTMARKER3,           true,  false, false, NULL},
+	{VK_4,      IDM_SEARCH_GONEXTMARKER4,           true,  false, false, NULL},
+	{VK_5,      IDM_SEARCH_GONEXTMARKER5,           true,  false, false, NULL},
+	{VK_0,      IDM_SEARCH_GONEXTMARKER_DEF,        true,  false, false, NULL}
 
 };
 
 
-ScintillaKeyDefinition scintKeyDefs[] = {	//array of accelerator keys for all possible scintilla functions, values can be 0 for vKey, which means its unused
-	{TEXT("SCI_CUT"),					SCI_CUT,					true,  false, false, VK_X, 		IDM_EDIT_CUT},
-	{TEXT(""),							SCI_CUT,					false, false, true,  VK_DELETE, 0},
-	{TEXT("SCI_COPY"),					SCI_COPY,					true,  false, false, VK_C, 		IDM_EDIT_COPY},
-	{TEXT(""),							SCI_COPY,					true,  false, false, VK_INSERT, 0},
-	{TEXT("SCI_PASTE"),					SCI_PASTE,					true,  false, false, VK_V, 		IDM_EDIT_PASTE},
-	{TEXT(""),							SCI_PASTE,					false, false, true,  VK_INSERT, 0},
-	{TEXT("SCI_SELECTALL"),				SCI_SELECTALL,				true,  false, false, VK_A, 		IDM_EDIT_SELECTALL},
-	{TEXT("SCI_CLEAR"),					SCI_CLEAR,					false, false, false, VK_DELETE, IDM_EDIT_DELETE},
-	{TEXT("SCI_CLEARALL"),				SCI_CLEARALL,				false, false, false, 0,			0},
-	{TEXT("SCI_UNDO"),					SCI_UNDO,					true,  false, false, VK_Z, 		IDM_EDIT_UNDO},
-	{TEXT(""),							SCI_UNDO,					false, true,  false, VK_BACK, 	0},
-	{TEXT("SCI_REDO"),					SCI_REDO,					true,  false, false, VK_Y, 		IDM_EDIT_REDO},
-	{TEXT("SCI_NEWLINE"),					SCI_NEWLINE,				false, false, false, VK_RETURN, 0},
-	{TEXT(""),							SCI_NEWLINE,				false, false, true,  VK_RETURN, 0},
-	{TEXT("SCI_TAB"),						SCI_TAB,					false, false, false, VK_TAB,	IDM_EDIT_INS_TAB},
-	{TEXT("SCI_BACKTAB"),					SCI_BACKTAB,				false, false, true,  VK_TAB,	IDM_EDIT_RMV_TAB},
-	{TEXT("SCI_FORMFEED"),				SCI_FORMFEED,				false, false, false, 0,			0},
-	{TEXT("SCI_ZOOMIN"),					SCI_ZOOMIN,					true,  false, false, VK_ADD, 	IDM_VIEW_ZOOMIN},
-	{TEXT("SCI_ZOOMOUT"),					SCI_ZOOMOUT,				true,  false, false, VK_SUBTRACT,IDM_VIEW_ZOOMOUT},
-	{TEXT("SCI_SETZOOM"),					SCI_SETZOOM,				true,  false, false, VK_DIVIDE,	IDM_VIEW_ZOOMRESTORE},
-	{TEXT("SCI_SELECTIONDUPLICATE"),		SCI_SELECTIONDUPLICATE,		true,  false, false, VK_D, 		IDM_EDIT_DUP_LINE},
-	{TEXT("SCI_LINESJOIN"),				SCI_LINESJOIN,				false, false, false, 0,			0},
-	{TEXT("SCI_SCROLLCARET"),				SCI_SCROLLCARET,			false, false, false, 0,			0},
-	{TEXT("SCI_EDITTOGGLEOVERTYPE"),		SCI_EDITTOGGLEOVERTYPE,		false, false, false, VK_INSERT, 0},
-	{TEXT("SCI_MOVECARETINSIDEVIEW"),		SCI_MOVECARETINSIDEVIEW,	false, false, false, 0,			0},
-	{TEXT("SCI_LINEDOWN"),				SCI_LINEDOWN,				false, false, false, VK_DOWN,	0},
-	{TEXT("SCI_LINEDOWNEXTEND"),			SCI_LINEDOWNEXTEND,			false, false, true,  VK_DOWN,	0},
-	{TEXT("SCI_LINEDOWNRECTEXTEND"),		SCI_LINEDOWNRECTEXTEND,		false, true,  true,  VK_DOWN,	0},
-	{TEXT("SCI_LINESCROLLDOWN"),			SCI_LINESCROLLDOWN,			true,  false, false, VK_DOWN,	0},
-	{TEXT("SCI_LINEUP"),					SCI_LINEUP,					false, false, false, VK_UP,		0},
-	{TEXT("SCI_LINEUPEXTEND"),			SCI_LINEUPEXTEND,			false, false, true,  VK_UP,		0},
-	{TEXT("SCI_LINEUPRECTEXTEND"),		SCI_LINEUPRECTEXTEND,		false, true,  true,  VK_UP,		0},
-	{TEXT("SCI_LINESCROLLUP"),			SCI_LINESCROLLUP,			true,  false, false, VK_UP,		0},
-	{TEXT("SCI_PARADOWN"),				SCI_PARADOWN,				true,  false, false, VK_OEM_6,	0},
-	{TEXT("SCI_PARADOWNEXTEND"),			SCI_PARADOWNEXTEND,			true,  false, true,  VK_OEM_6,	0},
-	{TEXT("SCI_PARAUP"),					SCI_PARAUP,					true,  false, false, VK_OEM_4,	0},
-	{TEXT("SCI_PARAUPEXTEND"),			SCI_PARAUPEXTEND,			true,  false, true,  VK_OEM_4,	0},
-	{TEXT("SCI_CHARLEFT"),				SCI_CHARLEFT,				false, false, false, VK_LEFT,	0},
-	{TEXT("SCI_CHARLEFTEXTEND"),			SCI_CHARLEFTEXTEND,			false, false, true,  VK_LEFT,	0},
-	{TEXT("SCI_CHARLEFTRECTEXTEND"),		SCI_CHARLEFTRECTEXTEND,		false, true,  true,  VK_LEFT,	0},
-	{TEXT("SCI_CHARRIGHT"),				SCI_CHARRIGHT,				false, false, false, VK_RIGHT,	0},
-	{TEXT("SCI_CHARRIGHTEXTEND"),			SCI_CHARRIGHTEXTEND,		false, false, true,  VK_RIGHT,	0},
-	{TEXT("SCI_CHARRIGHTRECTEXTEND"),		SCI_CHARRIGHTRECTEXTEND,	false, true,  true,  VK_RIGHT,	0},
-	{TEXT("SCI_WORDLEFT"),				SCI_WORDLEFT,				true,  false, false, VK_LEFT,	0},
-	{TEXT("SCI_WORDLEFTEXTEND"),			SCI_WORDLEFTEXTEND,			true,  false, true,  VK_LEFT,	0},
-	{TEXT("SCI_WORDRIGHT"),				SCI_WORDRIGHT,				true,  false, false, VK_RIGHT,	0},
-	{TEXT("SCI_WORDRIGHTEXTEND"),			SCI_WORDRIGHTEXTEND,		false, false, false, 0,			0},
-	{TEXT("SCI_WORDLEFTEND"),				SCI_WORDLEFTEND,			false, false, false, 0,			0},
-	{TEXT("SCI_WORDLEFTENDEXTEND"),		SCI_WORDLEFTENDEXTEND,		false, false, false, 0,			0},
-	{TEXT("SCI_WORDRIGHTEND"),			SCI_WORDRIGHTEND,			false, false, false, 0,			0},
-	{TEXT("SCI_WORDRIGHTENDEXTEND"),		SCI_WORDRIGHTENDEXTEND,		true,  false, true,  VK_RIGHT,	0},
-	{TEXT("SCI_WORDPARTLEFT"),			SCI_WORDPARTLEFT,			true,  false, false, VK_OEM_2,	0},
-	{TEXT("SCI_WORDPARTLEFTEXTEND"),		SCI_WORDPARTLEFTEXTEND,		true,  false, true,  VK_OEM_2,	0},
-	{TEXT("SCI_WORDPARTRIGHT"),			SCI_WORDPARTRIGHT,			true,  false, false, VK_OEM_5,	0},
-	{TEXT("SCI_WORDPARTRIGHTEXTEND"),		SCI_WORDPARTRIGHTEXTEND,	true,  false, true,  VK_OEM_5,	0},
-	{TEXT("SCI_HOME"),					SCI_HOME,					false, false, false, 0,			0},
-	{TEXT("SCI_HOMEEXTEND"),				SCI_HOMEEXTEND,				false, false, false, 0,			0},
-	{TEXT("SCI_HOMERECTEXTEND"),			SCI_HOMERECTEXTEND,			false, false, false, 0,			0},
-	{TEXT("SCI_HOMEDISPLAY"),				SCI_HOMEDISPLAY,			false, true,  false, VK_HOME, 	0},
-	{TEXT("SCI_HOMEDISPLAYEXTEND"),		SCI_HOMEDISPLAYEXTEND,		false, false, false, 0,			0},
-	{TEXT("SCI_HOMEWRAP"),				SCI_HOMEWRAP,				false, false, false, 0,			0},
-	{TEXT("SCI_HOMEWRAPEXTEND"),			SCI_HOMEWRAPEXTEND,			false, false, false, 0,			0},
-	{TEXT("SCI_VCHOME"),					SCI_VCHOME,					false, false, false, 0,			0},
-	{TEXT("SCI_VCHOMEEXTEND"),			SCI_VCHOMEEXTEND,			false, false, true,  VK_HOME, 	0},
-	{TEXT("SCI_VCHOMERECTEXTEND"),		SCI_VCHOMERECTEXTEND,		false, true,  true,  VK_HOME,	0},
-	{TEXT("SCI_VCHOMEWRAP"),				SCI_VCHOMEWRAP,				false, false, false, VK_HOME,	0},
-	{TEXT("SCI_VCHOMEWRAPEXTEND"),		SCI_VCHOMEWRAPEXTEND,		false, false, false, 0,			0},
-	{TEXT("SCI_LINEEND"),					SCI_LINEEND,				false, false, false, 0,			0},
-	{TEXT("SCI_LINEENDEXTEND"),			SCI_LINEENDEXTEND,			false, false, true,  VK_END,	0},
-	{TEXT("SCI_LINEENDRECTEXTEND"),		SCI_LINEENDRECTEXTEND,		false, true,  true,  VK_END,	0},
-	{TEXT("SCI_LINEENDDISPLAY"),			SCI_LINEENDDISPLAY,			false, true,  false, VK_END, 	0},
-	{TEXT("SCI_LINEENDDISPLAYEXTEND"), 	SCI_LINEENDDISPLAYEXTEND,	false, false, false, 0,			0},
-	{TEXT("SCI_LINEENDWRAP"),				SCI_LINEENDWRAP,			false, false, false, VK_END,	0},
-	{TEXT("SCI_LINEENDWRAPEXTEND"),		SCI_LINEENDWRAPEXTEND,		false, false, false, 0,			0},
-	{TEXT("SCI_DOCUMENTSTART"),			SCI_DOCUMENTSTART,			true,  false, false, VK_HOME, 	0},
-	{TEXT("SCI_DOCUMENTSTARTEXTEND"),		SCI_DOCUMENTSTARTEXTEND,	true,  false, true,  VK_HOME, 	0},
-	{TEXT("SCI_DOCUMENTEND"),				SCI_DOCUMENTEND,			true,  false, false, VK_END, 	0},
-	{TEXT("SCI_DOCUMENTENDEXTEND"),		SCI_DOCUMENTENDEXTEND,		true,  false, true,  VK_END, 	0},
-	{TEXT("SCI_PAGEUP"),					SCI_PAGEUP,					false, false, false, VK_PRIOR,	0},
-	{TEXT("SCI_PAGEUPEXTEND"),			SCI_PAGEUPEXTEND,			false, false, true,  VK_PRIOR,	0},
-	{TEXT("SCI_PAGEUPRECTEXTEND"),		SCI_PAGEUPRECTEXTEND,		false, true,  true,  VK_PRIOR,	0},
-	{TEXT("SCI_PAGEDOWN"),				SCI_PAGEDOWN,				false, false, false, VK_NEXT, 	0},
-	{TEXT("SCI_PAGEDOWNEXTEND"),			SCI_PAGEDOWNEXTEND,			false, false, true,  VK_NEXT, 	0},
-	{TEXT("SCI_PAGEDOWNRECTEXTEND"),		SCI_PAGEDOWNRECTEXTEND,		false, true,  true,  VK_NEXT,	0},
-	{TEXT("SCI_STUTTEREDPAGEUP"),			SCI_STUTTEREDPAGEUP,		false, false, false, 0,			0},
-	{TEXT("SCI_STUTTEREDPAGEUPEXTEND"),	SCI_STUTTEREDPAGEUPEXTEND,	false, false, false, 0,			0},
-	{TEXT("SCI_STUTTEREDPAGEDOWN"),		SCI_STUTTEREDPAGEDOWN,		false, false, false, 0,			0},
-	{TEXT("SCI_STUTTEREDPAGEDOWNEXTEND"), SCI_STUTTEREDPAGEDOWNEXTEND,false, false, false, 0,			0},
-	{TEXT("SCI_DELETEBACK"),				SCI_DELETEBACK,				false, false, false, VK_BACK,	0},
-	{TEXT(""),							SCI_DELETEBACK,				false, false, true,  VK_BACK,	0},
-	{TEXT("SCI_DELETEBACKNOTLINE"),		SCI_DELETEBACKNOTLINE,		false, false, false, 0,			0},
-	{TEXT("SCI_DELWORDLEFT"),				SCI_DELWORDLEFT,			true,  false, false, VK_BACK,	0},
-	{TEXT("SCI_DELWORDRIGHT"),			SCI_DELWORDRIGHT,			true,  false, false, VK_DELETE, 0},
-	{TEXT("SCI_DELLINELEFT"),				SCI_DELLINELEFT,			true,  false, true,  VK_BACK,	0},
-	{TEXT("SCI_DELLINERIGHT"),			SCI_DELLINERIGHT,			true,  false, true,  VK_DELETE,	0},
-	{TEXT("SCI_LINEDELETE"),				SCI_LINEDELETE,				true,  false, true,  VK_L, 		0},
-	{TEXT("SCI_LINECUT"),					SCI_LINECUT,				true,  false, false, VK_L, 		0},
-	{TEXT("SCI_LINECOPY"),				SCI_LINECOPY,				true,  false, true,  VK_T, 		0},
-	{TEXT("SCI_LINETRANSPOSE"),			SCI_LINETRANSPOSE,			true,  false, false, VK_T, 		0},
-	{TEXT("SCI_LINEDUPLICATE"),			SCI_LINEDUPLICATE,			false, false, false, 0,			0},
-	{TEXT("SCI_CANCEL"),					SCI_CANCEL,					false, false, false, VK_ESCAPE, 0},
-	{TEXT("SCI_SWAPMAINANCHORCARET"),	SCI_SWAPMAINANCHORCARET,			false, false, false, 0,	0},
-	{TEXT("SCI_ROTATESELECTION"),		SCI_ROTATESELECTION,					false, false, false, 0, 0}
+ScintillaKeyDefinition scintKeyDefs[] = {   //array of accelerator keys for all possible scintilla functions, values can be 0 for vKey, which means its unused
+	{TEXT("SCI_CUT"),                   SCI_CUT,                    true,  false, false, VK_X,      IDM_EDIT_CUT},
+	{TEXT(""),                          SCI_CUT,                    false, false, true,  VK_DELETE, 0},
+	{TEXT("SCI_COPY"),                  SCI_COPY,                   true,  false, false, VK_C,      IDM_EDIT_COPY},
+	{TEXT(""),                          SCI_COPY,                   true,  false, false, VK_INSERT, 0},
+	{TEXT("SCI_PASTE"),                 SCI_PASTE,                  true,  false, false, VK_V,      IDM_EDIT_PASTE},
+	{TEXT(""),                          SCI_PASTE,                  false, false, true,  VK_INSERT, 0},
+	{TEXT("SCI_SELECTALL"),             SCI_SELECTALL,              true,  false, false, VK_A,      IDM_EDIT_SELECTALL},
+	{TEXT("SCI_CLEAR"),                 SCI_CLEAR,                  false, false, false, VK_DELETE, IDM_EDIT_DELETE},
+	{TEXT("SCI_CLEARALL"),              SCI_CLEARALL,               false, false, false, 0,         0},
+	{TEXT("SCI_UNDO"),                  SCI_UNDO,                   true,  false, false, VK_Z,      IDM_EDIT_UNDO},
+	{TEXT(""),                          SCI_UNDO,                   false, true,  false, VK_BACK,   0},
+	{TEXT("SCI_REDO"),                  SCI_REDO,                   true,  false, false, VK_Y,      IDM_EDIT_REDO},
+	{TEXT("SCI_NEWLINE"),               SCI_NEWLINE,                false, false, false, VK_RETURN, 0},
+	{TEXT(""),                          SCI_NEWLINE,                false, false, true,  VK_RETURN, 0},
+	{TEXT("SCI_TAB"),                   SCI_TAB,                    false, false, false, VK_TAB,    IDM_EDIT_INS_TAB},
+	{TEXT("SCI_BACKTAB"),               SCI_BACKTAB,                false, false, true,  VK_TAB,    IDM_EDIT_RMV_TAB},
+	{TEXT("SCI_FORMFEED"),              SCI_FORMFEED,               false, false, false, 0,         0},
+	{TEXT("SCI_ZOOMIN"),                SCI_ZOOMIN,                 true,  false, false, VK_ADD,    IDM_VIEW_ZOOMIN},
+	{TEXT("SCI_ZOOMOUT"),               SCI_ZOOMOUT,                true,  false, false, VK_SUBTRACT,IDM_VIEW_ZOOMOUT},
+	{TEXT("SCI_SETZOOM"),               SCI_SETZOOM,                true,  false, false, VK_DIVIDE, IDM_VIEW_ZOOMRESTORE},
+	{TEXT("SCI_SELECTIONDUPLICATE"),    SCI_SELECTIONDUPLICATE,     true,  false, false, VK_D,      IDM_EDIT_DUP_LINE},
+	{TEXT("SCI_LINESJOIN"),             SCI_LINESJOIN,              false, false, false, 0,         0},
+	{TEXT("SCI_SCROLLCARET"),           SCI_SCROLLCARET,            false, false, false, 0,         0},
+	{TEXT("SCI_EDITTOGGLEOVERTYPE"),    SCI_EDITTOGGLEOVERTYPE,     false, false, false, VK_INSERT, 0},
+	{TEXT("SCI_MOVECARETINSIDEVIEW"),   SCI_MOVECARETINSIDEVIEW,    false, false, false, 0,         0},
+	{TEXT("SCI_LINEDOWN"),              SCI_LINEDOWN,               false, false, false, VK_DOWN,   0},
+	{TEXT("SCI_LINEDOWNEXTEND"),        SCI_LINEDOWNEXTEND,         false, false, true,  VK_DOWN,   0},
+	{TEXT("SCI_LINEDOWNRECTEXTEND"),    SCI_LINEDOWNRECTEXTEND,     false, true,  true,  VK_DOWN,   0},
+	{TEXT("SCI_LINESCROLLDOWN"),        SCI_LINESCROLLDOWN,         true,  false, false, VK_DOWN,   0},
+	{TEXT("SCI_LINEUP"),                SCI_LINEUP,                 false, false, false, VK_UP,     0},
+	{TEXT("SCI_LINEUPEXTEND"),          SCI_LINEUPEXTEND,           false, false, true,  VK_UP,     0},
+	{TEXT("SCI_LINEUPRECTEXTEND"),      SCI_LINEUPRECTEXTEND,       false, true,  true,  VK_UP,     0},
+	{TEXT("SCI_LINESCROLLUP"),          SCI_LINESCROLLUP,           true,  false, false, VK_UP,     0},
+	{TEXT("SCI_PARADOWN"),              SCI_PARADOWN,               true,  false, false, VK_OEM_6,  0},
+	{TEXT("SCI_PARADOWNEXTEND"),        SCI_PARADOWNEXTEND,         true,  false, true,  VK_OEM_6,  0},
+	{TEXT("SCI_PARAUP"),                SCI_PARAUP,                 true,  false, false, VK_OEM_4,  0},
+	{TEXT("SCI_PARAUPEXTEND"),          SCI_PARAUPEXTEND,           true,  false, true,  VK_OEM_4,  0},
+	{TEXT("SCI_CHARLEFT"),              SCI_CHARLEFT,               false, false, false, VK_LEFT,   0},
+	{TEXT("SCI_CHARLEFTEXTEND"),        SCI_CHARLEFTEXTEND,         false, false, true,  VK_LEFT,   0},
+	{TEXT("SCI_CHARLEFTRECTEXTEND"),    SCI_CHARLEFTRECTEXTEND,     false, true,  true,  VK_LEFT,   0},
+	{TEXT("SCI_CHARRIGHT"),             SCI_CHARRIGHT,              false, false, false, VK_RIGHT,  0},
+	{TEXT("SCI_CHARRIGHTEXTEND"),       SCI_CHARRIGHTEXTEND,        false, false, true,  VK_RIGHT,  0},
+	{TEXT("SCI_CHARRIGHTRECTEXTEND"),   SCI_CHARRIGHTRECTEXTEND,    false, true,  true,  VK_RIGHT,  0},
+	{TEXT("SCI_WORDLEFT"),              SCI_WORDLEFT,               true,  false, false, VK_LEFT,   0},
+	{TEXT("SCI_WORDLEFTEXTEND"),        SCI_WORDLEFTEXTEND,         true,  false, true,  VK_LEFT,   0},
+	{TEXT("SCI_WORDRIGHT"),             SCI_WORDRIGHT,              true,  false, false, VK_RIGHT,  0},
+	{TEXT("SCI_WORDRIGHTEXTEND"),       SCI_WORDRIGHTEXTEND,        false, false, false, 0,         0},
+	{TEXT("SCI_WORDLEFTEND"),           SCI_WORDLEFTEND,            false, false, false, 0,         0},
+	{TEXT("SCI_WORDLEFTENDEXTEND"),     SCI_WORDLEFTENDEXTEND,      false, false, false, 0,         0},
+	{TEXT("SCI_WORDRIGHTEND"),          SCI_WORDRIGHTEND,           false, false, false, 0,         0},
+	{TEXT("SCI_WORDRIGHTENDEXTEND"),    SCI_WORDRIGHTENDEXTEND,     true,  false, true,  VK_RIGHT,  0},
+	{TEXT("SCI_WORDPARTLEFT"),          SCI_WORDPARTLEFT,           true,  false, false, VK_OEM_2,  0},
+	{TEXT("SCI_WORDPARTLEFTEXTEND"),    SCI_WORDPARTLEFTEXTEND,     true,  false, true,  VK_OEM_2,  0},
+	{TEXT("SCI_WORDPARTRIGHT"),         SCI_WORDPARTRIGHT,          true,  false, false, VK_OEM_5,  0},
+	{TEXT("SCI_WORDPARTRIGHTEXTEND"),   SCI_WORDPARTRIGHTEXTEND,    true,  false, true,  VK_OEM_5,  0},
+	{TEXT("SCI_HOME"),                  SCI_HOME,                   false, false, false, 0,         0},
+	{TEXT("SCI_HOMEEXTEND"),            SCI_HOMEEXTEND,             false, false, false, 0,         0},
+	{TEXT("SCI_HOMERECTEXTEND"),        SCI_HOMERECTEXTEND,         false, false, false, 0,         0},
+	{TEXT("SCI_HOMEDISPLAY"),           SCI_HOMEDISPLAY,            false, true,  false, VK_HOME,   0},
+	{TEXT("SCI_HOMEDISPLAYEXTEND"),     SCI_HOMEDISPLAYEXTEND,      false, false, false, 0,         0},
+	{TEXT("SCI_HOMEWRAP"),              SCI_HOMEWRAP,               false, false, false, 0,         0},
+	{TEXT("SCI_HOMEWRAPEXTEND"),        SCI_HOMEWRAPEXTEND,         false, false, false, 0,         0},
+	{TEXT("SCI_VCHOME"),                SCI_VCHOME,                 false, false, false, 0,         0},
+	{TEXT("SCI_VCHOMEEXTEND"),          SCI_VCHOMEEXTEND,           false, false, true,  VK_HOME,   0},
+	{TEXT("SCI_VCHOMERECTEXTEND"),      SCI_VCHOMERECTEXTEND,       false, true,  true,  VK_HOME,   0},
+	{TEXT("SCI_VCHOMEWRAP"),            SCI_VCHOMEWRAP,             false, false, false, VK_HOME,   0},
+	{TEXT("SCI_VCHOMEWRAPEXTEND"),      SCI_VCHOMEWRAPEXTEND,       false, false, false, 0,         0},
+	{TEXT("SCI_LINEEND"),               SCI_LINEEND,                false, false, false, 0,         0},
+	{TEXT("SCI_LINEENDEXTEND"),         SCI_LINEENDEXTEND,          false, false, true,  VK_END,    0},
+	{TEXT("SCI_LINEENDRECTEXTEND"),     SCI_LINEENDRECTEXTEND,      false, true,  true,  VK_END,    0},
+	{TEXT("SCI_LINEENDDISPLAY"),        SCI_LINEENDDISPLAY,         false, true,  false, VK_END,    0},
+	{TEXT("SCI_LINEENDDISPLAYEXTEND"),  SCI_LINEENDDISPLAYEXTEND,   false, false, false, 0,         0},
+	{TEXT("SCI_LINEENDWRAP"),           SCI_LINEENDWRAP,            false, false, false, VK_END,    0},
+	{TEXT("SCI_LINEENDWRAPEXTEND"),     SCI_LINEENDWRAPEXTEND,      false, false, false, 0,         0},
+	{TEXT("SCI_DOCUMENTSTART"),         SCI_DOCUMENTSTART,          true,  false, false, VK_HOME,   0},
+	{TEXT("SCI_DOCUMENTSTARTEXTEND"),   SCI_DOCUMENTSTARTEXTEND,    true,  false, true,  VK_HOME,   0},
+	{TEXT("SCI_DOCUMENTEND"),           SCI_DOCUMENTEND,            true,  false, false, VK_END,    0},
+	{TEXT("SCI_DOCUMENTENDEXTEND"),     SCI_DOCUMENTENDEXTEND,      true,  false, true,  VK_END,    0},
+	{TEXT("SCI_PAGEUP"),                SCI_PAGEUP,                 false, false, false, VK_PRIOR,  0},
+	{TEXT("SCI_PAGEUPEXTEND"),          SCI_PAGEUPEXTEND,           false, false, true,  VK_PRIOR,  0},
+	{TEXT("SCI_PAGEUPRECTEXTEND"),      SCI_PAGEUPRECTEXTEND,       false, true,  true,  VK_PRIOR,  0},
+	{TEXT("SCI_PAGEDOWN"),              SCI_PAGEDOWN,               false, false, false, VK_NEXT,   0},
+	{TEXT("SCI_PAGEDOWNEXTEND"),        SCI_PAGEDOWNEXTEND,         false, false, true,  VK_NEXT,   0},
+	{TEXT("SCI_PAGEDOWNRECTEXTEND"),    SCI_PAGEDOWNRECTEXTEND,     false, true,  true,  VK_NEXT,   0},
+	{TEXT("SCI_STUTTEREDPAGEUP"),       SCI_STUTTEREDPAGEUP,        false, false, false, 0,         0},
+	{TEXT("SCI_STUTTEREDPAGEUPEXTEND"), SCI_STUTTEREDPAGEUPEXTEND,  false, false, false, 0,         0},
+	{TEXT("SCI_STUTTEREDPAGEDOWN"),     SCI_STUTTEREDPAGEDOWN,      false, false, false, 0,         0},
+	{TEXT("SCI_STUTTEREDPAGEDOWNEXTEND"), SCI_STUTTEREDPAGEDOWNEXTEND,false, false, false, 0,       0},
+	{TEXT("SCI_DELETEBACK"),            SCI_DELETEBACK,             false, false, false, VK_BACK,   0},
+	{TEXT(""),                          SCI_DELETEBACK,             false, false, true,  VK_BACK,   0},
+	{TEXT("SCI_DELETEBACKNOTLINE"),     SCI_DELETEBACKNOTLINE,      false, false, false, 0,         0},
+	{TEXT("SCI_DELWORDLEFT"),           SCI_DELWORDLEFT,            true,  false, false, VK_BACK,   0},
+	{TEXT("SCI_DELWORDRIGHT"),          SCI_DELWORDRIGHT,           true,  false, false, VK_DELETE, 0},
+	{TEXT("SCI_DELLINELEFT"),           SCI_DELLINELEFT,            true,  false, true,  VK_BACK,   0},
+	{TEXT("SCI_DELLINERIGHT"),          SCI_DELLINERIGHT,           true,  false, true,  VK_DELETE, 0},
+	{TEXT("SCI_LINEDELETE"),            SCI_LINEDELETE,             true,  false, true,  VK_L,      0},
+	{TEXT("SCI_LINECUT"),               SCI_LINECUT,                true,  false, false, VK_L,      0},
+	{TEXT("SCI_LINECOPY"),              SCI_LINECOPY,               true,  false, true,  VK_T,      0},
+	{TEXT("SCI_LINETRANSPOSE"),         SCI_LINETRANSPOSE,          true,  false, false, VK_T,      0},
+	{TEXT("SCI_LINEDUPLICATE"),         SCI_LINEDUPLICATE,          false, false, false, 0,         0},
+	{TEXT("SCI_CANCEL"),                SCI_CANCEL,                 false, false, false, VK_ESCAPE, 0},
+	{TEXT("SCI_SWAPMAINANCHORCARET"),   SCI_SWAPMAINANCHORCARET,    false, false, false, 0, 0},
+	{TEXT("SCI_ROTATESELECTION"),       SCI_ROTATESELECTION,        false, false, false, 0, 0}
 
-	// {TEXT("SCI_EMPTYUNDOBUFFER"),		SCI_EMPTYUNDOBUFFER,		false, false, false, 0,			0},
-	// {TEXT("SCI_TOGGLECARETSTICKY"),		SCI_TOGGLECARETSTICKY,		false, false, false, 0,			0},
-	// {TEXT("SCI_CALLTIPCANCEL"),			SCI_CALLTIPCANCEL,			false, false, false, 0,			0},
-	// {TEXT("SCI_SETSAVEPOINT"),			SCI_SETSAVEPOINT,			false, false, false, 0,			0},
-	// {TEXT("SCI_CLEARDOCUMENTSTYLE"),	SCI_CLEARDOCUMENTSTYLE,		false, false, false, 0,			0},
+	// {TEXT("SCI_EMPTYUNDOBUFFER"),        SCI_EMPTYUNDOBUFFER,        false, false, false, 0,        0},
+	// {TEXT("SCI_TOGGLECARETSTICKY"),      SCI_TOGGLECARETSTICKY,      false, false, false, 0,        0},
+	// {TEXT("SCI_CALLTIPCANCEL"),          SCI_CALLTIPCANCEL,          false, false, false, 0,        0},
+	// {TEXT("SCI_SETSAVEPOINT"),           SCI_SETSAVEPOINT,           false, false, false, 0,        0},
+	// {TEXT("SCI_CLEARDOCUMENTSTYLE"),     SCI_CLEARDOCUMENTSTYLE,     false, false, false, 0,        0},
 	//
 	//
-	//{TEXT("SCI_CHOOSECARETX"),			SCI_CHOOSECARETX,			false, false, false, 0,			0},
-	// {TEXT("SCI_AUTOCCOMPLETE"),			SCI_AUTOCCOMPLETE,			false, false, false, 0,			0},
-	// {TEXT("SCI_AUTOCCANCEL"),			SCI_AUTOCCANCEL,			false, false, false, 0,			0},
-	// {TEXT("SCI_CLEARREGISTEREDIMAGES"), SCI_CLEARREGISTEREDIMAGES,	false, false, false, 0,			0},
-	// {TEXT("SCI_HOMEDISPLAYEXTEND"),		SCI_HOMEDISPLAYEXTEND,		false, true,  true,  VK_HOME,	0},
-	// {TEXT("SCI_LINEENDDISPLAYEXTEND"),	SCI_LINEENDDISPLAYEXTEND,	false, true,  true,  VK_END,	0},
+	// {TEXT("SCI_CHOOSECARETX"),            SCI_CHOOSECARETX,           false, false, false, 0,       0},
+	// {TEXT("SCI_AUTOCCOMPLETE"),          SCI_AUTOCCOMPLETE,          false, false, false, 0,        0},
+	// {TEXT("SCI_AUTOCCANCEL"),            SCI_AUTOCCANCEL,            false, false, false, 0,        0},
+	// {TEXT("SCI_CLEARREGISTEREDIMAGES"),  SCI_CLEARREGISTEREDIMAGES,   false, false, false, 0,       0},
+	// {TEXT("SCI_HOMEDISPLAYEXTEND"),      SCI_HOMEDISPLAYEXTEND,      false, true,  true,  VK_HOME,  0},
+	// {TEXT("SCI_LINEENDDISPLAYEXTEND"),   SCI_LINEENDDISPLAYEXTEND,   false, true,  true,  VK_END,   0},
 	// 
-	// {TEXT("SCI_DELWORDRIGHTEND"),		SCI_DELWORDRIGHTEND,		false, false, false, 0,			0},
-	// {TEXT("SCI_LOWERCASE"),				SCI_LOWERCASE,				false, false, false, 0,			0},
-	// {TEXT("SCI_UPPERCASE"),				SCI_UPPERCASE,				false, false, false, 0,			0},
-	// {TEXT("SCI_LOWERCASE"),				SCI_LOWERCASE,				true,  false, false, VK_U, 		0},
-	// {TEXT("SCI_UPPERCASE"),				SCI_UPPERCASE,				true,  false, true,  VK_U, 		0},
+	// {TEXT("SCI_DELWORDRIGHTEND"),        SCI_DELWORDRIGHTEND,        false, false, false, 0,        0},
+	// {TEXT("SCI_LOWERCASE"),              SCI_LOWERCASE,              false, false, false, 0,        0},
+	// {TEXT("SCI_UPPERCASE"),              SCI_UPPERCASE,              false, false, false, 0,        0},
+	// {TEXT("SCI_LOWERCASE"),              SCI_LOWERCASE,              true,  false, false, VK_U,     0},
+	// {TEXT("SCI_UPPERCASE"),              SCI_UPPERCASE,              true,  false, true,  VK_U,     0},
 	// 
-	// {TEXT("SCI_FORMFEED"),				SCI_FORMFEED,				true,  false, false, VK_L, 		0},
-	// {TEXT("SCI_CLEARALLCMDKEYS"),		SCI_CLEARALLCMDKEYS,		false, false, false, 0,			0},
-	// {TEXT("SCI_STARTRECORD"),			SCI_STARTRECORD,			false, false, false, 0,			0},
-	// {TEXT("SCI_STOPRECORD"),			SCI_STOPRECORD,				false, false, false, 0,			0},
-	// {TEXT("SCI_SEARCHANCHOR"),			SCI_SEARCHANCHOR,			false, false, false, 0,			0},
-	// {TEXT("SCI_TARGETFROMSELECTION"),	SCI_TARGETFROMSELECTION,	false, false, false, 0,			0},
-	// {TEXT("SCI_STYLERESETDEFAULT"),		SCI_STYLERESETDEFAULT,		false, false, false, 0,			0},
-	// {TEXT("SCI_STYLECLEARALL"),			SCI_STYLECLEARALL,			false, false, false, 0,			0},
+	// {TEXT("SCI_FORMFEED"),               SCI_FORMFEED,               true,  false, false, VK_L,     0},
+	// {TEXT("SCI_CLEARALLCMDKEYS"),        SCI_CLEARALLCMDKEYS,        false, false, false, 0,        0},
+	// {TEXT("SCI_STARTRECORD"),            SCI_STARTRECORD,            false, false, false, 0,        0},
+	// {TEXT("SCI_STOPRECORD"),             SCI_STOPRECORD,             false, false, false, 0,        0},
+	// {TEXT("SCI_SEARCHANCHOR"),           SCI_SEARCHANCHOR,           false, false, false, 0,        0},
+	// {TEXT("SCI_TARGETFROMSELECTION"),    SCI_TARGETFROMSELECTION,    false, false, false, 0,        0},
+	// {TEXT("SCI_STYLERESETDEFAULT"),      SCI_STYLERESETDEFAULT,      false, false, false, 0,        0},
+	// {TEXT("SCI_STYLECLEARALL"),          SCI_STYLECLEARALL,          false, false, false, 0,        0},
 	//
 };
 
 
-static int strVal(const TCHAR *str, int base) {
+static int strVal(const TCHAR *str, int base)
+{
 	if (!str) return -1;
 	if (!str[0]) return 0;
 
@@ -462,15 +465,18 @@ static int strVal(const TCHAR *str, int base) {
 	return result;
 };
 
-static int decStrVal(const TCHAR *str) {
+static int decStrVal(const TCHAR *str)
+{
 	return strVal(str, 10);
 };
 
-static int hexStrVal(const TCHAR *str) {
+static int hexStrVal(const TCHAR *str)
+{
 	return strVal(str, 16);
 };
 
-static int getKwClassFromName(const TCHAR *str) {
+static int getKwClassFromName(const TCHAR *str)
+{
 	if (!lstrcmp(TEXT("instre1"), str)) return LANG_INDEX_INSTR;
 	if (!lstrcmp(TEXT("instre2"), str)) return LANG_INDEX_INSTR2;
 	if (!lstrcmp(TEXT("type1"), str)) return LANG_INDEX_TYPE;
@@ -568,8 +574,8 @@ winVer getWindowsVersion()
 	else
 		GetSystemInfo(&si);
 
-   switch (osvi.dwPlatformId)
-   {
+	switch (osvi.dwPlatformId)
+	{
 		case VER_PLATFORM_WIN32_NT:
 		{
 			if ( osvi.dwMajorVersion == 6 && osvi.dwMinorVersion == 2 )
@@ -628,24 +634,24 @@ winVer getWindowsVersion()
 		}
 		break;
 
-      case VER_PLATFORM_WIN32s:
-		return WV_WIN32S;
-      
-	  default :
-		return WV_UNKNOWN;
-   }
-   return WV_UNKNOWN; 
+		case VER_PLATFORM_WIN32s:
+			return WV_WIN32S;
+
+		default :
+			return WV_UNKNOWN;
+	}
+	return WV_UNKNOWN; 
 }
 
 
 NppParameters * NppParameters::_pSelf = new NppParameters;
 int FileDialog::_dialogFileBoxId = (NppParameters::getInstance())->getWinVersion() < WV_W2K?edt1:cmb13;
 
-NppParameters::NppParameters() :	_pXmlDoc(NULL),_pXmlUserDoc(NULL), _pXmlUserStylerDoc(NULL),_pXmlUserLangDoc(NULL),\
+NppParameters::NppParameters() :    _pXmlDoc(NULL),_pXmlUserDoc(NULL), _pXmlUserStylerDoc(NULL),_pXmlUserLangDoc(NULL),\
 									_pXmlNativeLangDocA(NULL), _nbLang(0), _pXmlToolIconsDoc(NULL), _nbRecentFile(0),\
 									_nbMaxRecentFile(10), _recentFileCustomLength(RECENTFILES_SHOWFULLPATH),\
-									_putRecentFileInSubMenu(false),	_pXmlShortcutDoc(NULL), _pXmlContextMenuDocA(NULL),\
-									_pXmlSessionDoc(NULL), _pXmlBlacklistDoc(NULL),	_nbUserLang(0), _nbExternalLang(0),\
+									_putRecentFileInSubMenu(false), _pXmlShortcutDoc(NULL), _pXmlContextMenuDocA(NULL),\
+									_pXmlSessionDoc(NULL), _pXmlBlacklistDoc(NULL), _nbUserLang(0), _nbExternalLang(0),\
 									_hUser32(NULL), _hUXTheme(NULL), _transparentFuncAddr(NULL), _enableThemeDialogTextureFuncAddr(NULL),\
 									_pNativeLangSpeaker(NULL), _isTaskListRBUTTONUP_Active(false), _fileSaveDlgFilterIndex(-1),\
 									_asNotepadStyle(false), _isFindReplacing(false)/*, _forceLoadingSession(false)*/
@@ -687,10 +693,13 @@ NppParameters::~NppParameters()
 {
 	for (int i = 0 ; i < _nbLang ; ++i)
 		delete _langList[i];
+
 	for (int i = 0 ; i < _nbRecentFile ; ++i)
 		delete _LRFileList[i];
+
 	for (int i = 0 ; i < _nbUserLang ; ++i)
 		delete _userLangArray[i];
+
 	if (_hUser32)
 		FreeLibrary(_hUser32);
 	if (_hUXTheme)
@@ -772,7 +781,7 @@ bool NppParameters::reloadLang()
 	if (!PathFileExists(nativeLangPath.c_str()))
 	{
 		nativeLangPath = _nppPath;
-		PathAppend(nativeLangPath, generic_string(TEXT("nativeLang.xml")));	
+		PathAppend(nativeLangPath, generic_string(TEXT("nativeLang.xml"))); 
 		if (!PathFileExists(nativeLangPath.c_str()))
 			return false;
 	}
@@ -795,7 +804,7 @@ bool NppParameters::reloadLang()
 bool NppParameters::load()
 {
 	L_END = L_EXTERNAL;
-	bool isAllLaoded = true;
+	bool isAllLoaded = true;
 	for (int i = 0 ; i < NB_LANG ; _langList[i] = NULL, ++i);
 	
 	// Make localConf.xml path
@@ -805,25 +814,25 @@ bool NppParameters::load()
 	// Test if localConf.xml exist
 	_isLocal = (PathFileExists(localConfPath.c_str()) == TRUE);
 
-    // Under vista and windows 7, the usage of doLocalConf.xml is not allowed
-    // if Notepad++ is installed in "program files" directory, because of UAC
-    if (_isLocal)
-    {
-        // We check if OS is Vista or above
-        if (_winVersion >= WV_VISTA)
-        {
-            ITEMIDLIST *pidl;
-		    SHGetSpecialFolderLocation(NULL, CSIDL_PROGRAM_FILES, &pidl);
-		    TCHAR progPath[MAX_PATH];
-		    SHGetPathFromIDList(pidl, progPath);
-            TCHAR nppDirLocation[MAX_PATH];
-            lstrcpy(nppDirLocation, _nppPath.c_str());
-            ::PathRemoveFileSpec(nppDirLocation);
-            	
-            if  (lstrcmp(progPath, nppDirLocation) == 0)
-                _isLocal = false;
-        }
-    }
+	// Under vista and windows 7, the usage of doLocalConf.xml is not allowed
+	// if Notepad++ is installed in "program files" directory, because of UAC
+	if (_isLocal)
+	{
+		// We check if OS is Vista or above
+		if (_winVersion >= WV_VISTA)
+		{
+			ITEMIDLIST *pidl;
+			SHGetSpecialFolderLocation(NULL, CSIDL_PROGRAM_FILES, &pidl);
+			TCHAR progPath[MAX_PATH];
+			SHGetPathFromIDList(pidl, progPath);
+			TCHAR nppDirLocation[MAX_PATH];
+			lstrcpy(nppDirLocation, _nppPath.c_str());
+			::PathRemoveFileSpec(nppDirLocation);
+
+			if  (lstrcmp(progPath, nppDirLocation) == 0)
+				_isLocal = false;
+		}
+	}
 
 	if (_isLocal)
 	{
@@ -866,19 +875,23 @@ bool NppParameters::load()
 	generic_string langs_xml_path(_userPath);
 	PathAppend(langs_xml_path, TEXT("langs.xml"));
 
-    BOOL doRecover = FALSE;
-    if (::PathFileExists(langs_xml_path.c_str()))
-    {
-        struct _stat buf;
-	    
-        if (generic_stat(langs_xml_path.c_str(), &buf)==0)
-            if (buf.st_size == 0)
-                doRecover = ::MessageBox(NULL, TEXT("Load langs.xml failed!\rDo you want to recover your langs.xml?"), TEXT("Configurator"),MB_YESNO);
-    }
-    else
-        doRecover = true;
+	BOOL doRecover = FALSE;
+	if (::PathFileExists(langs_xml_path.c_str()))
+	{
+		struct _stat buf;
+		
+		if (generic_stat(langs_xml_path.c_str(), &buf) == 0)
+		{
+			if (buf.st_size == 0)
+				doRecover = ::MessageBox(NULL, TEXT("Load langs.xml failed!\rDo you want to recover your langs.xml?"), TEXT("Configurator"), MB_YESNO);
+		}
+	}
+	else
+	{
+		doRecover = true;
+	}
 	
-    if (doRecover)
+	if (doRecover)
 	{
 		generic_string srcLangsPath(_nppPath);
 		PathAppend(srcLangsPath, TEXT("langs.model.xml"));
@@ -894,10 +907,12 @@ bool NppParameters::load()
 		::MessageBox(NULL, TEXT("Load langs.xml failed!"), TEXT("Configurator"),MB_OK);
 		delete _pXmlDoc;
 		_pXmlDoc = NULL;
-		isAllLaoded = false;
+		isAllLoaded = false;
 	}
 	else
+	{
 		getLangKeywordsFromXmlTree();
+	}
 
 	//---------------------------//
 	// config.xml : for per user //
@@ -926,20 +941,24 @@ bool NppParameters::load()
 				::MessageBox(NULL, TEXT("Recover config.xml failed!"), TEXT("Configurator"),MB_OK);
 				delete _pXmlUserDoc;
 				_pXmlUserDoc = NULL;
-				isAllLaoded = false;
+				isAllLoaded = false;
 			}
 			else
+			{
 				getUserParametersFromXmlTree();
+			}
 		}
 		else
 		{
 			delete _pXmlUserDoc;
 			_pXmlUserDoc = NULL;
-			isAllLaoded = false;
+			isAllLoaded = false;
 		}
 	}
 	else
+	{
 		getUserParametersFromXmlTree();
+	}
 
 	//----------------------------//
 	// stylers.xml : for per user //
@@ -969,7 +988,7 @@ bool NppParameters::load()
 		::MessageBox(NULL, TEXT("Load stylers.xml failed!"), _stylerPath.c_str(), MB_OK);
 		delete _pXmlUserStylerDoc;
 		_pXmlUserStylerDoc = NULL;
-		isAllLaoded = false;
+		isAllLoaded = false;
 	}
 	else
 		getUserStylersFromXmlTree();
@@ -990,10 +1009,12 @@ bool NppParameters::load()
 	{
 		delete _pXmlUserLangDoc;
 		_pXmlUserLangDoc = NULL;
-		isAllLaoded = false;
+		isAllLoaded = false;
 	}
 	else
+	{
 		getUserDefineLangsFromXmlTree();
+	}
 	
 	//----------------------------------------------//
 	// nativeLang.xml : for per user                //
@@ -1024,7 +1045,6 @@ bool NppParameters::load()
 		}
 	}
 
-
 	_pXmlNativeLangDocA = new TiXmlDocumentA();
 
 	loadOkay = _pXmlNativeLangDocA->LoadUnicodeFilePath(nativeLangPath.c_str());
@@ -1032,7 +1052,7 @@ bool NppParameters::load()
 	{
 		delete _pXmlNativeLangDocA;
 		_pXmlNativeLangDocA = NULL;
-		isAllLaoded = false;
+		isAllLoaded = false;
 	}
 
 	//---------------------------------//
@@ -1047,7 +1067,7 @@ bool NppParameters::load()
 	{
 		delete _pXmlToolIconsDoc;
 		_pXmlToolIconsDoc = NULL;
-		isAllLaoded = false;
+		isAllLoaded = false;
 	}
 
 	//------------------------------//
@@ -1070,7 +1090,7 @@ bool NppParameters::load()
 	{
 		delete _pXmlShortcutDoc;
 		_pXmlShortcutDoc = NULL;
-		isAllLaoded = false;
+		isAllLoaded = false;
 	}
 	else
 	{
@@ -1103,7 +1123,7 @@ bool NppParameters::load()
 	{
 		delete _pXmlContextMenuDocA;
 		_pXmlContextMenuDocA = NULL;
-		isAllLaoded = false;
+		isAllLoaded = false;
 	}
 
 	//----------------------------//
@@ -1119,34 +1139,36 @@ bool NppParameters::load()
 		_pXmlSessionDoc = new TiXmlDocument(_sessionPath);
 		loadOkay = _pXmlSessionDoc->LoadFile();
 		if (!loadOkay)
-			isAllLaoded = false;
+			isAllLoaded = false;
 		else
 			getSessionFromXmlTree();
 
 		delete _pXmlSessionDoc;
-		for (size_t i = 0, len = _pXmlExternalLexerDoc.size() ; i < len ; ++i)
+		for (size_t i = 0, len = _pXmlExternalLexerDoc.size(); i < len; ++i)
+		{
 			if (_pXmlExternalLexerDoc[i])
 				delete _pXmlExternalLexerDoc[i];
+		}
 
 		_pXmlSessionDoc = NULL;
 	}
 
-    //------------------------------//
+	//------------------------------//
 	// blacklist.xml : for per user //
 	//------------------------------//
 	_blacklistPath = _userPath;
 	PathAppend(_blacklistPath, TEXT("blacklist.xml"));
 
-    if (PathFileExists(_blacklistPath.c_str()))
+	if (PathFileExists(_blacklistPath.c_str()))
 	{
-        _pXmlBlacklistDoc = new TiXmlDocument(_blacklistPath);
-        loadOkay = _pXmlBlacklistDoc->LoadFile();
-        if (loadOkay)
-        {
-            getBlackListFromXmlTree();
-        }
-    }
-	return isAllLaoded;
+		_pXmlBlacklistDoc = new TiXmlDocument(_blacklistPath);
+		loadOkay = _pXmlBlacklistDoc->LoadFile();
+		if (loadOkay)
+		{
+			getBlackListFromXmlTree();
+		}
+	}
+	return isAllLoaded;
 }
 
 void NppParameters::destroyInstance()
@@ -1164,9 +1186,9 @@ void NppParameters::destroyInstance()
 		delete _pXmlUserStylerDoc;
 
 	if (_pXmlUserLangDoc)
-    {
+	{
 		delete _pXmlUserLangDoc;
-    }
+	}
 
 	for (int i = 0 ; i < _nbImportedULD ; ++i)
 	{
@@ -1219,16 +1241,19 @@ void NppParameters::setFontList(HWND hWnd)
 
 void NppParameters::getLangKeywordsFromXmlTree()
 {
-	TiXmlNode *root = 
-        _pXmlDoc->FirstChild(TEXT("NotepadPlus"));
-		if (!root) return;
+	TiXmlNode *root = _pXmlDoc->FirstChild(TEXT("NotepadPlus"));
+	if (!root)
+		return;
+
 	feedKeyWordsParameters(root);
 }
  
 void NppParameters::getExternalLexerFromXmlTree(TiXmlDocument *doc)
 {
 	TiXmlNode *root = doc->FirstChild(TEXT("NotepadPlus"));
-		if (!root) return;
+	if (!root)
+		return;
+
 	feedKeyWordsParameters(root);
 	feedStylerArray(root);
 }
@@ -1244,7 +1269,9 @@ int NppParameters::addExternalLangToEnd(ExternalLangContainer * externalLang)
 bool NppParameters::getUserStylersFromXmlTree()
 {
 	TiXmlNode *root = _pXmlUserStylerDoc->FirstChild(TEXT("NotepadPlus"));
-		if (!root) return false;
+	if (!root)
+		return false;
+
 	return feedStylerArray(root);
 }
 
@@ -1254,7 +1281,8 @@ bool NppParameters::getUserParametersFromXmlTree()
 		return false;
 
 	TiXmlNode *root = _pXmlUserDoc->FirstChild(TEXT("NotepadPlus"));
-	if (!root) return false;
+	if (!root)
+		return false;
 
 	// Get GUI parameters
 	feedGUIParameters(root);
@@ -1362,7 +1390,7 @@ bool NppParameters::getScintKeysFromXmlTree()
 
 bool NppParameters::getBlackListFromXmlTree()
 {
-    if (!_pXmlBlacklistDoc)
+	if (!_pXmlBlacklistDoc)
 		return false;
 	
 	TiXmlNode *root = _pXmlBlacklistDoc->FirstChild(TEXT("NotepadPlus"));
@@ -1384,8 +1412,8 @@ void NppParameters::initMenuKeys()
 	}
 }
 
-void NppParameters::initScintillaKeys() {
-
+void NppParameters::initScintillaKeys()
+{
 	int nrCommands = sizeof(scintKeyDefs)/sizeof(ScintillaKeyDefinition);
 
 	//Warning! Matching function have to be consecutive
@@ -1412,6 +1440,7 @@ void NppParameters::initScintillaKeys() {
 		prevID = skd.functionId;
 	}
 }
+
 bool NppParameters::reloadContextMenuFromXmlTree(HMENU mainMenuHadle, HMENU pluginsMenu)
 {
 	_contextMenuItems.clear();
@@ -1763,7 +1792,8 @@ bool NppParameters::getSessionFromXmlTree(TiXmlDocument *pSessionDoc, Session *p
 void NppParameters::feedFileListParameters(TiXmlNode *node)
 {
 	TiXmlNode *historyRoot = node->FirstChildElement(TEXT("History"));
-	if (!historyRoot) return;
+	if (!historyRoot)
+		return;
 
 	// nbMaxFile value
 	int nbMaxFile;
@@ -1798,7 +1828,8 @@ void NppParameters::feedFileListParameters(TiXmlNode *node)
 void NppParameters::feedProjectPanelsParameters(TiXmlNode *node)
 {
 	TiXmlNode *projPanelRoot = node->FirstChildElement(TEXT("ProjectPanels"));
-	if (!projPanelRoot) return;
+	if (!projPanelRoot)
+		return;
 	
 	for (TiXmlNode *childNode = projPanelRoot->FirstChildElement(TEXT("ProjectPanel"));
 		childNode;
@@ -1820,19 +1851,20 @@ void NppParameters::feedProjectPanelsParameters(TiXmlNode *node)
 void NppParameters::feedFindHistoryParameters(TiXmlNode *node)
 {
 	TiXmlNode *findHistoryRoot = node->FirstChildElement(TEXT("FindHistory"));
-	if (!findHistoryRoot) return;
+	if (!findHistoryRoot)
+		return;
 
 	(findHistoryRoot->ToElement())->Attribute(TEXT("nbMaxFindHistoryPath"), &_findHistory._nbMaxFindHistoryPath);
 	if ((_findHistory._nbMaxFindHistoryPath > 0) && (_findHistory._nbMaxFindHistoryPath <= NB_MAX_FINDHISTORY_PATH))
 	{
 		for (TiXmlNode *childNode = findHistoryRoot->FirstChildElement(TEXT("Path"));
-            childNode && (_findHistory._findHistoryPaths.size() < NB_MAX_FINDHISTORY_PATH);
+			childNode && (_findHistory._findHistoryPaths.size() < NB_MAX_FINDHISTORY_PATH);
 			childNode = childNode->NextSibling(TEXT("Path")) )
 		{
 			const TCHAR *filePath = (childNode->ToElement())->Attribute(TEXT("name"));
 			if (filePath)
 			{
-                _findHistory._findHistoryPaths.push_back(generic_string(filePath));
+				_findHistory._findHistoryPaths.push_back(generic_string(filePath));
 			}
 		}
 	}
@@ -1939,7 +1971,8 @@ void NppParameters::feedFindHistoryParameters(TiXmlNode *node)
 void NppParameters::feedShortcut(TiXmlNode *node)
 {
 	TiXmlNode *shortcutsRoot = node->FirstChildElement(TEXT("InternalCommands"));
-	if (!shortcutsRoot) return;
+	if (!shortcutsRoot)
+		return;
 
 	for (TiXmlNode *childNode = shortcutsRoot->FirstChildElement(TEXT("Shortcut"));
 		childNode ;
@@ -1954,7 +1987,7 @@ void NppParameters::feedShortcut(TiXmlNode *node)
 			for(int i = 0; i < len; ++i) 
 			{
 				if (_shortcuts[i].getID() == (unsigned long)id) 
-				{	//found our match
+				{   //found our match
 					getShortcuts(childNode, _shortcuts[i]);
 					addUserModifiedIndex(i);
 				}
@@ -1966,7 +1999,8 @@ void NppParameters::feedShortcut(TiXmlNode *node)
 void NppParameters::feedMacros(TiXmlNode *node)
 {
 	TiXmlNode *macrosRoot = node->FirstChildElement(TEXT("Macros"));
-	if (!macrosRoot) return;
+	if (!macrosRoot)
+		return;
 
 	for (TiXmlNode *childNode = macrosRoot->FirstChildElement(TEXT("Macro"));
 		childNode ;
@@ -2019,7 +2053,8 @@ void NppParameters::getActions(TiXmlNode *node, Macro & macro)
 void NppParameters::feedUserCmds(TiXmlNode *node)
 {
 	TiXmlNode *userCmdsRoot = node->FirstChildElement(TEXT("UserDefinedCommands"));
-	if (!userCmdsRoot) return;
+	if (!userCmdsRoot)
+		return;
 
 	for (TiXmlNode *childNode = userCmdsRoot->FirstChildElement(TEXT("Command"));
 		childNode ;
@@ -2047,7 +2082,8 @@ void NppParameters::feedUserCmds(TiXmlNode *node)
 void NppParameters::feedPluginCustomizedCmds(TiXmlNode *node)
 {
 	TiXmlNode *pluginCustomizedCmdsRoot = node->FirstChildElement(TEXT("PluginCommands"));
-	if (!pluginCustomizedCmdsRoot) return;
+	if (!pluginCustomizedCmdsRoot)
+		return;
 
 	for (TiXmlNode *childNode = pluginCustomizedCmdsRoot->FirstChildElement(TEXT("PluginCommand"));
 		childNode ;
@@ -2082,7 +2118,8 @@ void NppParameters::feedPluginCustomizedCmds(TiXmlNode *node)
 void NppParameters::feedScintKeys(TiXmlNode *node)
 {
 	TiXmlNode *scintKeysRoot = node->FirstChildElement(TEXT("ScintillaKeys"));
-	if (!scintKeysRoot) return;
+	if (!scintKeysRoot)
+		return;
 
 	for (TiXmlNode *childNode = scintKeysRoot->FirstChildElement(TEXT("ScintKey"));
 		childNode ;
@@ -2146,24 +2183,26 @@ void NppParameters::feedScintKeys(TiXmlNode *node)
 bool NppParameters::feedBlacklist(TiXmlNode *node)
 {
 	TiXmlNode *blackListRoot = node->FirstChildElement(TEXT("PluginBlackList"));
-	if (!blackListRoot) return false;
+	if (!blackListRoot)
+		return false;
 
 	for (TiXmlNode *childNode = blackListRoot->FirstChildElement(TEXT("Plugin"));
 		childNode ;
 		childNode = childNode->NextSibling(TEXT("Plugin")) )
 	{
-        const TCHAR *name = (childNode->ToElement())->Attribute(TEXT("name"));
-	    if (name)
-        {
-            _blacklist.push_back(name);
-        }
-    }
-    return true;
+		const TCHAR *name = (childNode->ToElement())->Attribute(TEXT("name"));
+		if (name)
+		{
+			_blacklist.push_back(name);
+		}
+	}
+	return true;
 }
 
 bool NppParameters::getShortcuts(TiXmlNode *node, Shortcut & sc)
 {
-	if (!node) return false;
+	if (!node)
+		return false;
 
 	const TCHAR *name = (node->ToElement())->Attribute(TEXT("name"));
 	if (!name)
@@ -2196,8 +2235,8 @@ bool NppParameters::getShortcuts(TiXmlNode *node, Shortcut & sc)
 
 bool NppParameters::feedUserLang(TiXmlNode *node)
 {
-    bool isEverythingOK = true;
-    bool hasFoundElement = false;
+	bool isEverythingOK = true;
+	bool hasFoundElement = false;
 
 	for (TiXmlNode *childNode = node->FirstChildElement(TEXT("UserLang"));
 		childNode && (_nbUserLang < NB_MAX_USER_LANG);
@@ -2206,7 +2245,7 @@ bool NppParameters::feedUserLang(TiXmlNode *node)
 		const TCHAR *name = (childNode->ToElement())->Attribute(TEXT("name"));
 		const TCHAR *ext = (childNode->ToElement())->Attribute(TEXT("ext"));
 		const TCHAR *udlVersion = (childNode->ToElement())->Attribute(TEXT("udlVersion"));
-        hasFoundElement = true;
+		hasFoundElement = true;
 		try {
 			if (!name || !name[0] || !ext)
 				throw std::runtime_error("NppParameters::feedUserLang : UserLang name is missing");
@@ -2243,14 +2282,18 @@ bool NppParameters::feedUserLang(TiXmlNode *node)
 					_userLangArray[_nbUserLang - 1]->_styleArray.addStyler(i, globalMappper().styleNameMapper[i].c_str());
 			}
 
-		} catch (std::exception e) {
+		} 
+		catch (std::exception e)
+		{
 			delete _userLangArray[--_nbUserLang];
-            isEverythingOK = false;
+			isEverythingOK = false;
 		}
 	}
-    if (isEverythingOK)
-        isEverythingOK = hasFoundElement;
-    return isEverythingOK;
+
+	if (isEverythingOK)
+		isEverythingOK = hasFoundElement;
+
+	return isEverythingOK;
 }
 
 bool NppParameters::importUDLFromFile(generic_string sourceFile)
@@ -2258,31 +2301,31 @@ bool NppParameters::importUDLFromFile(generic_string sourceFile)
 	if (_nbImportedULD >= NB_MAX_IMPORTED_UDL)
 		return false;
 	
-    TiXmlDocument *pXmlUserLangDoc = new TiXmlDocument(sourceFile);
+	TiXmlDocument *pXmlUserLangDoc = new TiXmlDocument(sourceFile);
 	bool loadOkay = pXmlUserLangDoc->LoadFile();
 	if (loadOkay)
 	{
 		loadOkay = getUserDefineLangsFromXmlTree(pXmlUserLangDoc);
-    }
+	}
 	_importedULD[_nbImportedULD++] = pXmlUserLangDoc;
-    return loadOkay;
+	return loadOkay;
 }
 
 bool NppParameters::exportUDLToFile(int langIndex2export, generic_string fileName2save)
 {
-    if (langIndex2export != -1 && langIndex2export >= _nbUserLang)
-        return false;
+	if (langIndex2export != -1 && langIndex2export >= _nbUserLang)
+		return false;
 
-    TiXmlDocument *pNewXmlUserLangDoc = new TiXmlDocument(fileName2save);
-    TiXmlNode *newRoot2export = pNewXmlUserLangDoc->InsertEndChild(TiXmlElement(TEXT("NotepadPlus")));
+	TiXmlDocument *pNewXmlUserLangDoc = new TiXmlDocument(fileName2save);
+	TiXmlNode *newRoot2export = pNewXmlUserLangDoc->InsertEndChild(TiXmlElement(TEXT("NotepadPlus")));
 
-    bool b = false;
-    
-    insertUserLang2Tree(newRoot2export, _userLangArray[langIndex2export]);
-    b = pNewXmlUserLangDoc->SaveFile();
-    
-    delete pNewXmlUserLangDoc;
-    return b;
+	bool b = false;
+	
+	insertUserLang2Tree(newRoot2export, _userLangArray[langIndex2export]);
+	b = pNewXmlUserLangDoc->SaveFile();
+	
+	delete pNewXmlUserLangDoc;
+	return b;
 }
 
 LangType NppParameters::getLangFromExt(const TCHAR *ext)
@@ -2314,6 +2357,7 @@ LangType NppParameters::getLangFromExt(const TCHAR *ext)
 		if (isInList(ext, list.c_str()))
 			return l->getLangID();
 	}
+
 	return L_TEXT;
 }
 
@@ -2608,52 +2652,52 @@ void NppParameters::feedUserSettings(TiXmlNode *settingsRoot)
 	{
 		boolStr = (globalSettingNode->ToElement())->Attribute(TEXT("caseIgnored"));
 		if (boolStr)
-            _userLangArray[_nbUserLang - 1]->_isCaseIgnored = !lstrcmp(TEXT("yes"), boolStr);
+			_userLangArray[_nbUserLang - 1]->_isCaseIgnored = !lstrcmp(TEXT("yes"), boolStr);
 
 		boolStr = (globalSettingNode->ToElement())->Attribute(TEXT("allowFoldOfComments"));
 		if (boolStr)
-            _userLangArray[_nbUserLang - 1]->_allowFoldOfComments = !lstrcmp(TEXT("yes"), boolStr);
+			_userLangArray[_nbUserLang - 1]->_allowFoldOfComments = !lstrcmp(TEXT("yes"), boolStr);
 
 		(globalSettingNode->ToElement())->Attribute(TEXT("forcePureLC"), &_userLangArray[_nbUserLang - 1]->_forcePureLC);
 		(globalSettingNode->ToElement())->Attribute(TEXT("decimalSeparator"), &_userLangArray[_nbUserLang - 1]->_decimalSeparator);
 
 		boolStr = (globalSettingNode->ToElement())->Attribute(TEXT("foldCompact"));
 		if (boolStr)
-            _userLangArray[_nbUserLang - 1]->_foldCompact = !lstrcmp(TEXT("yes"), boolStr);
+			_userLangArray[_nbUserLang - 1]->_foldCompact = !lstrcmp(TEXT("yes"), boolStr);
 	}
 
 	TiXmlNode *prefixNode = settingsRoot->FirstChildElement(TEXT("Prefix"));
 	if (prefixNode)
 	{
-        const TCHAR *udlVersion = _userLangArray[_nbUserLang - 1]->_udlVersion.c_str();
-        if (!lstrcmp(udlVersion, TEXT("2.1")) || !lstrcmp(udlVersion, TEXT("2.0")))
-        {
-            for (int i = 0 ; i < SCE_USER_TOTAL_KEYWORD_GROUPS ; ++i)
-            {
-                boolStr = (prefixNode->ToElement())->Attribute(globalMappper().keywordNameMapper[i+SCE_USER_KWLIST_KEYWORDS1]);
-                if (boolStr)
-                    _userLangArray[_nbUserLang - 1]->_isPrefix[i] = !lstrcmp(TEXT("yes"), boolStr);
-            }
-        }
-        else    // support for old style (pre 2.0)
-        {
-            TCHAR names[SCE_USER_TOTAL_KEYWORD_GROUPS][7] = {TEXT("words1"), TEXT("words2"), TEXT("words3"), TEXT("words4")};
-            for (int i = 0 ; i < 4 ; ++i)
-            {
-                boolStr = (prefixNode->ToElement())->Attribute(names[i]);
-                if (boolStr)
-                    _userLangArray[_nbUserLang - 1]->_isPrefix[i] = !lstrcmp(TEXT("yes"), boolStr);
-            }
-        }
+		const TCHAR *udlVersion = _userLangArray[_nbUserLang - 1]->_udlVersion.c_str();
+		if (!lstrcmp(udlVersion, TEXT("2.1")) || !lstrcmp(udlVersion, TEXT("2.0")))
+		{
+			for (int i = 0 ; i < SCE_USER_TOTAL_KEYWORD_GROUPS ; ++i)
+			{
+				boolStr = (prefixNode->ToElement())->Attribute(globalMappper().keywordNameMapper[i+SCE_USER_KWLIST_KEYWORDS1]);
+				if (boolStr)
+					_userLangArray[_nbUserLang - 1]->_isPrefix[i] = !lstrcmp(TEXT("yes"), boolStr);
+			}
+		}
+		else    // support for old style (pre 2.0)
+		{
+			TCHAR names[SCE_USER_TOTAL_KEYWORD_GROUPS][7] = {TEXT("words1"), TEXT("words2"), TEXT("words3"), TEXT("words4")};
+			for (int i = 0 ; i < 4 ; ++i)
+			{
+				boolStr = (prefixNode->ToElement())->Attribute(names[i]);
+				if (boolStr)
+					_userLangArray[_nbUserLang - 1]->_isPrefix[i] = !lstrcmp(TEXT("yes"), boolStr);
+			}
+		}
 	}
 }
 
 void NppParameters::feedUserKeywordList(TiXmlNode *node)
 {
-    const TCHAR * udlVersion = _userLangArray[_nbUserLang - 1]->_udlVersion.c_str();
-    const TCHAR * keywordsName = NULL;
-    TCHAR *kwl = NULL;
-    int id = -1;
+	const TCHAR * udlVersion = _userLangArray[_nbUserLang - 1]->_udlVersion.c_str();
+	const TCHAR * keywordsName = NULL;
+	TCHAR *kwl = NULL;
+	int id = -1;
 
 	for (TiXmlNode *childNode = node->FirstChildElement(TEXT("Keywords"));
 		childNode ;
@@ -2662,75 +2706,75 @@ void NppParameters::feedUserKeywordList(TiXmlNode *node)
 		keywordsName = (childNode->ToElement())->Attribute(TEXT("name"));
 		kwl = NULL;
 
-        TiXmlNode *valueNode = childNode->FirstChild();
-        if (valueNode)
-        {
-            if (!lstrcmp(udlVersion, TEXT("")) && !lstrcmp(keywordsName, TEXT("Delimiters")))    // support for old style (pre 2.0)
-            {
-                basic_string<TCHAR> temp = TEXT("");
-                kwl = (valueNode)?valueNode->Value():TEXT("000000");
-                    
-                temp += TEXT("00");     if (kwl[0] != '0') temp += kwl[0];     temp += TEXT(" 01");
-                temp += TEXT(" 02");    if (kwl[3] != '0') temp += kwl[3]; 
-                temp += TEXT(" 03");    if (kwl[1] != '0') temp += kwl[1];     temp += TEXT(" 04");
-                temp += TEXT(" 05");    if (kwl[4] != '0') temp += kwl[4]; 
-                temp += TEXT(" 06");    if (kwl[2] != '0') temp += kwl[2];     temp += TEXT(" 07");
-                temp += TEXT(" 08");    if (kwl[5] != '0') temp += kwl[5];
-                    
-                temp += TEXT(" 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23");
-                lstrcpy(_userLangArray[_nbUserLang - 1]->_keywordLists[SCE_USER_KWLIST_DELIMITERS], temp.c_str());
-            }
-            else if (!lstrcmp(keywordsName, TEXT("Comment")))
-            {
-                kwl = (valueNode)?valueNode->Value():TEXT("");
-                //int len = _tcslen(kwl);
-                basic_string<TCHAR> temp = TEXT(" ");
-                    
-                temp += kwl;
-                size_t pos = 0;
-                    
-                pos = temp.find(TEXT(" 0"));
-                while (pos != string::npos)
-                {
-                    temp.replace(pos, 2, TEXT(" 00"));
-                    pos = temp.find(TEXT(" 0"), pos+1);
-                }
-                pos = temp.find(TEXT(" 1"));
-                while (pos != string::npos)
-                {
-                    temp.replace(pos, 2, TEXT(" 03"));
-                    pos = temp.find(TEXT(" 1"));
-                }
-                pos = temp.find(TEXT(" 2"));
-                while (pos != string::npos)
-                {
-                    temp.replace(pos, 2, TEXT(" 04"));
-                    pos = temp.find(TEXT(" 2"));
-                }
-                    
-                temp += TEXT(" 01 02");
-                if (temp[0] == ' ')
-                    temp.erase(0, 1);
-                    
-                lstrcpy(_userLangArray[_nbUserLang - 1]->_keywordLists[SCE_USER_KWLIST_COMMENTS], temp.c_str());
-            }
-            else
-            {
-                kwl = (valueNode)?valueNode->Value():TEXT("");
-                if (globalMappper().keywordIdMapper.find(keywordsName) != globalMappper().keywordIdMapper.end())
-                {
-                    id = globalMappper().keywordIdMapper[keywordsName];
-                    lstrcpy(_userLangArray[_nbUserLang - 1]->_keywordLists[id], kwl);
-                }
-            }
-        }
+		TiXmlNode *valueNode = childNode->FirstChild();
+		if (valueNode)
+		{
+			if (!lstrcmp(udlVersion, TEXT("")) && !lstrcmp(keywordsName, TEXT("Delimiters")))    // support for old style (pre 2.0)
+			{
+				basic_string<TCHAR> temp = TEXT("");
+				kwl = (valueNode)?valueNode->Value():TEXT("000000");
+					
+				temp += TEXT("00");     if (kwl[0] != '0') temp += kwl[0];     temp += TEXT(" 01");
+				temp += TEXT(" 02");    if (kwl[3] != '0') temp += kwl[3]; 
+				temp += TEXT(" 03");    if (kwl[1] != '0') temp += kwl[1];     temp += TEXT(" 04");
+				temp += TEXT(" 05");    if (kwl[4] != '0') temp += kwl[4]; 
+				temp += TEXT(" 06");    if (kwl[2] != '0') temp += kwl[2];     temp += TEXT(" 07");
+				temp += TEXT(" 08");    if (kwl[5] != '0') temp += kwl[5];
+					
+				temp += TEXT(" 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23");
+				lstrcpy(_userLangArray[_nbUserLang - 1]->_keywordLists[SCE_USER_KWLIST_DELIMITERS], temp.c_str());
+			}
+			else if (!lstrcmp(keywordsName, TEXT("Comment")))
+			{
+				kwl = (valueNode)?valueNode->Value():TEXT("");
+				//int len = _tcslen(kwl);
+				basic_string<TCHAR> temp = TEXT(" ");
+					
+				temp += kwl;
+				size_t pos = 0;
+					
+				pos = temp.find(TEXT(" 0"));
+				while (pos != string::npos)
+				{
+					temp.replace(pos, 2, TEXT(" 00"));
+					pos = temp.find(TEXT(" 0"), pos+1);
+				}
+				pos = temp.find(TEXT(" 1"));
+				while (pos != string::npos)
+				{
+					temp.replace(pos, 2, TEXT(" 03"));
+					pos = temp.find(TEXT(" 1"));
+				}
+				pos = temp.find(TEXT(" 2"));
+				while (pos != string::npos)
+				{
+					temp.replace(pos, 2, TEXT(" 04"));
+					pos = temp.find(TEXT(" 2"));
+				}
+					
+				temp += TEXT(" 01 02");
+				if (temp[0] == ' ')
+					temp.erase(0, 1);
+					
+				lstrcpy(_userLangArray[_nbUserLang - 1]->_keywordLists[SCE_USER_KWLIST_COMMENTS], temp.c_str());
+			}
+			else
+			{
+				kwl = (valueNode)?valueNode->Value():TEXT("");
+				if (globalMappper().keywordIdMapper.find(keywordsName) != globalMappper().keywordIdMapper.end())
+				{
+					id = globalMappper().keywordIdMapper[keywordsName];
+					lstrcpy(_userLangArray[_nbUserLang - 1]->_keywordLists[id], kwl);
+				}
+			}
+		}
 	}
 }
 
 void NppParameters::feedUserStyles(TiXmlNode *node)
 {
-    const TCHAR *styleName = NULL;
-    int id = -1;
+	const TCHAR *styleName = NULL;
+	int id = -1;
 
 	for (TiXmlNode *childNode = node->FirstChildElement(TEXT("WordsStyle"));
 		childNode ;
@@ -2739,82 +2783,87 @@ void NppParameters::feedUserStyles(TiXmlNode *node)
 		styleName = (childNode->ToElement())->Attribute(TEXT("name"));
 		if (styleName)
 		{
-            if (globalMappper().styleIdMapper.find(styleName) != globalMappper().styleIdMapper.end())
-            {
-                id = globalMappper().styleIdMapper[styleName];
+			if (globalMappper().styleIdMapper.find(styleName) != globalMappper().styleIdMapper.end())
+			{
+				id = globalMappper().styleIdMapper[styleName];
 				_userLangArray[_nbUserLang - 1]->_styleArray.addStyler((id | L_USER << 16), childNode);
-            }
+			}
 		}
 	}
 }
 
 bool NppParameters::feedStylerArray(TiXmlNode *node)
 {
-    TiXmlNode *styleRoot = node->FirstChildElement(TEXT("LexerStyles"));
-    if (!styleRoot) return false;
+	TiXmlNode *styleRoot = node->FirstChildElement(TEXT("LexerStyles"));
+	if (!styleRoot)
+		return false;
 
-    // For each lexer
-    for (TiXmlNode *childNode = styleRoot->FirstChildElement(TEXT("LexerType"));
+	// For each lexer
+	for (TiXmlNode *childNode = styleRoot->FirstChildElement(TEXT("LexerType"));
 		 childNode ;
 		 childNode = childNode->NextSibling(TEXT("LexerType")) )
-    {
-     	if (!_lexerStylerArray.hasEnoughSpace()) return false;
+	{
+		if (!_lexerStylerArray.hasEnoughSpace())
+			return false;
 
-	    TiXmlElement *element = childNode->ToElement();
-	    const TCHAR *lexerName = element->Attribute(TEXT("name"));
+		TiXmlElement *element = childNode->ToElement();
+		const TCHAR *lexerName = element->Attribute(TEXT("name"));
 		const TCHAR *lexerDesc = element->Attribute(TEXT("desc"));
 		const TCHAR *lexerUserExt = element->Attribute(TEXT("ext"));
 		const TCHAR *lexerExcluded = element->Attribute(TEXT("excluded"));
-	    if (lexerName)
-	    {
-		    _lexerStylerArray.addLexerStyler(lexerName, lexerDesc, lexerUserExt, childNode);
+		if (lexerName)
+		{
+			_lexerStylerArray.addLexerStyler(lexerName, lexerDesc, lexerUserExt, childNode);
 			if (lexerExcluded != NULL && !lstrcmp(lexerExcluded, TEXT("yes")))
 			{
 				int index = getExternalLangIndexFromName(lexerName);
 				if (index != -1)
 					_nppGUI._excludedLangList.push_back(LangMenuItem((LangType)(index + L_EXTERNAL)));
 			}
-	    }
-    }
+		}
+	}
 
-    // The global styles for all lexers
-    TiXmlNode *globalStyleRoot = node->FirstChildElement(TEXT("GlobalStyles"));
-    if (!globalStyleRoot) return false;
+	// The global styles for all lexers
+	TiXmlNode *globalStyleRoot = node->FirstChildElement(TEXT("GlobalStyles"));
+	if (!globalStyleRoot)
+		return false;
 
-    for (TiXmlNode *childNode = globalStyleRoot->FirstChildElement(TEXT("WidgetStyle"));
+	for (TiXmlNode *childNode = globalStyleRoot->FirstChildElement(TEXT("WidgetStyle"));
 		 childNode ;
 		 childNode = childNode->NextSibling(TEXT("WidgetStyle")) )
-    {
-     	if (!_widgetStyleArray.hasEnoughSpace()) return false;
+	{
+		if (!_widgetStyleArray.hasEnoughSpace())
+			return false;
 
-	    TiXmlElement *element = childNode->ToElement();
-	    const TCHAR *styleIDStr = element->Attribute(TEXT("styleID"));
+		TiXmlElement *element = childNode->ToElement();
+		const TCHAR *styleIDStr = element->Attribute(TEXT("styleID"));
 
-        int styleID = -1;
+		int styleID = -1;
 		if ((styleID = decStrVal(styleIDStr)) != -1)
 		{
-		    _widgetStyleArray.addStyler(styleID, childNode);
-        }
-    }
+			_widgetStyleArray.addStyler(styleID, childNode);
+		}
+	}
 	return true;
 }
 
 void LexerStylerArray::addLexerStyler(const TCHAR *lexerName, const TCHAR *lexerDesc, const TCHAR *lexerUserExt , TiXmlNode *lexerNode)
 {
-    LexerStyler & ls = _lexerStylerArray[_nbLexerStyler++];
-    ls.setLexerName(lexerName);
+	LexerStyler & ls = _lexerStylerArray[_nbLexerStyler++];
+	ls.setLexerName(lexerName);
 	if (lexerDesc)
 		ls.setLexerDesc(lexerDesc);
 
 	if (lexerUserExt)
 		ls.setLexerUserExt(lexerUserExt);
-    
-    for (TiXmlNode *childNode = lexerNode->FirstChildElement(TEXT("WordsStyle"));
+	
+	for (TiXmlNode *childNode = lexerNode->FirstChildElement(TEXT("WordsStyle"));
 		 childNode ;
 		 childNode = childNode->NextSibling(TEXT("WordsStyle")) )
-    {
-	        
-		if (!ls.hasEnoughSpace()) return;
+	{
+			
+		if (!ls.hasEnoughSpace())
+			return;
 
 		TiXmlElement *element = childNode->ToElement();
 		const TCHAR *styleIDStr = element->Attribute(TEXT("styleID"));
@@ -2827,12 +2876,11 @@ void LexerStylerArray::addLexerStyler(const TCHAR *lexerName, const TCHAR *lexer
 				ls.addStyler(styleID, childNode);
 			}
 		}
-    }
+	}
 }
 
 void LexerStylerArray::eraseAll()
 {
-
 	for (int i = 0 ; i < _nbLexerStyler ; ++i)
 	{
 		_lexerStylerArray[i].setNbStyler( 0 );
@@ -2877,7 +2925,7 @@ void StyleArray::addStyler(int styleID, TiXmlNode *styleNode)
 		{
 			unsigned long result = hexStrVal(str);
 			_styleArray[index]._fgColor = (RGB((result >> 16) & 0xFF, (result >> 8) & 0xFF, result & 0xFF)) | (result & 0xFF000000);
-	            
+				
 		}
 		
 		str = element->Attribute(TEXT("bgColor"));
@@ -2931,13 +2979,16 @@ void StyleArray::addStyler(int styleID, TiXmlNode *styleNode)
 
 bool NppParameters::writeRecentFileHistorySettings(int nbMaxFile) const
 {
-	if (!_pXmlUserDoc) return false;
+	if (!_pXmlUserDoc)
+		return false;
 	
 	TiXmlNode *nppRoot = _pXmlUserDoc->FirstChild(TEXT("NotepadPlus"));
-	if (!nppRoot) return false;
+	if (!nppRoot)
+		return false;
 	
 	TiXmlNode *historyNode = nppRoot->FirstChildElement(TEXT("History"));
-	if (!historyNode) return false;
+	if (!historyNode)
+		return false;
 		
 	(historyNode->ToElement())->SetAttribute(TEXT("nbMaxFile"), nbMaxFile!=-1?nbMaxFile:_nbMaxRecentFile);
 	(historyNode->ToElement())->SetAttribute(TEXT("inSubMenu"), _putRecentFileInSubMenu?TEXT("yes"):TEXT("no"));
@@ -2947,10 +2998,12 @@ bool NppParameters::writeRecentFileHistorySettings(int nbMaxFile) const
 
 bool NppParameters::writeProjectPanelsSettings() const
 {
-	if (!_pXmlUserDoc) return false;
+	if (!_pXmlUserDoc)
+		return false;
 	
 	TiXmlNode *nppRoot = _pXmlUserDoc->FirstChild(TEXT("NotepadPlus"));
-	if (!nppRoot) return false;
+	if (!nppRoot)
+		return false;
 	
 	TiXmlNode *projPanelRootNode = nppRoot->FirstChildElement(TEXT("ProjectPanels"));
 	if (projPanelRootNode)
@@ -2980,10 +3033,12 @@ bool NppParameters::writeProjectPanelsSettings() const
 bool NppParameters::writeHistory(const TCHAR *fullpath)
 {
 	TiXmlNode *nppRoot = _pXmlUserDoc->FirstChild(TEXT("NotepadPlus"));
-	if (!nppRoot) return false;
+	if (!nppRoot)
+		return false;
 
 	TiXmlNode *historyNode = nppRoot->FirstChildElement(TEXT("History"));
-	if (!historyNode) return false;
+	if (!historyNode)
+		return false;
 	
 	TiXmlElement recentFileNode(TEXT("File"));
 	(recentFileNode.ToElement())->SetAttribute(TEXT("filename"), fullpath);
@@ -3014,9 +3069,11 @@ TiXmlNode * NppParameters::getChildElementByAttribut(TiXmlNode *pere, const TCHA
 LangType NppParameters::getLangIDFromStr(const TCHAR *langName)
 {
 	int lang = (int)L_TEXT;
-	for(; lang < L_EXTERNAL; ++lang) {
+	for(; lang < L_EXTERNAL; ++lang)
+	{
 		const TCHAR * name = ScintillaEditView::langNames[lang].lexerName;
-		if (!lstrcmp(name, langName)) {	//found lang?
+		if (!lstrcmp(name, langName)) //found lang?
+		{
 			return (LangType)lang;
 		}
 	}
@@ -3024,7 +3081,8 @@ LangType NppParameters::getLangIDFromStr(const TCHAR *langName)
 	//Cannot find language, check if its an external one
 
 	LangType l = (LangType)lang;
-	if (l == L_EXTERNAL) {	//try find external lexer
+	if (l == L_EXTERNAL) //try find external lexer
+	{
 		int id = _pSelf->getExternalLangIndexFromName(langName);
 		if (id != -1) return (LangType)(id + L_EXTERNAL);
 	}
@@ -3168,7 +3226,8 @@ void NppParameters::feedKeyWordsParameters(TiXmlNode *node)
 {
 	
 	TiXmlNode *langRoot = node->FirstChildElement(TEXT("Languages"));
-	if (!langRoot) return;
+	if (!langRoot)
+		return;
 
 	for (TiXmlNode *langNode = langRoot->FirstChildElement(TEXT("Language"));
 		langNode ;
@@ -3185,9 +3244,9 @@ void NppParameters::feedKeyWordsParameters(TiXmlNode *node)
 				_langList[_nbLang]->setCommentLineSymbol(element->Attribute(TEXT("commentLine")));
 				_langList[_nbLang]->setCommentStart(element->Attribute(TEXT("commentStart")));
 				_langList[_nbLang]->setCommentEnd(element->Attribute(TEXT("commentEnd")));
-                int i;
-                if (element->Attribute(TEXT("tabSettings"), &i))
-                    _langList[_nbLang]->setTabInfo(i);
+				int i;
+				if (element->Attribute(TEXT("tabSettings"), &i))
+					_langList[_nbLang]->setTabInfo(i);
 
 				for (TiXmlNode *kwNode = langNode->FirstChildElement(TEXT("Keywords"));
 					kwNode ;
@@ -3210,14 +3269,16 @@ void NppParameters::feedKeyWordsParameters(TiXmlNode *node)
 	}
 }
 
-extern "C" {
-typedef DWORD (WINAPI * EESFUNC) (LPCTSTR, LPTSTR, DWORD);
+extern "C"
+{
+	typedef DWORD (WINAPI * EESFUNC) (LPCTSTR, LPTSTR, DWORD);
 }
 
 void NppParameters::feedGUIParameters(TiXmlNode *node)
 {
 	TiXmlNode *GUIRoot = node->FirstChildElement(TEXT("GUIConfigs"));
-	if (!GUIRoot) return;
+	if (!GUIRoot)
+		return;
 
 	for (TiXmlNode *childNode = GUIRoot->FirstChildElement(TEXT("GUIConfig"));
 		childNode ;
@@ -3225,10 +3286,10 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 	{
 		TiXmlElement *element = childNode->ToElement();
 		const TCHAR *nm = element->Attribute(TEXT("name"));
-		if (!nm) continue;
+		if (!nm)
+			continue;
 
 		const TCHAR *val;
-
 		if (!lstrcmp(nm, TEXT("ToolBar")))
 		{
 			val = element->Attribute(TEXT("visible"));
@@ -3249,7 +3310,7 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 						_nppGUI._toolBarStatus = TB_SMALL;
 					else if (!lstrcmp(val, TEXT("large")))
 						_nppGUI._toolBarStatus = TB_LARGE;
-					else// if (!lstrcmp(val, TEXT("standard")))	//assume standard in all other cases
+					else// if (!lstrcmp(val, TEXT("standard"))) //assume standard in all other cases
 						_nppGUI._toolBarStatus = TB_STANDARD;
 				}
 			}
@@ -3386,8 +3447,6 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 			}
 			if (isFailed)
 				_nppGUI._tabStatus = oldValue;
-
-
 		}
 		else if (!lstrcmp(nm, TEXT("Auto-detection")))
 		{
@@ -3400,19 +3459,18 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 					if (!lstrcmp(val, TEXT("yes")))
 						_nppGUI._fileAutoDetection = cdEnabled;
 					else if (!lstrcmp(val, TEXT("auto")))
-            			_nppGUI._fileAutoDetection = cdAutoUpdate;
+						_nppGUI._fileAutoDetection = cdAutoUpdate;
 					else if (!lstrcmp(val, TEXT("Update2End")))
-            			_nppGUI._fileAutoDetection = cdGo2end;
+						_nppGUI._fileAutoDetection = cdGo2end;
 					else if (!lstrcmp(val, TEXT("autoUpdate2End")))
-            			_nppGUI._fileAutoDetection = cdAutoUpdateGo2end;
-         			else //(!lstrcmp(val, TEXT("no")))
-            			_nppGUI._fileAutoDetection = cdDisabled;
+						_nppGUI._fileAutoDetection = cdAutoUpdateGo2end;
+					else //(!lstrcmp(val, TEXT("no")))
+						_nppGUI._fileAutoDetection = cdDisabled;
 
 					_nppGUI._fileAutoDetectionOriginalValue = _nppGUI._fileAutoDetection;
 				}
 			}
 		}
-
 		else if (!lstrcmp(nm, TEXT("TrayIcon")))
 		{
 			TiXmlNode *n = childNode->FirstChild();
@@ -3441,7 +3499,6 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 				}
 			}
 		}
-
 		else if (!lstrcmp(nm, TEXT("MaitainIndent")))
 		{
 			TiXmlNode *n = childNode->FirstChild();
@@ -3457,7 +3514,6 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 				}
 			}
 		}
-
 		else if (!lstrcmp(nm, TEXT("SmartHighLight")))
 		{
 			TiXmlNode *n = childNode->FirstChild();
@@ -3473,7 +3529,6 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 				}
 			}
 		}
-
 		else if (!lstrcmp(nm, TEXT("SmartHighLightCaseSensitive")))
 		{
 			TiXmlNode *n = childNode->FirstChild();
@@ -3489,7 +3544,6 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 				}
 			}
 		}
-
 		else if (!lstrcmp(nm, TEXT("TagsMatchHighLight")))
 		{
 			TiXmlNode *n = childNode->FirstChild();
@@ -3509,7 +3563,6 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 				}
 			}
 		}
-
 		else if (!lstrcmp(nm, TEXT("TaskList")))
 		{
 			TiXmlNode *n = childNode->FirstChild();
@@ -3524,7 +3577,7 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 		}
 
 		else if (!lstrcmp(nm, TEXT("MRU")))
-		{	
+		{
 			TiXmlNode *n = childNode->FirstChild();
 			if (n)
 			{
@@ -3535,7 +3588,6 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 				}
 			}
 		}
-
 		else if (!lstrcmp(nm, TEXT("URL")))
 		{
 			TiXmlNode *n = childNode->FirstChild();
@@ -3553,7 +3605,6 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 				}
 			}
 		}
-
 		else if (!lstrcmp(nm, TEXT("CheckHistoryFiles")))
 		{
 			TiXmlNode *n = childNode->FirstChild();
@@ -3628,7 +3679,6 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 			if (val)
 				_nppGUI._tabReplacedBySpace = (!lstrcmp(val, TEXT("yes")));
 		}
-
 		else if (!lstrcmp(nm, TEXT("Caret")))
 		{
 			int i;
@@ -3640,14 +3690,12 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 			if (val)
 				_nppGUI._caretBlinkRate = i;
 		}
-
-        else if (!lstrcmp(nm, TEXT("ScintillaGlobalSettings")))
+		else if (!lstrcmp(nm, TEXT("ScintillaGlobalSettings")))
 		{
 			val = element->Attribute(TEXT("enableMultiSelection"));
 			if (val && lstrcmp(val, TEXT("yes")) == 0)
 				_nppGUI._enableMultiSelection = true;
 		}
-
 		else if (!lstrcmp(nm, TEXT("AppPosition")))
 		{
 			RECT oldRect = _nppGUI._appPos;
@@ -3742,7 +3790,8 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 					g7 = i;
 
 			bool langArray[nbMax];
-			for (int i = 0 ; i < nbMax ; ++i) langArray[i] = false;
+			for (int i = 0 ; i < nbMax ; ++i)
+				langArray[i] = false;
 			
 			UCHAR mask = 1;
 			for (int i = 0 ; i < 8 ; ++i) 
@@ -3812,7 +3861,6 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 			if (val)
 				_nppGUI._isLangMenuCompact = (!lstrcmp(val, TEXT("yes")));
 		}
-
 		else if (!lstrcmp(nm, TEXT("Print")))
 		{
 			val = element->Attribute(TEXT("lineNumber"));
@@ -3882,12 +3930,10 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 			if (element->Attribute(TEXT("margeBottom"), &i))
 				_nppGUI._printSettings._marge.bottom = i;
 		}
-
 		else if (!lstrcmp(nm, TEXT("ScintillaPrimaryView")))
 		{
 			feedScintillaParam(element);
 		}
-
 		else if (!lstrcmp(nm, TEXT("Backup")))
 		{
 			int i;
@@ -3907,7 +3953,6 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 		{
 			feedDockingManager(element);
 		}
-		
 		else if (!lstrcmp(nm, TEXT("globalOverride")))
 		{
 			const TCHAR *bDir = element->Attribute(TEXT("fg"));
@@ -4049,20 +4094,20 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 				val = n->Value();
 				if (val)
 				{
-                    _nppGUI._autoUpdateOpt._doAutoUpdate = (!lstrcmp(val, TEXT("yes")))?false:true;
+					_nppGUI._autoUpdateOpt._doAutoUpdate = (!lstrcmp(val, TEXT("yes")))?false:true;
 				}
-                
-                int i;
-                val = element->Attribute(TEXT("intervalDays"), &i);
-                if (val)
+				
+				int i;
+				val = element->Attribute(TEXT("intervalDays"), &i);
+				if (val)
 				{
-                    _nppGUI._autoUpdateOpt._intervalDays = i;
+					_nppGUI._autoUpdateOpt._intervalDays = i;
 				}
 
-                val = element->Attribute(TEXT("nextUpdateDate"));
-                if (val)
+				val = element->Attribute(TEXT("nextUpdateDate"));
+				if (val)
 				{
-                    _nppGUI._autoUpdateOpt._nextUpdateDate = Date(val);
+					_nppGUI._autoUpdateOpt._nextUpdateDate = Date(val);
 				}
 			}
 		}
@@ -4084,11 +4129,11 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 				lstrcpyn(_nppGUI._defaultDir, path, MAX_PATH);
 				::ExpandEnvironmentStrings(_nppGUI._defaultDir, _nppGUI._defaultDirExp, 500);
 			}
- 		}
+		}
 		else if (!lstrcmp(nm, TEXT("titleBar")))
 		{
 			const TCHAR * value = element->Attribute(TEXT("short"));
-			_nppGUI._shortTitlebar = false;	//default state
+			_nppGUI._shortTitlebar = false; //default state
 			if (value && value[0])
 			{
 				if (lstrcmp(value, TEXT("yes")) == 0)
@@ -4121,7 +4166,7 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 			else
 				_nppGUI._delimiterSelectionOnEntireDocument = false;
 		}
-        else if (!lstrcmp(nm, TEXT("multiInst")))
+		else if (!lstrcmp(nm, TEXT("multiInst")))
 		{
 			int val = 0;
 			element->Attribute(TEXT("setting"), &val);
@@ -4134,10 +4179,10 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 
 void NppParameters::feedScintillaParam(TiXmlNode *node)
 {
-    TiXmlElement *element = node->ToElement();
+	TiXmlElement *element = node->ToElement();
 
-    // Line Number Margin
-    const TCHAR *nm = element->Attribute(TEXT("lineNumberMargin"));
+	// Line Number Margin
+	const TCHAR *nm = element->Attribute(TEXT("lineNumberMargin"));
 	if (nm) 
 	{
 		if (!lstrcmp(nm, TEXT("show")))
@@ -4168,8 +4213,8 @@ void NppParameters::feedScintillaParam(TiXmlNode *node)
 			_svp._docChangeStateMarginShow = false;
 	}
 */
-    // Indent GuideLine 
-    nm = element->Attribute(TEXT("indentGuideLine"));
+	// Indent GuideLine 
+	nm = element->Attribute(TEXT("indentGuideLine"));
 	if (nm)
 	{
 		if (!lstrcmp(nm, TEXT("show")))
@@ -4178,8 +4223,8 @@ void NppParameters::feedScintillaParam(TiXmlNode *node)
 			_svp._indentGuideLineShow= false;
 	}
 
-    // Folder Mark Style
-    nm = element->Attribute(TEXT("folderMarkStyle"));
+	// Folder Mark Style
+	nm = element->Attribute(TEXT("folderMarkStyle"));
 	if (nm)
 	{
 		if (!lstrcmp(nm, TEXT("box")))
@@ -4206,8 +4251,8 @@ void NppParameters::feedScintillaParam(TiXmlNode *node)
 			_svp._lineWrapMethod = LINEWRAP_INDENT;
 	}
 
-    // Current Line Highlighting State
-    nm = element->Attribute(TEXT("currentLineHilitingShow"));
+	// Current Line Highlighting State
+	nm = element->Attribute(TEXT("currentLineHilitingShow"));
 	if (nm)
 	{
 		if (!lstrcmp(nm, TEXT("show")))
@@ -4216,8 +4261,8 @@ void NppParameters::feedScintillaParam(TiXmlNode *node)
 			_svp._currentLineHilitingShow = false;
 	}
 
-    // Current wrap symbol visibility State
-    nm = element->Attribute(TEXT("wrapSymbolShow"));
+	// Current wrap symbol visibility State
+	nm = element->Attribute(TEXT("wrapSymbolShow"));
 	if (nm)
 	{
 		if (!lstrcmp(nm, TEXT("show")))
@@ -4227,7 +4272,7 @@ void NppParameters::feedScintillaParam(TiXmlNode *node)
 	}
 
 	// Do Wrap
-    nm = element->Attribute(TEXT("Wrap"));
+	nm = element->Attribute(TEXT("Wrap"));
 	if (nm)
 	{
 		if (!lstrcmp(nm, TEXT("yes")))
@@ -4237,7 +4282,7 @@ void NppParameters::feedScintillaParam(TiXmlNode *node)
 	}
 
 	// Do Edge
-    nm = element->Attribute(TEXT("edge"));
+	nm = element->Attribute(TEXT("edge"));
 	if (nm)
 	{
 		if (!lstrcmp(nm, TEXT("background")))
@@ -4268,7 +4313,7 @@ void NppParameters::feedScintillaParam(TiXmlNode *node)
 	}
 
 	// White Space visibility State
-    nm = element->Attribute(TEXT("whiteSpaceShow"));
+	nm = element->Attribute(TEXT("whiteSpaceShow"));
 	if (nm)
 	{
 		if (!lstrcmp(nm, TEXT("show")))
@@ -4278,7 +4323,7 @@ void NppParameters::feedScintillaParam(TiXmlNode *node)
 	}
 
 	// EOL visibility State
-    nm = element->Attribute(TEXT("eolShow"));
+	nm = element->Attribute(TEXT("eolShow"));
 	if (nm)
 	{
 		if (!lstrcmp(nm, TEXT("show")))
@@ -4298,9 +4343,9 @@ void NppParameters::feedScintillaParam(TiXmlNode *node)
 
 void NppParameters::feedDockingManager(TiXmlNode *node)
 {
-    TiXmlElement *element = node->ToElement();
+	TiXmlElement *element = node->ToElement();
 
-    int i;
+	int i;
 	if (element->Attribute(TEXT("leftWidth"), &i))
 		_nppGUI._dockingData._leftWidth = i;
 
@@ -4382,17 +4427,21 @@ void NppParameters::feedDockingManager(TiXmlNode *node)
 
 bool NppParameters::writeScintillaParams(const ScintillaViewParams & svp) 
 {
-	if (!_pXmlUserDoc) return false;
+	if (!_pXmlUserDoc)
+		return false;
 
 	const TCHAR *pViewName = TEXT("ScintillaPrimaryView");
 	TiXmlNode *nppRoot = _pXmlUserDoc->FirstChild(TEXT("NotepadPlus"));
-	if (!nppRoot) return false;
+	if (!nppRoot)
+		return false;
 
 	TiXmlNode *configsRoot = nppRoot->FirstChildElement(TEXT("GUIConfigs"));
-	if (!configsRoot) return false;
+	if (!configsRoot)
+		return false;
 
 	TiXmlNode *scintNode = getChildElementByAttribut(configsRoot, TEXT("GUIConfig"), TEXT("name"), pViewName);
-	if (!scintNode) return false;
+	if (!scintNode)
+		return false;
 
 	(scintNode->ToElement())->SetAttribute(TEXT("lineNumberMargin"), svp._lineNumberMarginShow?TEXT("show"):TEXT("hide"));
 	(scintNode->ToElement())->SetAttribute(TEXT("bookMarkMargin"), svp._bookMarkMarginShow?TEXT("show"):TEXT("hide"));
@@ -4430,13 +4479,16 @@ bool NppParameters::writeScintillaParams(const ScintillaViewParams & svp)
 
 bool NppParameters::writeGUIParams()
 {
-	if (!_pXmlUserDoc) return false;
+	if (!_pXmlUserDoc)
+		return false;
 
 	TiXmlNode *nppRoot = _pXmlUserDoc->FirstChild(TEXT("NotepadPlus"));
-	if (!nppRoot) return false;
+	if (!nppRoot)
+		return false;
 
 	TiXmlNode *GUIRoot = nppRoot->FirstChildElement(TEXT("GUIConfigs"));
-	if (!GUIRoot) return false;
+	if (!GUIRoot)
+		return false;
 
 	bool autoDetectionExist = false;
 	bool checkHistoryFilesExist = false;
@@ -4460,7 +4512,7 @@ bool NppParameters::writeGUIParams()
 	bool smartHighLightCaseSensitiveExist = false;
 	bool tagsMatchHighLightExist = false;
 	bool caretExist = false;
-    bool ScintillaGlobalSettingsExist = false;
+	bool ScintillaGlobalSettingsExist = false;
 	bool openSaveDirExist = false;
 	bool titleBarExist = false;
 	bool stylerThemeExist = false;
@@ -4530,7 +4582,7 @@ bool NppParameters::writeGUIParams()
 			element->SetAttribute(TEXT("doubleClick2Close"), pStr);
 
 			pStr = (_nppGUI._tabStatus & TAB_VERTICAL)?TEXT("yes"):TEXT("no");
-			element->SetAttribute(TEXT("vertical"), pStr);			
+			element->SetAttribute(TEXT("vertical"), pStr);          
 			
 			pStr = (_nppGUI._tabStatus & TAB_MULTILINE)?TEXT("yes"):TEXT("no");
 			element->SetAttribute(TEXT("multiLine"), pStr);
@@ -4572,10 +4624,10 @@ bool NppParameters::writeGUIParams()
 			element->SetAttribute(TEXT("width"), _nppGUI._caretWidth);
 			element->SetAttribute(TEXT("blinkRate"), _nppGUI._caretBlinkRate);
 		}
-        else if (!lstrcmp(nm, TEXT("ScintillaGlobalSettings")))
+		else if (!lstrcmp(nm, TEXT("ScintillaGlobalSettings")))
 		{
 			ScintillaGlobalSettingsExist = true;
-            element->SetAttribute(TEXT("enableMultiSelection"), _nppGUI._enableMultiSelection?TEXT("yes"):TEXT("no"));
+			element->SetAttribute(TEXT("enableMultiSelection"), _nppGUI._enableMultiSelection?TEXT("yes"):TEXT("no"));
 		}
 		else if (!lstrcmp(nm, TEXT("Auto-detection")))
 		{
@@ -4790,7 +4842,7 @@ bool NppParameters::writeGUIParams()
 		else if (!lstrcmp(nm, TEXT("auto-insert")))
 		{
 			autocInsetExist = true;
-     
+	 
 			const TCHAR * pStr = _nppGUI._matchedPairConf._doParentheses?TEXT("yes"):TEXT("no");
 			element->SetAttribute(TEXT("parentheses"), pStr);
 
@@ -4848,10 +4900,10 @@ bool NppParameters::writeGUIParams()
 		else if (!lstrcmp(nm, TEXT("noUpdate")))
 		{
 			noUpdateExist = true;
-            const TCHAR *pStr = _nppGUI._autoUpdateOpt._doAutoUpdate?TEXT("no"):TEXT("yes");
+			const TCHAR *pStr = _nppGUI._autoUpdateOpt._doAutoUpdate?TEXT("no"):TEXT("yes");
 			
-            element->SetAttribute(TEXT("intervalDays"), _nppGUI._autoUpdateOpt._intervalDays);
-            element->SetAttribute(TEXT("nextUpdateDate"), _nppGUI._autoUpdateOpt._nextUpdateDate.toString().c_str());
+			element->SetAttribute(TEXT("intervalDays"), _nppGUI._autoUpdateOpt._intervalDays);
+			element->SetAttribute(TEXT("nextUpdateDate"), _nppGUI._autoUpdateOpt._nextUpdateDate.toString().c_str());
 			
 			TiXmlNode *n = childNode->FirstChild();
 			if (n)
@@ -4898,7 +4950,7 @@ bool NppParameters::writeGUIParams()
 
 	if (!noUpdateExist)
 	{
-        insertGUIConfigBoolNode(GUIRoot, TEXT("noUpdate"), _nppGUI._autoUpdateOpt._doAutoUpdate);
+		insertGUIConfigBoolNode(GUIRoot, TEXT("noUpdate"), _nppGUI._autoUpdateOpt._doAutoUpdate);
 	}
 
 	if (!autoDetectionExist)
@@ -5091,12 +5143,12 @@ bool NppParameters::writeGUIParams()
 		GUIConfigElement->SetAttribute(TEXT("blinkRate"), _nppGUI._caretBlinkRate);
 	}
 
-    if (!ScintillaGlobalSettingsExist)
-    {
-        TiXmlElement *GUIConfigElement = (GUIRoot->InsertEndChild(TiXmlElement(TEXT("GUIConfig"))))->ToElement();
+	if (!ScintillaGlobalSettingsExist)
+	{
+		TiXmlElement *GUIConfigElement = (GUIRoot->InsertEndChild(TiXmlElement(TEXT("GUIConfig"))))->ToElement();
 		GUIConfigElement->SetAttribute(TEXT("name"), TEXT("ScintillaGlobalSettings"));
-        GUIConfigElement->SetAttribute(TEXT("enableMultiSelection"), _nppGUI._enableMultiSelection?TEXT("yes"):TEXT("no"));
-    }
+		GUIConfigElement->SetAttribute(TEXT("enableMultiSelection"), _nppGUI._enableMultiSelection?TEXT("yes"):TEXT("no"));
+	}
 
 	if (!openSaveDirExist)
 	{
@@ -5158,26 +5210,26 @@ bool NppParameters::writeFindHistory()
 	(findHistoryRoot->ToElement())->SetAttribute(TEXT("nbMaxFindHistoryFind"),    _findHistory._nbMaxFindHistoryFind);
 	(findHistoryRoot->ToElement())->SetAttribute(TEXT("nbMaxFindHistoryReplace"), _findHistory._nbMaxFindHistoryReplace);
 
-	(findHistoryRoot->ToElement())->SetAttribute(TEXT("matchWord"),				_findHistory._isMatchWord?TEXT("yes"):TEXT("no"));
-	(findHistoryRoot->ToElement())->SetAttribute(TEXT("matchCase"),				_findHistory._isMatchCase?TEXT("yes"):TEXT("no"));
-	(findHistoryRoot->ToElement())->SetAttribute(TEXT("wrap"),					_findHistory._isWrap?TEXT("yes"):TEXT("no"));
-	(findHistoryRoot->ToElement())->SetAttribute(TEXT("directionDown"),			_findHistory._isDirectionDown?TEXT("yes"):TEXT("no"));
+	(findHistoryRoot->ToElement())->SetAttribute(TEXT("matchWord"),             _findHistory._isMatchWord?TEXT("yes"):TEXT("no"));
+	(findHistoryRoot->ToElement())->SetAttribute(TEXT("matchCase"),             _findHistory._isMatchCase?TEXT("yes"):TEXT("no"));
+	(findHistoryRoot->ToElement())->SetAttribute(TEXT("wrap"),                  _findHistory._isWrap?TEXT("yes"):TEXT("no"));
+	(findHistoryRoot->ToElement())->SetAttribute(TEXT("directionDown"),         _findHistory._isDirectionDown?TEXT("yes"):TEXT("no"));
 
-	(findHistoryRoot->ToElement())->SetAttribute(TEXT("fifRecuisive"),			_findHistory._isFifRecuisive?TEXT("yes"):TEXT("no"));
-	(findHistoryRoot->ToElement())->SetAttribute(TEXT("fifInHiddenFolder"),		_findHistory._isFifInHiddenFolder?TEXT("yes"):TEXT("no"));
-	(findHistoryRoot->ToElement())->SetAttribute(TEXT("dlgAlwaysVisible"),		_findHistory._isDlgAlwaysVisible?TEXT("yes"):TEXT("no"));
-	(findHistoryRoot->ToElement())->SetAttribute(TEXT("fifFilterFollowsDoc"),	_findHistory._isFilterFollowDoc?TEXT("yes"):TEXT("no"));
-	(findHistoryRoot->ToElement())->SetAttribute(TEXT("fifFolderFollowsDoc"),	_findHistory._isFolderFollowDoc?TEXT("yes"):TEXT("no"));
+	(findHistoryRoot->ToElement())->SetAttribute(TEXT("fifRecuisive"),          _findHistory._isFifRecuisive?TEXT("yes"):TEXT("no"));
+	(findHistoryRoot->ToElement())->SetAttribute(TEXT("fifInHiddenFolder"),     _findHistory._isFifInHiddenFolder?TEXT("yes"):TEXT("no"));
+	(findHistoryRoot->ToElement())->SetAttribute(TEXT("dlgAlwaysVisible"),      _findHistory._isDlgAlwaysVisible?TEXT("yes"):TEXT("no"));
+	(findHistoryRoot->ToElement())->SetAttribute(TEXT("fifFilterFollowsDoc"),   _findHistory._isFilterFollowDoc?TEXT("yes"):TEXT("no"));
+	(findHistoryRoot->ToElement())->SetAttribute(TEXT("fifFolderFollowsDoc"),   _findHistory._isFolderFollowDoc?TEXT("yes"):TEXT("no"));
 
 	(findHistoryRoot->ToElement())->SetAttribute(TEXT("searchMode"), _findHistory._searchMode);
 	(findHistoryRoot->ToElement())->SetAttribute(TEXT("transparencyMode"), _findHistory._transparencyMode);
 	(findHistoryRoot->ToElement())->SetAttribute(TEXT("transparency"), _findHistory._transparency);
-	(findHistoryRoot->ToElement())->SetAttribute(TEXT("dotMatchesNewline"),		_findHistory._dotMatchesNewline?TEXT("yes"):TEXT("no"));
+	(findHistoryRoot->ToElement())->SetAttribute(TEXT("dotMatchesNewline"),     _findHistory._dotMatchesNewline?TEXT("yes"):TEXT("no"));
 
 	TiXmlElement hist_element(TEXT(""));
 
 	hist_element.SetValue(TEXT("Path"));
-    for (size_t i = 0, len = _findHistory._findHistoryPaths.size(); i < len; ++i)
+	for (size_t i = 0, len = _findHistory._findHistoryPaths.size(); i < len; ++i)
 	{
 		(hist_element.ToElement())->SetAttribute(TEXT("name"), _findHistory._findHistoryPaths[i].c_str());
 		findHistoryRoot->InsertEndChild(hist_element);
@@ -5350,8 +5402,9 @@ TiXmlElement * NppParameters::insertGUIConfigBoolNode(TiXmlNode *r2w, const TCHA
 	return GUIConfigElement;
 }
 
-int RGB2int(COLORREF color) {
-    return (((((DWORD)color) & 0x0000FF) << 16) | ((((DWORD)color) & 0x00FF00)) | ((((DWORD)color) & 0xFF0000) >> 16));
+int RGB2int(COLORREF color)
+{
+	return (((((DWORD)color) & 0x0000FF) << 16) | ((((DWORD)color) & 0x00FF00)) | ((((DWORD)color) & 0xFF0000) >> 16));
 }
 
 int NppParameters::langTypeToCommandID(LangType lt) const 
@@ -5359,18 +5412,18 @@ int NppParameters::langTypeToCommandID(LangType lt) const
 	int id;
 	switch (lt)
 	{
-		case L_C :	
+		case L_C :
 			id = IDM_LANG_C; break;
 		case L_CPP :
 			id = IDM_LANG_CPP; break;
 		case L_JAVA :
-			id = IDM_LANG_JAVA;	break;
+			id = IDM_LANG_JAVA; break;
 		case L_CS :
 			id = IDM_LANG_CS; break;
 		case L_OBJC :
-			id = IDM_LANG_OBJC;	break;
+			id = IDM_LANG_OBJC; break;
 		case L_HTML :
-			id = IDM_LANG_HTML;	break;
+			id = IDM_LANG_HTML; break;
 		case L_XML : 
 			id = IDM_LANG_XML; break;
 		case L_JS :
@@ -5379,7 +5432,7 @@ int NppParameters::langTypeToCommandID(LangType lt) const
 			id = IDM_LANG_PHP; break;
 		case L_ASP :
 			id = IDM_LANG_ASP; break;
-        case L_JSP :
+		case L_JSP :
 			id = IDM_LANG_JSP; break;
 		case L_CSS :
 			id = IDM_LANG_CSS; break;
@@ -5394,7 +5447,7 @@ int NppParameters::langTypeToCommandID(LangType lt) const
 		case L_PASCAL :
 			id = IDM_LANG_PASCAL; break;
 		case L_MAKEFILE :
-			id = IDM_LANG_MAKEFILE;	break;
+			id = IDM_LANG_MAKEFILE; break;
 		case L_INI :
 			id = IDM_LANG_INI; break;
 		case L_ASCII :
@@ -5413,81 +5466,81 @@ int NppParameters::langTypeToCommandID(LangType lt) const
 			id = IDM_LANG_NSIS; break;
 		case L_USER :
 			id = IDM_LANG_USER; break;
-        case L_SQL :
-            id = IDM_LANG_SQL; break;
-        case L_VB :
-            id = IDM_LANG_VB; break;
+		case L_SQL :
+			id = IDM_LANG_SQL; break;
+		case L_VB :
+			id = IDM_LANG_VB; break;
 		case L_TCL :
-            id = IDM_LANG_TCL; break;
+			id = IDM_LANG_TCL; break;
 
 		case L_LISP :
-            id = IDM_LANG_LISP; break;
+			id = IDM_LANG_LISP; break;
 		case L_SCHEME :
-            id = IDM_LANG_SCHEME; break;
+			id = IDM_LANG_SCHEME; break;
 		case L_ASM :
-            id = IDM_LANG_ASM; break;
+			id = IDM_LANG_ASM; break;
 		case L_DIFF :
-            id = IDM_LANG_DIFF; break;
+			id = IDM_LANG_DIFF; break;
 		case L_PROPS :
-            id = IDM_LANG_PROPS; break;
+			id = IDM_LANG_PROPS; break;
 		case L_PS :
-            id = IDM_LANG_PS; break;
+			id = IDM_LANG_PS; break;
 		case L_RUBY :
-            id = IDM_LANG_RUBY; break;
+			id = IDM_LANG_RUBY; break;
 		case L_SMALLTALK :
-            id = IDM_LANG_SMALLTALK; break;
+			id = IDM_LANG_SMALLTALK; break;
 		case L_VHDL :
-            id = IDM_LANG_VHDL; break;
+			id = IDM_LANG_VHDL; break;
 
 		case L_ADA :
-            id = IDM_LANG_ADA; break;
+			id = IDM_LANG_ADA; break;
 		case L_MATLAB :
-            id = IDM_LANG_MATLAB; break;
+			id = IDM_LANG_MATLAB; break;
 
 		case L_HASKELL :
-            id = IDM_LANG_HASKELL; break;
+			id = IDM_LANG_HASKELL; break;
 
 		case L_KIX :
-            id = IDM_LANG_KIX; break;
+			id = IDM_LANG_KIX; break;
 		case L_AU3 :
-            id = IDM_LANG_AU3; break;
+			id = IDM_LANG_AU3; break;
 		case L_VERILOG :
-            id = IDM_LANG_VERILOG; break;
+			id = IDM_LANG_VERILOG; break;
 		case L_CAML :
-            id = IDM_LANG_CAML; break;
+			id = IDM_LANG_CAML; break;
 
 		case L_INNO :
-            id = IDM_LANG_INNO; break;
+			id = IDM_LANG_INNO; break;
 
 		case L_CMAKE :
-            id = IDM_LANG_CMAKE; break;
+			id = IDM_LANG_CMAKE; break;
 
 		case L_YAML :
-            id = IDM_LANG_YAML; break;
+			id = IDM_LANG_YAML; break;
 
 		case L_COBOL :
-            id = IDM_LANG_COBOL; break;
+			id = IDM_LANG_COBOL; break;
 
 		case L_D :
-            id = IDM_LANG_D; break;
+			id = IDM_LANG_D; break;
 
 		case L_GUI4CLI :
-            id = IDM_LANG_GUI4CLI; break;
+			id = IDM_LANG_GUI4CLI; break;
 
 		case L_POWERSHELL :
-            id = IDM_LANG_POWERSHELL; break;
+			id = IDM_LANG_POWERSHELL; break;
 
 		case L_R :
-            id = IDM_LANG_R; break;
+			id = IDM_LANG_R; break;
 
 		case L_COFFEESCRIPT :
-            id = IDM_LANG_COFFEESCRIPT; break;
+			id = IDM_LANG_COFFEESCRIPT; break;
 
 		case L_SEARCHRESULT :
-			id = -1;	break;
+			id = -1;    break;
 
 		case L_TEXT :
-			id = IDM_LANG_TEXT;	break;
+			id = IDM_LANG_TEXT; break;
 
 		default :
 			if(lt >= L_EXTERNAL && lt < L_END)
@@ -5509,7 +5562,7 @@ void NppParameters::writeStyles(LexerStylerArray & lexersStylers, StyleArray & g
 		const TCHAR *nm = element->Attribute(TEXT("name"));
 		
 		LexerStyler *pLs = _lexerStylerArray.getLexerStylerByName(nm);
-        LexerStyler *pLs2 = lexersStylers.getLexerStylerByName(nm);
+		LexerStyler *pLs2 = lexersStylers.getLexerStylerByName(nm);
 
 		if (pLs) 
 		{
@@ -5520,16 +5573,16 @@ void NppParameters::writeStyles(LexerStylerArray & lexersStylers, StyleArray & g
 					grChildNode = grChildNode->NextSibling(TEXT("WordsStyle")))
 			{
 				TiXmlElement *grElement = grChildNode->ToElement();
-                const TCHAR *styleName = grElement->Attribute(TEXT("name"));
+				const TCHAR *styleName = grElement->Attribute(TEXT("name"));
 
-                int i = pLs->getStylerIndexByName(styleName);
-                if (i != -1)
+				int i = pLs->getStylerIndexByName(styleName);
+				if (i != -1)
 				{
-                    Style & style = pLs->getStyler(i);
-                    Style & style2Sync = pLs2->getStyler(i);
+					Style & style = pLs->getStyler(i);
+					Style & style2Sync = pLs2->getStyler(i);
 
-                    writeStyle2Element(style, style2Sync, grElement);
-                }
+					writeStyle2Element(style, style2Sync, grElement);
+				}
 			}
 		}
 	}
@@ -5575,22 +5628,22 @@ void NppParameters::writeStyles(LexerStylerArray & lexersStylers, StyleArray & g
 
 	TiXmlNode *globalStylesRoot = (_pXmlUserStylerDoc->FirstChild(TEXT("NotepadPlus")))->FirstChildElement(TEXT("GlobalStyles"));
 
-    for (TiXmlNode *childNode = globalStylesRoot->FirstChildElement(TEXT("WidgetStyle"));
+	for (TiXmlNode *childNode = globalStylesRoot->FirstChildElement(TEXT("WidgetStyle"));
 		childNode ;
 		childNode = childNode->NextSibling(TEXT("WidgetStyle")))
-    {
-        TiXmlElement *pElement = childNode->ToElement();
-        const TCHAR *styleName = pElement->Attribute(TEXT("name"));
-        int i = _widgetStyleArray.getStylerIndexByName(styleName);
+	{
+		TiXmlElement *pElement = childNode->ToElement();
+		const TCHAR *styleName = pElement->Attribute(TEXT("name"));
+		int i = _widgetStyleArray.getStylerIndexByName(styleName);
 
-        if (i != -1)
+		if (i != -1)
 		{
-            Style & style = _widgetStyleArray.getStyler(i);
-            Style & style2Sync = globalStylers.getStyler(i);
+			Style & style = _widgetStyleArray.getStyler(i);
+			Style & style2Sync = globalStylers.getStyler(i);
 
-            writeStyle2Element(style, style2Sync, pElement);
-        }
-    }
+			writeStyle2Element(style, style2Sync, pElement);
+		}
+	}
 
 	_pXmlUserStylerDoc->SaveFile();
 }
@@ -5598,102 +5651,104 @@ void NppParameters::writeStyles(LexerStylerArray & lexersStylers, StyleArray & g
 
 bool NppParameters::insertTabInfo(const TCHAR *langName, int tabInfo)
 {
-    if (!_pXmlDoc) return false;
-    TiXmlNode *langRoot = (_pXmlDoc->FirstChild(TEXT("NotepadPlus")))->FirstChildElement(TEXT("Languages"));
-    for (TiXmlNode *childNode = langRoot->FirstChildElement(TEXT("Language"));
+	if (!_pXmlDoc)
+		return false;
+
+	TiXmlNode *langRoot = (_pXmlDoc->FirstChild(TEXT("NotepadPlus")))->FirstChildElement(TEXT("Languages"));
+	for (TiXmlNode *childNode = langRoot->FirstChildElement(TEXT("Language"));
 		childNode ;
 		childNode = childNode->NextSibling(TEXT("Language")))
 	{
-        TiXmlElement *element = childNode->ToElement();
+		TiXmlElement *element = childNode->ToElement();
 		const TCHAR *nm = element->Attribute(TEXT("name"));
-        if (nm && lstrcmp(langName, nm) == 0)
-        {
-            childNode->ToElement()->SetAttribute(TEXT("tabSettings"), tabInfo);
+		if (nm && lstrcmp(langName, nm) == 0)
+		{
+			childNode->ToElement()->SetAttribute(TEXT("tabSettings"), tabInfo);
 			_pXmlDoc->SaveFile();
-            return true;
-        }
-    }
-    return false;
+			return true;
+		}
+	}
+	return false;
 }
 
 void NppParameters::writeStyle2Element(Style & style2Write, Style & style2Sync, TiXmlElement *element)
 {
-    if (HIBYTE(HIWORD(style2Write._fgColor)) != 0xFF)
-    {
-        int rgbVal = RGB2int(style2Write._fgColor);
-	    TCHAR fgStr[7];
-	    wsprintf(fgStr, TEXT("%.6X"), rgbVal);
-	    element->SetAttribute(TEXT("fgColor"), fgStr);
-    }
+	if (HIBYTE(HIWORD(style2Write._fgColor)) != 0xFF)
+	{
+		int rgbVal = RGB2int(style2Write._fgColor);
+		TCHAR fgStr[7];
+		wsprintf(fgStr, TEXT("%.6X"), rgbVal);
+		element->SetAttribute(TEXT("fgColor"), fgStr);
+	}
 
-    if (HIBYTE(HIWORD(style2Write._bgColor)) != 0xFF)
-    {
-        int rgbVal = RGB2int(style2Write._bgColor);
-	    TCHAR bgStr[7];
-	    wsprintf(bgStr, TEXT("%.6X"), rgbVal);
-	    element->SetAttribute(TEXT("bgColor"), bgStr);
-    }
+	if (HIBYTE(HIWORD(style2Write._bgColor)) != 0xFF)
+	{
+		int rgbVal = RGB2int(style2Write._bgColor);
+		TCHAR bgStr[7];
+		wsprintf(bgStr, TEXT("%.6X"), rgbVal);
+		element->SetAttribute(TEXT("bgColor"), bgStr);
+	}
 
 	if (style2Write._colorStyle != COLORSTYLE_ALL)
-    {
-	    element->SetAttribute(TEXT("colorStyle"), style2Write._colorStyle);
-    }
+	{
+		element->SetAttribute(TEXT("colorStyle"), style2Write._colorStyle);
+	}
 
-    if (style2Write._fontName)
-    {
-        const TCHAR *oldFontName = element->Attribute(TEXT("fontName"));
-        if (lstrcmp(oldFontName, style2Write._fontName))
-        {
-		    element->SetAttribute(TEXT("fontName"), style2Write._fontName);
-            style2Sync._fontName = style2Write._fontName = element->Attribute(TEXT("fontName"));
-        }
-    }
+	if (style2Write._fontName)
+	{
+		const TCHAR *oldFontName = element->Attribute(TEXT("fontName"));
+		if (lstrcmp(oldFontName, style2Write._fontName))
+		{
+			element->SetAttribute(TEXT("fontName"), style2Write._fontName);
+			style2Sync._fontName = style2Write._fontName = element->Attribute(TEXT("fontName"));
+		}
+	}
 
-    if (style2Write._fontSize != STYLE_NOT_USED)
-    {
-        if (!style2Write._fontSize)
-            element->SetAttribute(TEXT("fontSize"), TEXT(""));
-        else
-		    element->SetAttribute(TEXT("fontSize"), style2Write._fontSize);
-    }
+	if (style2Write._fontSize != STYLE_NOT_USED)
+	{
+		if (!style2Write._fontSize)
+			element->SetAttribute(TEXT("fontSize"), TEXT(""));
+		else
+			element->SetAttribute(TEXT("fontSize"), style2Write._fontSize);
+	}
 
-    if (style2Write._fontStyle != STYLE_NOT_USED)
-    {
-	    element->SetAttribute(TEXT("fontStyle"), style2Write._fontStyle);
-    }
+	if (style2Write._fontStyle != STYLE_NOT_USED)
+	{
+		element->SetAttribute(TEXT("fontStyle"), style2Write._fontStyle);
+	}
 
 	
 	if (style2Write._keywords)
-    {	
+	{
 		TiXmlNode *teteDeNoeud = element->LastChild();
 
 		if (teteDeNoeud)
 			teteDeNoeud->SetValue(style2Write._keywords->c_str());
 		else 
 			element->InsertEndChild(TiXmlText(style2Write._keywords->c_str()));
-    }
+	}
 }
 
 void NppParameters::insertUserLang2Tree(TiXmlNode *node, UserLangContainer *userLang) 
 {
 	TiXmlElement *rootElement = (node->InsertEndChild(TiXmlElement(TEXT("UserLang"))))->ToElement();
 
-    TCHAR temp[32];
-    generic_string udlVersion = TEXT("");
-    udlVersion += generic_itoa(SCE_UDL_VERSION_MAJOR, temp, 10);
-    udlVersion += TEXT(".");
-    udlVersion += generic_itoa(SCE_UDL_VERSION_MINOR, temp, 10);
+	TCHAR temp[32];
+	generic_string udlVersion = TEXT("");
+	udlVersion += generic_itoa(SCE_UDL_VERSION_MAJOR, temp, 10);
+	udlVersion += TEXT(".");
+	udlVersion += generic_itoa(SCE_UDL_VERSION_MINOR, temp, 10);
 
 	rootElement->SetAttribute(TEXT("name"), userLang->_name);
 	rootElement->SetAttribute(TEXT("ext"), userLang->_ext);
-    rootElement->SetAttribute(TEXT("udlVersion"), udlVersion.c_str());
+	rootElement->SetAttribute(TEXT("udlVersion"), udlVersion.c_str());
 
 	TiXmlElement *settingsElement = (rootElement->InsertEndChild(TiXmlElement(TEXT("Settings"))))->ToElement();
 	{
 		TiXmlElement *globalElement = (settingsElement->InsertEndChild(TiXmlElement(TEXT("Global"))))->ToElement();
-		globalElement->SetAttribute(TEXT("caseIgnored"),			userLang->_isCaseIgnored ? TEXT("yes"):TEXT("no"));
-		globalElement->SetAttribute(TEXT("allowFoldOfComments"),	userLang->_allowFoldOfComments ? TEXT("yes"):TEXT("no"));
-		globalElement->SetAttribute(TEXT("foldCompact"),			userLang->_foldCompact ? TEXT("yes"):TEXT("no"));
+		globalElement->SetAttribute(TEXT("caseIgnored"),            userLang->_isCaseIgnored ? TEXT("yes"):TEXT("no"));
+		globalElement->SetAttribute(TEXT("allowFoldOfComments"),    userLang->_allowFoldOfComments ? TEXT("yes"):TEXT("no"));
+		globalElement->SetAttribute(TEXT("foldCompact"),            userLang->_foldCompact ? TEXT("yes"):TEXT("no"));
 		globalElement->SetAttribute(TEXT("forcePureLC"),            userLang->_forcePureLC);
 		globalElement->SetAttribute(TEXT("decimalSeparator"),       userLang->_decimalSeparator);
 
@@ -5815,6 +5870,7 @@ void NppParameters::addUserModifiedIndex(int index)
 			break;
 		}
 	}
+
 	if (!found) 
 	{
 		_customizedShortcuts.push_back(index);
@@ -5833,6 +5889,7 @@ void NppParameters::addPluginModifiedIndex(int index)
 			break;
 		}
 	}
+
 	if (!found) 
 	{
 		_pluginCustomizedCmds.push_back(index);
@@ -5851,6 +5908,7 @@ void NppParameters::addScintillaModifiedIndex(int index)
 			break;
 		}
 	}
+
 	if (!found) 
 	{
 		_scintillaModifiedKeyIndices.push_back(index);

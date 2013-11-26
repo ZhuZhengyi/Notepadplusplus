@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -50,10 +50,10 @@
 
 BOOL CALLBACK ProjectPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
-    switch (message)
-    {
-        case WM_INITDIALOG :
-        {
+	switch (message)
+	{
+		case WM_INITDIALOG :
+		{
 			ProjectPanel::initMenus();
 
 			// Create toolbar menu
@@ -97,8 +97,8 @@ BOOL CALLBACK ProjectPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPar
 			if (!openWorkSpace(_workSpaceFilePath.c_str()))
 				newWorkSpace();
 
-            return TRUE;
-        }
+			return TRUE;
+		}
 
 		
 		case WM_MOUSEMOVE:
@@ -117,25 +117,25 @@ BOOL CALLBACK ProjectPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPar
 		}
 		return TRUE;
 
-        case WM_SIZE:
-        {
-            int width = LOWORD(lParam);
-            int height = HIWORD(lParam);
-            RECT toolbarMenuRect;
-            ::GetClientRect(_hToolbarMenu, &toolbarMenuRect);
+		case WM_SIZE:
+		{
+			int width = LOWORD(lParam);
+			int height = HIWORD(lParam);
+			RECT toolbarMenuRect;
+			::GetClientRect(_hToolbarMenu, &toolbarMenuRect);
 
-            ::MoveWindow(_hToolbarMenu, 0, 0, width, toolbarMenuRect.bottom, TRUE);
+			::MoveWindow(_hToolbarMenu, 0, 0, width, toolbarMenuRect.bottom, TRUE);
 
 			HWND hwnd = _treeView.getHSelf();
 			if (hwnd)
 				::MoveWindow(hwnd, 0, toolbarMenuRect.bottom + 2, width, height - toolbarMenuRect.bottom - 2, TRUE);
-            break;
-        }
+			break;
+		}
 
-        case WM_CONTEXTMENU:
+		case WM_CONTEXTMENU:
 			if (!_treeView.isDragging())
 				showContextMenu(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
-        return TRUE;
+		return TRUE;
 
 		case WM_COMMAND:
 		{
@@ -144,12 +144,12 @@ BOOL CALLBACK ProjectPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPar
 		}
 
 		case WM_DESTROY:
-        {
+		{
 			_treeView.destroy();
 			destroyMenus();
 			::DestroyWindow(_hToolbarMenu);
-            break;
-        }
+			break;
+		}
 		case WM_KEYDOWN:
 			//if (wParam == VK_F2)
 			{
@@ -157,9 +157,9 @@ BOOL CALLBACK ProjectPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPar
 			}
 			break;
 
-        default :
-            return DockingDlgInterface::run_dlgProc(message, wParam, lParam);
-    }
+		default :
+			return DockingDlgInterface::run_dlgProc(message, wParam, lParam);
+	}
 	return DockingDlgInterface::run_dlgProc(message, wParam, lParam);
 }
 
@@ -389,35 +389,35 @@ bool ProjectPanel::saveWorkSpace()
 
 bool ProjectPanel::writeWorkSpace(TCHAR *projectFileName)
 {
-    //write <NotepadPlus>: use the default file name if new file name is not given
+	//write <NotepadPlus>: use the default file name if new file name is not given
 	const TCHAR * fn2write = projectFileName?projectFileName:_workSpaceFilePath.c_str();
 	TiXmlDocument projDoc(fn2write);
-    TiXmlNode *root = projDoc.InsertEndChild(TiXmlElement(TEXT("NotepadPlus")));
+	TiXmlNode *root = projDoc.InsertEndChild(TiXmlElement(TEXT("NotepadPlus")));
 
 	TCHAR textBuffer[MAX_PATH];
 	TVITEM tvItem;
-    tvItem.mask = TVIF_TEXT;
-    tvItem.pszText = textBuffer;
-    tvItem.cchTextMax = MAX_PATH;
+	tvItem.mask = TVIF_TEXT;
+	tvItem.pszText = textBuffer;
+	tvItem.cchTextMax = MAX_PATH;
 
-    //for each project, write <Project>
-    HTREEITEM tvRoot = _treeView.getRoot();
-    if (!tvRoot)
-      return false;
+	//for each project, write <Project>
+	HTREEITEM tvRoot = _treeView.getRoot();
+	if (!tvRoot)
+	  return false;
 
-    for (HTREEITEM tvProj = _treeView.getChildFrom(tvRoot);
-        tvProj != NULL;
-        tvProj = _treeView.getNextSibling(tvProj))
-    {        
-        tvItem.hItem = tvProj;
-        SendMessage(_treeView.getHSelf(), TVM_GETITEM, 0,(LPARAM)&tvItem);
-        //printStr(tvItem.pszText);
+	for (HTREEITEM tvProj = _treeView.getChildFrom(tvRoot);
+		tvProj != NULL;
+		tvProj = _treeView.getNextSibling(tvProj))
+	{        
+		tvItem.hItem = tvProj;
+		SendMessage(_treeView.getHSelf(), TVM_GETITEM, 0,(LPARAM)&tvItem);
+		//printStr(tvItem.pszText);
 
 		TiXmlNode *projRoot = root->InsertEndChild(TiXmlElement(TEXT("Project")));
 		projRoot->ToElement()->SetAttribute(TEXT("name"), tvItem.pszText);
 		buildProjectXml(projRoot, tvProj, fn2write);
-    }
-    projDoc.SaveFile();
+	}
+	projDoc.SaveFile();
 	return true;
 }
 
@@ -429,7 +429,7 @@ void ProjectPanel::buildProjectXml(TiXmlNode *node, HTREEITEM hItem, const TCHAR
 	tvItem.pszText = textBuffer;
 	tvItem.cchTextMax = MAX_PATH;
 
-    for (HTREEITEM hItemNode = _treeView.getChildFrom(hItem);
+	for (HTREEITEM hItemNode = _treeView.getChildFrom(hItem);
 		hItemNode != NULL;
 		hItemNode = _treeView.getNextSibling(hItemNode))
 	{

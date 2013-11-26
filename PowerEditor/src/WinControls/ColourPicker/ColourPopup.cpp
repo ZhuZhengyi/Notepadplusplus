@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -178,9 +178,9 @@ BOOL CALLBACK ColourPopup::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPara
 
 		case WM_COMMAND:
 			switch (LOWORD(wParam))
-            {
-                case IDOK :
-			    {
+			{
+				case IDOK :
+				{
 					isColourChooserLaunched = true;
 					CHOOSECOLOR cc;                 // common dialog box structure 
 					static COLORREF acrCustClr[16] = {
@@ -210,27 +210,27 @@ BOOL CALLBACK ColourPopup::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPara
 						::SendMessage(_hParent, WM_PICKUP_CANCEL, 0, 0);
 					}
 
-				    return TRUE;
-			    }
+					return TRUE;
+				}
 
-                case IDC_COLOUR_LIST :
-                {
-			        if (HIWORD(wParam) == LBN_SELCHANGE)
-		            {
-                        int i = ::SendMessage((HWND)lParam, LB_GETCURSEL, 0L, 0L);
-                        _colour = ::SendMessage((HWND)lParam, LB_GETITEMDATA, i, 0L);
+				case IDC_COLOUR_LIST :
+				{
+					if (HIWORD(wParam) == LBN_SELCHANGE)
+					{
+						int i = ::SendMessage((HWND)lParam, LB_GETCURSEL, 0L, 0L);
+						_colour = ::SendMessage((HWND)lParam, LB_GETITEMDATA, i, 0L);
 
-                        ::SendMessage(_hParent, WM_PICKUP_COLOR, _colour, 0);
-					    return TRUE;
-		            }
-                }
-			    
-                default :
-                    return FALSE;
-            }
-		
+						::SendMessage(_hParent, WM_PICKUP_COLOR, _colour, 0);
+						return TRUE;
+					}
+				}
+
+				default :
+					return FALSE;
+			}
+
 		case WM_ACTIVATE :
-        {
+		{
 			if (LOWORD(wParam) == WA_INACTIVE)
 				if (!isColourChooserLaunched)
 					::SendMessage(_hParent, WM_PICKUP_CANCEL, 0, 0);
@@ -238,8 +238,6 @@ BOOL CALLBACK ColourPopup::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPara
 		}
 		
 	}
+
 	return FALSE;
 }
-
-
-

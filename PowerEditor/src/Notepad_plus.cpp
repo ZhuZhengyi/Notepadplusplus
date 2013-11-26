@@ -3523,7 +3523,7 @@ bool Notepad_plus::doBlockComment(comment_mode currCommentMode)
 	generic_string symbolStart;
 	generic_string symbolEnd;
 
-	const TCHAR *commentLineSybol;
+	const TCHAR *commentLineSymbol;
 	generic_string symbol;
 
 	Buffer * buf = _pEditView->getCurrentBuffer();
@@ -4352,8 +4352,8 @@ void Notepad_plus::getCurrentOpenedFiles(Session & session)
 
 			if (PathFileExists(buf->getFullPathName()))
 			{
-				generic_string	languageName = getLangFromMenu(buf);
-				const TCHAR *langName	= languageName.c_str();
+				generic_string languageName = getLangFromMenu(buf);
+				const TCHAR *langName = languageName.c_str();
 
 				sessionFileInfo sfi(buf->getFullPathName(), langName, buf->getEncoding(), buf->getPosition(&_mainEditView));
 

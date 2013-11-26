@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -37,51 +37,60 @@
 #include "clipboardHistoryPanel_rc.h"
 #include <vector>
 
-#define CH_PROJECTPANELTITLE		TEXT("Clipboard History")
+#define CH_PROJECTPANELTITLE    TEXT("Clipboard History")
 
 typedef std::vector<unsigned char> ClipboardData;
 
 class ScintillaEditView;
 
-class ByteArray {
+class ByteArray
+{
 public:
 	ByteArray():_pBytes(NULL), _length(0) {};
 	ByteArray(ClipboardData cd);
-	
-	~ByteArray() {
+
+	~ByteArray()
+	{
 		if (_pBytes)
 			delete [] _pBytes;
 		_pBytes = NULL;
 		_length = 0;
 	};
+
 	const unsigned char * getPointer() const {return _pBytes;};
 	size_t getLength() const {return _length;};
+
 protected:
 	unsigned char *_pBytes;
 	size_t _length;
 };
 
-class StringArray : public ByteArray {
+class StringArray : public ByteArray
+{
 public:
 	StringArray(ClipboardData cd, size_t maxLen);
 };
 
-class ClipboardHistoryPanel : public DockingDlgInterface {
+class ClipboardHistoryPanel : public DockingDlgInterface
+{
 public:
 	ClipboardHistoryPanel(): DockingDlgInterface(IDD_CLIPBOARDHISTORY_PANEL), _ppEditView(NULL), _hwndNextCbViewer(NULL) {};
 
-	void init(HINSTANCE hInst, HWND hPere, ScintillaEditView **ppEditView) {
+	void init(HINSTANCE hInst, HWND hPere, ScintillaEditView **ppEditView)
+	{
 		DockingDlgInterface::init(hInst, hPere);
 		_ppEditView = ppEditView;
 	};
 
-    virtual void display(bool toShow = true) const {
-        DockingDlgInterface::display(toShow);
-    };
+	virtual void display(bool toShow = true) const
+	{
+		DockingDlgInterface::display(toShow);
+	};
 
-    void setParent(HWND parent2set){
-        _hParent = parent2set;
-    };
+	void setParent(HWND parent2set)
+	{
+		_hParent = parent2set;
+	};
 
 	//void switchEncoding();
 	ClipboardData getClipboadData();

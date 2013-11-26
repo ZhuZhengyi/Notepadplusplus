@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -45,29 +45,29 @@ ClipboardData ClipboardHistoryPanel::getClipboadData()
 
 	if (!OpenClipboard(NULL))
 		return clipboardData;
-	 
+
 	HGLOBAL hglb = GetClipboardData(CLIPBOARD_TEXTFORMAT); 
-	if (hglb != NULL) 
-	{ 
+	if (hglb != NULL)
+	{
 		char *lpchar = (char *)GlobalLock(hglb);
 		wchar_t *lpWchar = (wchar_t *)GlobalLock(hglb);
 		
-		if (lpchar != NULL) 
+		if (lpchar != NULL)
 		{
 			UINT cf_nppTextLen = RegisterClipboardFormat(CF_NPPTEXTLEN);
 			if (IsClipboardFormatAvailable(cf_nppTextLen))
 			{
 				HGLOBAL hglbLen = GetClipboardData(cf_nppTextLen); 
-				if (hglbLen != NULL) 
+				if (hglbLen != NULL)
 				{ 
 					unsigned long *lpLen = (unsigned long *)GlobalLock(hglbLen); 
-					if (lpLen != NULL) 
+					if (lpLen != NULL)
 					{
 						for (size_t i = 0 ; i < (*lpLen) ; ++i)
 						{
 							clipboardData.push_back((unsigned char)lpchar[i]);
 						}
-						GlobalUnlock(hglb); 
+						GlobalUnlock(hglb);
 					}
 				}
 			}
@@ -181,13 +181,13 @@ void ClipboardHistoryPanel::addToClipboadHistory(ClipboardData cbd)
 
 BOOL CALLBACK ClipboardHistoryPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
-    switch (message)
-    {
-        case WM_INITDIALOG :
-        {
+	switch (message)
+	{
+		case WM_INITDIALOG :
+		{
 			_hwndNextCbViewer = ::SetClipboardViewer(_hSelf);
-            return TRUE;
-        }
+			return TRUE;
+		}
 
 		case WM_CHANGECBCHAIN:
 			if (_hwndNextCbViewer == (HWND)wParam)
@@ -213,8 +213,8 @@ BOOL CALLBACK ClipboardHistoryPanel::run_dlgProc(UINT message, WPARAM wParam, LP
 		case WM_COMMAND : 
 		{
 			switch (LOWORD(wParam))
-            {
-                case IDC_LIST_CLIPBOARD:
+			{
+				case IDC_LIST_CLIPBOARD:
 				{
 					if (HIWORD(wParam) == LBN_DBLCLK)
 					{
@@ -258,13 +258,13 @@ BOOL CALLBACK ClipboardHistoryPanel::run_dlgProc(UINT message, WPARAM wParam, LP
 		}
 		break;
 		
-        case WM_SIZE:
-        {
-            int width = LOWORD(lParam);
-            int height = HIWORD(lParam);
+		case WM_SIZE:
+		{
+			int width = LOWORD(lParam);
+			int height = HIWORD(lParam);
 			::MoveWindow(::GetDlgItem(_hSelf, IDC_LIST_CLIPBOARD), 0, 0, width, height, TRUE);
-            break;
-        }
+			break;
+		}
 /*
 		case WM_VKEYTOITEM:
 		{
@@ -278,8 +278,9 @@ BOOL CALLBACK ClipboardHistoryPanel::run_dlgProc(UINT message, WPARAM wParam, LP
 		}
 */
 
-        default :
-            return DockingDlgInterface::run_dlgProc(message, wParam, lParam);
-    }
+		default :
+			return DockingDlgInterface::run_dlgProc(message, wParam, lParam);
+	}
+
 	return DockingDlgInterface::run_dlgProc(message, wParam, lParam);
 }

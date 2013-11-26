@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -36,7 +36,7 @@ const int WS_TOOLBARSTYLE = WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIB
 
 void ToolBar::initTheme(TiXmlDocument *toolIconsDocRoot)
 {
-    _toolIcons =  toolIconsDocRoot->FirstChild(TEXT("NotepadPlus"));
+	_toolIcons =  toolIconsDocRoot->FirstChild(TEXT("NotepadPlus"));
 	if (_toolIcons)
 	{
 		_toolIcons = _toolIcons->FirstChild(TEXT("ToolBarIcons"));
@@ -148,7 +148,8 @@ bool ToolBar::init( HINSTANCE hInst, HWND hPere, toolBarStatusType type,
 		_pTBB[i].iString = 0;
 	}
 
-	if (_nrDynButtons > 0) {
+	if (_nrDynButtons > 0)
+	{
 		//add separator
 		_pTBB[i].iBitmap = 0;
 		_pTBB[i].idCommand = 0;
@@ -172,35 +173,43 @@ bool ToolBar::init( HINSTANCE hInst, HWND hPere, toolBarStatusType type,
 		}
 	}
 
-	reset(true);	//load icons etc
+	reset(true); //load icons etc
 
 	return true;
 }
 
-void ToolBar::destroy() {
-	if (_pRebar) {
+void ToolBar::destroy()
+{
+	if (_pRebar)
+	{
 		_pRebar->removeBand(_rbBand.wID);
 		_pRebar = NULL;
 	}
+
 	delete [] _pTBB;
 	::DestroyWindow(_hSelf);
 	_hSelf = NULL;
 	_toolBarIcons.destroy();
 };
 
-int ToolBar::getWidth() const {
+int ToolBar::getWidth() const
+{
 	RECT btnRect;
 	int totalWidth = 0;
-	for(size_t i = 0; i < _nrCurrentButtons; ++i) {
+
+	for(size_t i = 0; i < _nrCurrentButtons; ++i)
+	{
 		::SendMessage(_hSelf, TB_GETITEMRECT, i, (LPARAM)&btnRect);
 		totalWidth += btnRect.right - btnRect.left;
 	}
+
 	return totalWidth;
 }
 
-int ToolBar::getHeight() const {
+int ToolBar::getHeight() const
+{
 	DWORD size = (DWORD)SendMessage(_hSelf, TB_GETBUTTONSIZE, 0, 0);
-    DWORD padding = (DWORD)SendMessage(_hSelf, TB_GETPADDING, 0,0);
+	DWORD padding = (DWORD)SendMessage(_hSelf, TB_GETPADDING, 0,0);
 	int totalHeight = HIWORD(size) + HIWORD(padding);
 
 	return totalHeight;
@@ -209,18 +218,22 @@ int ToolBar::getHeight() const {
 void ToolBar::reset(bool create) 
 {
 
-	if(create && _hSelf) {
+	if(create && _hSelf)
+	{
 		//Store current button state information
 		TBBUTTON tempBtn;
-		for(size_t i = 0; i < _nrCurrentButtons; ++i) {
+		for(size_t i = 0; i < _nrCurrentButtons; ++i)
+		{
 			::SendMessage(_hSelf, TB_GETBUTTON, (WPARAM)i, (LPARAM)&tempBtn);
 			_pTBB[i].fsState = tempBtn.fsState;
 		}
+
 		::DestroyWindow(_hSelf);
 		_hSelf = NULL;
 	}
 
-	if(!_hSelf) {
+	if(!_hSelf)
+	{
 		_hSelf = ::CreateWindowEx(
 					WS_EX_PALETTEWINDOW,
 					TOOLBARCLASSNAME,
@@ -260,7 +273,9 @@ void ToolBar::reset(bool create)
 			addbmp.nID = _toolBarIcons.getStdIconAt(i);
 			::SendMessage(_hSelf, TB_ADDBITMAP, 1, (LPARAM)&addbmp);
 		}
-		if (_nrDynButtons > 0) {
+
+		if (_nrDynButtons > 0)
+		{
 			for (size_t j = 0; j < _nrDynButtons; ++j)
 			{
 				addbmpdyn.nID = (UINT_PTR)_vDynBtnReg.at(j).hBmp;
@@ -269,8 +284,8 @@ void ToolBar::reset(bool create)
 		}
 	}
 
-	if (create)
-	{	//if the toolbar has been recreated, readd the buttons
+	if (create) //if the toolbar has been recreated, readd the buttons
+	{
 		size_t nrBtnToAdd = (_state == TB_STANDARD?_nrTotalButtons:_nrButtons);
 		_nrCurrentButtons = nrBtnToAdd;
 		WORD btnSize = (_state == TB_LARGE?32:16);
@@ -281,11 +296,11 @@ void ToolBar::reset(bool create)
 
 	if (_pRebar)
 	{
-		_rbBand.hwndChild	= getHSelf();
-		_rbBand.cxMinChild	= 0;
-		_rbBand.cyIntegral	= 1;
-		_rbBand.cyMinChild	= _rbBand.cyMaxChild	= getHeight();
-		_rbBand.cxIdeal		= getWidth();
+		_rbBand.hwndChild  = getHSelf();
+		_rbBand.cxMinChild = 0;
+		_rbBand.cyIntegral = 1;
+		_rbBand.cyMinChild = _rbBand.cyMaxChild	= getHeight();
+		_rbBand.cxIdeal    = getWidth();
 
 		_pRebar->reNew(REBAR_BAR_TOOLBAR, &_rbBand);
 	}
@@ -296,41 +311,50 @@ void ToolBar::registerDynBtn(UINT messageID, toolbarIcons* tIcon)
 	// Note: Register of buttons only possible before init!
 	if ((_hSelf == NULL) && (messageID != 0) && (tIcon->hToolbarBmp != NULL))
 	{
-		tDynamicList		dynList;
-		dynList.message		= messageID;
-		dynList.hBmp		= tIcon->hToolbarBmp;
-		dynList.hIcon		= tIcon->hToolbarIcon;
+		tDynamicList   dynList;
+		dynList.message = messageID;
+		dynList.hBmp    = tIcon->hToolbarBmp;
+		dynList.hIcon   = tIcon->hToolbarIcon;
 		_vDynBtnReg.push_back(dynList);
 	}
 }
 
-void ToolBar::doPopop(POINT chevPoint) {
+void ToolBar::doPopop(POINT chevPoint)
+{
 	//first find hidden buttons
 	int width = Window::getWidth();
 
 	size_t start = 0;
 	RECT btnRect = {0,0,0,0};
-	while(start < _nrCurrentButtons) {
+	while(start < _nrCurrentButtons)
+	{
 		::SendMessage(_hSelf, TB_GETITEMRECT, start, (LPARAM)&btnRect);
 		if(btnRect.right > width)
 			break;
 		++start;
 	}
 
-	if (start < _nrCurrentButtons) {	//some buttons are hidden
+	if (start < _nrCurrentButtons) //some buttons are hidden
+	{
 		HMENU menu = ::CreatePopupMenu();
 		int cmd;
 		generic_string text;
-		while (start < _nrCurrentButtons) {
+		while (start < _nrCurrentButtons)
+		{
 			cmd = _pTBB[start].idCommand;
 			getNameStrFromCmd(cmd, text);
-			if (_pTBB[start].idCommand != 0) {
+			if (_pTBB[start].idCommand != 0)
+			{
 				if (::SendMessage(_hSelf, TB_ISBUTTONENABLED, cmd, 0) != 0)
 					AppendMenu(menu, MF_ENABLED, cmd, text.c_str());
 				else
 					AppendMenu(menu, MF_DISABLED|MF_GRAYED, cmd, text.c_str());
-			} else
+			}
+			else
+			{
 				AppendMenu(menu, MF_SEPARATOR, 0, TEXT(""));
+			}
+
 			++start;
 		}
 		TrackPopupMenu(menu, 0, chevPoint.x, chevPoint.y, 0, _hSelf, NULL);
@@ -349,13 +373,13 @@ void ToolBar::addToRebar(ReBar * rebar)
 	_rbBand.fMask   = RBBIM_STYLE | RBBIM_CHILD | RBBIM_CHILDSIZE |
 					  RBBIM_SIZE | RBBIM_IDEALSIZE | RBBIM_ID;
 
-	_rbBand.fStyle		= RBBS_VARIABLEHEIGHT | RBBS_USECHEVRON;
-	_rbBand.hwndChild	= getHSelf();
-	_rbBand.wID			= REBAR_BAR_TOOLBAR;	//ID REBAR_BAR_TOOLBAR for toolbar
-	_rbBand.cxMinChild	= 0;
-	_rbBand.cyIntegral	= 1;
-	_rbBand.cyMinChild	= _rbBand.cyMaxChild	= getHeight();
-	_rbBand.cxIdeal		= _rbBand.cx			= getWidth();
+	_rbBand.fStyle     = RBBS_VARIABLEHEIGHT | RBBS_USECHEVRON;
+	_rbBand.hwndChild  = getHSelf();
+	_rbBand.wID        = REBAR_BAR_TOOLBAR;	//ID REBAR_BAR_TOOLBAR for toolbar
+	_rbBand.cxMinChild = 0;
+	_rbBand.cyIntegral = 1;
+	_rbBand.cyMinChild = _rbBand.cyMaxChild = getHeight();
+	_rbBand.cxIdeal    = _rbBand.cx         = getWidth();
 
 	_pRebar->addBand(&_rbBand, true);
 
@@ -388,13 +412,16 @@ bool ReBar::addBand(REBARBANDINFO * rBand, bool useID)
 	else
 		rBand->fStyle = RBBS_GRIPPERALWAYS;
 	rBand->fMask |= RBBIM_ID | RBBIM_STYLE;
-	if (useID) {
+	if (useID)
+	{
 		if (isIDTaken(rBand->wID))
 			return false;
-
-	} else {
+	}
+	else
+	{
 		rBand->wID = getNewID();
 	}
+
 	::SendMessage(_hSelf, RB_INSERTBAND, (WPARAM)-1, (LPARAM)rBand);	//add to end of list
 	return true;
 }
@@ -417,7 +444,7 @@ void ReBar::setIDVisible(int id, bool show)
 {
 	int index = (int)SendMessage(_hSelf, RB_IDTOINDEX, (WPARAM)id, 0);
 	if (index == -1 )
-		return;	//error
+		return; //error
 
 	REBARBANDINFO rbBand;
 	ZeroMemory(&rbBand, REBARBAND_SIZE);
@@ -426,10 +453,12 @@ void ReBar::setIDVisible(int id, bool show)
 
 	rbBand.fMask = RBBIM_STYLE;
 	::SendMessage(_hSelf, RB_GETBANDINFO, (WPARAM)index, (LPARAM)&rbBand);
+
 	if (show)
 		rbBand.fStyle &= (RBBS_HIDDEN ^ -1);
 	else
 		rbBand.fStyle |= RBBS_HIDDEN;
+
 	::SendMessage(_hSelf, RB_SETBANDINFO, (WPARAM)index, (LPARAM)&rbBand);
 }
 
@@ -437,7 +466,7 @@ bool ReBar::getIDVisible(int id)
 {
 	int index = (int)SendMessage(_hSelf, RB_IDTOINDEX, (WPARAM)id, 0);
 	if (index == -1 )
-		return false;	//error
+		return false; //error
 	REBARBANDINFO rbBand;
 	ZeroMemory(&rbBand, REBARBAND_SIZE);
 	rbBand.cbSize  = REBARBAND_SIZE;
@@ -452,7 +481,7 @@ void ReBar::setGrayBackground(int id)
 {
 	int index = (int)SendMessage(_hSelf, RB_IDTOINDEX, (WPARAM)id, 0);
 	if (index == -1 )
-		return;	//error
+		return; //error
 	REBARBANDINFO rbBand;
 	ZeroMemory(&rbBand, REBARBAND_SIZE);
 	rbBand.cbSize  = REBARBAND_SIZE;
@@ -479,7 +508,7 @@ int ReBar::getNewID()
 		}
 		else
 		{
-			break;		//found gap
+			break; //found gap
 		}
 	}
 
@@ -510,6 +539,7 @@ bool ReBar::isIDTaken(int id)
 			return true;
 		}
 	}
+
 	return false;
 }
 

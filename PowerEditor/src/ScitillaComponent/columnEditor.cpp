@@ -33,9 +33,9 @@
 
 void ColumnEditorDlg::display(bool toShow) const 
 {
-    Window::display(toShow);
-    if (toShow)
-        ::SetFocus(::GetDlgItem(_hSelf, ID_GOLINE_EDIT));
+	Window::display(toShow);
+	if (toShow)
+		::SetFocus(::GetDlgItem(_hSelf, ID_GOLINE_EDIT));
 }
 
 BOOL CALLBACK ColumnEditorDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
@@ -66,7 +66,7 @@ BOOL CALLBACK ColumnEditorDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 					return TRUE;
 
 				case IDOK :
-                {
+				{
 					(*_ppEditView)->execute(SCI_BEGINUNDOACTION);
 					
 					const int stringSize = 1024;
@@ -176,7 +176,6 @@ BOOL CALLBACK ColumnEditorDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 							int nbInit = getNbDigits(initialNumber, base);
 							int nb = max(nbInit, nbEnd);
 
-
 							for (int i = cursorLine ; i <= endLine ; ++i)
 							{
 								int lineBegin = (*_ppEditView)->execute(SCI_POSITIONFROMLINE, i);
@@ -218,9 +217,9 @@ BOOL CALLBACK ColumnEditorDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 						}
 					}
 					(*_ppEditView)->execute(SCI_ENDUNDOACTION);
-                    (*_ppEditView)->getFocus();
-                    return TRUE;
-                }
+					(*_ppEditView)->getFocus();
+					return TRUE;
+				}
 				case IDC_COL_TEXT_RADIO :
 				case IDC_COL_NUM_RADIO :
 				{

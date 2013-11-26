@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -56,10 +56,10 @@ int CALLBACK ListViewCompareProc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSo
 
 BOOL CALLBACK VerticalFileSwitcher::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
-    switch (message)
-    {
-        case WM_INITDIALOG :
-        {
+	switch (message)
+	{
+		case WM_INITDIALOG :
+		{
 			_fileListView.init(_hInst, _hSelf, _hImaLst);
 			NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance())->getNativeLangSpeaker();
 			generic_string nameStr = pNativeSpeaker->getAttrNameStr(TEXT("Name"), FS_ROOTNODE, FS_CLMNNAME);
@@ -70,8 +70,8 @@ BOOL CALLBACK VerticalFileSwitcher::run_dlgProc(UINT message, WPARAM wParam, LPA
 			_fileListView.initList();
 			_fileListView.display();
 
-            return TRUE;
-        }
+			return TRUE;
+		}
 
 		case WM_NOTIFY:
 		{
@@ -186,23 +186,23 @@ BOOL CALLBACK VerticalFileSwitcher::run_dlgProc(UINT message, WPARAM wParam, LPA
 		}
 		return TRUE;
 
-        case WM_SIZE:
-        {
-            int width = LOWORD(lParam);
-            int height = HIWORD(lParam);
+		case WM_SIZE:
+		{
+			int width = LOWORD(lParam);
+			int height = HIWORD(lParam);
 			::MoveWindow(_fileListView.getHSelf(), 0, 0, width, height, TRUE);
-            break;
-        }
-        
-		case WM_DESTROY:
-        {
-			_fileListView.destroy();
-            break;
-        }
+			break;
+		}
 
-        default :
-            return DockingDlgInterface::run_dlgProc(message, wParam, lParam);
-    }
+		case WM_DESTROY:
+		{
+			_fileListView.destroy();
+			break;
+		}
+
+		default :
+			return DockingDlgInterface::run_dlgProc(message, wParam, lParam);
+	}
 	return DockingDlgInterface::run_dlgProc(message, wParam, lParam);
 }
 
@@ -245,13 +245,13 @@ int VerticalFileSwitcher::setHeaderOrder(LPNMLISTVIEW pnm_list_view)
 	}
 
 	if(HDF_SORTDOWN & lvc.fmt)
-    {
+	{
 		//the opposite
 		lvc.fmt = lvc.fmt & (~HDF_SORTDOWN) | HDF_SORTUP;
 		SendMessage(hListView, LVM_SETCOLUMN, (WPARAM) index, (LPARAM) &lvc);
 		return SORT_DIRECTION_UP;
-    }
-  
+	}
+
 	// this is the case our clicked column wasn't the one being sorted up until now
 	// so first  we need to iterate through all columns and send LVM_SETCOLUMN to them with fmt set to NOT include these HDFs
 	colHeader = (HWND)SendMessage(hListView,LVM_GETHEADER,0,0);

@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -33,7 +33,8 @@
 #include "Parameters.h"
 #endif //PARAMETERS_H
 
-struct RecentItem {
+struct RecentItem
+{
 	int _id;
 	generic_string _name;
 	RecentItem(const TCHAR * name) : _name(name) {};
@@ -44,7 +45,8 @@ typedef std::deque<RecentItem> recentList;
 class LastRecentFileList
 {
 public :
-	LastRecentFileList() : _hasSeparators(false), _size(0), _locked(false) {
+	LastRecentFileList() : _hasSeparators(false), _size(0), _locked(false)
+	{
 		_userMax = (NppParameters::getInstance())->getNbMaxRecentFile();
 	};
 
@@ -57,35 +59,41 @@ public :
 	void remove(int index);
 	void clear();
 
-	int getSize() {
+	int getSize()
+	{
 		return _size;
 	};
 
 
-	int getMaxNbLRF() const {
+	int getMaxNbLRF() const
+	{
 		return NB_MAX_LRF_FILE;
 	};
 
-	int getUserMaxNbLRF() const {
+	int getUserMaxNbLRF() const
+	{
 		return _userMax;
 	};
-	
-	generic_string & getItem(int id);	//use menu id
-	generic_string & getIndex(int index);	//use menu id
+
+	generic_string & getItem(int id);     //use menu id
+	generic_string & getIndex(int index); //use menu id
 
 	void setUserMaxNbLRF(int size);
 
 	void saveLRFL();
 
-	void setLock(bool lock) {
+	void setLock(bool lock)
+	{
 		_locked = lock;
 	};
 
-	void setLangEncoding(int nativeLangEncoding) {
+	void setLangEncoding(int nativeLangEncoding)
+	{
 		_nativeLangEncoding = nativeLangEncoding;
 	};
 
-	bool isSubMenuMode() const {
+	bool isSubMenuMode() const
+	{
 		return (_hParentMenu != NULL);
 	};
 

@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -48,6 +48,7 @@ int ScintillaCtrls::getIndexFrom(HWND handle2Find)
 			return i;
 		}
 	}
+
 	return -1;
 }
 
@@ -56,6 +57,7 @@ ScintillaEditView * ScintillaCtrls::getScintillaEditViewFrom(HWND handle2Find)
 	int i = getIndexFrom(handle2Find);
 	if (i == -1 || size_t(i) >= _scintVector.size())
 		return NULL;
+
 	return _scintVector[i];
 }
 

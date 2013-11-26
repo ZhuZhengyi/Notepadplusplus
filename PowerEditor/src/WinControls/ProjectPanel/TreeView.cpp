@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -37,15 +37,15 @@ void TreeView::init(HINSTANCE hInst, HWND parent, int treeViewID)
 	_hSelf = ::GetDlgItem(parent, treeViewID);
 
 	_hSelf = CreateWindowEx(0,
-                            WC_TREEVIEW,
-                            TEXT("Tree View"),
-                            WS_CHILD | WS_BORDER | WS_HSCROLL | WS_TABSTOP | TVS_LINESATROOT | TVS_HASLINES |
+							WC_TREEVIEW,
+							TEXT("Tree View"),
+							WS_CHILD | WS_BORDER | WS_HSCROLL | WS_TABSTOP | TVS_LINESATROOT | TVS_HASLINES |
 							TVS_HASBUTTONS | TVS_SHOWSELALWAYS | TVS_EDITLABELS | TVS_INFOTIP, 
-                            0,  0,  0, 0,
-                            _hParent, 
-                            NULL, 
-                            _hInst, 
-                            (LPVOID)0);
+							0,  0,  0, 0,
+							_hParent, 
+							NULL, 
+							_hInst, 
+							(LPVOID)0);
 
 	TreeView_SetItemHeight(_hSelf, CY_ITEMHEIGHT);
 
@@ -133,8 +133,8 @@ void TreeView::removeItem(HTREEITEM hTreeItem)
 void TreeView::removeAllItems()
 {
 	for (HTREEITEM tvProj = getRoot();
-        tvProj != NULL;
-        tvProj = getNextSibling(tvProj))
+		tvProj != NULL;
+		tvProj = getNextSibling(tvProj))
 	{
 		cleanSubEntries(tvProj);
 	}
@@ -225,81 +225,81 @@ void TreeView::beginDrag(NMTREEVIEW* tv)
 	if (!canDragOut(tv->itemNew.hItem))
 		return;
 
-    // create dragging image for you using TVM_CREATEDRAGIMAGE
-    // You have to delete it after drop operation, so remember it.
-    _draggedItem = tv->itemNew.hItem;
-    _draggedImageList = (HIMAGELIST)::SendMessage(_hSelf, TVM_CREATEDRAGIMAGE, (WPARAM)0, (LPARAM)_draggedItem);
+	// create dragging image for you using TVM_CREATEDRAGIMAGE
+	// You have to delete it after drop operation, so remember it.
+	_draggedItem = tv->itemNew.hItem;
+	_draggedImageList = (HIMAGELIST)::SendMessage(_hSelf, TVM_CREATEDRAGIMAGE, (WPARAM)0, (LPARAM)_draggedItem);
 
-    // start dragging operation
-    // PARAMS: HIMAGELIST, imageIndex, xHotspot, yHotspot
-    ::ImageList_BeginDrag(_draggedImageList, 0, 0, 0);
-    ::ImageList_DragEnter(_hSelf, tv->ptDrag.x, tv->ptDrag.y);
+	// start dragging operation
+	// PARAMS: HIMAGELIST, imageIndex, xHotspot, yHotspot
+	::ImageList_BeginDrag(_draggedImageList, 0, 0, 0);
+	::ImageList_DragEnter(_hSelf, tv->ptDrag.x, tv->ptDrag.y);
 
-    // redirect mouse input to the parent window
-    ::SetCapture(::GetParent(_hSelf));
-    ::ShowCursor(false);          // hide the cursor
+	// redirect mouse input to the parent window
+	::SetCapture(::GetParent(_hSelf));
+	::ShowCursor(false);          // hide the cursor
 
-    _isItemDragged = true;
+	_isItemDragged = true;
 }
 
 void TreeView::dragItem(HWND parentHandle, int x, int y)
 {
-    // convert the dialog coords to control coords
-    POINT point;
-    point.x = (SHORT)x;
-    point.y = (SHORT)y;
-    ::ClientToScreen(parentHandle, &point);
-    ::ScreenToClient(_hSelf, &point);
+	// convert the dialog coords to control coords
+	POINT point;
+	point.x = (SHORT)x;
+	point.y = (SHORT)y;
+	::ClientToScreen(parentHandle, &point);
+	::ScreenToClient(_hSelf, &point);
 
-    // drag the item to the current the cursor position
-    ::ImageList_DragMove(point.x, point.y);
+	// drag the item to the current the cursor position
+	::ImageList_DragMove(point.x, point.y);
 
-    // hide the dragged image, so the background can be refreshed
-    ::ImageList_DragShowNolock(false);
+	// hide the dragged image, so the background can be refreshed
+	::ImageList_DragShowNolock(false);
 
-    // find out if the pointer is on an item
-    // If so, highlight the item as a drop target.
-    TVHITTESTINFO hitTestInfo;
-    hitTestInfo.pt.x = point.x;
-    hitTestInfo.pt.y = point.y;
-    HTREEITEM targetItem = (HTREEITEM)::SendMessage(_hSelf, TVM_HITTEST, (WPARAM)0, (LPARAM)&hitTestInfo);
-    if(targetItem)
-    {
+	// find out if the pointer is on an item
+	// If so, highlight the item as a drop target.
+	TVHITTESTINFO hitTestInfo;
+	hitTestInfo.pt.x = point.x;
+	hitTestInfo.pt.y = point.y;
+	HTREEITEM targetItem = (HTREEITEM)::SendMessage(_hSelf, TVM_HITTEST, (WPARAM)0, (LPARAM)&hitTestInfo);
+	if(targetItem)
+	{
 		::SendMessage(_hSelf, TVM_SELECTITEM, (WPARAM)(TVGN_DROPHILITE), (LPARAM)targetItem);
-    }
+	}
 
-    // show the dragged image
-    ::ImageList_DragShowNolock(true);
+	// show the dragged image
+	::ImageList_DragShowNolock(true);
 }
 
 bool TreeView::dropItem()
 {
 	bool isFilesMoved = false;
-    // get the target item
-    HTREEITEM targetItem = (HTREEITEM)::SendMessage(_hSelf, TVM_GETNEXTITEM, (WPARAM)TVGN_DROPHILITE, (LPARAM)0);
+	// get the target item
+	HTREEITEM targetItem = (HTREEITEM)::SendMessage(_hSelf, TVM_GETNEXTITEM, (WPARAM)TVGN_DROPHILITE, (LPARAM)0);
 
-    // make a copy of the dragged item and insert the clone under
-    // the target item, then, delete the original dragged item
-    // Note that the dragged item may have children. In this case,
-    // you have to move (copy and delete) for every child items, too.
+	// make a copy of the dragged item and insert the clone under
+	// the target item, then, delete the original dragged item
+	// Note that the dragged item may have children. In this case,
+	// you have to move (copy and delete) for every child items, too.
 	if (canBeDropped(_draggedItem, targetItem))
 	{
 		moveTreeViewItem(_draggedItem, targetItem);
 		isFilesMoved = true;
 	}
-    // finish drag-and-drop operation
-    ::ImageList_EndDrag();
-    ::ImageList_Destroy(_draggedImageList);
-    ::ReleaseCapture();
-    ::ShowCursor(true);
-	    
+	// finish drag-and-drop operation
+	::ImageList_EndDrag();
+	::ImageList_Destroy(_draggedImageList);
+	::ReleaseCapture();
+	::ShowCursor(true);
+		
 	SendMessage(_hSelf,TVM_SELECTITEM,TVGN_CARET,(LPARAM)targetItem);
-    SendMessage(_hSelf,TVM_SELECTITEM,TVGN_DROPHILITE,0);
+	SendMessage(_hSelf,TVM_SELECTITEM,TVGN_DROPHILITE,0);
 
-    // clear global variables
-    _draggedItem = 0;
-    _draggedImageList = 0;
-    _isItemDragged = false;
+	// clear global variables
+	_draggedItem = 0;
+	_draggedImageList = 0;
+	_isItemDragged = false;
 	return isFilesMoved;
 }
 
@@ -358,7 +358,7 @@ void TreeView::moveTreeViewItem(HTREEITEM draggedItem, HTREEITEM targetItem)
 	if (tvDraggingItem.lParam)
 		tvDraggingItem.lParam = (LPARAM)(new generic_string(*((generic_string *)(tvDraggingItem.lParam))));
 
-    TVINSERTSTRUCT tvInsertStruct;
+	TVINSERTSTRUCT tvInsertStruct;
 	tvInsertStruct.item = tvDraggingItem;
 	tvInsertStruct.hInsertAfter = (HTREEITEM)TVI_LAST;
 	tvInsertStruct.hParent = targetItem;
@@ -422,7 +422,7 @@ bool TreeView::swapTreeViewItem(HTREEITEM itemGoDown, HTREEITEM itemGoUp)
 		tvDownItem.lParam = (LPARAM)(new generic_string(*((generic_string *)(tvDownItem.lParam))));
 
 	// add 2 new items
-    TVINSERTSTRUCT tvInsertUp;
+	TVINSERTSTRUCT tvInsertUp;
 	tvInsertUp.item = tvUpItem;
 	tvInsertUp.hInsertAfter = itemTop;
 	tvInsertUp.hParent = parentGoUp;

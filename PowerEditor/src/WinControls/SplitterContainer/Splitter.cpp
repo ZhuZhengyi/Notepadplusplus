@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -48,8 +48,7 @@ Splitter::Splitter() : Window()
 }
 
 
-void Splitter::init( HINSTANCE hInst, HWND hPere, int splitterSize,
-				int iSplitRatio, DWORD dwFlags)
+void Splitter::init( HINSTANCE hInst, HWND hPere, int splitterSize, int iSplitRatio, DWORD dwFlags)
 {
 	if (hPere == NULL)
 	{
@@ -86,43 +85,43 @@ void Splitter::init( HINSTANCE hInst, HWND hPere, int splitterSize,
 	}
 
 	_splitPercent = iSplitRatio;
-	
-	wcex.cbSize			= sizeof(WNDCLASSEX); 
-	wcex.style			= CS_HREDRAW | CS_VREDRAW;
-	wcex.lpfnWndProc	= (WNDPROC)staticWndProc;
-	wcex.cbClsExtra		= 0;
-	wcex.cbWndExtra		= 0;
-	wcex.hInstance		= _hInst;
-	wcex.hIcon			= NULL;
-	
+
+	wcex.cbSize      = sizeof(WNDCLASSEX); 
+	wcex.style       = CS_HREDRAW | CS_VREDRAW;
+	wcex.lpfnWndProc = (WNDPROC)staticWndProc;
+	wcex.cbClsExtra  = 0;
+	wcex.cbWndExtra  = 0;
+	wcex.hInstance   = _hInst;
+	wcex.hIcon       = NULL;
+
 	::GetClientRect(_hParent, &_rect);
-	
+
 	if (_dwFlags & SV_HORIZONTAL) //Horizontal spliter
 	{
 		_rect.top  = ((_rect.bottom * _splitPercent)/100);
 		// y axis determined by the split% of the parent windows height
-		
+
 		_rect.left = 0;
 		// x axis is always 0
-		
+
 		_rect.bottom = _spiltterSize;
 		// the height of the spliter
-		
+
 		// the width of the splitter remains the same as the width of the parent window.
 	}
 	else //Vertical spliter
 	{
 		// y axis is 0 always 
-		
+
 		_rect.left = ((_rect.right * _splitPercent)/100); 
 		// x axis determined by split% of the parent windows width.
-		
+
 		_rect.right = _spiltterSize; 
-		// width of the spliter.			
-		
+		// width of the spliter.
+
 		//height of the spliter remains the same as the height of the parent window
 	}
-	
+
 	if (!_isFixed)
 	{
 		if ((_dwFlags & SV_ENABLERDBLCLK) || (_dwFlags & SV_ENABLELDBLCLK))
@@ -131,36 +130,36 @@ void Splitter::init( HINSTANCE hInst, HWND hPere, int splitterSize,
 			// enable mouse double click messages.
 		}
 	}
-	
+
 	if (_isFixed)
 	{
-		wcex.hCursor		= ::LoadCursor(NULL, IDC_ARROW);
+		wcex.hCursor = ::LoadCursor(NULL, IDC_ARROW);
 		// if fixed spliter then choose default cursor type.
-        if (_dwFlags & SV_HORIZONTAL)
-		    wcex.lpszClassName	= TEXT("fxdnsspliter");
-        else
-            wcex.lpszClassName	= TEXT("fxdwespliter");
+		if (_dwFlags & SV_HORIZONTAL)
+			wcex.lpszClassName = TEXT("fxdnsspliter");
+		else
+			wcex.lpszClassName = TEXT("fxdwespliter");
 	}
 	else
 	{
 		if (_dwFlags & SV_HORIZONTAL)
 		{
 			//double sided arrow pointing north-south as cursor
-			wcex.hCursor		= ::LoadCursor(NULL,IDC_SIZENS);
-			wcex.lpszClassName	= TEXT("nsspliter");
+			wcex.hCursor       = ::LoadCursor(NULL,IDC_SIZENS);
+			wcex.lpszClassName = TEXT("nsspliter");
 		}
 		else
 		{
 			// double sided arrow pointing east-west as cursor
-			wcex.hCursor		= ::LoadCursor(NULL,IDC_SIZEWE);
-			wcex.lpszClassName	= TEXT("wespliter");
+			wcex.hCursor       = ::LoadCursor(NULL,IDC_SIZEWE);
+			wcex.lpszClassName = TEXT("wespliter");
 		}
 	}
-	
-	wcex.hbrBackground	= (HBRUSH)(COLOR_3DFACE+1);
-	wcex.lpszMenuName	= NULL;
-	wcex.hIconSm		= NULL;
-	
+
+	wcex.hbrBackground = (HBRUSH)(COLOR_3DFACE+1);
+	wcex.lpszMenuName  = NULL;
+	wcex.hIconSm       = NULL;
+
 	if ((_dwFlags & SV_HORIZONTAL)&&(!_isHorizontalRegistered))
 	{
 		RegisterClassEx(&wcex);
@@ -171,16 +170,16 @@ void Splitter::init( HINSTANCE hInst, HWND hPere, int splitterSize,
 		RegisterClassEx(&wcex);
 		_isVerticalRegistered = true;
 	}
-    else if ((_dwFlags & SV_HORIZONTAL)&&(!_isHorizontalFixedRegistered))
-    {
-        RegisterClassEx(&wcex);
-        _isHorizontalFixedRegistered = true;
-    }
-    else if (isVertical()&&(!_isVerticalFixedRegistered))
-    {
-        RegisterClassEx(&wcex);
-        _isVerticalFixedRegistered = true;
-    }
+	else if ((_dwFlags & SV_HORIZONTAL)&&(!_isHorizontalFixedRegistered))
+	{
+		RegisterClassEx(&wcex);
+		_isHorizontalFixedRegistered = true;
+	}
+	else if (isVertical()&&(!_isVerticalFixedRegistered))
+	{
+		RegisterClassEx(&wcex);
+		_isVerticalFixedRegistered = true;
+	}
 
 	_hSelf = CreateWindowEx(
 				dwExStyle,
@@ -195,7 +194,7 @@ void Splitter::init( HINSTANCE hInst, HWND hPere, int splitterSize,
 				NULL,
 				_hInst,
 				(LPVOID)this);
-	
+
 	if (!_hSelf)
 	{
 		throw std::runtime_error("Splitter::init : CreateWindowEx() function return null");
@@ -385,6 +384,7 @@ LRESULT CALLBACK Splitter::spliterWndProc(UINT uMsg, WPARAM wParam, LPARAM lPara
 			}
 			return 0;
 		}
+
 	case WM_CAPTURECHANGED:
 		{
 			if (_isDraged)
@@ -404,6 +404,7 @@ LRESULT CALLBACK Splitter::spliterWndProc(UINT uMsg, WPARAM wParam, LPARAM lPara
 		destroy();
 		return 0;
 	}
+
 	return ::DefWindowProc(_hSelf, uMsg, wParam, lParam);
 }
 
@@ -436,18 +437,20 @@ void Splitter::resizeSpliter(RECT *pRect)
 		
 		//if resizeing should be done proportionately.
 		if (_dwFlags & SV_RESIZEWTHPERCNT) 
-        {
+		{
 			_rect.left = ((rect.right * _splitPercent)/100);
-        }
-        else // soit la fenetre gauche soit la fenetre droit qui est fixee
+		}
+		else
+		{
+			// soit la fenetre gauche soit la fenetre droit qui est fixee
 			_rect.left = getSplitterFixPosX();
-        
+		}
 	}
 	::MoveWindow(_hSelf, _rect.left, _rect.top, _rect.right, _rect.bottom, TRUE);
 	::SendMessage(_hParent, WM_RESIZE_CONTAINER, _rect.left, _rect.top);
 	
 	RECT rc;
-	getClientRect(rc);	
+	getClientRect(rc);
 	_clickZone2BR.right = getClickZone(WIDTH);
 	_clickZone2BR.bottom = getClickZone(HEIGHT);
 	_clickZone2BR.left = rc.right - _clickZone2BR.right;
@@ -649,7 +652,9 @@ void Splitter::paintArrow(HDC hdc, const RECT &rect, Arrow arrowDir)
 }
 void Splitter::adjustZoneToDraw(RECT & rc2def, ZONE_TYPE whichZone) 
 {
-	if (_spiltterSize < 4) return;
+	if (_spiltterSize < 4)
+		return;
+
 	int x0, y0, x1, y1, w, h;
 	if ((4 <= _spiltterSize) && (_spiltterSize <= 8))
 	{

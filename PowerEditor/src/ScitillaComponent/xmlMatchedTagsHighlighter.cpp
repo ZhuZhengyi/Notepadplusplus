@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -312,8 +312,6 @@ bool XmlMatchedTagsHighlighter::getXmlMatchedTagsPos(XmlMatchedTagsPos &xmlTags)
 						{
 							// It's a normal open tag
 
-
-
 							/* Now we need to find the close tag.  The logic here is that we search for "</TAGNAME",
 							 * then check the next character - if it's '>' or whitespace followed by '>' then we've 
 							 * found a relevant tag. 
@@ -374,7 +372,6 @@ bool XmlMatchedTagsHighlighter::getXmlMatchedTagsPos(XmlMatchedTagsPos &xmlTags)
 							} while (!tagFound && closeTagsRemaining > 0 && nextCloseTag.success);
 						} // end if (selfclosingtag)... else {
 					} // end if (-1 != closeAngle)  {
-
 				} // end if tagName.size() != 0
 			} // end open tag test
 		}
@@ -397,7 +394,6 @@ XmlMatchedTagsHighlighter::FindResult XmlMatchedTagsHighlighter::findOpenTag(con
 	bool forwardSearch = (start < end);
 	do
 	{
-		
 		result = findText(search.c_str(), searchStart, searchEnd, 0);
 		if (result.success)
 		{
@@ -424,7 +420,6 @@ XmlMatchedTagsHighlighter::FindResult XmlMatchedTagsHighlighter::findOpenTag(con
 					}
 				}
 			}
-
 		}
 
 		if (forwardSearch)
@@ -441,7 +436,6 @@ XmlMatchedTagsHighlighter::FindResult XmlMatchedTagsHighlighter::findOpenTag(con
 	} while (result.success && !openTagFound.success);
 	
 	openTagFound.start = result.start;
-
 
 	return openTagFound;
 
@@ -483,7 +477,6 @@ int XmlMatchedTagsHighlighter::findCloseAngle(int startPosition, int endPosition
 				startPosition = closeAngle.end;
 			}
 		}
-				
 	} while (closeAngle.success && isValidClose == false);
 
 	return returnPosition;
@@ -619,7 +612,7 @@ void XmlMatchedTagsHighlighter::tagMatch(bool doHiliteAttr)
 
 	XmlMatchedTagsPos xmlTags;
 
-    // Detect if it's a xml/html tag. If yes, Colour it!
+	// Detect if it's a xml/html tag. If yes, Colour it!
 	if (getXmlMatchedTagsPos(xmlTags))
 	{
 		_pEditView->execute(SCI_SETINDICATORCURRENT, SCE_UNIVERSAL_TAGMATCH);
@@ -637,9 +630,8 @@ void XmlMatchedTagsHighlighter::tagMatch(bool doHiliteAttr)
 		_pEditView->execute(SCI_INDICATORFILLRANGE,  xmlTags.tagOpenStart, xmlTags.tagNameEnd - xmlTags.tagOpenStart);
 		_pEditView->execute(SCI_INDICATORFILLRANGE,  xmlTags.tagOpenEnd - openTagTailLen, openTagTailLen);
 
-        
-        // Colouising its attributs
-        if (doHiliteAttr)
+		// Colouising its attributs
+		if (doHiliteAttr)
 		{
 			vector< pair<int, int> > attributes = getAttributesPos(xmlTags.tagNameEnd, xmlTags.tagOpenEnd - openTagTailLen);
 			_pEditView->execute(SCI_SETINDICATORCURRENT,  SCE_UNIVERSAL_TAGATTR);
@@ -647,9 +639,9 @@ void XmlMatchedTagsHighlighter::tagMatch(bool doHiliteAttr)
 			{
 				_pEditView->execute(SCI_INDICATORFILLRANGE,  attributes[i].first, attributes[i].second - attributes[i].first);
 			}
-        }
+		}
 
-        // Colouising indent guide line position
+		// Colouising indent guide line position
 		if (_pEditView->isShownIndentGuide())
 		{
 			int columnAtCaret  = int(_pEditView->execute(SCI_GETCOLUMN, xmlTags.tagOpenStart));

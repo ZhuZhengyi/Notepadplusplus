@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -80,9 +80,11 @@ struct KeyCombo {
 	UCHAR _key;
 };
 
-class Shortcut  : public StaticDialog {
+class Shortcut  : public StaticDialog
+{
 public:
-	Shortcut(): _canModifyName(false) {
+	Shortcut(): _canModifyName(false)
+	{
 		setName(TEXT(""));
 		_keyCombo._isCtrl = false;
 		_keyCombo._isAlt = false;
@@ -90,11 +92,15 @@ public:
 		_keyCombo._key = 0;
 	};
 
-	Shortcut(const TCHAR *name, bool isCtrl, bool isAlt, bool isShift, UCHAR key) : _canModifyName(false) {
+	Shortcut(const TCHAR *name, bool isCtrl, bool isAlt, bool isShift, UCHAR key) : _canModifyName(false)
+	{
 		_name[0] = '\0';
-		if (name) {
+		if (name)
+		{
 			setName(name);
-		} else {
+		}
+		else
+		{
 			setName(TEXT(""));
 		}
 		_keyCombo._isCtrl = isCtrl;
@@ -103,60 +109,72 @@ public:
 		_keyCombo._key = key;
 	};
 
-	Shortcut(const Shortcut & sc) {
+	Shortcut(const Shortcut & sc)
+	{
 		setName(sc.getMenuName());
 		_keyCombo = sc._keyCombo;
 		_canModifyName = sc._canModifyName;
 	}
 
-	BYTE getAcceleratorModifiers() {
+	BYTE getAcceleratorModifiers()
+	{
 		return ( FVIRTKEY | (_keyCombo._isCtrl?FCONTROL:0) | (_keyCombo._isAlt?FALT:0) | (_keyCombo._isShift?FSHIFT:0) );
 	};
 
-	Shortcut & operator=(const Shortcut & sc) {
+	Shortcut & operator=(const Shortcut & sc)
+	{
 		//Do not allow setting empty names
 		//So either we have an empty name or the other name has to be set
-		if (_name[0] == 0 || sc._name[0] != 0) {
+		if (_name[0] == 0 || sc._name[0] != 0)
+		{
 			setName(sc.getMenuName());
 		}
 		_keyCombo = sc._keyCombo;
 		this->_canModifyName = sc._canModifyName;
 		return *this;
 	}
-	friend inline const bool operator==(const Shortcut & a, const Shortcut & b) {
-		return ((lstrcmp(a.getMenuName(), b.getMenuName()) == 0) && 
-			(a._keyCombo._isCtrl == b._keyCombo._isCtrl) && 
-			(a._keyCombo._isAlt == b._keyCombo._isAlt) && 
-			(a._keyCombo._isShift == b._keyCombo._isShift) && 
+
+	friend inline const bool operator==(const Shortcut & a, const Shortcut & b)
+	{
+		return ((lstrcmp(a.getMenuName(), b.getMenuName()) == 0) &&
+			(a._keyCombo._isCtrl == b._keyCombo._isCtrl) &&
+			(a._keyCombo._isAlt == b._keyCombo._isAlt) &&
+			(a._keyCombo._isShift == b._keyCombo._isShift) &&
 			(a._keyCombo._key == b._keyCombo._key)
 			);
 	};
 
-	friend inline const bool operator!=(const Shortcut & a, const Shortcut & b) {
+	friend inline const bool operator!=(const Shortcut & a, const Shortcut & b)
+	{
 		return !(a == b);
 	};
 
-	virtual int doDialog() {
+	virtual int doDialog()
+	{
 		return ::DialogBoxParam(_hInst, MAKEINTRESOURCE(IDD_SHORTCUT_DLG), _hParent,  (DLGPROC)dlgProc, (LPARAM)this);
-    };
+	};
 
-	virtual bool isValid() const { //valid should only be used in cases where the shortcut isEnabled().
+	virtual bool isValid() const //valid should only be used in cases where the shortcut isEnabled().
+	{
 		if (_keyCombo._key == 0)
-			return true;	//disabled _keyCombo always valid, just disabled
+			return true; //disabled _keyCombo always valid, just disabled
 
 		//These keys need a modifier, else invalid
-		if ( ((_keyCombo._key >= 'A') && (_keyCombo._key <= 'Z')) || ((_keyCombo._key >= '0') && (_keyCombo._key <= '9')) || _keyCombo._key == VK_SPACE || _keyCombo._key == VK_CAPITAL || _keyCombo._key == VK_BACK || _keyCombo._key == VK_RETURN) {
+		if ( ((_keyCombo._key >= 'A') && (_keyCombo._key <= 'Z')) || ((_keyCombo._key >= '0') && (_keyCombo._key <= '9')) || _keyCombo._key == VK_SPACE || _keyCombo._key == VK_CAPITAL || _keyCombo._key == VK_BACK || _keyCombo._key == VK_RETURN)
+		{
 			return ((_keyCombo._isCtrl) || (_keyCombo._isAlt));
 		}
 		// the remaining keys are always valid
 		return true;
 	};
-	virtual bool isEnabled() const {	//true if _keyCombo != 0, false if _keyCombo == 0, in which case no accelerator should be made
+
+	virtual bool isEnabled() const { //true if _keyCombo != 0, false if _keyCombo == 0, in which case no accelerator should be made
 		return (_keyCombo._key != 0);
 	};
 
-	virtual generic_string toString() const;					//the hotkey part
-	generic_string toMenuItemString() const {					//generic_string suitable for menu
+	virtual generic_string toString() const; //the hotkey part
+	generic_string toMenuItemString() const  //generic_string suitable for menu
+	{
 		generic_string str = _menuName;
 		if(isEnabled())
 		{
@@ -165,15 +183,18 @@ public:
 		}
 		return str;
 	};
-	const KeyCombo & getKeyCombo() const {
+	const KeyCombo & getKeyCombo() const
+	{
 		return _keyCombo;
 	};
 
-	const TCHAR * getName() const {
+	const TCHAR * getName() const
+	{
 		return _name;
 	};
 
-	const TCHAR * getMenuName() const {
+	const TCHAR * getMenuName() const
+	{
 		return _menuName;
 	}
 
@@ -183,11 +204,12 @@ protected :
 	KeyCombo _keyCombo;
 	virtual BOOL CALLBACK run_dlgProc(UINT Message, WPARAM wParam, LPARAM lParam);
 	bool _canModifyName;
-	TCHAR _name[nameLenMax];		//normal name is plain text (for display purposes)
-	TCHAR _menuName[nameLenMax];	//menu name has ampersands for quick keys
+	TCHAR _name[nameLenMax];     //normal name is plain text (for display purposes)
+	TCHAR _menuName[nameLenMax]; //menu name has ampersands for quick keys
 };
-		 
-class CommandShortcut : public Shortcut {
+
+class CommandShortcut : public Shortcut
+{
 public:
 	CommandShortcut(Shortcut sc, long id) :	Shortcut(sc), _id(id) {};
 	unsigned long getID() const {return _id;};
@@ -198,7 +220,8 @@ private :
 };
 
 
-class ScintillaKeyMap : public Shortcut {
+class ScintillaKeyMap : public Shortcut
+{
 public:
 	ScintillaKeyMap(Shortcut sc, unsigned long scintillaKeyID, unsigned long id): Shortcut(sc), _menuCmdID(id), _scintillaKeyID(scintillaKeyID) {
 		_keyCombos.clear();
@@ -208,7 +231,8 @@ public:
 	};
 	unsigned long getScintillaKeyID() const {return _scintillaKeyID;};
 	int getMenuCmdID() const {return _menuCmdID;};
-	int toKeyDef(int index) const {
+	int toKeyDef(int index) const
+	{
 		KeyCombo kc = _keyCombos[index];
 		int keymod = (kc._isCtrl?SCMOD_CTRL:0) | (kc._isAlt?SCMOD_ALT:0) | (kc._isShift?SCMOD_SHIFT:0);
 		return keyTranslate((int)kc._key) + (keymod << 16);
@@ -217,11 +241,13 @@ public:
 	KeyCombo getKeyComboByIndex(int index) const;
 	void ScintillaKeyMap::setKeyComboByIndex(int index, KeyCombo combo);
 	void removeKeyComboByIndex(int index);
-	void clearDups() {
+	void clearDups()
+	{
 		if (size > 1)
 			_keyCombos.erase(_keyCombos.begin()+1, _keyCombos.end());
 		size = 1;
 	};
+
 	int addKeyCombo(KeyCombo combo);
 	bool isEnabled() const;
 	size_t getSize() const;
@@ -229,28 +255,32 @@ public:
 	generic_string toString() const;
 	generic_string toString(int index) const;
 
-	int doDialog() {
+	int doDialog()
+	{
 		return ::DialogBoxParam(_hInst, MAKEINTRESOURCE(IDD_SHORTCUTSCINT_DLG), _hParent,  (DLGPROC)dlgProc, (LPARAM)this);
-    };
+	};
 
 	//only compares the internal KeyCombos, nothing else
-	friend inline const bool operator==(const ScintillaKeyMap & a, const ScintillaKeyMap & b) {
+	friend inline const bool operator==(const ScintillaKeyMap & a, const ScintillaKeyMap & b)
+	{
 		bool equal = a.size == b.size;
 		if (!equal)
 			return false;
 		size_t i = 0;
-		while(equal && (i < a.size)) {
-			equal = 
-				(a._keyCombos[i]._isCtrl	== b._keyCombos[i]._isCtrl) && 
-				(a._keyCombos[i]._isAlt		== b._keyCombos[i]._isAlt) && 
-				(a._keyCombos[i]._isShift	== b._keyCombos[i]._isShift) && 
-				(a._keyCombos[i]._key		== b._keyCombos[i]._key);
+		while(equal && (i < a.size))
+		{
+			equal =
+				(a._keyCombos[i]._isCtrl  == b._keyCombos[i]._isCtrl) &&
+				(a._keyCombos[i]._isAlt   == b._keyCombos[i]._isAlt) &&
+				(a._keyCombos[i]._isShift == b._keyCombos[i]._isShift) &&
+				(a._keyCombos[i]._key     == b._keyCombos[i]._key);
 			++i;
 		}
 		return equal;
 	};
 
-	friend inline const bool operator!=(const ScintillaKeyMap & a, const ScintillaKeyMap & b) {
+	friend inline const bool operator!=(const ScintillaKeyMap & a, const ScintillaKeyMap & b)
+	{
 		return !(a == b);
 	};
 
@@ -271,24 +301,27 @@ protected :
 class Window;
 class ScintillaEditView;
 
-struct recordedMacroStep {
+struct recordedMacroStep
+{
 	enum MacroTypeIndex {mtUseLParameter, mtUseSParameter, mtMenuCommand, mtSavedSnR};
-	
+
 	int message;
 	long wParameter;
 	long lParameter;
 	generic_string sParameter;
 	MacroTypeIndex MacroType;
-	
+
 	recordedMacroStep(int iMessage, long wParam, long lParam, int codepage);
 	recordedMacroStep(int iCommandID) : message(0), wParameter(iCommandID), lParameter(0), MacroType(mtMenuCommand) {};
 
 	recordedMacroStep(int iMessage, long wParam, long lParam, const TCHAR *sParam, int type)
-		: message(iMessage), wParameter(wParam), lParameter(lParam), MacroType(MacroTypeIndex(type)){
-			sParameter = (sParam)?generic_string(sParam):TEXT("");	
+		: message(iMessage), wParameter(wParam), lParameter(lParam), MacroType(MacroTypeIndex(type))
+	{
+			sParameter = (sParam)?generic_string(sParam):TEXT("");
 	};
 
-	bool isValid() const {
+	bool isValid() const
+	{
 		return true;
 	};
 	bool isPlayable() const {return MacroType <= mtMenuCommand;};
@@ -298,7 +331,8 @@ struct recordedMacroStep {
 
 typedef vector<recordedMacroStep> Macro;
 
-class MacroShortcut : public CommandShortcut {
+class MacroShortcut : public CommandShortcut
+{
 friend class NppParameters;
 public:
 	MacroShortcut(Shortcut sc, Macro macro, int id) : CommandShortcut(sc, id), _macro(macro) {_canModifyName = true;};
@@ -308,7 +342,8 @@ private:
 };
 
 
-class UserCommand : public CommandShortcut {
+class UserCommand : public CommandShortcut
+{
 friend class NppParameters;
 public:
 	UserCommand(Shortcut sc, const TCHAR *cmd, int id) : CommandShortcut(sc, id), _cmd(cmd) {_canModifyName = true;};
@@ -317,18 +352,22 @@ private:
 	generic_string _cmd;
 };
 
-class PluginCmdShortcut : public CommandShortcut {
+class PluginCmdShortcut : public CommandShortcut
+{
 //friend class NppParameters;
 public:
 	PluginCmdShortcut(Shortcut sc, int id, const TCHAR *moduleName, unsigned short internalID) :\
 		CommandShortcut(sc, id), _id(id), _moduleName(moduleName), _internalID(internalID) {};
-	bool isValid() const {
+
+	bool isValid() const
+	{
 		if (!Shortcut::isValid())
 			return false;
 		if ((!_moduleName[0]) || (_internalID == -1))
 			return false;
 		return true;
 	}
+
 	const TCHAR * getModuleName() const {return _moduleName.c_str();};
 	int getInternalID() const {return _internalID;};
 	unsigned long getID() const {return _id;};
@@ -343,13 +382,16 @@ class Accelerator { //Handles accelerator keys for Notepad++ menu, including cus
 friend class ShortcutMapper;
 public:
 	Accelerator():_hAccelMenu(NULL), _hMenuParent(NULL), _hAccTable(NULL), _pAccelArray(NULL), _nbAccelItems(0){};
-	~Accelerator(){
+	~Accelerator()
+	{
 		if (_hAccTable)
 			::DestroyAcceleratorTable(_hAccTable);
 		if (_pAccelArray)
 			delete [] _pAccelArray;
 	};
-	void init(HMENU hMenu, HWND menuParent) {
+
+	void init(HMENU hMenu, HWND menuParent)
+	{
 		_hAccelMenu = hMenu;
 		_hMenuParent = menuParent;
 		updateShortcuts();
@@ -366,7 +408,8 @@ private:
 	ACCEL *_pAccelArray;
 	int _nbAccelItems;
 
-	void reNew() {
+	void reNew()
+	{
 		if(_hAccTable)
 			::DestroyAcceleratorTable(_hAccTable);
 		_hAccTable = ::CreateAcceleratorTable(_pAccelArray, _nbAccelItems);
@@ -374,7 +417,8 @@ private:
 	void updateMenuItemByCommand(CommandShortcut csc);
 };
 
-class ScintillaAccelerator {	//Handles accelerator keys for scintilla
+class ScintillaAccelerator //Handles accelerator keys for scintilla
+{
 public:
 	ScintillaAccelerator() : _nrScintillas(0) {};
 	void init(vector<HWND> * vScintillas, HMENU hMenu, HWND menuParent);

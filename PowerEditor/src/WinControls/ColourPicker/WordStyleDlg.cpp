@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -33,35 +33,35 @@
 BOOL CALLBACK ColourStaticTextHooker::colourStaticProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 {
 	switch(Message)
-    {
-        case WM_PAINT:
-        {
-	        RECT rect;
-            ::GetClientRect(hwnd, &rect);
+	{
+		case WM_PAINT:
+		{
+			RECT rect;
+			::GetClientRect(hwnd, &rect);
 
-            PAINTSTRUCT ps;
-            HDC hdc = ::BeginPaint(hwnd, &ps);
-    		
-            ::SetTextColor(hdc, _colour);
+			PAINTSTRUCT ps;
+			HDC hdc = ::BeginPaint(hwnd, &ps);
+			
+			::SetTextColor(hdc, _colour);
 
-		    // Get the default GUI font
-            HFONT hf = (HFONT)::GetStockObject(DEFAULT_GUI_FONT);
+			// Get the default GUI font
+			HFONT hf = (HFONT)::GetStockObject(DEFAULT_GUI_FONT);
 
 			HANDLE hOld = SelectObject(hdc, hf);
 
-		    // Draw the text!
-            TCHAR text[MAX_PATH];
-            ::GetWindowText(hwnd, text, MAX_PATH);
-            ::DrawText(hdc, text, -1, &rect, DT_LEFT);
-    		
-            ::SelectObject(hdc, hOld);
+			// Draw the text!
+			TCHAR text[MAX_PATH];
+			::GetWindowText(hwnd, text, MAX_PATH);
+			::DrawText(hdc, text, -1, &rect, DT_LEFT);
+			
+			::SelectObject(hdc, hOld);
 
-            ::EndPaint(hwnd, &ps);
+			::EndPaint(hwnd, &ps);
 
-		    return TRUE;
-        }
-    }
-    return ::CallWindowProc(_oldProc, hwnd, Message, wParam, lParam);
+			return TRUE;
+		}
+	}
+	return ::CallWindowProc(_oldProc, hwnd, Message, wParam, lParam);
 }
 void WordStyleDlg::updateGlobalOverrideCtrls()
 {
@@ -83,8 +83,8 @@ BOOL CALLBACK WordStyleDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lPar
 		{
 			NppParameters *nppParamInst = NppParameters::getInstance();
 
-            _hCheckBold = ::GetDlgItem(_hSelf, IDC_BOLD_CHECK);
-            _hCheckItalic = ::GetDlgItem(_hSelf, IDC_ITALIC_CHECK);
+			_hCheckBold = ::GetDlgItem(_hSelf, IDC_BOLD_CHECK);
+			_hCheckItalic = ::GetDlgItem(_hSelf, IDC_ITALIC_CHECK);
 			_hCheckUnderline = ::GetDlgItem(_hSelf, IDC_UNDERLINE_CHECK);
 			_hFontNameCombo = ::GetDlgItem(_hSelf, IDC_FONT_COMBO);
 			_hFontSizeCombo = ::GetDlgItem(_hSelf, IDC_FONTSIZE_COMBO);
@@ -137,16 +137,16 @@ BOOL CALLBACK WordStyleDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lPar
 			_pFgColour->init(_hInst, _hSelf);
 			_pBgColour->init(_hInst, _hSelf);
 
-            POINT p1, p2;
+			POINT p1, p2;
 
-            alignWith(_hFgColourStaticText, _pFgColour->getHSelf(), ALIGNPOS_RIGHT, p1);
-            alignWith(_hBgColourStaticText, _pBgColour->getHSelf(), ALIGNPOS_RIGHT, p2);
+			alignWith(_hFgColourStaticText, _pFgColour->getHSelf(), ALIGNPOS_RIGHT, p1);
+			alignWith(_hBgColourStaticText, _pBgColour->getHSelf(), ALIGNPOS_RIGHT, p2);
 
-            p1.x = p2.x = ((p1.x > p2.x)?p1.x:p2.x) + 10;
-            p1.y -= 4; p2.y -= 4;
+			p1.x = p2.x = ((p1.x > p2.x)?p1.x:p2.x) + 10;
+			p1.y -= 4; p2.y -= 4;
 
-            ::MoveWindow((HWND)_pFgColour->getHSelf(), p1.x, p1.y, 25, 25, TRUE);
-            ::MoveWindow((HWND)_pBgColour->getHSelf(), p2.x, p2.y, 25, 25, TRUE);
+			::MoveWindow((HWND)_pFgColour->getHSelf(), p1.x, p1.y, 25, 25, TRUE);
+			::MoveWindow((HWND)_pBgColour->getHSelf(), p2.x, p2.y, 25, 25, TRUE);
 			_pFgColour->display();
 			_pBgColour->display();
 
@@ -192,7 +192,7 @@ BOOL CALLBACK WordStyleDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lPar
 		case WM_COMMAND : 
 		{
 			if (HIWORD(wParam) == EN_CHANGE)
-            {
+			{
 				int editID = LOWORD(wParam);
 				if (editID == IDC_USER_KEYWORDS_EDIT)
 				{
@@ -468,17 +468,17 @@ void WordStyleDlg::loadLangListFromNppParam()
 {
 	NppParameters *nppParamInst = NppParameters::getInstance();
 	_lsArray = nppParamInst->getLStylerArray();
-    _globalStyles = nppParamInst->getGlobalStylers();
+	_globalStyles = nppParamInst->getGlobalStylers();
 
 	// Clean up Language List
 	::SendDlgItemMessage(_hSelf, IDC_LANGUAGES_LIST, LB_RESETCONTENT, 0, 0);
 
 	::SendDlgItemMessage(_hSelf, IDC_LANGUAGES_LIST, LB_ADDSTRING, 0, (LPARAM)TEXT("Global Styles"));
 	// All the lexers
-    for (int i = 0, nb = _lsArray.getNbLexer() ; i < nb ; ++i)
-    {
+	for (int i = 0, nb = _lsArray.getNbLexer() ; i < nb ; ++i)
+	{
 		::SendDlgItemMessage(_hSelf, IDC_LANGUAGES_LIST, LB_ADDSTRING, 0, (LPARAM)_lsArray.getLexerDescFromIndex(i));
-    }
+	}
 
 	const int index2Begin = 0;
 	::SendDlgItemMessage(_hSelf, IDC_LANGUAGES_LIST, LB_SETCURSEL, 0, index2Begin);
@@ -583,7 +583,7 @@ void WordStyleDlg::updateUserKeywords()
 
 void WordStyleDlg::updateFontName()
 {
-    Style & style = getCurrentStyler();
+	Style & style = getCurrentStyler();
 	int iFontSel = ::SendMessage(_hFontNameCombo, CB_GETCURSEL, 0, 0);
 	TCHAR *fnStr = (TCHAR *)::SendMessage(_hFontNameCombo, CB_GETITEMDATA, iFontSel, 0);
 	style._fontName = fnStr;
@@ -591,7 +591,7 @@ void WordStyleDlg::updateFontName()
 
 void WordStyleDlg::updateFontStyleStatus(fontStyleType whitchStyle)
 {
-    Style & style = getCurrentStyler();
+	Style & style = getCurrentStyler();
 	if (style._fontStyle == STYLE_NOT_USED)
 		style._fontStyle = FONTSTYLE_NONE;
 
@@ -627,9 +627,9 @@ void WordStyleDlg::switchToTheme()
 	_themeName.clear();
 	
 	NppParameters *nppParamInst = NppParameters::getInstance();
-    ThemeSwitcher & themeSwitcher = nppParamInst->getThemeSwitcher();
+	ThemeSwitcher & themeSwitcher = nppParamInst->getThemeSwitcher();
 	pair<generic_string, generic_string> & themeInfo = themeSwitcher.getElementFromIndex(iSel);
-    _themeName = themeInfo.second;
+	_themeName = themeInfo.second;
 
 	if (_isThemeDirty)
 	{
@@ -655,10 +655,10 @@ void WordStyleDlg::switchToTheme()
 
 void WordStyleDlg::setStyleListFromLexer(int index)
 {
-    _currentLexerIndex = index;
+	_currentLexerIndex = index;
 
-    // Fill out Styles listbox
-    // Before filling out, we clean it
+	// Fill out Styles listbox
+	// Before filling out, we clean it
 	::SendDlgItemMessage(_hSelf, IDC_STYLES_LIST, LB_RESETCONTENT, 0, 0);
 
 	if (index)
@@ -668,39 +668,39 @@ void WordStyleDlg::setStyleListFromLexer(int index)
 		const TCHAR *userExt = (_lsArray.getLexerStylerByName(langName))->getLexerUserExt();
 		::SendDlgItemMessage(_hSelf, IDC_DEF_EXT_EDIT, WM_SETTEXT, 0, (LPARAM)(ext));
 
-        // WM_SETTEXT cause sending WM_COMMAND message with EN_CHANGE.
-        // That makes status dirty, even it shouldn't in this case.
-        // The walk around solution is get the current status before sending WM_SETTEXT,
-        // then restore the status after sending this message.
-        bool isDirty = _isDirty;
+		// WM_SETTEXT cause sending WM_COMMAND message with EN_CHANGE.
+		// That makes status dirty, even it shouldn't in this case.
+		// The walk around solution is get the current status before sending WM_SETTEXT,
+		// then restore the status after sending this message.
+		bool isDirty = _isDirty;
 		bool isThemeDirty = _isThemeDirty;
 		::SendDlgItemMessage(_hSelf, IDC_USER_EXT_EDIT, WM_SETTEXT, 0, (LPARAM)(userExt));
-        _isDirty = isDirty;
-        _isThemeDirty = isThemeDirty;
-        ::EnableWindow(::GetDlgItem(_hSelf, IDC_SAVECLOSE_BUTTON), isDirty || isThemeDirty);
+		_isDirty = isDirty;
+		_isThemeDirty = isThemeDirty;
+		::EnableWindow(::GetDlgItem(_hSelf, IDC_SAVECLOSE_BUTTON), isDirty || isThemeDirty);
 	}
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_DEF_EXT_EDIT), index?SW_SHOW:SW_HIDE);
-    ::ShowWindow(::GetDlgItem(_hSelf, IDC_DEF_EXT_STATIC), index?SW_SHOW:SW_HIDE);
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_DEF_EXT_STATIC), index?SW_SHOW:SW_HIDE);
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_USER_EXT_EDIT), index?SW_SHOW:SW_HIDE);
-    ::ShowWindow(::GetDlgItem(_hSelf, IDC_USER_EXT_STATIC), index?SW_SHOW:SW_HIDE);
+	::ShowWindow(::GetDlgItem(_hSelf, IDC_USER_EXT_STATIC), index?SW_SHOW:SW_HIDE);
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_PLUSSYMBOL2_STATIC), index?SW_SHOW:SW_HIDE);
 
 	StyleArray & lexerStyler = index?_lsArray.getLexerFromIndex(index-1):_globalStyles;
 
-    for (int i = 0, nb = lexerStyler.getNbStyler(); i < nb ; ++i)
-    {
-        Style & style = lexerStyler.getStyler(i);
+	for (int i = 0, nb = lexerStyler.getNbStyler(); i < nb ; ++i)
+	{
+		Style & style = lexerStyler.getStyler(i);
 		::SendDlgItemMessage(_hSelf, IDC_STYLES_LIST, LB_ADDSTRING, 0, (LPARAM)style._styleDesc);
-    }
+	}
 	::SendDlgItemMessage(_hSelf, IDC_STYLES_LIST, LB_SETCURSEL, 0, 0);
-    setVisualFromStyleList();
+	setVisualFromStyleList();
 }
 
 void WordStyleDlg::setVisualFromStyleList() 
 {
 	showGlobalOverrideCtrls(false);
 
-    Style & style = getCurrentStyler();
+	Style & style = getCurrentStyler();
 
 	// Global override style
 	if (style._styleDesc && lstrcmp(style._styleDesc, TEXT("Global override")) == 0)
@@ -708,8 +708,8 @@ void WordStyleDlg::setVisualFromStyleList()
 		showGlobalOverrideCtrls(true);
 	}
 
-    //--Warning text
-    //bool showWarning = ((_currentLexerIndex == 0) && (style._styleID == STYLE_DEFAULT));//?SW_SHOW:SW_HIDE;
+	//--Warning text
+	//bool showWarning = ((_currentLexerIndex == 0) && (style._styleID == STYLE_DEFAULT));//?SW_SHOW:SW_HIDE;
 
 	COLORREF c = RGB(0x00, 0x00, 0xFF);
 	TCHAR str[256];
@@ -803,7 +803,7 @@ void WordStyleDlg::setVisualFromStyleList()
 		::SendMessage(_hCheckUnderline, BM_SETCHECK, BST_UNCHECKED, 0);
 	}
 
-    enableFontStyle(isEnable);
+	enableFontStyle(isEnable);
 
 
 	//-- Default Keywords
@@ -835,7 +835,7 @@ void WordStyleDlg::setVisualFromStyleList()
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_USER_KEYWORDS_STATIC),showOption);
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_PLUSSYMBOL_STATIC),showOption);
 
-    redraw();
+	redraw();
 }
 
 void WordStyleDlg::create(int dialogID, bool isRTL)

@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -44,7 +44,7 @@ void printStr(const TCHAR *str2print)
 };
 
 void writeLog(const TCHAR *logFileName, const char *log2write)
-{	
+{
 	FILE *f = generic_fopen(logFileName, TEXT("a+"));
 	fwrite(log2write, sizeof(log2write[0]), strlen(log2write), f);
 	fputc('\n', f);
@@ -58,6 +58,7 @@ static int __stdcall BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM, LPARAM pDa
 {
 	if (uMsg == BFFM_INITIALIZED && pData != 0)
 		::SendMessage(hwnd, BFFM_SETSELECTION, TRUE, pData);
+
 	return 0;
 };
 
@@ -147,60 +148,62 @@ generic_string getFolderName(HWND parent, const TCHAR *defaultDir)
 		}
 		pShellMalloc->Release();
 	}
+
 	return folderName;
 }
 
 
 void ClientRectToScreenRect(HWND hWnd, RECT* rect)
 {
-	POINT		pt;
+	POINT pt;
 
-	pt.x		 = rect->left;
-	pt.y		 = rect->top;
+	pt.x         = rect->left;
+	pt.y         = rect->top;
 	::ClientToScreen( hWnd, &pt );
 	rect->left   = pt.x;
 	rect->top    = pt.y;
 
-	pt.x		 = rect->right;
-	pt.y		 = rect->bottom;
+	pt.x         = rect->right;
+	pt.y         = rect->bottom;
 	::ClientToScreen( hWnd, &pt );
 	rect->right  = pt.x;
 	rect->bottom = pt.y;
 };
 
-std::vector<generic_string> tokenizeString(const generic_string & tokenString, const char delim) {
+std::vector<generic_string> tokenizeString(const generic_string & tokenString, const char delim)
+{
 	//Vector is created on stack and copied on return
 	std::vector<generic_string> tokens;
 
-    // Skip delimiters at beginning.
+	// Skip delimiters at beginning.
 	generic_string::size_type lastPos = tokenString.find_first_not_of(delim, 0);
-    // Find first "non-delimiter".
-    generic_string::size_type pos     = tokenString.find_first_of(delim, lastPos);
+	// Find first "non-delimiter".
+	generic_string::size_type pos     = tokenString.find_first_of(delim, lastPos);
 
-    while (pos != std::string::npos || lastPos != std::string::npos)
-    {
-        // Found a token, add it to the vector.
-        tokens.push_back(tokenString.substr(lastPos, pos - lastPos));
-        // Skip delimiters.  Note the "not_of"
-        lastPos = tokenString.find_first_not_of(delim, pos);
-        // Find next "non-delimiter"
-        pos = tokenString.find_first_of(delim, lastPos);
-    }
+	while (pos != std::string::npos || lastPos != std::string::npos)
+	{
+		// Found a token, add it to the vector.
+		tokens.push_back(tokenString.substr(lastPos, pos - lastPos));
+		// Skip delimiters.  Note the "not_of"
+		lastPos = tokenString.find_first_not_of(delim, pos);
+		// Find next "non-delimiter"
+		pos = tokenString.find_first_of(delim, lastPos);
+	}
 	return tokens;
 }
 
 void ScreenRectToClientRect(HWND hWnd, RECT* rect)
 {
-	POINT		pt;
+	POINT pt;
 
-	pt.x		 = rect->left;
-	pt.y		 = rect->top;
+	pt.x = rect->left;
+	pt.y = rect->top;
 	::ScreenToClient( hWnd, &pt );
-	rect->left   = pt.x;
-	rect->top    = pt.y;
+	rect->left = pt.x;
+	rect->top  = pt.y;
 
-	pt.x		 = rect->right;
-	pt.y		 = rect->bottom;
+	pt.x       = rect->right;
+	pt.y       = rect->bottom;
 	::ScreenToClient( hWnd, &pt );
 	rect->right  = pt.x;
 	rect->bottom = pt.y;
@@ -208,15 +211,17 @@ void ScreenRectToClientRect(HWND hWnd, RECT* rect)
 
 int filter(unsigned int code, struct _EXCEPTION_POINTERS *) 
 {
-    if (code == EXCEPTION_ACCESS_VIOLATION)
-        return EXCEPTION_EXECUTE_HANDLER;
+	if (code == EXCEPTION_ACCESS_VIOLATION)
+		return EXCEPTION_EXECUTE_HANDLER;
 
-    return EXCEPTION_CONTINUE_SEARCH;
+	return EXCEPTION_CONTINUE_SEARCH;
 }
 
-bool isInList(const TCHAR *token, const TCHAR *list) {
+bool isInList(const TCHAR *token, const TCHAR *list)
+{
 	if ((!token) || (!list))
 		return false;
+
 	TCHAR word[64];
 	size_t i = 0;
 	size_t j = 0;
@@ -273,10 +278,15 @@ generic_string purgeMenuItemString(const TCHAR * menuItemStr, bool keepAmpersand
 const wchar_t * WcharMbcsConvertor::char2wchar(const char * mbcs2Convert, UINT codepage, int lenMbcs, int *pLenWc, int *pBytesNotProcessed)
 {
 	// Do not process NULL pointer
-	if (!mbcs2Convert) return NULL;
+	if (!mbcs2Convert) 
+		return NULL;
 
 	// Do not process empty strings
-	if (lenMbcs == 0 || lenMbcs == -1 && mbcs2Convert[0] == 0) { _wideCharStr.empty(); return _wideCharStr;	}
+	if (lenMbcs == 0 || lenMbcs == -1 && mbcs2Convert[0] == 0)
+	{
+		_wideCharStr.empty();
+		return _wideCharStr;
+	}
 
 	int bytesNotProcessed = 0;
 	int lenWc = 0;
@@ -302,8 +312,10 @@ const wchar_t * WcharMbcsConvertor::char2wchar(const char * mbcs2Convert, UINT c
 		if (lenWc == 0 && GetLastError() == ERROR_NO_UNICODE_TRANSLATION)
 		{
 			// Test without last byte
-			if (lenMbcs > 1) lenWc = MultiByteToWideChar(codepage, MB_ERR_INVALID_CHARS, mbcs2Convert, lenMbcs-1, NULL, 0);
-			if (lenWc == 0) // don't have to check that the error is still ERROR_NO_UNICODE_TRANSLATION, since only the length parameter changed
+			if (lenMbcs > 1)
+				lenWc = MultiByteToWideChar(codepage, MB_ERR_INVALID_CHARS, mbcs2Convert, lenMbcs-1, NULL, 0);
+
+			if (lenWc == 0) // Don't have to check that the error is still ERROR_NO_UNICODE_TRANSLATION, since only the length parameter changed
 			{
 				// TODO: should warn user about incorrect loading due to invalid characters
 				// We still load the file, but the system will either strip or replace invalid characters (including the last character, if cut in half)
@@ -323,10 +335,16 @@ const wchar_t * WcharMbcsConvertor::char2wchar(const char * mbcs2Convert, UINT c
 		MultiByteToWideChar(codepage, 0, mbcs2Convert, lenMbcs-bytesNotProcessed, _wideCharStr, lenWc);
 	}
 	else
+	{
 		_wideCharStr.empty();
+	}
 
-	if(pLenWc) *pLenWc = lenWc;
-	if(pBytesNotProcessed) *pBytesNotProcessed = bytesNotProcessed;
+	if (pLenWc)
+		*pLenWc = lenWc;
+
+	if (pBytesNotProcessed) 
+		*pBytesNotProcessed = bytesNotProcessed;
+
 	return _wideCharStr;
 }
 
@@ -335,7 +353,8 @@ const wchar_t * WcharMbcsConvertor::char2wchar(const char * mbcs2Convert, UINT c
 const wchar_t * WcharMbcsConvertor::char2wchar(const char * mbcs2Convert, UINT codepage, int *mstart, int *mend)
 {
 	// Do not process NULL pointer
-	if (!mbcs2Convert) return NULL;
+	if (!mbcs2Convert)
+		return NULL;
 
 	int len = MultiByteToWideChar(codepage, 0, mbcs2Convert, -1, NULL, 0);
 	if (len > 0)
@@ -360,13 +379,15 @@ const wchar_t * WcharMbcsConvertor::char2wchar(const char * mbcs2Convert, UINT c
 		*mstart = 0;
 		*mend = 0;
 	}
+
 	return _wideCharStr;
 } 
 
 const char * WcharMbcsConvertor::wchar2char(const wchar_t * wcharStr2Convert, UINT codepage, int lenWc, int *pLenMbcs) 
 {
 	// Do not process NULL pointer
-	if (!wcharStr2Convert) return NULL;
+	if (!wcharStr2Convert) 
+		return NULL;
 
 	int lenMbcs = WideCharToMultiByte(codepage, 0, wcharStr2Convert, lenWc, NULL, 0, NULL, NULL);
 	if (lenMbcs > 0)
@@ -375,7 +396,9 @@ const char * WcharMbcsConvertor::wchar2char(const wchar_t * wcharStr2Convert, UI
 		WideCharToMultiByte(codepage, 0, wcharStr2Convert, lenWc, _multiByteStr, lenMbcs, NULL, NULL);
 	}
 	else
+	{
 		_multiByteStr.empty();
+	}
 
 	if(pLenMbcs) *pLenMbcs = lenMbcs;
 	return _multiByteStr;
@@ -384,7 +407,8 @@ const char * WcharMbcsConvertor::wchar2char(const wchar_t * wcharStr2Convert, UI
 const char * WcharMbcsConvertor::wchar2char(const wchar_t * wcharStr2Convert, UINT codepage, long *mstart, long *mend) 
 {
 	// Do not process NULL pointer
-	if (!wcharStr2Convert) return NULL;
+	if (!wcharStr2Convert)
+		return NULL;
 
 	int len = WideCharToMultiByte(codepage, 0, wcharStr2Convert, -1, NULL, 0, NULL, NULL);
 	if (len > 0)
@@ -392,8 +416,8 @@ const char * WcharMbcsConvertor::wchar2char(const wchar_t * wcharStr2Convert, UI
 		_multiByteStr.sizeTo(len);
 		len = WideCharToMultiByte(codepage, 0, wcharStr2Convert, -1, _multiByteStr, len, NULL, NULL); // not needed?
 
-        if ((int)*mstart < lstrlenW(wcharStr2Convert) && (int)*mend < lstrlenW(wcharStr2Convert))
-        {
+		if ((int)*mstart < lstrlenW(wcharStr2Convert) && (int)*mend < lstrlenW(wcharStr2Convert))
+		{
 			*mstart = WideCharToMultiByte(codepage, 0, wcharStr2Convert, *mstart, NULL, 0, NULL, NULL);
 			*mend = WideCharToMultiByte(codepage, 0, wcharStr2Convert, *mend, NULL, 0, NULL, NULL);
 			if (*mstart >= len || *mend >= len)
@@ -404,7 +428,9 @@ const char * WcharMbcsConvertor::wchar2char(const wchar_t * wcharStr2Convert, UI
 		}
 	}
 	else
+	{
 		_multiByteStr.empty();
+	}
 
 	return _multiByteStr;
 }
@@ -412,27 +438,31 @@ const char * WcharMbcsConvertor::wchar2char(const wchar_t * wcharStr2Convert, UI
 std::wstring string2wstring(const std::string & rString, UINT codepage)
 {
 	int len = MultiByteToWideChar(codepage, 0, rString.c_str(), -1, NULL, 0);
-	if(len > 0)
-	{		
+	if (len > 0)
+	{
 		std::vector<wchar_t> vw(len);
 		MultiByteToWideChar(codepage, 0, rString.c_str(), -1, &vw[0], len);
 		return &vw[0];
 	}
 	else
+	{
 		return L"";
+	}
 }
 
 std::string wstring2string(const std::wstring & rwString, UINT codepage)
 {
 	int len = WideCharToMultiByte(codepage, 0, rwString.c_str(), -1, NULL, 0, NULL, NULL);
-	if(len > 0)
-	{		
+	if (len > 0)
+	{
 		std::vector<char> vw(len);
 		WideCharToMultiByte(codepage, 0, rwString.c_str(), -1, &vw[0], len, NULL, NULL);
 		return &vw[0];
 	}
 	else
+	{
 		return "";
+	}
 }
 
 // Escapes ampersands in file name to use it in menu
@@ -443,7 +473,9 @@ generic_string convertFileName(T beg, T end)
 
 	for (T it = beg; it != end; ++it)
 	{
-		if (*it == '&') strTmp.push_back('&');
+		if (*it == '&') 
+			strTmp.push_back('&');
+
 		strTmp.push_back(*it);
 	}
 
@@ -459,7 +491,8 @@ generic_string intToString(int val)
 
 	vt.push_back('0' + (TCHAR)(std::abs(val % 10)));
 	val /= 10;
-	while (val != 0) {
+	while (val != 0)
+	{
 		vt.push_back('0' + (TCHAR)(std::abs(val % 10)));
 		val /= 10;
 	}
@@ -537,23 +570,24 @@ generic_string BuildMenuFileName(int filenameLen, unsigned int pos, const generi
 
 generic_string PathRemoveFileSpec(generic_string & path)
 {
-    generic_string::size_type lastBackslash = path.find_last_of(TEXT('\\'));
-    if (lastBackslash == generic_string::npos)
-    {
-        if (path.size() >= 2 && path[1] == TEXT(':'))  // "C:foo.bar" becomes "C:"
-            path.erase(2);
-        else
-            path.erase();
-    }
-    else
-    {
-        if (lastBackslash == 2 && path[1] == TEXT(':') && path.size() >= 3)  // "C:\foo.exe" becomes "C:\"
-            path.erase(3);
-        else if (lastBackslash == 0 && path.size() > 1)  //   "\foo.exe" becomes "\"
-            path.erase(1);
-        else
-            path.erase(lastBackslash);
-    }
+	generic_string::size_type lastBackslash = path.find_last_of(TEXT('\\'));
+	if (lastBackslash == generic_string::npos)
+	{
+		if (path.size() >= 2 && path[1] == TEXT(':'))  // "C:foo.bar" becomes "C:"
+			path.erase(2);
+		else
+			path.erase();
+	}
+	else
+	{
+		if (lastBackslash == 2 && path[1] == TEXT(':') && path.size() >= 3)  // "C:\foo.exe" becomes "C:\"
+			path.erase(3);
+		else if (lastBackslash == 0 && path.size() > 1)  //   "\foo.exe" becomes "\"
+			path.erase(1);
+		else
+			path.erase(lastBackslash);
+	}
+
 	return path;
 }
 
@@ -579,7 +613,7 @@ generic_string PathAppend(generic_string &strDest, const generic_string & str2ap
 	}
 
 	if ((strDest[strDest.length() - 1] == '\\' && (str2append != TEXT("") && str2append[0] != '\\')) // toto\ + titi
-		|| (strDest[strDest.length() - 1] != '\\' && (str2append != TEXT("") && str2append[0] == '\\'))) // toto + \titi
+	 || (strDest[strDest.length() - 1] != '\\' && (str2append != TEXT("") && str2append[0] == '\\'))) // toto + \titi
 	{
 		strDest += str2append;
 		return strDest;
@@ -632,7 +666,7 @@ COLORREF getCtrlBgColor(HWND hWnd)
 
 generic_string stringToUpper(generic_string strToConvert)
 {
-    std::transform(strToConvert.begin(), strToConvert.end(), strToConvert.begin(), ::toupper);
-    return strToConvert;
+	std::transform(strToConvert.begin(), strToConvert.end(), strToConvert.begin(), ::toupper);
+	return strToConvert;
 }
 

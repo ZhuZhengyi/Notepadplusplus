@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -56,7 +56,8 @@ const TCHAR TABBAR_ACTIVEUNFOCUSEDINDCATOR[64] = TEXT("Active tab unfocused indi
 const TCHAR TABBAR_ACTIVETEXT[64] = TEXT("Active tab text");
 const TCHAR TABBAR_INACTIVETEXT[64] = TEXT("Inactive tabs");
 
-struct TBHDR {
+struct TBHDR
+{
 	NMHDR hdr;
 	int tabOrigin;
 };
@@ -73,37 +74,44 @@ public:
 	void activateAt(int index) const;
 	void getCurrentTitle(TCHAR *title, int titleLen);
 
-	int getCurrentTabIndex() const {
+	int getCurrentTabIndex() const
+	{
 		return ::SendMessage(_hSelf, TCM_GETCURSEL, 0, 0);
 	};
 
-	int getItemCount() const {
+	int getItemCount() const
+	{
 		return ::SendMessage(_hSelf, TCM_GETITEMCOUNT, 0, 0);
 	}
 
 	void deletItemAt(size_t index);
 
-	void deletAllItem() {
+	void deletAllItem()
+	{
 		::SendMessage(_hSelf, TCM_DELETEALLITEMS, 0, 0);
 		_nbItem = 0;
 	};
 
-	void setImageList(HIMAGELIST himl) {
+	void setImageList(HIMAGELIST himl)
+	{
 		_hasImgLst = true;
 		::SendMessage(_hSelf, TCM_SETIMAGELIST, 0, (LPARAM)himl);
 	};
-    
-    int nbItem() const {
-        return _nbItem;
-    };
+
+	int nbItem() const
+	{
+		return _nbItem;
+	};
 
 	void setFont(TCHAR *fontName, size_t fontSize);
-		
-	void setVertical(bool b) {
+
+	void setVertical(bool b)
+	{
 		_isVertical = b;
 	};
-	
-	void setMultiLine(bool b) {
+
+	void setMultiLine(bool b)
+	{
 		_isMultiLine = b;
 	};
 
@@ -121,14 +129,16 @@ protected:
 
 	bool _isVertical;
 	bool _isMultiLine;
-	
-	long getRowCount() const {
+
+	long getRowCount() const
+	{
 		return long(::SendMessage(_hSelf, TCM_GETROWCOUNT, 0, 0));
 	};
 };
 
 
-struct CloseButtonZone {
+struct CloseButtonZone
+{
 	CloseButtonZone(): _width(11), _hight(11), _fromTop(5), _fromRight(3){};
 	bool isHit(int x, int y, const RECT & testZone) const;
 	RECT getButtonRectFrom(const RECT & tabItemRect) const;
@@ -149,25 +159,30 @@ public :
 		activeText, activeFocusedTop, activeUnfocusedTop, inactiveText, inactiveBg
 	};
 
-	static void doDragNDrop(bool justDoIt) {
-        _doDragNDrop = justDoIt;
-    };
+	static void doDragNDrop(bool justDoIt)
+	{
+		_doDragNDrop = justDoIt;
+	};
 
 	virtual void init(HINSTANCE hInst, HWND hwnd, bool isVertical = false, bool isTraditional = false, bool isMultiLine = false);
 
-    static bool doDragNDropOrNot() {
-        return _doDragNDrop;
-    };
+	static bool doDragNDropOrNot()
+	{
+		return _doDragNDrop;
+	};
 
-	int getSrcTabIndex() const {
-        return _nSrcTab;
-    };
+	int getSrcTabIndex() const
+	{
+		return _nSrcTab;
+	};
 
-    int getTabDraggedIndex() const {
-        return _nTabDragged;
-    };
+	int getTabDraggedIndex() const 
+	{
+		return _nTabDragged;
+	};
 
-	POINT getDraggingPoint() const {
+	POINT getDraggingPoint() const
+	{
 		return _draggingPoint;
 	};
 
@@ -187,29 +202,35 @@ public :
 	static bool isVertical() { return _isCtrlVertical;};
 	static bool isMultiLine() { return _isCtrlMultiLine;};
 
-	static void setDrawTopBar(bool b) {
+	static void setDrawTopBar(bool b)
+	{
 		_drawTopBar = b;
 		doOwnerDrawTab();
 	};
-	static void setDrawInactiveTab(bool b) {
+	static void setDrawInactiveTab(bool b)
+	{
 		_drawInactiveTab = b;
 		doOwnerDrawTab();
 	};
-	static void setDrawTabCloseButton(bool b) {
+	static void setDrawTabCloseButton(bool b)
+	{
 		_drawTabCloseButton = b;
 		doOwnerDrawTab();
 	};
 
-	static void setDbClk2Close(bool b) {
+	static void setDbClk2Close(bool b)
+	{
 		_isDbClk2Close = b;
 	};
 
-	static void setVertical(bool b) {
+	static void setVertical(bool b)
+	{
 		_isCtrlVertical = b;
 		doVertical();
 	};
 
-	static void setMultiLine(bool b) {
+	static void setMultiLine(bool b)
+	{
 		_isCtrlMultiLine = b;
 		doMultiLine();
 	};
@@ -217,12 +238,12 @@ public :
 	static void setColour(COLORREF colour2Set, tabColourIndex i);
 
 protected:
-    // it's the boss to decide if we do the drag N drop
-    static bool _doDragNDrop;
+	// it's the boss to decide if we do the drag N drop
+	static bool _doDragNDrop;
 	// drag N drop members
 	bool _isDragging;
 	bool _isDraggingInside;
-    int _nSrcTab;
+	int _nSrcTab;
 	int _nTabDragged;
 	POINT _draggingPoint; // coordinate of Screen
 	WNDPROC _tabBarDefaultProc;
@@ -237,7 +258,8 @@ protected:
 
 	LRESULT runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam);
 
-	static LRESULT CALLBACK TabBarPlus_Proc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) {
+	static LRESULT CALLBACK TabBarPlus_Proc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
+	{
 		return (((TabBarPlus *)(::GetWindowLongPtr(hwnd, GWL_USERDATA)))->runProc(hwnd, Message, wParam, lParam));
 	};
 	void exchangeItemData(POINT point);
@@ -263,23 +285,26 @@ protected:
 	void drawItem(DRAWITEMSTRUCT *pDrawItemStruct);
 	void draggingCursor(POINT screenPoint);
 
-	int getTabIndexAt(const POINT & p) {
+	int getTabIndexAt(const POINT & p)
+	{
 		return getTabIndexAt(p.x, p.y);
 	};
 
-	int getTabIndexAt(int x, int y) {
+	int getTabIndexAt(int x, int y)
+	{
 		TCHITTESTINFO hitInfo;
 		hitInfo.pt.x = x;
 		hitInfo.pt.y = y;
 		return ::SendMessage(_hSelf, TCM_HITTEST, 0, (LPARAM)&hitInfo);
 	};
 
-	bool isPointInParentZone(POINT screenPoint) const {
-        RECT parentZone;
-        ::GetWindowRect(_hParent, &parentZone);
-	    return (((screenPoint.x >= parentZone.left) && (screenPoint.x <= parentZone.right)) &&
-			    (screenPoint.y >= parentZone.top) && (screenPoint.y <= parentZone.bottom));
-    };
+	bool isPointInParentZone(POINT screenPoint) const
+	{
+		RECT parentZone;
+		::GetWindowRect(_hParent, &parentZone);
+		return (((screenPoint.x >= parentZone.left) && (screenPoint.x <= parentZone.right)) &&
+				(screenPoint.y >= parentZone.top) && (screenPoint.y <= parentZone.bottom));
+	};
 };
 
 #endif // TAB_BAR_H

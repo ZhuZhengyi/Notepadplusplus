@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -77,7 +77,7 @@ public :
 	virtual void destroy() {
 		_verticalEdgeLineNbColVal.destroy();
 	};
-	
+
 private :
 	URLCtrl _verticalEdgeLineNbColVal;
 	BOOL CALLBACK run_dlgProc(UINT Message, WPARAM wParam, LPARAM lParam);
@@ -137,7 +137,7 @@ public :
 	LangMenuDlg() {};
 
 private :
-    LexerStylerArray _lsArray;
+	LexerStylerArray _lsArray;
 	BOOL CALLBACK run_dlgProc(UINT Message, WPARAM wParam, LPARAM lParam);
 	vector<LangMenuItem> _langList;
 };
@@ -146,12 +146,12 @@ class TabSettings : public StaticDialog
 {
 public :
 	TabSettings() {};
-    virtual void destroy() {
+	virtual void destroy() {
 		_tabSizeVal.destroy();
 	};
 
 private :
-    URLCtrl _tabSizeVal;
+	URLCtrl _tabSizeVal;
 	BOOL CALLBACK run_dlgProc(UINT Message, WPARAM wParam, LPARAM lParam);
 };
 
@@ -220,20 +220,20 @@ friend class NativeLangSpeaker;
 public :
 	PreferenceDlg(){};
 
-    void init(HINSTANCE hInst, HWND parent)	{
-        Window::init(hInst, parent);
+	void init(HINSTANCE hInst, HWND parent)	{
+		Window::init(hInst, parent);
 	};
 
-    void doDialog(bool isRTL = false) {
-    	if (!isCreated())
+	void doDialog(bool isRTL = false) {
+		if (!isCreated())
 		{
 			create(IDD_PREFERENCE_BOX, isRTL);
 			goToCenter();
 		}
-	    display();
-    };
+		display();
+	};
 	bool renameDialogTitle(const TCHAR *internalName, const TCHAR *newName);
-	
+
 	int getListSelectedIndex() const {
 		return ::SendDlgItemMessage(_hSelf, IDC_LIST_DLGTITLE, LB_GETCURSEL, 0, 0);
 	};

@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -42,7 +42,9 @@ void ControlsTab::createTabs(WindowVector & winVector)
 
 void ControlsTab::activateWindowAt(int index)
 {
-    if (index == _current)  return;
+	if (index == _current)
+		return;
+
 	(*_pWinVector)[_current]._dlg->display(false);
 	(*_pWinVector)[index]._dlg->display(true);
 	_current = index;
@@ -53,18 +55,18 @@ void ControlsTab::reSizeTo(RECT & rc)
 	TabBar::reSizeTo(rc);
 	rc.left += marge;
 	rc.top += marge;
-	
+
 	//-- We do those dirty things 
 	//-- because it's a "vertical" tab control
-    if (_isVertical)
-    {
-	    rc.right -= 40;
-	    rc.bottom -= 20;
-	    if (getRowCount() == 2)
-	    {
-		    rc.right -= 20;
-	    }
-    }
+	if (_isVertical)
+	{
+		rc.right -= 40;
+		rc.bottom -= 20;
+		if (getRowCount() == 2)
+		{
+			rc.right -= 20;
+		}
+	}
 	//-- end of dirty things
 	rc.bottom -= 55;
 	rc.right -= 20;
@@ -86,6 +88,7 @@ bool ControlsTab::renameTab(const TCHAR *internalName, const TCHAR *newName)
 			break;
 		}
 	}
+
 	if (!foundIt)
 		return false;
 

@@ -1,16 +1,16 @@
 // this file is part of docking functionality for Notepad++
 // Copyright (C)2006 Jens Lorenz <jens.plugin.npp@gmx.de>
-// 
+//
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
 // as published by the Free Software Foundation; either
 // version 2 of the License, or (at your option) any later version.
-// 
+//
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -20,7 +20,7 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -46,7 +46,7 @@ class DockingManager;
 
 
 // Used by getRectAndStyle() to draw the drag rectangle
-static const WORD DotPattern[] = 
+static const WORD DotPattern[] =
 {
 	0x00aa, 0x0055, 0x00aa, 0x0055, 0x00aa, 0x0055, 0x00aa, 0x0055
 };
@@ -59,16 +59,19 @@ class Gripper
 {
 public:
 	Gripper();
-    
-	void init(HINSTANCE hInst, HWND hParent) {
-		_hInst   = hInst;	
+
+	void init(HINSTANCE hInst, HWND hParent)
+	{
+		_hInst   = hInst;
 		_hParent = hParent;
 	};
 
 	void startGrip(DockingCont* pCont, DockingManager* pDockMgr);
 
-	~Gripper() {
-		if (_hdc) {
+	~Gripper()
+	{
+		if (_hdc)
+		{
 			// usually this should already have been done by a call to drawRectangle(),
 			// here just for cases where usual handling was interrupted (jg)
 			#ifdef USE_LOCKWINDOWUPDATE
@@ -76,10 +79,14 @@ public:
 			#endif
 			::ReleaseDC(0, _hdc);
 		}
-		if (_hbm) {
+
+		if (_hbm)
+		{
 			::DeleteObject(_hbm);
 		}
-		if (_hbrush) {
+
+		if (_hbrush)
+		{
 			::DeleteObject(_hbrush);
 		}
 	};

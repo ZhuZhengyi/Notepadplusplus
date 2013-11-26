@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -33,10 +33,11 @@ const int DEFAULT_NB_NUMBER = 2;
 class ValueDlg : public StaticDialog
 {
 public :
-        ValueDlg() : StaticDialog(), _nbNumber(DEFAULT_NB_NUMBER) {};
-        void init(HINSTANCE hInst, HWND parent, int valueToSet, const TCHAR *text);
-        int doDialog(POINT p, bool isRTL = false);
-		void setNBNumber(int nbNumber) {
+		ValueDlg() : StaticDialog(), _nbNumber(DEFAULT_NB_NUMBER) {};
+		void init(HINSTANCE hInst, HWND parent, int valueToSet, const TCHAR *text);
+		int doDialog(POINT p, bool isRTL = false);
+		void setNBNumber(int nbNumber)
+		{
 			if (nbNumber > 0)
 				_nbNumber = nbNumber;
 		};
@@ -48,7 +49,7 @@ protected :
 
 private :
 	int _nbNumber;
-    int _defaultValue;
+	int _defaultValue;
 	generic_string _name;
 	POINT _p;
 };
@@ -63,32 +64,35 @@ const int buttonStatus_postit = 2;
 class ButtonDlg : public StaticDialog
 {
 public :
-    ButtonDlg() : StaticDialog(), _buttonStatus(buttonStatus_nada) {};
-        void init(HINSTANCE hInst, HWND parent){
-        	Window::init(hInst, parent);
-        };
+	ButtonDlg() : StaticDialog(), _buttonStatus(buttonStatus_nada) {};
+		void init(HINSTANCE hInst, HWND parent)
+		{
+			Window::init(hInst, parent);
+		};
 
-        void doDialog(bool isRTL = false);
+		void doDialog(bool isRTL = false);
 		void destroy() {};
-        int getButtonStatus() const {
-            return _buttonStatus;
-        };
-        void setButtonStatus(int buttonStatus) {
-            _buttonStatus = buttonStatus;
-        };
+		int getButtonStatus() const {
+			return _buttonStatus;
+		};
+		void setButtonStatus(int buttonStatus)
+		{
+			_buttonStatus = buttonStatus;
+		};
 
-        void display(bool toShow = true) const {
-            int cmdToShow = toShow?SW_SHOW:SW_HIDE;
-            if (!toShow)
-            {
-                cmdToShow = (_buttonStatus != buttonStatus_nada)?SW_SHOW:SW_HIDE; 
-            }
-		    ::ShowWindow(_hSelf, cmdToShow);
-	    };
+		void display(bool toShow = true) const
+		{
+			int cmdToShow = toShow?SW_SHOW:SW_HIDE;
+			if (!toShow)
+			{
+				cmdToShow = (_buttonStatus != buttonStatus_nada)?SW_SHOW:SW_HIDE;
+			}
+			::ShowWindow(_hSelf, cmdToShow);
+		};
 
 protected :
 	BOOL CALLBACK run_dlgProc(UINT Message, WPARAM wParam, LPARAM);
-    int _buttonStatus;
+	int _buttonStatus;
 
 };
 #endif //TABSIZE_DLG_H

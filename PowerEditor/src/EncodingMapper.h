@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -29,23 +29,25 @@
 #ifndef ENCODINGMAPPER_H
 #define ENCODINGMAPPER_H
 
-struct EncodingUnit {
+struct EncodingUnit
+{
    int _codePage;
    char *_aliasList;
 };
 
-class EncodingMapper {
+class EncodingMapper
+{
 public:
-    static EncodingMapper * getInstance() {return _pSelf;};
-    int getEncodingFromIndex(int index) const;
+	static EncodingMapper * getInstance() {return _pSelf;};
+	int getEncodingFromIndex(int index) const;
 	int getIndexFromEncoding(int encoding) const;
 	int getEncodingFromString(const char * encodingAlias) const;
 
 private:
 	EncodingMapper(){};
 	~EncodingMapper(){};
-    static EncodingMapper *_pSelf;
-    EncodingUnit *_encodings;
+	static EncodingMapper *_pSelf;
+	EncodingUnit *_encodings;
 };
 
 #endif // ENCODINGMAPPER_H

@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -52,7 +52,7 @@ void Printer::init(HINSTANCE hInst, HWND hwnd, ScintillaEditView *pSEView, bool 
 	_pdlg.nToPage = 1;
 	_pdlg.nMinPage = 1;
 	_pdlg.nMaxPage = 0xffffU; // We do not know how many pages in the
-							// document until the printer is selected and the paper size is known.
+	                          // document until the printer is selected and the paper size is known.
 	_pdlg.nCopies = 1;
 	_pdlg.hDC = 0;
 	_pdlg.hDevMode = NULL;
@@ -108,13 +108,13 @@ size_t Printer::doPrint(bool justDoIt)
 	// To get the right and lower unprintable area,
 	// we take the entire width and height of the paper and
 	// subtract everything else.
-	rectPhysMargins.right = ptPage.x						// total paper width
+	rectPhysMargins.right = ptPage.x                            // total paper width
 	                        - GetDeviceCaps(_pdlg.hDC, HORZRES) // printable width
-	                        - rectPhysMargins.left;				// left unprintable margin
+	                        - rectPhysMargins.left;             // left unprintable margin
 
-	rectPhysMargins.bottom = ptPage.y						// total paper height
+	rectPhysMargins.bottom = ptPage.y                           // total paper height
 	                         - GetDeviceCaps(_pdlg.hDC, VERTRES)	// printable height
-	                         - rectPhysMargins.top;				// right unprintable margin
+	                         - rectPhysMargins.top;             // right unprintable margin
 	if (nppGUI._printSettings.isUserMargePresent())
 	{
 		userMargins.left  = MulDiv(nppGUI._printSettings._marge.left*100, ptDpi.x, 2540);
@@ -122,17 +122,17 @@ size_t Printer::doPrint(bool justDoIt)
 		userMargins.right  = MulDiv(nppGUI._printSettings._marge.right*100, ptDpi.x, 2540);
 		userMargins.bottom  = MulDiv(nppGUI._printSettings._marge.bottom*100, ptDpi.y, 2540);
 	
-		rectMargins.left	= max(rectPhysMargins.left, userMargins.left);
-		rectMargins.top		= max(rectPhysMargins.top, userMargins.top);
-		rectMargins.right	= max(rectPhysMargins.right, userMargins.right);
-		rectMargins.bottom	= max(rectPhysMargins.bottom, userMargins.bottom);
+		rectMargins.left   = max(rectPhysMargins.left, userMargins.left);
+		rectMargins.top    = max(rectPhysMargins.top, userMargins.top);
+		rectMargins.right  = max(rectPhysMargins.right, userMargins.right);
+		rectMargins.bottom = max(rectPhysMargins.bottom, userMargins.bottom);
 	}
 	else
 	{
-	rectMargins.left	= rectPhysMargins.left;
-	rectMargins.top		= rectPhysMargins.top;
-	rectMargins.right	= rectPhysMargins.right;
-	rectMargins.bottom	= rectPhysMargins.bottom;
+		rectMargins.left    = rectPhysMargins.left;
+		rectMargins.top     = rectPhysMargins.top;
+		rectMargins.right   = rectPhysMargins.right;
+		rectMargins.bottom = rectPhysMargins.bottom;
 	}
 	// Convert device coordinates into logical coordinates
 	DPtoLP(_pdlg.hDC, (LPPOINT)&rectMargins, 2);

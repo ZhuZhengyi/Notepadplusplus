@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -32,7 +32,7 @@
 
 BOOL CALLBACK GoToLineDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 {
-	switch (message) 
+	switch (message)
 	{
 		case WM_INITDIALOG :
 		{
@@ -46,25 +46,28 @@ BOOL CALLBACK GoToLineDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 			{
 				case IDCANCEL : // Close
 					display(false);
-                    cleanLineEdit();
+					cleanLineEdit();
 					return TRUE;
 
 				case IDOK :
-                {
-                    int line = getLine();
-                    if (line != -1)
-                    {
-                        display(false);
-                        cleanLineEdit();
-						if (_mode == go2line) {
+				{
+					int line = getLine();
+					if (line != -1)
+					{
+						display(false);
+						cleanLineEdit();
+						if (_mode == go2line)
+						{
 							(*_ppEditView)->execute(SCI_ENSUREVISIBLE, line-1);
 							(*_ppEditView)->execute(SCI_GOTOLINE, line-1);
-						} else {
+						}
+						else
+						{
 							int sci_line = (*_ppEditView)->execute(SCI_LINEFROMPOSITION, line);
 							(*_ppEditView)->execute(SCI_ENSUREVISIBLE, sci_line);
 							(*_ppEditView)->execute(SCI_GOTOPOS, line);
 						}
-                    }
+					}
 
 					// find hotspots
 					NMHDR nmhdr;
@@ -73,9 +76,9 @@ BOOL CALLBACK GoToLineDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 					nmhdr.idFrom = ::GetDlgCtrlID(nmhdr.hwndFrom);
 					::SendMessage(_hParent, WM_NOTIFY, (WPARAM)LINKTRIGGERED, (LPARAM)&nmhdr);
 
-                    (*_ppEditView)->getFocus();
-                    return TRUE;
-                }
+					(*_ppEditView)->getFocus();
+					return TRUE;
+				}
 
 				case IDC_RADIO_GOTOLINE :
 				case IDC_RADIO_GOTOOFFSET :
@@ -107,6 +110,7 @@ BOOL CALLBACK GoToLineDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 						case BN_SETFOCUS :
 							updateLinesNumbers();
 							return TRUE;
+
 						default :
 							return TRUE;
 					}
@@ -135,7 +139,7 @@ void GoToLineDlg::updateLinesNumbers() const
 		current = (unsigned int)(*_ppEditView)->execute(SCI_GETCURRENTPOS);
 		limit = (unsigned int)((*_ppEditView)->getCurrentDocLen() - 1);
 	}
-    ::SetDlgItemInt(_hSelf, ID_CURRLINE, current, FALSE);
-    ::SetDlgItemInt(_hSelf, ID_LASTLINE, limit, FALSE);
+	::SetDlgItemInt(_hSelf, ID_CURRLINE, current, FALSE);
+	::SetDlgItemInt(_hSelf, ID_LASTLINE, limit, FALSE);
 }
 

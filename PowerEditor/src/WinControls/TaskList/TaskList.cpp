@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -39,31 +39,31 @@ void TaskList::init(HINSTANCE hInst, HWND parent, HIMAGELIST hImaLst, int nbItem
 
 	_currentIndex = index2set;
 
-    INITCOMMONCONTROLSEX icex;
-    
-    // Ensure that the common control DLL is loaded. 
-    icex.dwSize = sizeof(INITCOMMONCONTROLSEX);
-    icex.dwICC  = ICC_LISTVIEW_CLASSES;
-    InitCommonControlsEx(&icex);
+	INITCOMMONCONTROLSEX icex;
+
+	// Ensure that the common control DLL is loaded. 
+	icex.dwSize = sizeof(INITCOMMONCONTROLSEX);
+	icex.dwICC  = ICC_LISTVIEW_CLASSES;
+	InitCommonControlsEx(&icex);
 
 	_nbItem = nbItem;
-    
-    // Create the list-view window in report view with label editing enabled.
+
+	// Create the list-view window in report view with label editing enabled.
 	int listViewStyles = LVS_REPORT | LVS_OWNERDATA | LVS_NOCOLUMNHEADER | LVS_NOSORTHEADER\
 						| /*LVS_NOSCROLL |*/ LVS_SINGLESEL | LVS_AUTOARRANGE | LVS_OWNERDRAWFIXED\
 						| LVS_SHAREIMAGELISTS/* | WS_BORDER*/;
 
 	_hSelf = ::CreateWindow(WC_LISTVIEW, 
-                                TEXT(""), 
-                                WS_CHILD | listViewStyles,
-                                0,
-                                0, 
-                                0,
-                                0,
-                                _hParent, 
-                                (HMENU) NULL, 
-                                hInst,
-                                NULL);
+								TEXT(""), 
+								WS_CHILD | listViewStyles,
+								0,
+								0, 
+								0,
+								0,
+								_hParent, 
+								(HMENU) NULL, 
+								hInst,
+								NULL);
 	if (!_hSelf)
 	{
 		throw std::runtime_error("TaskList::init : CreateWindowEx() function return null");
@@ -144,16 +144,16 @@ void TaskList::setFont(TCHAR *fontName, size_t fontSize)
 		::DeleteObject(_hFontSelected);
 
 	_hFont = ::CreateFont(fontSize, 0, 0, 0,
-		                   FW_NORMAL,
-			               0, 0, 0, 0,
-			               0, 0, 0, 0,
-				           fontName);
+							FW_NORMAL,
+							0, 0, 0, 0,
+							0, 0, 0, 0,
+							fontName);
 
 	_hFontSelected = ::CreateFont(fontSize, 0, 0, 0,
-		                   FW_BOLD,
-			               0, 0, 0, 0,
-			               0, 0, 0, 0,
-				           fontName);
+							FW_BOLD,
+							0, 0, 0, 0,
+							0, 0, 0, 0,
+							fontName);
 
 	if (_hFont)
 		::SendMessage(_hSelf, WM_SETFONT, reinterpret_cast<WPARAM>(_hFont), 0);
@@ -170,6 +170,7 @@ int TaskList::updateCurrentIndex()
 			return _currentIndex;
 		}
 	}
+
 	return _currentIndex;
 }
 
@@ -201,7 +202,7 @@ LRESULT TaskList::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 				// tells what item(s) to be repainted
 				ListView_RedrawItems(_hSelf, selected, selected);
 				// repaint item(s)
-				UpdateWindow(_hSelf);              
+				UpdateWindow(_hSelf);
 				_currentIndex = selected;
 			}
 			else
@@ -216,7 +217,7 @@ LRESULT TaskList::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 				// tells what item(s) to be repainted
 				ListView_RedrawItems(_hSelf, selected, selected);
 				// repaint item(s)
-				UpdateWindow(_hSelf);              
+				UpdateWindow(_hSelf);
 				_currentIndex = selected;
 			}
 			return TRUE;
@@ -226,7 +227,6 @@ LRESULT TaskList::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 		{
 			return TRUE;
 		}
-		
 
 		case WM_GETDLGCODE :
 		{
@@ -238,7 +238,7 @@ LRESULT TaskList::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 				{
 					// Shift+Tab is cool but I think VK_UP and VK_LEFT are also cool :-)
 					if (((msg->wParam == VK_TAB) && (0x80 & GetKeyState(VK_SHIFT))) ||
-					    (msg->wParam == VK_UP))
+						(msg->wParam == VK_UP))
 					{ 
 						size_t selected = (_currentIndex - 1) < 0 ? (_nbItem - 1) : (_currentIndex - 1);
 						ListView_SetItemState(_hSelf, _currentIndex, 0, LVIS_SELECTED|LVIS_FOCUSED);
@@ -250,7 +250,7 @@ LRESULT TaskList::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 						// tells what item(s) to be repainted
 						ListView_RedrawItems(_hSelf, selected, selected);
 						// repaint item(s)
-						UpdateWindow(_hSelf);              
+						UpdateWindow(_hSelf);
 						_currentIndex = selected;
 					}
 					// VK_DOWN and VK_RIGHT do the same as VK_TAB does
@@ -266,7 +266,7 @@ LRESULT TaskList::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 						// tells what item(s) to be repainted
 						ListView_RedrawItems(_hSelf, selected, selected);
 						// repaint item(s)
-						UpdateWindow(_hSelf);              
+						UpdateWindow(_hSelf);
 						_currentIndex = selected;
 					}
 				}

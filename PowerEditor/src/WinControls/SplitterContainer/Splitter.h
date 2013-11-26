@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -33,18 +33,18 @@
 #include "resource.h"
 #endif //RESOURCE_H
 
-#define SV_HORIZONTAL		0x00000001
-#define SV_VERTICAL			0x00000002
-#define SV_FIXED			0x00000004
-#define SV_ENABLERDBLCLK	0x00000008
-#define SV_ENABLELDBLCLK	0x00000010
-#define SV_RESIZEWTHPERCNT	0x00000020
+#define SV_HORIZONTAL       0x00000001
+#define SV_VERTICAL         0x00000002
+#define SV_FIXED            0x00000004
+#define SV_ENABLERDBLCLK    0x00000008
+#define SV_ENABLELDBLCLK    0x00000010
+#define SV_RESIZEWTHPERCNT  0x00000020
 
 
-#define WM_GETSPLITTER_X		(SPLITTER_USER + 1)
-#define WM_GETSPLITTER_Y		(SPLITTER_USER + 2)
-#define WM_DOPOPUPMENU			(SPLITTER_USER + 3)
-#define WM_RESIZE_CONTAINER		(SPLITTER_USER + 4)
+#define WM_GETSPLITTER_X        (SPLITTER_USER + 1)
+#define WM_GETSPLITTER_Y        (SPLITTER_USER + 2)
+#define WM_DOPOPUPMENU          (SPLITTER_USER + 3)
+#define WM_RESIZE_CONTAINER     (SPLITTER_USER + 4)
 
 const int HIEGHT_MINIMAL = 15;
 
@@ -58,23 +58,30 @@ typedef bool ZONE_TYPE;
 const bool TOP_LEFT = true;
 const bool BOTTOM_RIGHT = false;
 
-enum SplitterMode {
-    DYNAMIC, LEFT_FIX, RIGHT_FIX
+enum SplitterMode
+{
+	DYNAMIC,
+	LEFT_FIX,
+	RIGHT_FIX
 };
 
 class Splitter : public Window
 {
-public:	
+public:
 	Splitter();
 	~Splitter(){};
-	void destroy() {
+
+	void destroy()
+	{
 		::DestroyWindow(_hSelf);
 	};
+
 	void resizeSpliter(RECT *pRect = NULL);
-	void init(HINSTANCE hInst, HWND hPere, int splitterSize,
-			int iSplitRatio, DWORD dwFlags);
+	void init(HINSTANCE hInst, HWND hPere, int splitterSize, int iSplitRatio, DWORD dwFlags);
 	void rotate();
-	int getPhisicalSize() const {
+
+	int getPhisicalSize() const
+	{
 		return _spiltterSize;
 	};
 
@@ -87,40 +94,44 @@ private:
 	bool _isFixed;
 	static bool _isHorizontalRegistered;
 	static bool _isVerticalRegistered;
-    static bool _isHorizontalFixedRegistered;
-    static bool _isVerticalFixedRegistered;
+	static bool _isHorizontalFixedRegistered;
+	static bool _isVerticalFixedRegistered;
 
 	RECT _clickZone2TL, _clickZone2BR;
 
 	static LRESULT CALLBACK staticWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 	LRESULT CALLBACK spliterWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    int getClickZone(WH which);
-	void adjustZoneToDraw(RECT & rc2def, ZONE_TYPE whichZone);	 
+	int getClickZone(WH which);
+	void adjustZoneToDraw(RECT & rc2def, ZONE_TYPE whichZone);
 	void drawSplitter();
 	bool isVertical() const {return (_dwFlags & SV_VERTICAL) != 0;};
 	void paintArrow(HDC hdc, const RECT &rect, Arrow arrowDir);
 	void gotoTopLeft();
 	void gotoRightBouuom();
 
-	bool isInLeftTopZone(const POINT &p) const {
+	bool isInLeftTopZone(const POINT &p) const
+	{
 		return (((p.x >= _clickZone2TL.left) && (p.x <= _clickZone2TL.left + _clickZone2TL.right)) &&
 			(p.y >= _clickZone2TL.top) && (p.y <= _clickZone2TL.top + _clickZone2TL.bottom));
 	};
 
-	bool isInRightBottomZone(const POINT &p) const {
-		return (((p.x >= _clickZone2BR.left) && 
-			(p.x <= _clickZone2BR.left + _clickZone2BR.right)) &&
-			(p.y >= _clickZone2BR.top) && 
-			(p.y <= _clickZone2BR.top + _clickZone2BR.bottom));
+	bool isInRightBottomZone(const POINT &p) const
+	{
+		return (((p.x >= _clickZone2BR.left) &&
+				 (p.x <= _clickZone2BR.left + _clickZone2BR.right)) &&
+				 (p.y >= _clickZone2BR.top) &&
+				 (p.y <= _clickZone2BR.top + _clickZone2BR.bottom));
 	};
-	
-	int getSplitterFixPosX() {
+
+	int getSplitterFixPosX()
+	{
 		long result = long(::SendMessage(_hParent, WM_GETSPLITTER_X, 0, 0));
 		return (LOWORD(result) - ((HIWORD(result) == RIGHT_FIX) ? _spiltterSize : 0));
 	};
 
-	int getSplitterFixPosY() {
+	int getSplitterFixPosY()
+	{
 		long result = long(::SendMessage(_hParent, WM_GETSPLITTER_Y, 0, 0));
 		return (LOWORD(result) - ((HIWORD(result) == RIGHT_FIX) ? _spiltterSize : 0));
 	};

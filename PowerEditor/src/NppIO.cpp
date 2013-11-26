@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -242,6 +242,7 @@ bool Notepad_plus::doReload(BufferID id, bool alert)
 			TEXT("Are you sure you want to reload the current file and lose the changes made in Notepad++?"),
 			TEXT("Reload"), 
 			MB_YESNO | MB_ICONEXCLAMATION | MB_APPLMODAL);
+
 		if (answer != IDYES)
 			return false;
 	}
@@ -250,29 +251,37 @@ bool Notepad_plus::doReload(BufferID id, bool alert)
 	//an empty Document is inserted during reload if needed.
 	bool mainVisisble = (_mainEditView.getCurrentBufferID() == id);
 	bool subVisisble = (_subEditView.getCurrentBufferID() == id);
-	if (mainVisisble) {
+	if (mainVisisble)
+	{
 		_mainEditView.saveCurrentPos();
 		_mainEditView.execute(SCI_SETDOCPOINTER, 0, 0);
 	}
-	if (subVisisble) {
+
+	if (subVisisble)
+	{
 		_subEditView.saveCurrentPos();
 		_subEditView.execute(SCI_SETDOCPOINTER, 0, 0);
 	}
 
-	if (!mainVisisble && !subVisisble) {
+	if (!mainVisisble && !subVisisble)
+	{
 		return MainFileManager->reloadBufferDeferred(id);
 	}
 
 	bool res = MainFileManager->reloadBuffer(id);
 	Buffer * pBuf = MainFileManager->getBufferByID(id);
-	if (mainVisisble) {
+	if (mainVisisble)
+	{
 		_mainEditView.execute(SCI_SETDOCPOINTER, 0, pBuf->getDocument());
 		_mainEditView.restoreCurrentPos();
 	}
-	if (subVisisble) {
+
+	if (subVisisble)
+	{
 		_subEditView.execute(SCI_SETDOCPOINTER, 0, pBuf->getDocument());
 		_subEditView.restoreCurrentPos();
 	}
+
 	return res;
 }
 
@@ -313,6 +322,7 @@ bool Notepad_plus::doSave(BufferID id, const TCHAR * filename, bool isCopy)
 			::MessageBox(_pPublicInterface->getHSelf(), error_msg.c_str(), TEXT("Save failed"), MB_OK);
 		}
 	}
+
 	return res;
 }
 
@@ -363,7 +373,8 @@ void Notepad_plus::doClose(BufferID id, int whichOne)
 	bool isBufRemoved = removeBufferFromView(id, whichOne);
 	int hiddenBufferID = -1;
 	if (nrDocs == 1 && canHideView(whichOne))
-	{	//close the view if both visible
+	{
+		//close the view if both visible
 		hideView(whichOne);
 
 		// if the current activated buffer is in this view, 
@@ -439,7 +450,7 @@ generic_string Notepad_plus::exts2Filters(generic_string exts) const
 	}
 
 	// remove the last ';'
-    filters = filters.substr(0, filters.length()-1);
+	filters = filters.substr(0, filters.length()-1);
 	return filters;
 }
 
@@ -451,8 +462,8 @@ int Notepad_plus::setFileOpenSaveDlgFilters(FileDialog & fDlg, int langType)
 	int i = 0;
 	Lang *l = NppParameters::getInstance()->getLangFromIndex(i++);
 
-    int ltIndex = 0;
-    bool ltFound = false;
+	int ltIndex = 0;
+	bool ltFound = false;
 	while (l)
 	{
 		LangType lid = l->getLangID();
@@ -495,26 +506,26 @@ int Notepad_plus::setFileOpenSaveDlgFilters(FileDialog & fDlg, int langType)
 			{
 				fDlg.setExtsFilter(getLangDesc(lid, false).c_str(), filters);
 
-                //
-                // Get index of lang type to find
-                //
-                if (langType != -1 && !ltFound)
-                {
-                    ltFound = langType == lid;
-                }
+				//
+				// Get index of lang type to find
+				//
+				if (langType != -1 && !ltFound)
+				{
+					ltFound = langType == lid;
+				}
 
-                if (langType != -1 && !ltFound)
-                {
-                    ++ltIndex;
-                }
+				if (langType != -1 && !ltFound)
+				{
+					++ltIndex;
+				}
 			}
 		}
 		l = (NppParameters::getInstance())->getLangFromIndex(i++);
 	}
 
-    if (!ltFound)
-        return -1;
-    return ltIndex;
+	if (!ltFound)
+		return -1;
+	return ltIndex;
 }
 
 
@@ -593,6 +604,7 @@ bool Notepad_plus::fileCloseAll()
 			}
 		}
 	}
+
 	for(int i = 0; i < _subDocTab.nbItem(); ++i) 
 	{
 		BufferID id = _subDocTab.getBufferByIndex(i);
@@ -621,20 +633,24 @@ bool Notepad_plus::fileCloseAll()
 	}
 
 	//Then start closing, inactive view first so the active is left open
-    if (bothActive())
-    {	//first close all docs in non-current view, which gets closed automatically
+	if (bothActive())
+	{
+		//first close all docs in non-current view, which gets closed automatically
 		//Set active tab to the last one closed.
 		activateBuffer(_pNonDocTab->getBufferByIndex(0), otherView());
-		for(int i = _pNonDocTab->nbItem() - 1; i >= 0; i--) {	//close all from right to left
+		for(int i = _pNonDocTab->nbItem() - 1; i >= 0; i--) //close all from right to left
+		{
 			doClose(_pNonDocTab->getBufferByIndex(i), otherView());
 		}
 		//hideView(otherView());
-    }
+	}
 
 	activateBuffer(_pDocTab->getBufferByIndex(0), currentView());
-	for(int i = _pDocTab->nbItem() - 1; i >= 0; i--) {	//close all from right to left
+	for(int i = _pDocTab->nbItem() - 1; i >= 0; i--) //close all from right to left
+	{
 		doClose(_pDocTab->getBufferByIndex(i), currentView());
 	}
+
 	return true;
 }
 
@@ -644,7 +660,8 @@ bool Notepad_plus::fileCloseAllGiven(const std::vector<int> &krvecBufferIndexes)
 
 	std::vector<int>::const_iterator itIndexesEnd = krvecBufferIndexes.end();
 
-	for(std::vector<int>::const_iterator itIndex = krvecBufferIndexes.begin(); itIndex != itIndexesEnd; ++itIndex) {
+	for(std::vector<int>::const_iterator itIndex = krvecBufferIndexes.begin(); itIndex != itIndexesEnd; ++itIndex)
+	{
 		BufferID id = _pDocTab->getBufferByIndex(*itIndex);
 		Buffer * buf = MainFileManager->getBufferByID(id);
 		if (buf->isUntitled() && buf->docLength() == 0)
@@ -679,7 +696,8 @@ bool Notepad_plus::fileCloseAllGiven(const std::vector<int> &krvecBufferIndexes)
 	}
 
 	// Now we close.
-	for(std::vector<int>::const_iterator itIndex = krvecBufferIndexes.begin(); itIndex != itIndexesEnd; ++itIndex) {
+	for(std::vector<int>::const_iterator itIndex = krvecBufferIndexes.begin(); itIndex != itIndexesEnd; ++itIndex)
+	{
 		doClose(_pDocTab->getBufferByIndex(*itIndex), currentView());
 	}
 
@@ -691,9 +709,11 @@ bool Notepad_plus::fileCloseAllToLeft()
 	// Indexes must go from high to low to deal with the fact that when one index is closed, any remaining
 	// indexes (smaller than the one just closed) will point to the wrong tab.
 	std::vector<int> vecIndexesToClose;
-	for(int i = _pDocTab->getCurrentTabIndex() - 1; i >= 0; i--) {
+	for(int i = _pDocTab->getCurrentTabIndex() - 1; i >= 0; i--)
+	{
 		vecIndexesToClose.push_back(i);
 	}
+
 	return fileCloseAllGiven(vecIndexesToClose);
 }
 
@@ -703,9 +723,11 @@ bool Notepad_plus::fileCloseAllToRight()
 	// indexes (smaller than the one just closed) will point to the wrong tab.
 	const int kiActive = _pDocTab->getCurrentTabIndex();
 	std::vector<int> vecIndexesToClose;
-	for(int i = _pDocTab->nbItem() - 1; i > kiActive; i--) {
+	for(int i = _pDocTab->nbItem() - 1; i > kiActive; i--)
+	{
 		vecIndexesToClose.push_back(i);
 	}
+
 	return fileCloseAllGiven(vecIndexesToClose);
 }
 
@@ -716,10 +738,12 @@ bool Notepad_plus::fileCloseAllButCurrent()
 	//closes all documents, makes the current view the only one visible
 
 	//first check if we need to save any file
-	for(int i = 0; i < _mainDocTab.nbItem(); ++i) {
+	for(int i = 0; i < _mainDocTab.nbItem(); ++i)
+	{
 		BufferID id = _mainDocTab.getBufferByIndex(i);
 		if (id == current)
 			continue;
+
 		Buffer * buf = MainFileManager->getBufferByID(id);
 		if (buf->isUntitled() && buf->docLength() == 0)
 		{
@@ -735,7 +759,7 @@ bool Notepad_plus::fileCloseAllButCurrent()
 			if (res == IDYES) 
 			{
 				if (!fileSave(id))
-					return false;	//abort entire procedure
+					return false; //abort entire procedure
 			} 
 			else if (res == IDCANCEL)
 			{
@@ -743,6 +767,7 @@ bool Notepad_plus::fileCloseAllButCurrent()
 			}
 		}
 	}
+
 	for(int i = 0; i < _subDocTab.nbItem(); ++i) 
 	{
 		BufferID id = _subDocTab.getBufferByIndex(i);
@@ -772,23 +797,29 @@ bool Notepad_plus::fileCloseAllButCurrent()
 	}
 
 	//Then start closing, inactive view first so the active is left open
-    if (bothActive())
-    {	//first close all docs in non-current view, which gets closed automatically
+	if (bothActive())
+	{
+		//first close all docs in non-current view, which gets closed automatically
 		//Set active tab to the last one closed.
 		activateBuffer(_pNonDocTab->getBufferByIndex(0), otherView());
-		for(int i = _pNonDocTab->nbItem() - 1; i >= 0; i--) {	//close all from right to left
+		for(int i = _pNonDocTab->nbItem() - 1; i >= 0; i--) //close all from right to left
+		{
 			doClose(_pNonDocTab->getBufferByIndex(i), otherView());
 		}
 		//hideView(otherView());
-    }
+	}
 
 	activateBuffer(_pDocTab->getBufferByIndex(0), currentView());
-	for(int i = _pDocTab->nbItem() - 1; i >= 0; i--) {	//close all from right to left
-		if (i == active) {	//dont close active index
+	for(int i = _pDocTab->nbItem() - 1; i >= 0; i--) //close all from right to left
+	{
+		if (i == active) //dont close active index
+		{
 			continue;
 		}
+
 		doClose(_pDocTab->getBufferByIndex(i), currentView());
 	}
+
 	return true;
 }
 
@@ -880,20 +911,26 @@ bool Notepad_plus::fileSave(BufferID id)
 	return false;
 }
 
-bool Notepad_plus::fileSaveAll() {
-	if (viewVisible(MAIN_VIEW)) {
-		for(int i = 0; i < _mainDocTab.nbItem(); ++i) {
+bool Notepad_plus::fileSaveAll()
+{
+	if (viewVisible(MAIN_VIEW))
+	{
+		for(int i = 0; i < _mainDocTab.nbItem(); ++i) 
+		{
 			BufferID idToSave = _mainDocTab.getBufferByIndex(i);
 			fileSave(idToSave);
 		}
 	}
 
-	if (viewVisible(SUB_VIEW)) {
-		for(int i = 0; i < _subDocTab.nbItem(); ++i) {
+	if (viewVisible(SUB_VIEW))
+	{
+		for(int i = 0; i < _subDocTab.nbItem(); ++i)
+		{
 			BufferID idToSave = _subDocTab.getBufferByIndex(i);
 			fileSave(idToSave);
 		}
 	}
+
 	checkDocState();
 	return true;
 }
@@ -907,11 +944,11 @@ bool Notepad_plus::fileSaveAs(BufferID id, bool isSaveCopy)
 
 	FileDialog fDlg(_pPublicInterface->getHSelf(), _pPublicInterface->getHinst());
 
-    fDlg.setExtFilter(TEXT("All types"), TEXT(".*"), NULL);
+	fDlg.setExtFilter(TEXT("All types"), TEXT(".*"), NULL);
 	int langTypeIndex = setFileOpenSaveDlgFilters(fDlg, buf->getLangType());
 	fDlg.setDefFileName(buf->getFileName());
 	
-    fDlg.setExtIndex(langTypeIndex+1); // +1 for "All types"
+	fDlg.setExtIndex(langTypeIndex+1); // +1 for "All types"
 
 	// Disable file autodetection before opening save dialog to prevent use-after-delete bug.
 	NppParameters *pNppParam = NppParameters::getInstance();
@@ -933,7 +970,7 @@ bool Notepad_plus::fileSaveAs(BufferID id, bool isSaveCopy)
 			//Changing lexer after save seems to work properly
 			return res;
 		}
-		else		//cannot save, other view has buffer already open, activate it
+		else //cannot save, other view has buffer already open, activate it
 		{
 			_nativeLangSpeaker.messageBox("FileAlreadyOpenedInNpp",
 				_pPublicInterface->getHSelf(),
@@ -945,10 +982,10 @@ bool Notepad_plus::fileSaveAs(BufferID id, bool isSaveCopy)
 		}
 	}
 	else // cancel button is pressed
-    {
-        checkModifiedDocument();
+	{
+		checkModifiedDocument();
 		return false;
-    }
+	}
 }
 
 bool Notepad_plus::fileRename(BufferID id)
@@ -960,9 +997,9 @@ bool Notepad_plus::fileRename(BufferID id)
 
 	FileDialog fDlg(_pPublicInterface->getHSelf(), _pPublicInterface->getHinst());
 
-    fDlg.setExtFilter(TEXT("All types"), TEXT(".*"), NULL);
+	fDlg.setExtFilter(TEXT("All types"), TEXT(".*"), NULL);
 	setFileOpenSaveDlgFilters(fDlg);
-			
+
 	fDlg.setDefFileName(buf->getFileName());
 	TCHAR *pfn = fDlg.doSaveDlg();
 
@@ -1006,12 +1043,13 @@ bool Notepad_plus::fileDelete(BufferID id)
 		doClose(bufferID, SUB_VIEW);
 		return true;
 	}
+
 	return false;
 }
 
 void Notepad_plus::fileOpen()
 {
-    FileDialog fDlg(_pPublicInterface->getHSelf(), _pPublicInterface->getHinst());
+	FileDialog fDlg(_pPublicInterface->getHSelf(), _pPublicInterface->getHinst());
 	fDlg.setExtFilter(TEXT("All types"), TEXT(".*"), NULL);
 	
 	setFileOpenSaveDlgFilters(fDlg);
@@ -1020,26 +1058,30 @@ void Notepad_plus::fileOpen()
 	if (stringVector *pfns = fDlg.doOpenMultiFilesDlg())
 	{
 		size_t sz = pfns->size();
-		for (size_t i = 0 ; i < sz ; ++i) {
+		for (size_t i = 0 ; i < sz ; ++i)
+		{
 			BufferID test = doOpen(pfns->at(i).c_str(), fDlg.isReadOnly());
 			if (test != BUFFER_INVALID)
 				lastOpened = test;
 		}
 	}
-	if (lastOpened != BUFFER_INVALID) {
+
+	if (lastOpened != BUFFER_INVALID)
+	{
 		switchToFile(lastOpened);
 	}
 }
 
 void Notepad_plus::fileNew()
 {
-    BufferID newBufID = MainFileManager->newEmptyDocument();
+	BufferID newBufID = MainFileManager->newEmptyDocument();
 	
-    loadBufferIntoView(newBufID, currentView(), true);	//true, because we want multiple new files if possible
-    activateBuffer(newBufID, currentView());
+	loadBufferIntoView(newBufID, currentView(), true);	//true, because we want multiple new files if possible
+	activateBuffer(newBufID, currentView());
 }
 
-bool Notepad_plus::isFileSession(const TCHAR * filename) {
+bool Notepad_plus::isFileSession(const TCHAR * filename)
+{
 	// if file2open matches the ext of user defined session file ext, then it'll be opened as a session
 	const TCHAR *definedSessionExt = NppParameters::getInstance()->getNppGUI()._definedSessionExt.c_str();
 	if (*definedSessionExt != '\0')
@@ -1202,7 +1244,7 @@ bool Notepad_plus::loadSession(Session & session)
 			const TCHAR *pLn = session._subViewFiles[k]._langName.c_str();
 			int id = getLangFromMenuName(pLn);
 			LangType typeToSet = L_TEXT;
-            
+			
 			if (id != 0)
 				typeToSet = menuID2LangType(id);
 			if (typeToSet == L_EXTERNAL )
@@ -1270,6 +1312,7 @@ bool Notepad_plus::loadSession(Session & session)
 		hideView(otherView());
 	else if (canHideView(currentView()))
 		hideView(currentView());
+
 	return allSessionFilesLoaded;
 }
 
@@ -1333,10 +1376,12 @@ bool Notepad_plus::fileLoadSession(const TCHAR *fn)
 				isAllSuccessful = loadSession(session2Load);
 				result = true;
 			}
+
 			if (!isAllSuccessful)
 				(NppParameters::getInstance())->writeSession(session2Load, sessionFileName);
 		}
 	}
+
 	return result;
 }
 
@@ -1354,11 +1399,14 @@ const TCHAR * Notepad_plus::fileSaveSession(size_t nbFile, TCHAR ** fileNames, c
 			}
 		}
 		else
+		{
 			getCurrentOpenedFiles(currentSession);
+		}
 
 		(NppParameters::getInstance())->writeSession(currentSession, sessionFile2save);
 		return sessionFile2save;
 	}
+
 	return NULL;
 }
 

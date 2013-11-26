@@ -30,7 +30,8 @@
 #include "ShortcutMapper.h"
 #include "Notepad_plus.h"
 
-void ShortcutMapper::initTabs() {
+void ShortcutMapper::initTabs()
+{
 	HWND hTab = _hTabCtrl = ::GetDlgItem(_hSelf, IDC_BABYGRID_TABBAR);
 	TCITEM tie;
 	tie.mask = TCIF_TEXT;
@@ -48,13 +49,15 @@ void ShortcutMapper::initTabs() {
 	TabCtrl_SetCurSel(_hTabCtrl, int(_currentState));
 }
 
-void ShortcutMapper::translateTab(int index, const TCHAR * newname) {
+void ShortcutMapper::translateTab(int index, const TCHAR * newname)
+{
 	if (index < 0 || index > 4)
 		return;
 	generic_strncpy(tabNames[index], newname, maxTabName);
 }
 
-void ShortcutMapper::initBabyGrid() {
+void ShortcutMapper::initBabyGrid()
+{
 	RECT rect;
 	getClientRect(rect);
 

@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -33,9 +33,10 @@
 #include "TabBar.h"
 #endif //TAB_BAR_H
 
-struct DlgInfo {
-    Window *_dlg;
-    generic_string _name;
+struct DlgInfo
+{
+	Window *_dlg;
+	generic_string _name;
 	generic_string _internalName;
 
 	DlgInfo(Window *dlg, TCHAR *name, TCHAR *internalName = NULL): _dlg(dlg), _name(name), _internalName(internalName?internalName:TEXT("")) {};
@@ -49,16 +50,19 @@ public :
 	ControlsTab() : TabBar(), _pWinVector(NULL), _current(0), _isVertical(false) {};
 	~ControlsTab(){};
 
-	virtual void init(HINSTANCE hInst, HWND hwnd, bool isVertical = false, bool isTraditional = false, bool isMultiLine = false) {
+	virtual void init(HINSTANCE hInst, HWND hwnd, bool isVertical = false, bool isTraditional = false, bool isMultiLine = false)
+	{
 		_isVertical = isVertical;
 		TabBar::init(hInst, hwnd, false, isTraditional, isMultiLine);
 	};
+
 	void ControlsTab::createTabs(WindowVector & winVector);
 
-	void destroy() {
+	void destroy()
+	{
 		TabBar::destroy();
 	};
-	
+
 	virtual void reSizeTo(RECT & rc);
 	void activateWindowAt(int index);
 
@@ -72,10 +76,8 @@ public :
 
 private :
 	WindowVector *_pWinVector;
-    int _current;
-    bool _isVertical;
+	int _current;
+	bool _isVertical;
 };
-
-
 
 #endif //CONTROLS_TAB_H

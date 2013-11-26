@@ -40,7 +40,7 @@ void VerticalFileSwitcherListView::init(HINSTANCE hInst, HWND parent, HIMAGELIST
 	icex.dwICC  = ICC_LISTVIEW_CLASSES;
 	InitCommonControlsEx(&icex);
 
-    // Create the list-view window in report view with label editing enabled.
+	// Create the list-view window in report view with label editing enabled.
 	int listViewStyles = LVS_REPORT /*| LVS_SINGLESEL*/ | LVS_AUTOARRANGE\
 						| LVS_SHAREIMAGELISTS | LVS_SHOWSELALWAYS;
 

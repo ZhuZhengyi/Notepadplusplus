@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -38,11 +38,11 @@ FileDialog::FileDialog(HWND hwnd, HINSTANCE hInst)
 	: _nbCharFileExt(0), _nbExt(0), _fileExt(NULL), _extTypeIndex(-1)
 {
 	staticThis = this;
-    //for (int i = 0 ; i < nbExtMax ; i++)
-    //    _extArray[i][0] = '\0';
+	//for (int i = 0 ; i < nbExtMax ; i++)
+	//    _extArray[i][0] = '\0';
 
 	_fileName[0] = '\0';
- 
+
 	_winVersion = (NppParameters::getInstance())->getWinVersion();
 
 	_ofn.lStructSize = sizeof(_ofn);
@@ -88,39 +88,39 @@ FileDialog::~FileDialog()
 // FileDialog.setExtFilter(TEXT("Makefile"), TEXT("makefile"), TEXT("GNUmakefile"), NULL);
 void FileDialog::setExtFilter(const TCHAR *extText, const TCHAR *ext, ...)
 {
-    // fill out the ext array for save as file dialog
+	// fill out the ext array for save as file dialog
 	generic_string exts;
 
-    va_list pArg;
-    va_start(pArg, ext);
+	va_list pArg;
+	va_start(pArg, ext);
 
-    const TCHAR *ext2Concat;
+	const TCHAR *ext2Concat;
 	ext2Concat = ext;
-    do
+	do
 	{
-        if (ext2Concat[0] == TEXT('.'))
-            exts += TEXT("*");
-        exts += ext2Concat;
-        exts += TEXT(";");
+		if (ext2Concat[0] == TEXT('.'))
+			exts += TEXT("*");
+		exts += ext2Concat;
+		exts += TEXT(";");
 	}
 	while ( (ext2Concat = va_arg(pArg, const TCHAR *)) != NULL );
 
 	va_end(pArg);
 
 	// remove the last ';'
-    exts = exts.substr(0, exts.length()-1);
+	exts = exts.substr(0, exts.length()-1);
 
 	setExtsFilter(extText, exts.c_str());
 }
 
 int FileDialog::setExtsFilter(const TCHAR *extText, const TCHAR *exts)
 {
-    // fill out the ext array for save as file dialog
-    generic_string extFilter = extText;
+	// fill out the ext array for save as file dialog
+	generic_string extFilter = extText;
 	TCHAR *oldFilter = NULL;
 
-    extFilter += TEXT(" (");
-    extFilter += exts;
+	extFilter += TEXT(" (");
+	extFilter += exts;
 	extFilter += TEXT(")");	
 	
 	// Resize filter buffer
@@ -147,13 +147,13 @@ int FileDialog::setExtsFilter(const TCHAR *extText, const TCHAR *exts)
 	}
 
 	// Append new filter    
-    TCHAR *pFileExt = _fileExt + _nbCharFileExt;
+	TCHAR *pFileExt = _fileExt + _nbCharFileExt;
 	lstrcpy(pFileExt, extFilter.c_str());
-    _nbCharFileExt += extFilter.length() + 1;
-    
-    pFileExt = _fileExt + _nbCharFileExt;
+	_nbCharFileExt += extFilter.length() + 1;
+	
+	pFileExt = _fileExt + _nbCharFileExt;
 	lstrcpy(pFileExt, exts);
-    _nbCharFileExt += lstrlen(exts) + 1;
+	_nbCharFileExt += lstrlen(exts) + 1;
 
 	// Set file dialog pointer
 	_ofn.lpstrFilter = _fileExt;
@@ -171,7 +171,8 @@ TCHAR * FileDialog::doOpenSingleFileDlg()
 	_ofn.Flags |= OFN_FILEMUSTEXIST;
 
 	TCHAR *fn = NULL;
-	try {
+	try
+	{
 		fn = ::GetOpenFileName((OPENFILENAME*)&_ofn)?_fileName:NULL;
 		
 		if (params->getNppGUI()._openSaveDir == dir_last)
@@ -179,9 +180,13 @@ TCHAR * FileDialog::doOpenSingleFileDlg()
 			::GetCurrentDirectory(MAX_PATH, dir);
 			params->setWorkingDir(dir);
 		}
-	} catch(std::exception e) {
+	}
+	catch(std::exception e)
+	{
 		::MessageBoxA(NULL, e.what(), "Exception", MB_OK);
-	} catch(...) {
+	}
+	catch(...)
+	{
 		::MessageBox(NULL, TEXT("GetSaveFileName crashes!!!"), TEXT(""), MB_OK);
 	}
 
@@ -214,15 +219,17 @@ stringVector * FileDialog::doOpenMultiFilesDlg()
 		TCHAR fn[MAX_PATH];
 		TCHAR *pFn = _fileName + lstrlen(_fileName) + 1;
 		if (!(*pFn))
+		{
 			_fileNames.push_back(generic_string(_fileName));
+		}
 		else
 		{
 			lstrcpy(fn, _fileName);
 			if (fn[lstrlen(fn)-1] != '\\')
 				lstrcat(fn, TEXT("\\"));
 		}
-		int term = int(lstrlen(fn));
 
+		int term = int(lstrlen(fn));
 		while (*pFn)
 		{
 			fn[term] = '\0';
@@ -234,7 +241,9 @@ stringVector * FileDialog::doOpenMultiFilesDlg()
 		return &_fileNames;
 	}
 	else
+	{
 		return NULL;
+	}
 }
 
 TCHAR * FileDialog::doSaveDlg() 
@@ -252,16 +261,21 @@ TCHAR * FileDialog::doSaveDlg()
 	_ofn.lpfnHook = OFNHookProc;
 
 	TCHAR *fn = NULL;
-	try {
+	try
+	{
 		fn = ::GetSaveFileName((OPENFILENAME*)&_ofn)?_fileName:NULL;
 		if (params->getNppGUI()._openSaveDir == dir_last)
 		{
 			::GetCurrentDirectory(MAX_PATH, dir);
 			params->setWorkingDir(dir);
 		}
-	} catch(std::exception e) {
+	}
+	catch(std::exception e)
+	{
 		::MessageBoxA(NULL, e.what(), "Exception", MB_OK);
-	} catch(...) {
+	}
+	catch(...)
+	{
 		::MessageBox(NULL, TEXT("GetSaveFileName crashes!!!"), TEXT(""), MB_OK);
 	}
 
@@ -278,7 +292,7 @@ static generic_string currentExt = TEXT("");
 static BOOL CALLBACK fileDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
-    {
+	{
 		case WM_COMMAND :
 		{
 			switch (wParam)
@@ -313,7 +327,8 @@ static BOOL CALLBACK fileDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 };
 
 
-static TCHAR * get1stExt(TCHAR *ext) { // precondition : ext should be under the format : Batch (*.bat;*.cmd;*.nt)
+static TCHAR * get1stExt(TCHAR *ext) // precondition : ext should be under the format : Batch (*.bat;*.cmd;*.nt)
+{
 	TCHAR *begin = ext;
 	for ( ; *begin != '.' ; begin++);
 	TCHAR *end = ++begin;
@@ -324,7 +339,8 @@ static TCHAR * get1stExt(TCHAR *ext) { // precondition : ext should be under the
 	return begin;
 };
 
-static generic_string addExt(HWND textCtrl, HWND typeCtrl) {
+static generic_string addExt(HWND textCtrl, HWND typeCtrl)
+{
 	TCHAR fn[MAX_PATH];
 	::GetWindowText(textCtrl, fn, MAX_PATH);
 	
@@ -349,10 +365,10 @@ static generic_string addExt(HWND textCtrl, HWND typeCtrl) {
 
 UINT_PTR CALLBACK FileDialog::OFNHookProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    switch(uMsg)
-    {
-        case WM_INITDIALOG :
-        {
+	switch(uMsg)
+	{
+		case WM_INITDIALOG :
+		{
 			NppParameters *pNppParam = NppParameters::getInstance();
 			int index = pNppParam->getFileSaveDlgFilterIndex();
 
@@ -383,30 +399,30 @@ UINT_PTR CALLBACK FileDialog::OFNHookProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
 			}
 			return pFileDialog->run(hWnd, uMsg, wParam, lParam);
 		}
-    }
+	}
 }
 
 BOOL APIENTRY FileDialog::run(HWND hWnd, UINT uMsg, WPARAM, LPARAM lParam)
 {
-    switch (uMsg)
-    {
-        case WM_NOTIFY :
+	switch (uMsg)
+	{
+		case WM_NOTIFY :
 		{
 			LPNMHDR pNmhdr = (LPNMHDR)lParam;
 			switch(pNmhdr->code)
 			{
-                case CDN_INITDONE :
-                {
-                    if (_extTypeIndex == -1)
-                        return TRUE;
+				case CDN_INITDONE :
+				{
+					if (_extTypeIndex == -1)
+						return TRUE;
 
-                    HWND fnControl = ::GetDlgItem(::GetParent(hWnd), _dialogFileBoxId);
-                    HWND typeControl = ::GetDlgItem(::GetParent(hWnd), cmb1);
-                    ::SendMessage(typeControl, CB_SETCURSEL, _extTypeIndex, 0);
+					HWND fnControl = ::GetDlgItem(::GetParent(hWnd), _dialogFileBoxId);
+					HWND typeControl = ::GetDlgItem(::GetParent(hWnd), cmb1);
+					::SendMessage(typeControl, CB_SETCURSEL, _extTypeIndex, 0);
 
-                    currentExt = addExt(fnControl, typeControl);
-                    return TRUE;
-                }
+					currentExt = addExt(fnControl, typeControl);
+					return TRUE;
+				}
 
 				case CDN_TYPECHANGE :
 				{
@@ -430,29 +446,30 @@ BOOL APIENTRY FileDialog::run(HWND hWnd, UINT uMsg, WPARAM, LPARAM lParam)
 			}
 			
 		}
+
 		default :
 			return FALSE;
-    }
+	}
 }
 
 void goToCenter(HWND hwnd)
 {
-    RECT rc;
+	RECT rc;
 	HWND hParent = ::GetParent(hwnd);
 	::GetClientRect(hParent, &rc);
 	
 	//If window coordinates are all zero(ie,window is minimised),then assign desktop as the parent window.
- 	if(rc.left == 0 && rc.right == 0 && rc.top == 0 && rc.bottom == 0)
- 	{
- 		//hParent = ::GetDesktopWindow();
+	if(rc.left == 0 && rc.right == 0 && rc.top == 0 && rc.bottom == 0)
+	{
+		//hParent = ::GetDesktopWindow();
 		::ShowWindow(hParent, SW_SHOWNORMAL);
- 		::GetClientRect(hParent,&rc);
- 	}
+		::GetClientRect(hParent,&rc);
+	}
 	
-    POINT center;
-    center.x = rc.left + (rc.right - rc.left)/2;
-    center.y = rc.top + (rc.bottom - rc.top)/2;
-    ::ClientToScreen(hParent, &center);
+	POINT center;
+	center.x = rc.left + (rc.right - rc.left)/2;
+	center.y = rc.top + (rc.bottom - rc.top)/2;
+	::ClientToScreen(hParent, &center);
 
 	RECT _rc;
 	::GetWindowRect(hwnd, &_rc);

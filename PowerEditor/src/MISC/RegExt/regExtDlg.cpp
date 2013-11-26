@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -39,14 +39,14 @@ const int nbExtMax = 10;
 const int extNameMax = 18;
 
 TCHAR defExtArray[nbSupportedLang][nbExtMax][extNameMax] = {
-	{TEXT("Notepad"),        			TEXT(".txt"), TEXT(".log"), TEXT(".ini")},
-	{TEXT("c, c++, objc"),   	TEXT(".h"), TEXT(".hpp"), TEXT(".hxx"), TEXT(".c"), TEXT(".cpp"), TEXT(".cxx"), TEXT(".cc"), TEXT(".m")},
-	{TEXT("java, c#, pascal"), 		TEXT(".java"), TEXT(".cs"), TEXT(".pas"), TEXT(".inc")},
-	{TEXT("web(html) script"),   TEXT(".html"), TEXT(".htm"), TEXT(".php"), TEXT(".phtml"), TEXT(".js"), TEXT(".jsp"), TEXT(".asp"), TEXT(".css"), TEXT(".xml")},
-	{TEXT("public script"),		TEXT(".sh"), TEXT(".bsh"), TEXT(".nsi"), TEXT(".nsh"), TEXT(".lua"), TEXT(".pl"), TEXT(".pm"), TEXT(".py")},
-	{TEXT("property script"),	TEXT(".rc"), TEXT(".as"), TEXT(".mx"), TEXT(".vb"), TEXT(".vbs")},
-	{TEXT("fortran, TeX, SQL"),			TEXT(".f"),  TEXT(".for"), TEXT(".f90"),  TEXT(".f95"), TEXT(".f2k"), TEXT(".tex"), TEXT(".sql")},
-	{TEXT("misc"),								TEXT(".nfo"), TEXT(".mak")},
+	{TEXT("Notepad"),           TEXT(".txt"),  TEXT(".log"), TEXT(".ini")},
+	{TEXT("c, c++, objc"),      TEXT(".h"),    TEXT(".hpp"), TEXT(".hxx"), TEXT(".c"),     TEXT(".cpp"), TEXT(".cxx"), TEXT(".cc"),  TEXT(".m")},
+	{TEXT("java, c#, pascal"),  TEXT(".java"), TEXT(".cs"),  TEXT(".pas"), TEXT(".inc")},
+	{TEXT("web(html) script"),  TEXT(".html"), TEXT(".htm"), TEXT(".php"), TEXT(".phtml"), TEXT(".js"),  TEXT(".jsp"), TEXT(".asp"), TEXT(".css"), TEXT(".xml")},
+	{TEXT("public script"),     TEXT(".sh"),   TEXT(".bsh"), TEXT(".nsi"), TEXT(".nsh"),   TEXT(".lua"), TEXT(".pl"),  TEXT(".pm"),  TEXT(".py")},
+	{TEXT("property script"),   TEXT(".rc"),   TEXT(".as"),  TEXT(".mx"),  TEXT(".vb"),    TEXT(".vbs")},
+	{TEXT("fortran, TeX, SQL"), TEXT(".f"),    TEXT(".for"), TEXT(".f90"), TEXT(".f95"),   TEXT(".f2k"), TEXT(".tex"), TEXT(".sql")},
+	{TEXT("misc"),              TEXT(".nfo"),  TEXT(".mak")},
 	{TEXT("customize")}
 };
 
@@ -60,7 +60,9 @@ void RegExtDlg::doDialog(bool isRTL)
 		::GlobalFree(hMyDlgTemplate);
 	}
 	else
-		::DialogBoxParam(_hInst, MAKEINTRESOURCE(IDD_REGEXT_BOX), _hParent,  (DLGPROC)dlgProc, (LPARAM)this);
+	{
+		::DialogBoxParam(_hInst, MAKEINTRESOURCE(IDD_REGEXT_BOX), _hParent, (DLGPROC)dlgProc, (LPARAM)this);
+	}
 };
 
 BOOL CALLBACK RegExtDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lParam)
@@ -149,7 +151,7 @@ BOOL CALLBACK RegExtDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lParam)
 			}
 
 			if (HIWORD(wParam) == EN_CHANGE)
-            {
+			{
 				TCHAR text[extNameMax] = TEXT("");
 				::SendDlgItemMessage(_hSelf, IDC_CUSTOMEXT_EDIT, WM_GETTEXT, extNameMax, (LPARAM)text);
 				if ((lstrlen(text) == 1) && (text[0] != '.'))
@@ -165,7 +167,7 @@ BOOL CALLBACK RegExtDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lParam)
 			}
 
 			if (HIWORD(wParam) == LBN_SELCHANGE)
-            {
+			{
 				int i = ::SendDlgItemMessage(_hSelf, LOWORD(wParam), LB_GETCURSEL, 0, 0);
 				if (LOWORD(wParam) == IDC_REGEXT_LANG_LIST)
 				{
@@ -262,24 +264,23 @@ void RegExtDlg::getDefSupportedExts()
 
 void RegExtDlg::addExt(TCHAR *ext)
 {
-    HKEY  hKey;
-    DWORD dwDisp;
-    long  nRet;
-    
-	nRet = ::RegCreateKeyEx(HKEY_CLASSES_ROOT,
-                ext,
-                0,
-                NULL,
-                0,
-                KEY_ALL_ACCESS,
-                NULL,
-                &hKey,
-                &dwDisp);
-    
-    if (nRet == ERROR_SUCCESS)
-    {
+	HKEY  hKey;
+	DWORD dwDisp;
+
+	long nRet = ::RegCreateKeyEx(HKEY_CLASSES_ROOT,
+	            ext,
+	            0,
+	            NULL,
+	            0,
+	            KEY_ALL_ACCESS,
+	            NULL,
+	            &hKey,
+	            &dwDisp);
+
+	if (nRet == ERROR_SUCCESS)
+	{
 		TCHAR valData[MAX_PATH];
-		int valDataLen = MAX_PATH * sizeof(TCHAR);		
+		int valDataLen = MAX_PATH * sizeof(TCHAR);
 
 		if (dwDisp == REG_OPENED_EXISTING_KEY)
 		{
@@ -290,7 +291,7 @@ void RegExtDlg::addExt(TCHAR *ext)
 		::RegSetValueEx(hKey, NULL, 0, REG_SZ, (LPBYTE)nppName, (lstrlen(nppName)+1)*sizeof(TCHAR));
 
 		::RegCloseKey(hKey);
-    }
+	}
 }
 
 bool RegExtDlg::deleteExts(const TCHAR *ext2Delete)
@@ -320,7 +321,9 @@ bool RegExtDlg::deleteExts(const TCHAR *ext2Delete)
 			::RegDeleteValue(hKey, nppBackup);
 		}
 		else
+		{
 			::RegDeleteValue(hKey, NULL);
+		}
 	}
 
 	return true;
@@ -330,11 +333,10 @@ void RegExtDlg::writeNppPath()
 {
 	HKEY  hKey, hRootKey;
 	DWORD dwDisp;
-	long  nRet;
 	generic_string regStr(nppName);
 	regStr += TEXT("\\shell\\open\\command");
 
-	nRet = ::RegCreateKeyEx(
+	long nRet = ::RegCreateKeyEx(
 				HKEY_CLASSES_ROOT,
 				regStr.c_str(),
 				0,
@@ -394,4 +396,4 @@ void RegExtDlg::writeNppPath()
 		}
 		RegCloseKey(hKey);
 	}
-} 
+}

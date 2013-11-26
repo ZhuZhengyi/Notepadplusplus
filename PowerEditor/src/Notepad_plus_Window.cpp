@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -79,8 +79,8 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 					NULL,\
 					_hInst,\
 					(LPVOID)this); // pass the ptr of this instantiated object
-                                   // for retrieve it in Notepad_plus_Proc from 
-                                   // the CREATESTRUCT.lpCreateParams afterward.
+					               // for retrieve it in Notepad_plus_Proc from 
+					               // the CREATESTRUCT.lpCreateParams afterward.
 
 	if (!_hSelf)
 	{
@@ -97,7 +97,7 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 	{
 		WINDOWPLACEMENT posInfo;
 
-	    posInfo.length = sizeof(WINDOWPLACEMENT);
+		posInfo.length = sizeof(WINDOWPLACEMENT);
 		posInfo.flags = 0;
 		if(_isPrelaunch)
 			posInfo.showCmd = SW_HIDE;
@@ -131,7 +131,7 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 	{
 		::SendMessage(_hSelf, WM_COMMAND, IDM_VIEW_ALWAYSONTOP, 0);
 	}
-    _notepad_plus_plus_core._rememberThisSession = !cmdLineParams->_isNoSession;
+	_notepad_plus_plus_core._rememberThisSession = !cmdLineParams->_isNoSession;
 	if (nppGUI._rememberLastSession && !cmdLineParams->_isNoSession)
 	{
 		_notepad_plus_plus_core.loadLastSession();
@@ -150,10 +150,10 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 		_notepad_plus_plus_core._pTrayIco->doTrayIcon(ADD);
 	}
 
-    if (cmdLine)
-    {
+	if (cmdLine)
+	{
 		_notepad_plus_plus_core.loadCommandlineParams(cmdLine, cmdLineParams);
-    }
+	}
 
 	vector<generic_string> fileNames;
 	vector<generic_string> patterns;
@@ -179,16 +179,16 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 	//  overriding default themes of the same name.
 
 	generic_string themeDir;
-    if (pNppParams->getAppDataNppDir() && pNppParams->getAppDataNppDir()[0])
-    {
-        themeDir = pNppParams->getAppDataNppDir();
-	    PathAppend(themeDir, TEXT("themes\\"));
-	    _notepad_plus_plus_core.getMatchedFileNames(themeDir.c_str(), patterns, fileNames, false, false);
-	    for (size_t i = 0, len = fileNames.size() ; i < len ; ++i)
-	    {
-		    themeSwitcher.addThemeFromXml(fileNames[i].c_str());
-	    }
-    }
+	if (pNppParams->getAppDataNppDir() && pNppParams->getAppDataNppDir()[0])
+	{
+		themeDir = pNppParams->getAppDataNppDir();
+		PathAppend(themeDir, TEXT("themes\\"));
+		_notepad_plus_plus_core.getMatchedFileNames(themeDir.c_str(), patterns, fileNames, false, false);
+		for (size_t i = 0, len = fileNames.size() ; i < len ; ++i)
+		{
+			themeSwitcher.addThemeFromXml(fileNames[i].c_str());
+		}
+	}
 	fileNames.clear();
 	themeDir.clear();
 	themeDir = nppDir.c_str(); // <- should use the pointer to avoid the constructor of copy

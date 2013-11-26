@@ -39,7 +39,8 @@ const TCHAR currentColumn[] = TEXT("CURRENT_COLUMN");
 int whichVar(TCHAR *str);
 void expandNppEnvironmentStrs(const TCHAR *strSrc, TCHAR *stringDest, size_t strDestLen, HWND hWnd);
 
-class Command {
+class Command
+{
 public :
 	Command(){};
 	Command(TCHAR *cmd) : _cmdLine(cmd){};
@@ -59,9 +60,7 @@ public :
 
 	void doDialog(bool isRTL = false);
 
-    virtual void destroy() {
-
-    };
+	virtual void destroy() {};
 
 protected :
 	virtual BOOL CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);

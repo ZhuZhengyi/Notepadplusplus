@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 // 
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -86,11 +86,11 @@ void SmartHighlighter::highlightView(ScintillaEditView * pHighlightView)
 	int originalEndPos = (int)pHighlightView->execute(SCI_GETTARGETEND);
 
 	// Get the range of text visible and highlight everything in it
-	int firstLine =		(int)pHighlightView->execute(SCI_GETFIRSTVISIBLELINE);
-	int nrLines =	min((int)pHighlightView->execute(SCI_LINESONSCREEN), MAXLINEHIGHLIGHT ) + 1;
-	int lastLine =		firstLine+nrLines;
-	int startPos =		0;
-	int endPos =		0;
+	int firstLine = (int)pHighlightView->execute(SCI_GETFIRSTVISIBLELINE);
+	int nrLines   = min((int)pHighlightView->execute(SCI_LINESONSCREEN), MAXLINEHIGHLIGHT ) + 1;
+	int lastLine  = firstLine+nrLines;
+	int startPos  = 0;
+	int endPos    = 0;
 	int currentLine = firstLine;
 	int prevDocLineChecked = -1;	//invalid start
 
@@ -111,15 +111,18 @@ void SmartHighlighter::highlightView(ScintillaEditView * pHighlightView)
 	{
 		int docLine = (int)pHighlightView->execute(SCI_DOCLINEFROMVISIBLE, currentLine);
 		if (docLine == prevDocLineChecked)
-			continue;	//still on same line (wordwrap)
+			continue; //still on same line (wordwrap)
 		prevDocLineChecked = docLine;
 		startPos = (int)pHighlightView->execute(SCI_POSITIONFROMLINE, docLine);
 		endPos = (int)pHighlightView->execute(SCI_POSITIONFROMLINE, docLine+1);
-		if (endPos == -1) {	//past EOF
+		if (endPos == -1) //past EOF
+		{
 			endPos = (int)pHighlightView->getCurrentDocLen() - 1;
 			_pFRDlg->processRange(ProcessMarkAll_2, searchText, NULL, startPos, endPos, NULL, &fo);
 			break;
-		} else {
+		}
+		else
+		{
 			_pFRDlg->processRange(ProcessMarkAll_2, searchText, NULL, startPos, endPos, NULL, &fo);
 		}
 	}
@@ -136,6 +139,7 @@ bool SmartHighlighter::isQualifiedWord(const char *str) const
 		if (!isWordChar(str[i]))
 			return false;
 	}
+
 	return true;
 };
 
@@ -182,5 +186,6 @@ bool SmartHighlighter::isWordChar(char ch) const
 		case '\\':
 			return false;
 	}
+
 	return true;
 };

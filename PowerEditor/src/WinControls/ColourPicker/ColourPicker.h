@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -37,12 +37,12 @@ class ColourPicker : public Window
 {
 public :
 	ColourPicker() : Window(),  _currentColour(RGB(0xFF, 0x00, 0x00)), _pColourPopup(NULL), _isEnabled(true) {};
-    ~ColourPicker(){};
+	~ColourPicker(){};
 	virtual void init(HINSTANCE hInst, HWND parent);
 	virtual void destroy();
-    void setColour(COLORREF c) {
-        _currentColour = c;
-    };
+	void setColour(COLORREF c) {
+		_currentColour = c;
+	};
 
 	COLORREF getColour() const {return _currentColour;};
 	bool isEnabled() {return _isEnabled;};
@@ -50,15 +50,15 @@ public :
 
 private :
 	COLORREF _currentColour;
-    WNDPROC _buttonDefaultProc;
+	WNDPROC _buttonDefaultProc;
 	ColourPopup *_pColourPopup;
 	bool _isEnabled;
 
-    static LRESULT CALLBACK staticWinProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) {
-        return (((ColourPicker *)(::GetWindowLongPtr(hwnd, GWL_USERDATA)))->runProc(Message, wParam, lParam));
-    };
+	static LRESULT CALLBACK staticWinProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) {
+		return (((ColourPicker *)(::GetWindowLongPtr(hwnd, GWL_USERDATA)))->runProc(Message, wParam, lParam));
+	};
 	LRESULT runProc(UINT Message, WPARAM wParam, LPARAM lParam);
-    void drawForeground(HDC hDC);
+	void drawForeground(HDC hDC);
 	void drawBackground(HDC hDC);
 };
 

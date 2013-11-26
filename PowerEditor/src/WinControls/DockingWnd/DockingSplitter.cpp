@@ -169,6 +169,7 @@ LRESULT DockingSplitter::runProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 			}
 			break;
 		}
+
 		case WM_LBUTTONUP:
 		case WM_NCLBUTTONUP:
 		{
@@ -182,6 +183,7 @@ LRESULT DockingSplitter::runProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 			_isLeftButtonDown = FALSE;
 			break;
 		}
+
 		case WM_MOUSEMOVE:
 		case WM_NCMOUSEMOVE:
 		{
@@ -202,8 +204,10 @@ LRESULT DockingSplitter::runProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 			}
 			break;
 		}
+
 		default :
 			break;
 	}
+
 	return ::DefWindowProc(hwnd, message, wParam, lParam);
 }

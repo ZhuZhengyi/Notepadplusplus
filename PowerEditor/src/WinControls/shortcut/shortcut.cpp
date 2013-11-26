@@ -871,7 +871,7 @@ BOOL CALLBACK ScintillaKeyMap::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)
 					int res = addKeyCombo(_keyCombo);
 					if (res > -1)
 					{
-						if (res == oldsize
+						if (res == oldsize)
 						{
 							::SendDlgItemMessage(_hSelf, IDC_LIST_KEYS, LB_INSERTSTRING, (WPARAM)-1, (LPARAM)toString(res).c_str());
 						}

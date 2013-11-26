@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -30,13 +30,13 @@
 #ifndef RUN_MACRO_DLG_RC_H
 #define RUN_MACRO_DLG_RC_H
 
-#define IDD_RUN_MACRO_DLG					8000
-#define IDC_M_RUN_MULTI						8001
-#define IDC_M_RUN_EOF						8002
-#define IDC_M_RUN_TIMES						8003
-#define IDC_MACRO_COMBO						8004
-//#define IDC_MACROGROUP_STATIC				8005
-#define IDC_TIMES_STATIC					8005
-#define IDC_MACRO2RUN_STATIC				8006
+#define IDD_RUN_MACRO_DLG           8000
+#define IDC_M_RUN_MULTI             8001
+#define IDC_M_RUN_EOF               8002
+#define IDC_M_RUN_TIMES             8003
+#define IDC_MACRO_COMBO             8004
+//#define IDC_MACROGROUP_STATIC     8005
+#define IDC_TIMES_STATIC            8005
+#define IDC_MACRO2RUN_STATIC        8006
 
 #endif //RUN_MACRO_DLG_RC_H

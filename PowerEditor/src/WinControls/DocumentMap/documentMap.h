@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -45,7 +45,8 @@ class ScintillaEditView;
 const bool moveDown = true;
 const bool moveUp = false;
 
-enum moveMode {
+enum moveMode
+{
 	perLine,
 	perPage
 };
@@ -57,20 +58,24 @@ public :
 
 	void doDialog();
 
-    virtual void destroy() {
-    };
+	virtual void destroy()
+	{
+	};
 
-	void drawZone(long hY, long lY) {
+	void drawZone(long hY, long lY)
+	{
 		_higherY = hY;
 		_lowerY = lY;
 		::InvalidateRect(_viewZoneCanvas, NULL, TRUE);
 	};
 
-	int getViewerHeight() const {
+	int getViewerHeight() const
+	{
 		return (_lowerY - _higherY);
 	};
 
-	int getCurrentCenterPosY() const {
+	int getCurrentCenterPosY() const
+	{
 		return (_lowerY - _higherY)/2 + _higherY;
 	};
 
@@ -85,38 +90,44 @@ protected :
 private :
 	HWND _viewZoneCanvas;
 	WNDPROC _canvasDefaultProc;
-	
+
 	long _higherY;
 	long _lowerY;
 };
 
 
-class DocumentMap : public DockingDlgInterface {
+class DocumentMap : public DockingDlgInterface
+{
 public:
 	DocumentMap(): DockingDlgInterface(IDD_DOCUMENTMAP), _ppEditView(NULL),\
 		_pScintillaEditView(NULL), id4dockingCont(DM_NOFOCUSWHILECLICKINGCAPTION)
 	{};
 
-	void create(tTbData * data, bool isRTL = false) {
+	void create(tTbData * data, bool isRTL = false)
+	{
 		DockingDlgInterface::create(data, isRTL);
 		data->pszAddInfo = id4dockingCont.c_str();
 	};
 
-	void init(HINSTANCE hInst, HWND hPere, ScintillaEditView **ppEditView) {
+	void init(HINSTANCE hInst, HWND hPere, ScintillaEditView **ppEditView)
+	{
 		DockingDlgInterface::init(hInst, hPere);
 		_ppEditView = ppEditView;
 	};
 
-    virtual void display(bool toShow = true) const {
-        DockingDlgInterface::display(toShow);
+	virtual void display(bool toShow = true) const
+	{
+		DockingDlgInterface::display(toShow);
 		_vzDlg.display();
-    };
+	};
 
-    void setParent(HWND parent2set){
-        _hParent = parent2set;
-    };
+	void setParent(HWND parent2set)
+	{
+		_hParent = parent2set;
+	};
 
-	void vzDlgDisplay(bool toShow = true) {
+	void vzDlgDisplay(bool toShow = true)
+	{
 		_vzDlg.display(toShow);
 	}
 

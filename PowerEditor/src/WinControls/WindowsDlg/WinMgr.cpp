@@ -12,11 +12,13 @@
 #include "WinMgr.h"
 
 // Theo - Style Helpers
-inline static DWORD GetStyle(HWND hWnd) { 
+inline static DWORD GetStyle(HWND hWnd)
+{ 
 	return (DWORD)GetWindowLongPtr(hWnd, GWL_STYLE); 
 }
 
-inline static DWORD GetExStyle(HWND hWnd) { 
+inline static DWORD GetExStyle(HWND hWnd)
+{ 
 	return (DWORD)GetWindowLongPtr(hWnd, GWL_EXSTYLE); 
 }
 
@@ -40,8 +42,10 @@ void CWinMgr::InitToFitSizeFromCurrent(HWND hWnd)
 	assert(hWnd);
 	assert(m_map);
 	GetWindowPositions(hWnd);
-	for (WINRECT* w = m_map; !w->IsEnd(); ++w) {
-		if (w->Type()==WRCT_TOFIT && !w->IsGroup()) {
+	for (WINRECT* w = m_map; !w->IsEnd(); ++w)
+	{
+		if (w->Type()==WRCT_TOFIT && !w->IsGroup())
+		{
 			w->SetToFitSize(RectToSize(w->GetRect()));
 		}
 	}
@@ -54,10 +58,13 @@ void CWinMgr::GetWindowPositions(HWND hWnd)
 {
 	assert(m_map);
 	assert(hWnd);
-	for (WINRECT* wrc=m_map; !wrc->IsEnd(); ++wrc) {
-		if (wrc->IsWindow()) {
+	for (WINRECT* wrc=m_map; !wrc->IsEnd(); ++wrc)
+	{
+		if (wrc->IsWindow())
+		{
 			HWND HChild = GetDlgItem(hWnd, wrc->GetID());
-			if (HChild) {
+			if (HChild)
+			{
 				GetWindowRect(HChild, &wrc->GetRect());
 				POINT p = RectToPoint(wrc->GetRect());
 				::ScreenToClient(hWnd, &p);
@@ -69,18 +76,21 @@ void CWinMgr::GetWindowPositions(HWND hWnd)
 //////////////////
 // Move all the windows. Use DeferWindowPos for speed.
 //
-void
-CWinMgr::SetWindowPositions(HWND hWnd)
+void CWinMgr::SetWindowPositions(HWND hWnd)
 {
 	int nWindows = CountWindows();
-	if (m_map && hWnd && nWindows>0) {
+	if (m_map && hWnd && nWindows>0)
+	{
 		HDWP hdwp = ::BeginDeferWindowPos(nWindows);
 		int count=0;
-		for (WINRECT* wrc=m_map; !wrc->IsEnd(); ++wrc) {
-			if (wrc->IsWindow()) {
+		for (WINRECT* wrc=m_map; !wrc->IsEnd(); ++wrc)
+		{
+			if (wrc->IsWindow())
+			{
 				assert(count < nWindows);
 				HWND hwndChild = ::GetDlgItem(hWnd, wrc->GetID());
-				if (hwndChild) {
+				if (hwndChild)
+				{
 					const RECT& rc = wrc->GetRect();
 					::DeferWindowPos(hdwp,
 						hwndChild,
@@ -90,7 +100,9 @@ CWinMgr::SetWindowPositions(HWND hWnd)
 					InvalidateRect(hwndChild,NULL,TRUE); // repaint
 					++count;
 				}
-			} else {
+			}
+			else
+			{
 				// not a window: still need to repaint background
 				InvalidateRect(hWnd, &wrc->GetRect(), TRUE);
 			}
@@ -107,10 +119,13 @@ int CWinMgr::CountWindows()
 {
 	assert(m_map);
 	int nWin = 0;
-	for (WINRECT* w=m_map; !w->IsEnd(); ++w) {
+
+	for (WINRECT* w=m_map; !w->IsEnd(); ++w)
+	{
 		if (w->IsWindow())
 			++nWin;
 	}
+
 	return nWin;
 }
 
@@ -120,10 +135,13 @@ int CWinMgr::CountWindows()
 WINRECT* CWinMgr::FindRect(int nID)
 {
 	assert(m_map);
-	for (WINRECT* w=m_map; !w->IsEnd(); ++w) {
+
+	for (WINRECT* w=m_map; !w->IsEnd(); ++w)
+	{
 		if (w->GetID()==(UINT)nID)
 			return w;
 	}
+
 	return NULL;
 }
 
@@ -132,8 +150,7 @@ WINRECT* CWinMgr::FindRect(int nID)
 // algorithm. If a window is given, it's used to get the min/max size and
 // desired size for TOFIT types.
 //
-void
-CWinMgr::CalcGroup(WINRECT* pGroup, HWND hWnd)
+void CWinMgr::CalcGroup(WINRECT* pGroup, HWND hWnd)
 {
 	// If this bombs, most likely the first entry in your map is not a group!
 	assert(pGroup && pGroup->IsGroup());
@@ -142,13 +159,14 @@ CWinMgr::CalcGroup(WINRECT* pGroup, HWND hWnd)
 	// adjust total avail by margins
 	RECT rcTotal = pGroup->GetRect();
 	int w,h;
-	if (pGroup->GetMargins(w,h)) {
+	if (pGroup->GetMargins(w,h))
+	{
 		w = min(abs(w), RectWidth(rcTotal)/2);
 		h = min(abs(h), RectHeight(rcTotal)/2);
 		::InflateRect(&rcTotal, -w, -h);
 	}
 	
-	BOOL bRow = pGroup->IsRowGroup();		 // Is this a row group?
+	BOOL bRow = pGroup->IsRowGroup(); // Is this a row group?
 
 	// Running height or width: start with total
 	int hwRemaining = bRow ? RectHeight(rcTotal) : RectWidth(rcTotal);
@@ -156,32 +174,38 @@ CWinMgr::CalcGroup(WINRECT* pGroup, HWND hWnd)
 	// First, set all rects to their minimum sizes.
 	// This ensures that each rect gets its min size.
 	CWinGroupIterator it;
-	for (it=pGroup; it; it.Next()) {
+	for (it=pGroup; it; it.Next())
+	{
 		WINRECT* wrc = it;
 		SIZEINFO szi;
 		OnGetSizeInfo(szi, wrc, hWnd);
 		int hwMin = bRow ? szi.szMin.cy : szi.szMin.cx;
-		hwMin = min(hwMin, hwRemaining);		// truncate
-		wrc->SetHeightOrWidth(hwMin, bRow);	// set
-		hwRemaining -= hwMin;					// decrement remaining height/width
+		hwMin = min(hwMin, hwRemaining);    // truncate
+		wrc->SetHeightOrWidth(hwMin, bRow); // set
+		hwRemaining -= hwMin;               // decrement remaining height/width
 		assert(hwRemaining>=0);
 	}
 
 	// Now adjust all rects upward to desired size. Save REST rect for last.
 	WINRECT* pRestRect = NULL;
-	for (it=pGroup; it; it.Next()) {
+	for (it=pGroup; it; it.Next())
+	{
 		WINRECT* wrc = it;
-		if (wrc->Type()==WRCT_REST) {
-			assert(pRestRect==NULL);		 // can only be one REST rect!
-			pRestRect = wrc;					 // remember it
-		} else {
+		if (wrc->Type()==WRCT_REST)
+		{
+			assert(pRestRect==NULL);  // can only be one REST rect!
+			pRestRect = wrc;          // remember it
+		}
+		else
+		{
 			AdjustSize(wrc, bRow, hwRemaining, hWnd);
 		}
 	}
 	assert(hwRemaining>=0);
 
 	// Adjust REST rect if any
-	if (pRestRect) {
+	if (pRestRect)
+	{
 		AdjustSize(pRestRect, bRow, hwRemaining, hWnd);
 		assert(hwRemaining==0);
 	}
@@ -192,7 +216,8 @@ CWinMgr::CalcGroup(WINRECT* pGroup, HWND hWnd)
 	PositionRects(pGroup, rcTotal, bRow);
 
 	// Finally, descend recursively into each subgroup.
-	for (it=pGroup; it; it.Next()) {
+	for (it=pGroup; it; it.Next())
+	{
 		WINRECT* wrc = it;
 		if (wrc->IsGroup())
 			CalcGroup(wrc, hWnd); // recurse!
@@ -203,14 +228,13 @@ CWinMgr::CalcGroup(WINRECT* pGroup, HWND hWnd)
 // Adjust the size of a single entry upwards to its desired size.
 // Decrement hwRemaining by amount increased.
 //
-void
-CWinMgr::AdjustSize(WINRECT* wrc, BOOL bRow,
-	int& hwRemaining, HWND hWnd)
+void CWinMgr::AdjustSize(WINRECT* wrc, BOOL bRow, int& hwRemaining, HWND hWnd)
 {
 	SIZEINFO szi;
 	OnGetSizeInfo(szi, wrc, hWnd);
 	int hw = bRow ? szi.szDesired.cy : szi.szDesired.cx; // desired ht or wid
-	if (wrc->Type() == WRCT_REST) {
+	if (wrc->Type() == WRCT_REST)
+	{
 		// for REST type, use all remaining space
 		RECT& rc = wrc->GetRect();
 		hw = hwRemaining + (bRow ? RectHeight(rc) : RectWidth(rc));
@@ -222,11 +246,11 @@ CWinMgr::AdjustSize(WINRECT* wrc, BOOL bRow,
 	// each entry gets its min size.
 	//
 	int hwCurrent = wrc->GetHeightOrWidth(bRow); // current size
-	int hwExtra = hw - hwCurrent;						// amount extra
-	hwExtra = min(max(hwExtra, 0), hwRemaining);	// truncate 
-	hw = hwCurrent + hwExtra;							// new height-or-width
-	wrc->SetHeightOrWidth(hw, bRow);				// set...
-	hwRemaining -= hwExtra;								// and adjust remaining
+	int hwExtra = hw - hwCurrent;                // amount extra
+	hwExtra = min(max(hwExtra, 0), hwRemaining); // truncate 
+	hw = hwCurrent + hwExtra;                    // new height-or-width
+	wrc->SetHeightOrWidth(hw, bRow);	             // set...
+	hwRemaining -= hwExtra;                      // and adjust remaining
 }
 
 //////////////////
@@ -236,30 +260,33 @@ CWinMgr::AdjustSize(WINRECT* wrc, BOOL bRow,
 // one below the other; for columns, set each column as tall as rcTotal and
 // each to the right of the previous.
 //
-void
-CWinMgr::PositionRects(WINRECT* pGroup, const RECT& rcTotal, BOOL bRow)
+void CWinMgr::PositionRects(WINRECT* pGroup, const RECT& rcTotal, BOOL bRow)
 {
 	LONG xoryPos = bRow ? rcTotal.top : rcTotal.left;
 
 	CWinGroupIterator it;
-	for (it=pGroup; it; it.Next()) {
+	for (it=pGroup; it; it.Next())
+	{
 		WINRECT* wrc = it;
 		RECT& rc = wrc->GetRect();
-		if (bRow) {							 // for ROWS:
-			LONG height = RectHeight(rc);		 // height of row = total height
-			rc.top    = xoryPos;				 // top = running yPos
-			rc.bottom = rc.top + height;	 // ...
-			rc.left   = rcTotal.left;		 // ...
-			rc.right  = rcTotal.right;		 // ...
-			xoryPos += height;				 // increment yPos
+		if (bRow)                            // for ROWS:
+		{
+			LONG height = RectHeight(rc);    // height of row = total height
+			rc.top    = xoryPos;             // top = running yPos
+			rc.bottom = rc.top + height;     //
+			rc.left   = rcTotal.left;        //
+			rc.right  = rcTotal.right;       //
+			xoryPos += height;               // increment yPos
 
-		} else {									 // for COLS:
-			LONG width = RectWidth(rc);		 // width = total width
-			rc.left    = xoryPos;			 // left = running xPos
-			rc.right   = rc.left + width;	 // ...
-			rc.top     = rcTotal.top;		 // ...
-			rc.bottom  = rcTotal.bottom;	 // ...
-			xoryPos += width;					 // increment xPos
+		}
+		else                                 // for COLS:
+		{
+			LONG width = RectWidth(rc);      // width = total width
+			rc.left    = xoryPos;            // left = running xPos
+			rc.right   = rc.left + width;    //
+			rc.top     = rcTotal.top;        //
+			rc.bottom  = rcTotal.bottom;     //
+			xoryPos += width;                // increment xPos
 		}
 	}
 }
@@ -269,24 +296,26 @@ CWinMgr::PositionRects(WINRECT* pGroup, const RECT& rcTotal, BOOL bRow)
 // the SIZEINFO argument. For a group, calculate size info as aggregate of
 // subentries.
 //
-void
-CWinMgr::OnGetSizeInfo(SIZEINFO& szi, WINRECT* wrc, HWND hWnd)
+void CWinMgr::OnGetSizeInfo(SIZEINFO& szi, WINRECT* wrc, HWND hWnd)
 {
-	szi.szMin = SIZEZERO;				// default min size = zero
-	szi.szMax = SIZEMAX;					// default max size = infinite
+	szi.szMin = SIZEZERO;         // default min size = zero
+	szi.szMax = SIZEMAX;          // default max size = infinite
 	szi.szDesired = RectToSize(wrc->GetRect());	// default desired size = current 
 
-	if (wrc->IsGroup()) {
+	if (wrc->IsGroup())
+	{
 		// For groups, calculate min, max, desired size as aggregate of children
 		szi.szDesired = SIZEZERO;
 		BOOL bRow = wrc->IsRowGroup();
 
 		CWinGroupIterator it;
-		for (it=wrc; it; it.Next()) {
+		for (it=wrc; it; it.Next())
+		{
 			WINRECT* wrc2 = it;
 			SIZEINFO szi2;
 			OnGetSizeInfo(szi2, wrc2, hWnd);
-			if (bRow) {
+			if (bRow)
+			{
 				szi.szMin.cx = max(szi.szMin.cx, szi2.szMin.cx);
 				szi.szMin.cy += szi2.szMin.cy;
 				szi.szMax.cx = min(szi.szMax.cx, szi2.szMax.cx);
@@ -294,7 +323,9 @@ CWinMgr::OnGetSizeInfo(SIZEINFO& szi, WINRECT* wrc, HWND hWnd)
 				szi.szDesired.cx = max(szi.szDesired.cx, szi2.szDesired.cx);
 				szi.szDesired.cy += szi2.szDesired.cy;
 
-			} else {
+			}
+			else
+			{
 				szi.szMin.cx += szi2.szMin.cx;
 				szi.szMin.cy = max(szi.szMin.cy, szi2.szMin.cy);
 				szi.szMax.cx = min(szi.szMax.cx + szi2.szMax.cx, INFINITY);
@@ -306,14 +337,16 @@ CWinMgr::OnGetSizeInfo(SIZEINFO& szi, WINRECT* wrc, HWND hWnd)
 
 		// Add margins. 
 		int w2,h2;
-		wrc->GetMargins(w2,h2);			// get margins
-		w2<<=1; h2<<=1;					// double
-		szi.szMin.cx += max(0,w2);		// negative margins ==> don't include in min
-		szi.szMin.cy += max(0,h2);		// ditto
-		szi.szDesired.cx += abs(w2);	// for desired size, use abs vallue
-		szi.szDesired.cy += abs(h2);	// ditto
+		wrc->GetMargins(w2,h2);      // get margins
+		w2<<=1; h2<<=1;              // double
+		szi.szMin.cx += max(0,w2);   // negative margins ==> don't include in min
+		szi.szMin.cy += max(0,h2);   // ditto
+		szi.szDesired.cx += abs(w2); // for desired size, use abs vallue
+		szi.szDesired.cy += abs(h2); // ditto
 
-	} else {
+	}
+	else
+	{
 		// not a group
 		WINRECT* parent = wrc->Parent();
 		assert(parent);
@@ -321,17 +354,22 @@ CWinMgr::OnGetSizeInfo(SIZEINFO& szi, WINRECT* wrc, HWND hWnd)
 		BOOL bRow = parent->IsRowGroup();
 		int hw, hwMin, hwTotal, pct;
 
-		switch (wrc->Type()) {
+		switch (wrc->Type())
+		{
 		case WRCT_FIXED:
-			hw = hwMin = wrc->GetParam();	 // ht/wid is parameter
-			if (hw<0) {							 // if fixed val is negative:
-				hw = -hw;						 // use absolute val for desired..
-				hwMin = 0;						 // ..and zero for minimum
+			hw = hwMin = wrc->GetParam(); // ht/wid is parameter
+			if (hw<0)                     // if fixed val is negative:
+			{
+				hw = -hw;                 // use absolute val for desired..
+				hwMin = 0;                // ..and zero for minimum
 			}
-			if (bRow) {
+			if (bRow)
+			{
 				szi.szMax.cy = szi.szDesired.cy = hw;
 				szi.szMin.cy = hwMin;
-			} else {
+			}
+			else
+			{
 				szi.szMax.cx = szi.szDesired.cx = hw;
 				szi.szMin.cx = hwMin;
 			}
@@ -346,7 +384,8 @@ CWinMgr::OnGetSizeInfo(SIZEINFO& szi, WINRECT* wrc, HWND hWnd)
 			break;
 
 		case WRCT_TOFIT:
-			if (wrc->HasToFitSize()) {
+			if (wrc->HasToFitSize())
+			{
 				szi.szDesired = wrc->GetToFitSize();
 			}
 			break;
@@ -361,14 +400,19 @@ CWinMgr::OnGetSizeInfo(SIZEINFO& szi, WINRECT* wrc, HWND hWnd)
 		// If the entry is a window, send message to get min/max/tofit size.
 		// Only set tofit size if type is TOFIT.
 		//
-		if (wrc->IsWindow() && hWnd) {
+		if (wrc->IsWindow() && hWnd)
+		{
 			HWND hChild = GetDlgItem(hWnd, wrc->GetID());
-			if (hChild) {
-				if (!IsWindowVisible(hChild) && IsWindowVisible(hWnd)) {
+			if (hChild)
+			{
+				if (!IsWindowVisible(hChild) && IsWindowVisible(hWnd))
+				{
 					// parent visible but child not ==> tofit size is zero
 					// important so hidden windows use no space
 					szi.szDesired = SIZEZERO;
-				} else {
+				}
+				else
+				{
 					szi.szAvail = RectToSize(rcParent);
 					SendGetSizeInfo(szi, hWnd, wrc->GetID());
 				}
@@ -384,11 +428,12 @@ CWinMgr::OnGetSizeInfo(SIZEINFO& szi, WINRECT* wrc, HWND hWnd)
 BOOL CWinMgr::SendGetSizeInfo(SIZEINFO& szi, HWND hWnd, UINT nID)
 {
 	NMWINMGR nmw;
-	nmw.code = NMWINMGR::GET_SIZEINFO;	// request size info
-	nmw.idFrom = nID;							// ID of child I'm computing
-	nmw.sizeinfo = szi;						// copy
+	nmw.code = NMWINMGR::GET_SIZEINFO; // request size info
+	nmw.idFrom = nID;                  // ID of child I'm computing
+	nmw.sizeinfo = szi;                // copy
 
-	if (!SendMessage(hWnd, WM_WINMGR, nID, (LPARAM)&nmw) && !nmw.processed) {
+	if (!SendMessage(hWnd, WM_WINMGR, nID, (LPARAM)&nmw) && !nmw.processed)
+	{
 		HWND hwndChild = ::GetDlgItem(hWnd, nID);
 		if (!hwndChild || !::SendMessage(hwndChild,WM_WINMGR,nID,(LPARAM)&nmw))
 			return FALSE;
@@ -400,8 +445,7 @@ BOOL CWinMgr::SendGetSizeInfo(SIZEINFO& szi, HWND hWnd, UINT nID)
 //////////////////
 // Get min/max info.
 //
-void
-CWinMgr::GetMinMaxInfo(HWND hWnd, MINMAXINFO* lpMMI)
+void CWinMgr::GetMinMaxInfo(HWND hWnd, MINMAXINFO* lpMMI)
 {
 	SIZEINFO szi;
 	GetMinMaxInfo(hWnd, szi); // call overloaded version
@@ -415,28 +459,36 @@ CWinMgr::GetMinMaxInfo(HWND hWnd, MINMAXINFO* lpMMI)
 void CWinMgr::GetMinMaxInfo(HWND hWnd, SIZEINFO& szi)
 {
 	OnGetSizeInfo(szi, m_map, hWnd);  // get size info
-	if (!hWnd)					 // window not created ==> done
+	if (!hWnd)                        // window not created ==> done
 		return;
 
 	// Add extra space for frame/dialog screen junk.
 	DWORD dwStyle = GetStyle(hWnd);
 	DWORD dwExStyle = GetExStyle(hWnd);
-	if (dwStyle & WS_VISIBLE) {
+	if (dwStyle & WS_VISIBLE)
+	{
 		SIZE& szMin = szi.szMin; // ref!
-		if (!(dwStyle & WS_CHILD)) {
+		if (!(dwStyle & WS_CHILD))
+		{
 			if (dwStyle & WS_CAPTION)
 				szMin.cy += GetSystemMetrics(SM_CYCAPTION);
 			if (::GetMenu(hWnd))
 				szMin.cy += GetSystemMetrics(SM_CYMENU);
 		}
-		if (dwStyle & WS_THICKFRAME) {
+
+		if (dwStyle & WS_THICKFRAME)
+		{
 			szMin.cx += 2*GetSystemMetrics(SM_CXSIZEFRAME);
 			szMin.cy += 2*GetSystemMetrics(SM_CYSIZEFRAME);
-		} else if (dwStyle & WS_BORDER) {
+		}
+		else if (dwStyle & WS_BORDER)
+		{
 			szMin.cx += 2*GetSystemMetrics(SM_CXBORDER);
 			szMin.cy += 2*GetSystemMetrics(SM_CYBORDER);
 		}
-		if (dwExStyle & WS_EX_CLIENTEDGE) {
+
+		if (dwExStyle & WS_EX_CLIENTEDGE)
+		{
 			szMin.cx += 2*GetSystemMetrics(SM_CXEDGE);
 			szMin.cy += 2*GetSystemMetrics(SM_CYEDGE);
 		}
@@ -459,17 +511,21 @@ void CWinMgr::MoveRect(WINRECT* pwrcMove, POINT ptMove, HWND pParentWnd)
 
 	RECT& rcNext = next->GetRect();
 	RECT& rcPrev = prev->GetRect();
-	if (bIsRow) {
+	if (bIsRow)
+	{
 		// a row can only be moved up or down
 		ptMove.x = 0;
 		rcPrev.bottom += ptMove.y;
 		rcNext.top += ptMove.y;
-	} else {
+	}
+	else
+	{
 		// a column can only be moved left or right
 		ptMove.y = 0;
 		rcPrev.right += ptMove.x;
 		rcNext.left += ptMove.x;
 	}
+
 	OffsetRect(pwrcMove->GetRect(), ptMove);
 	if (prev->IsGroup())
 		CalcGroup(prev, pParentWnd);

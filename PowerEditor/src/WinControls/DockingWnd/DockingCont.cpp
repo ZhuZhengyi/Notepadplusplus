@@ -7,10 +7,10 @@
 //version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -37,19 +37,19 @@
 #define WH_MOUSE_LL 14
 #endif
 
-static HWND		hWndServer		= NULL;
-static HHOOK	hookMouse		= NULL;
+static HWND  hWndServer = NULL;
+static HHOOK hookMouse  = NULL;
 
 static LRESULT CALLBACK hookProcMouse(UINT nCode, WPARAM wParam, LPARAM lParam)
 {
-    if(nCode < 0)
-    {
+	if(nCode < 0)
+	{
 		::CallNextHookEx(hookMouse, nCode, wParam, lParam);
-        return 0;
-    }
+		return 0;
+	}
 
-    switch (wParam)
-    {
+	switch (wParam)
+	{
 		case WM_MOUSEMOVE:
 		case WM_NCMOUSEMOVE:
 			::PostMessage(hWndServer, wParam, 0, 0);
@@ -58,7 +58,7 @@ static LRESULT CALLBACK hookProcMouse(UINT nCode, WPARAM wParam, LPARAM lParam)
 		case WM_NCLBUTTONUP:
 			::PostMessage(hWndServer, wParam, 0, 0);
 			break;
-        default: 
+		default: 
 			break;
 	}
 
@@ -68,22 +68,22 @@ static LRESULT CALLBACK hookProcMouse(UINT nCode, WPARAM wParam, LPARAM lParam)
 
 DockingCont::DockingCont()
 {
-	_isMouseOver		= FALSE;
-	_isMouseClose		= FALSE;
-	_isMouseDown		= FALSE;
-	_isFloating			= false;
-	_isTopCaption		= CAPTION_TOP;
-	_dragFromTab		= FALSE;
-	_hContTab			= NULL;
-	_hDefaultTabProc	= NULL;
-	_beginDrag			= FALSE;
-	_prevItem			= 0;
-	_hFont				= NULL;
-	_bTabTTHover		= FALSE;
-	_bCaptionTT			= FALSE;
-	_bCapTTHover		= FALSE;
-	_hoverMPos			= posClose;
-	_bDrawOgLine		= TRUE;
+	_isMouseOver     = FALSE;
+	_isMouseClose    = FALSE;
+	_isMouseDown     = FALSE;
+	_isFloating      = false;
+	_isTopCaption    = CAPTION_TOP;
+	_dragFromTab     = FALSE;
+	_hContTab        = NULL;
+	_hDefaultTabProc = NULL;
+	_beginDrag       = FALSE;
+	_prevItem        = 0;
+	_hFont           = NULL;
+	_bTabTTHover     = FALSE;
+	_bCaptionTT      = FALSE;
+	_bCapTTHover     = FALSE;
+	_hoverMPos       = posClose;
+	_bDrawOgLine     = TRUE;
 	_vTbData.clear();
 }
 
@@ -139,7 +139,7 @@ tTbData* DockingCont::createToolbar(tTbData data)
 	}
 
 	// set attached child window
-    ::SetParent(pTbData->hClient, ::GetDlgItem(_hSelf, IDC_CLIENT_TAB));
+	::SetParent(pTbData->hClient, ::GetDlgItem(_hSelf, IDC_CLIENT_TAB));
 
 	// set names for captions and view toolbar
 	viewToolbar(pTbData);
@@ -173,7 +173,7 @@ void DockingCont::removeToolbar(tTbData TbData)
 
 tTbData* DockingCont::findToolbarByWnd(HWND hClient)
 {
-	tTbData*	pTbData		= NULL;
+	tTbData* pTbData = NULL;
 
 	// find entry by handle
 	for (size_t iTb = 0, len = _vTbData.size(); iTb < len; ++iTb)
@@ -188,7 +188,7 @@ tTbData* DockingCont::findToolbarByWnd(HWND hClient)
 
 tTbData* DockingCont::findToolbarByName(TCHAR* pszName)
 {
-	tTbData*	pTbData		= NULL;
+	tTbData* pTbData = NULL;
 
 	// find entry by handle
 	for (size_t iTb = 0, len = _vTbData.size(); iTb < len; ++iTb)
@@ -223,14 +223,14 @@ int DockingCont::getActiveTb()
 
 tTbData* DockingCont::getDataOfActiveTb()
 {
-	tTbData*	pTbData	= NULL;
-	int			iItem	= getActiveTb();
+	tTbData* pTbData = NULL;
+	int      iItem   = getActiveTb();
 
 	if (iItem != -1)
 	{
-		TCITEM	tcItem	= {0};
+		TCITEM tcItem = {0};
 
-		tcItem.mask		= TCIF_PARAM;
+		tcItem.mask = TCIF_PARAM;
 		::SendMessage(_hContTab, TCM_GETITEM, iItem, (LPARAM)&tcItem);
 		pTbData = (tTbData*)tcItem.lParam;
 	}
@@ -240,11 +240,11 @@ tTbData* DockingCont::getDataOfActiveTb()
 
 vector<tTbData*> DockingCont::getDataOfVisTb()
 {
-	vector<tTbData*>	vTbData;
-	TCITEM				tcItem		= {0};
-	int					iItemCnt	= ::SendMessage(_hContTab, TCM_GETITEMCOUNT, 0, 0);
+	vector<tTbData*> vTbData;
+	TCITEM           tcItem   = {0};
+	int              iItemCnt = ::SendMessage(_hContTab, TCM_GETITEMCOUNT, 0, 0);
 
-	tcItem.mask	= TCIF_PARAM;
+	tcItem.mask = TCIF_PARAM;
 
 	for(int iItem = 0; iItem < iItemCnt; ++iItem)
 	{
@@ -256,8 +256,8 @@ vector<tTbData*> DockingCont::getDataOfVisTb()
 
 bool DockingCont::isTbVis(tTbData* data)
 {
-	TCITEM				tcItem		= {0};
-	int					iItemCnt	= ::SendMessage(_hContTab, TCM_GETITEMCOUNT, 0, 0);
+	TCITEM tcItem   = {0};
+	int    iItemCnt = ::SendMessage(_hContTab, TCM_GETITEMCOUNT, 0, 0);
 
 	tcItem.mask	= TCIF_PARAM;
 
@@ -278,7 +278,7 @@ bool DockingCont::isTbVis(tTbData* data)
 //
 LRESULT DockingCont::runProcCaption(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 {
-	static ToolTip	toolTip;
+	static ToolTip toolTip;
 
 	switch (Message)
 	{
@@ -288,13 +288,13 @@ LRESULT DockingCont::runProcCaption(HWND hwnd, UINT Message, WPARAM wParam, LPAR
 
 			if (isInRect(hwnd, LOWORD(lParam), HIWORD(lParam)) == posClose)
 			{
-				_isMouseClose	= TRUE;
-				_isMouseOver	= TRUE;
+				_isMouseClose = TRUE;
+				_isMouseOver  = TRUE;
 
 				// start hooking
-				hWndServer		= _hCaption;
+				hWndServer = _hCaption;
 				winVer ver = (NppParameters::getInstance())->getWinVersion();
-				hookMouse	= ::SetWindowsHookEx(ver >= WV_W2K?WH_MOUSE_LL:WH_MOUSE, (HOOKPROC)hookProcMouse, _hInst, 0);
+				hookMouse  = ::SetWindowsHookEx(ver >= WV_W2K?WH_MOUSE_LL:WH_MOUSE, (HOOKPROC)hookProcMouse, _hInst, 0);
 
 				if (!hookMouse)
 				{
@@ -309,25 +309,27 @@ LRESULT DockingCont::runProcCaption(HWND hwnd, UINT Message, WPARAM wParam, LPAR
 			focusClient();
 			return TRUE;
 		}
+
 		case WM_LBUTTONUP:
 		{
 			_isMouseDown = FALSE;
-			if (_isMouseClose == TRUE)
+			if (_isMouseClose)
 			{
 				// end hooking
 				::UnhookWindowsHookEx(hookMouse);
 
-				if (_isMouseOver == TRUE)
+				if (_isMouseOver)
 				{
 					doClose();
 				}
-				_isMouseClose	= FALSE;
-				_isMouseOver	= FALSE;
+				_isMouseClose = FALSE;
+				_isMouseOver  = FALSE;
 			}
 			
 			focusClient();
 			return TRUE;
 		}
+
 		case WM_LBUTTONDBLCLK:
 		{
 			if (isInRect(hwnd, LOWORD(lParam), HIWORD(lParam)) == posCaption)
@@ -336,33 +338,34 @@ LRESULT DockingCont::runProcCaption(HWND hwnd, UINT Message, WPARAM wParam, LPAR
 			focusClient();
 			return TRUE;
 		}
+
 		case WM_MOUSEMOVE:
 		{
-			POINT	pt			= {0};
+			POINT pt = {0};
 
 			// get correct cursor position
 			::GetCursorPos(&pt);
 			::ScreenToClient(_hCaption, &pt);
 
-			if (_isMouseDown == TRUE)
+			if (_isMouseDown)
 			{
 				if (_isMouseClose == FALSE)
 				{
-                    // keep sure that button is still down and within caption
-                    if ((wParam == MK_LBUTTON) && (isInRect(hwnd, pt.x, pt.y) == posCaption))
-                    {
-    					_dragFromTab = FALSE;
-    					NotifyParent(DMM_MOVE);
-    					_isMouseDown = FALSE;
-                    }
-                    else
-                    {
-                        _isMouseDown = FALSE;
-                    }
+					// keep sure that button is still down and within caption
+					if ((wParam == MK_LBUTTON) && (isInRect(hwnd, pt.x, pt.y) == posCaption))
+					{
+						_dragFromTab = FALSE;
+						NotifyParent(DMM_MOVE);
+						_isMouseDown = FALSE;
+					}
+					else
+					{
+						_isMouseDown = FALSE;
+					}
 				}
 				else
 				{
-					BOOL    isMouseOver	= _isMouseOver;
+					BOOL isMouseOver = _isMouseOver;
 					_isMouseOver = (isInRect(hwnd, pt.x, pt.y) == posClose ? TRUE : FALSE);
 
 					// if state is changed draw new
@@ -377,7 +380,7 @@ LRESULT DockingCont::runProcCaption(HWND hwnd, UINT Message, WPARAM wParam, LPAR
 			{
 				_hoverMPos = isInRect(hwnd, LOWORD(lParam), HIWORD(lParam));
 
-				if ((_bCaptionTT == TRUE) || (_hoverMPos == posClose))
+				if (_bCaptionTT || (_hoverMPos == posClose))
 				{
 					TRACKMOUSEEVENT tme;
 					tme.cbSize = sizeof(tme);
@@ -387,19 +390,19 @@ LRESULT DockingCont::runProcCaption(HWND hwnd, UINT Message, WPARAM wParam, LPAR
 					_bCapTTHover = _TrackMouseEvent(&tme);
 				}
 			}
-			else if ((_bCapTTHover == TRUE) &&
-				(_hoverMPos != isInRect(hwnd, LOWORD(lParam), HIWORD(lParam))))
+			else if (_bCapTTHover && (_hoverMPos != isInRect(hwnd, LOWORD(lParam), HIWORD(lParam))))
 			{
 				toolTip.destroy();
 				_bCapTTHover = FALSE;
 			}
+
 			return TRUE;
 		}
+
 		case WM_MOUSEHOVER:
 		{
-			RECT	rc	= {0};
-			POINT	pt	= {0};
-
+			RECT  rc = {0};
+			POINT pt = {0};
 
 			// get mouse position
 			::GetCursorPos(&pt);
@@ -415,23 +418,27 @@ LRESULT DockingCont::runProcCaption(HWND hwnd, UINT Message, WPARAM wParam, LPAR
 			}
 			return TRUE;
 		}
+
 		case WM_MOUSELEAVE:
 		{
 			toolTip.destroy();
 			_bCapTTHover = FALSE;
 			return TRUE;
 		}
+
 		case WM_SIZE:
 		{
 			::GetWindowRect(hwnd, &_rcCaption);
 			ScreenRectToClientRect(hwnd, &_rcCaption);
 			break;
 		}
+
 		case WM_SETTEXT:
 		{
 			::RedrawWindow(hwnd, NULL, NULL, TRUE);
 			return TRUE;
 		}
+
 		default:
 			break;
 	}
@@ -441,44 +448,47 @@ LRESULT DockingCont::runProcCaption(HWND hwnd, UINT Message, WPARAM wParam, LPAR
 
 void DockingCont::drawCaptionItem(DRAWITEMSTRUCT *pDrawItemStruct)
 {
-	HBRUSH		bgbrush		= NULL;
-	HFONT		hOldFont	= NULL;
-	RECT		rc			= pDrawItemStruct->rcItem;
-	HDC			hDc			= pDrawItemStruct->hDC;
-	HPEN		hPen		= ::CreatePen(PS_SOLID, 1, ::GetSysColor(COLOR_BTNSHADOW));
-	BITMAP		bmp			= {0};
-	HBITMAP		hBmpCur		= NULL;
-	HBITMAP		hBmpOld 	= NULL;
-	HBITMAP		hBmpNew		= NULL;
-	UINT		length  	= _pszCaption.length();
+	HBRUSH  bgbrush  = NULL;
+	HFONT   hOldFont = NULL;
+	RECT    rc       = pDrawItemStruct->rcItem;
+	HDC     hDc      = pDrawItemStruct->hDC;
+	HPEN    hPen     = ::CreatePen(PS_SOLID, 1, ::GetSysColor(COLOR_BTNSHADOW));
+	BITMAP  bmp      = {0};
+	HBITMAP hBmpCur  = NULL;
+	HBITMAP hBmpOld  = NULL;
+	HBITMAP hBmpNew  = NULL;
+	UINT    length   = _pszCaption.length();
 
-	int nSavedDC			= ::SaveDC(hDc);
+	int nSavedDC = ::SaveDC(hDc);
 
 	// begin with paint
 	::SetBkMode(hDc, TRANSPARENT);
 
-	if (_isActive == TRUE) {
+	if (_isActive)
+	{
 		bgbrush = ::CreateSolidBrush(::GetSysColor(COLOR_ACTIVECAPTION));
 		::SetTextColor(hDc, ::GetSysColor(COLOR_CAPTIONTEXT));
-	} else {
+	}
+	else
+	{
 		bgbrush = ::CreateSolidBrush(::GetSysColor(COLOR_BTNFACE));
 	}
 
 	// set text and/or caption grid
-	if (_isTopCaption == TRUE)
+	if (_isTopCaption)
 	{
-		if (_isActive == TRUE)
+		if (_isActive)
 		{
 			// fill background
 			::FillRect(hDc, &rc, bgbrush);
-			rc.right	-= 1;
-			rc.bottom	-= 1;
+			rc.right  -= 1;
+			rc.bottom -= 1;
 		}
 		else
 		{
 			// fill background
-			rc.right	-= 1;
-			rc.bottom	-= 1;
+			rc.right  -= 1;
+			rc.bottom -= 1;
 			::FillRect(hDc, &rc, bgbrush);
 
 			// draw grid lines
@@ -491,14 +501,14 @@ void DockingCont::drawCaptionItem(DRAWITEMSTRUCT *pDrawItemStruct)
 		}
 
 		// draw text
-		rc.left		+= 2;
-		rc.top		+= 1;
-		rc.right	-= 16;
+		rc.left  += 2;
+		rc.top   += 1;
+		rc.right -= 16;
 		hOldFont = (HFONT)::SelectObject(hDc, _hFont);
 		::DrawText(hDc, _pszCaption.c_str(), length, &rc, DT_LEFT | DT_SINGLELINE | DT_VCENTER | DT_END_ELLIPSIS | DT_NOPREFIX);
 
-		// calculate text size and if its trankated...
-		SIZE	size	= {0};
+		// calculate text size and if its truncated
+		SIZE size = {0};
 		GetTextExtentPoint32(hDc, _pszCaption.c_str(), length, &size);
 		_bCaptionTT = (((rc.right - rc.left) < size.cx) ? TRUE : FALSE);
 
@@ -507,36 +517,36 @@ void DockingCont::drawCaptionItem(DRAWITEMSTRUCT *pDrawItemStruct)
 	else
 	{
 		// create local font for vertical draw
-		HFONT	hFont;
+		HFONT hFont;
 
-		if (_isActive == TRUE)
+		if (_isActive)
 		{
 			// fill background
 			::FillRect(hDc, &rc, bgbrush);
-			rc.right	-= 1;
-			rc.bottom	-= 1;
+			rc.right  -= 1;
+			rc.bottom -= 1;
 		}
 		else
 		{
 			// fill background
-			rc.right	-= 1;
-			rc.bottom	-= 1;
+			rc.right  -= 1;
+			rc.bottom -= 1;
 			::FillRect(hDc, &rc, bgbrush);
 
 			// draw grid lines
 			MoveToEx(hDc, rc.left , rc.top , NULL);
-			LineTo  (hDc, rc.right, rc.top );
-			LineTo  (hDc, rc.right, rc.bottom );
-			LineTo  (hDc, rc.left , rc.bottom );
-			LineTo  (hDc, rc.left , rc.top);
+			LineTo (hDc, rc.right, rc.top );
+			LineTo (hDc, rc.right, rc.bottom );
+			LineTo (hDc, rc.left , rc.bottom );
+			LineTo (hDc, rc.left , rc.top);
 		}
 
 		// draw text
-		rc.left		+= 1;
-		rc.top		+= HIGH_CAPTION;
+		rc.left     += 1;
+		rc.top      += HIGH_CAPTION;
 		// to make ellipsis working
-		rc.right	= rc.bottom - rc.top;
-		rc.bottom	+= 14;
+		rc.right    = rc.bottom - rc.top;
+		rc.bottom   += 14;
 
 		hFont = ::CreateFont(12, 0, 90 * 10, 0,
 			 FW_NORMAL, FALSE, FALSE, FALSE,
@@ -549,7 +559,7 @@ void DockingCont::drawCaptionItem(DRAWITEMSTRUCT *pDrawItemStruct)
 		::DrawText(hDc, _pszCaption.c_str(), length, &rc, DT_BOTTOM | DT_SINGLELINE | DT_END_ELLIPSIS | DT_NOPREFIX);
 
 		// calculate text size and if its trankated...
-		SIZE	size	= {0};
+		SIZE size = {0};
 		GetTextExtentPoint32(hDc, _pszCaption.c_str(), length, &size);
 		_bCaptionTT = (((rc.bottom - rc.top) < size.cy) ? TRUE : FALSE);
 
@@ -560,10 +570,10 @@ void DockingCont::drawCaptionItem(DRAWITEMSTRUCT *pDrawItemStruct)
 	::DeleteObject(bgbrush);
 
 	// draw button
-	HDC			dcMem		= ::CreateCompatibleDC(NULL);
+	HDC dcMem = ::CreateCompatibleDC(NULL);
 
 	// select correct bitmap
-	if ((_isMouseOver == TRUE) && (_isMouseDown == TRUE))
+	if (_isMouseOver && _isMouseDown)
 		hBmpCur = ::LoadBitmap(_hInst, MAKEINTRESOURCE(IDB_CLOSE_DOWN));
 	else
 		hBmpCur = ::LoadBitmap(_hInst, MAKEINTRESOURCE(IDB_CLOSE_UP));
@@ -576,7 +586,7 @@ void DockingCont::drawCaptionItem(DRAWITEMSTRUCT *pDrawItemStruct)
 	rc = pDrawItemStruct->rcItem;
 	::SelectObject(hDc, hBmpNew);
 
-	if (_isTopCaption == TRUE)
+	if (_isTopCaption)
 		::BitBlt(hDc, rc.right-bmp.bmWidth-CLOSEBTN_POS_LEFT, CLOSEBTN_POS_TOP, bmp.bmWidth, bmp.bmHeight, dcMem, 0, 0, SRCCOPY);
 	else
 		::BitBlt(hDc, CLOSEBTN_POS_LEFT, CLOSEBTN_POS_LEFT, bmp.bmWidth, bmp.bmHeight, dcMem, 0, 0, SRCCOPY);
@@ -591,13 +601,13 @@ void DockingCont::drawCaptionItem(DRAWITEMSTRUCT *pDrawItemStruct)
 
 eMousePos DockingCont::isInRect(HWND hwnd, int x, int y)
 {
-	RECT		rc;
-	eMousePos	ret	= posOutside;
+	RECT      rc;
+	eMousePos ret = posOutside;
 
 	::GetWindowRect(hwnd, &rc);
 	ScreenRectToClientRect(hwnd, &rc);
 
-	if (_isTopCaption == TRUE)
+	if (_isTopCaption)
 	{
 		if ((x > rc.left) && (x < rc.right-HIGH_CAPTION) && (y > rc.top) && (y < rc.bottom))
 		{
@@ -631,19 +641,20 @@ eMousePos DockingCont::isInRect(HWND hwnd, int x, int y)
 //
 LRESULT DockingCont::runProcTab(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 {
-	static	ToolTip	toolTip;
+	static ToolTip toolTip;
 
 	switch (Message)
 	{
 		case WM_LBUTTONDOWN:
 		{
-			_beginDrag	= TRUE;
+			_beginDrag = TRUE;
 			return TRUE;
 		}
+
 		case WM_LBUTTONUP:
 		{
-			int				iItem	= 0;
-			TCHITTESTINFO	info	= {0};
+			int             iItem = 0;
+			TCHITTESTINFO   info  = {0};
 
 			// get selected sub item
 			info.pt.x = LOWORD(lParam);
@@ -654,16 +665,18 @@ LRESULT DockingCont::runProcTab(HWND hwnd, UINT Message, WPARAM wParam, LPARAM l
 			_beginDrag = FALSE;
 			return TRUE;
 		}
+
 		case WM_LBUTTONDBLCLK:
 		{
-			NotifyParent((_isFloating == true)?DMM_DOCK:DMM_FLOAT);
+			NotifyParent((_isFloating) ? DMM_DOCK : DMM_FLOAT);
 			return TRUE;
 		}
+
 		case WM_MBUTTONUP:
 		{
-			int				iItem	= 0;
-			TCITEM			tcItem	= {0};
-			TCHITTESTINFO	info	= {0};
+			int             iItem = 0;
+			TCITEM          tcItem = {0};
+			TCHITTESTINFO   info = {0};
 
 			// get selected sub item
 			info.pt.x = LOWORD(lParam);
@@ -673,7 +686,7 @@ LRESULT DockingCont::runProcTab(HWND hwnd, UINT Message, WPARAM wParam, LPARAM l
 			SelectTab(iItem);
 
 			// get data and hide toolbar
-			tcItem.mask		= TCIF_PARAM;
+			tcItem.mask = TCIF_PARAM;
 			::SendMessage(hwnd, TCM_GETITEM, iItem, (LPARAM)&tcItem);
 
 			if (!tcItem.lParam)
@@ -689,15 +702,15 @@ LRESULT DockingCont::runProcTab(HWND hwnd, UINT Message, WPARAM wParam, LPARAM l
 
 		case WM_MOUSEMOVE:
 		{
-			int				iItem	= 0;
-			TCHITTESTINFO	info	= {0};
+			int iItem = 0;
+			TCHITTESTINFO info = {0};
 
 			// get selected sub item
 			info.pt.x = LOWORD(lParam);
 			info.pt.y = HIWORD(lParam);
 			iItem = ::SendMessage(hwnd, TCM_HITTEST, 0, (LPARAM)&info);
 
-			if ((_beginDrag == TRUE) && (wParam == MK_LBUTTON))
+			if (_beginDrag && (wParam == MK_LBUTTON))
 			{
 				SelectTab(iItem);
 
@@ -706,9 +719,9 @@ LRESULT DockingCont::runProcTab(HWND hwnd, UINT Message, WPARAM wParam, LPARAM l
 				NotifyParent(DMM_MOVE);
 				_beginDrag = FALSE;
 			}
-            else
-            {
-				int	iItemSel = ::SendMessage(hwnd, TCM_GETCURSEL, 0, 0);
+			else
+			{
+				int iItemSel = ::SendMessage(hwnd, TCM_GETCURSEL, 0, 0);
 
 				if ((_bTabTTHover == FALSE) && (iItem != iItemSel))
 				{
@@ -728,8 +741,8 @@ LRESULT DockingCont::runProcTab(HWND hwnd, UINT Message, WPARAM wParam, LPARAM l
 					}
 					else if (iItem != _iLastHovered)
 					{
-						TCITEM	tcItem	= {0};
-						RECT	rc		= {0};
+						TCITEM tcItem = {0};
+						RECT   rc      = {0};
 
 						// destroy old tooltip
 						toolTip.destroy();
@@ -738,7 +751,7 @@ LRESULT DockingCont::runProcTab(HWND hwnd, UINT Message, WPARAM wParam, LPARAM l
 						::ClientToScreen(hwnd, &info.pt);
 
 						// get text of toolbar
-						tcItem.mask		= TCIF_PARAM;
+						tcItem.mask = TCIF_PARAM;
 						::SendMessage(hwnd, TCM_GETITEM, iItem, (LPARAM)&tcItem);
 						if (!tcItem.lParam)
 							return FALSE;
@@ -758,10 +771,10 @@ LRESULT DockingCont::runProcTab(HWND hwnd, UINT Message, WPARAM wParam, LPARAM l
 
 		case WM_MOUSEHOVER:
 		{
-			int				iItem	= 0;
-			TCITEM			tcItem	= {0};
-			RECT			rc		= {0};
-			TCHITTESTINFO	info	= {0};
+			int           iItem  = 0;
+			TCITEM        tcItem = {0};
+			RECT          rc     = {0};
+			TCHITTESTINFO info   = {0};
 
 			// get selected sub item
 			info.pt.x = LOWORD(lParam);
@@ -772,7 +785,7 @@ LRESULT DockingCont::runProcTab(HWND hwnd, UINT Message, WPARAM wParam, LPARAM l
 			::ClientToScreen(hwnd, &info.pt);
 
 			// get text of toolbar
-			tcItem.mask		= TCIF_PARAM;
+			tcItem.mask = TCIF_PARAM;
 			::SendMessage(hwnd, TCM_GETITEM, iItem, (LPARAM)&tcItem);
 			if (!tcItem.lParam)
 				return FALSE;
@@ -791,12 +804,12 @@ LRESULT DockingCont::runProcTab(HWND hwnd, UINT Message, WPARAM wParam, LPARAM l
 
 		case WM_NOTIFY:
 		{
-			LPNMHDR	lpnmhdr = (LPNMHDR)lParam;
+			LPNMHDR lpnmhdr = (LPNMHDR)lParam;
 
 			if ((lpnmhdr->hwndFrom == _hContTab) && (lpnmhdr->code == TCN_GETOBJECT))
 			{
-				int				iItem	= 0;
-				TCHITTESTINFO	info	= {0};
+				int iItem = 0;
+				TCHITTESTINFO info = {0};
 
 				// get selected sub item
 				info.pt.x = LOWORD(lParam);
@@ -807,6 +820,7 @@ LRESULT DockingCont::runProcTab(HWND hwnd, UINT Message, WPARAM wParam, LPARAM l
 			}
 			break;
 		}
+
 		default:
 			break;
 	}
@@ -816,11 +830,11 @@ LRESULT DockingCont::runProcTab(HWND hwnd, UINT Message, WPARAM wParam, LPARAM l
 
 void DockingCont::drawTabItem(DRAWITEMSTRUCT *pDrawItemStruct)
 {
-	TCITEM	tcItem		= {0};
-	RECT	rc			= pDrawItemStruct->rcItem;
+	TCITEM tcItem     = {0};
+	RECT   rc         = pDrawItemStruct->rcItem;
 	
-	int		nTab		= pDrawItemStruct->itemID;
-	bool	isSelected	= (nTab == getActiveTb());
+	int    nTab       = pDrawItemStruct->itemID;
+	bool   isSelected = (nTab == getActiveTb());
 
 	// get current selected item
 	tcItem.mask = TCIF_PARAM;
@@ -828,13 +842,11 @@ void DockingCont::drawTabItem(DRAWITEMSTRUCT *pDrawItemStruct)
 	if (!tcItem.lParam)
 		return;
 
-	const TCHAR *text	= ((tTbData*)tcItem.lParam)->pszName;
-	int		length	= lstrlen(((tTbData*)tcItem.lParam)->pszName);
-
+	const TCHAR *text = ((tTbData*)tcItem.lParam)->pszName;
+	int length = lstrlen(((tTbData*)tcItem.lParam)->pszName);
 
 	// get drawing context
 	HDC hDc = pDrawItemStruct->hDC;
-
 	int nSavedDC = ::SaveDC(hDc);
 
 	// For some bizarre reason the rcItem you get extends above the actual
@@ -847,7 +859,7 @@ void DockingCont::drawTabItem(DRAWITEMSTRUCT *pDrawItemStruct)
 	::DeleteObject((HGDIOBJ)hBrush);
 
 	// draw orange bar
-	if ((_bDrawOgLine == TRUE) && (isSelected))
+	if (_bDrawOgLine && isSelected)
 	{
 		RECT barRect  = rc;
 		barRect.top  += rc.bottom - 4;
@@ -855,32 +867,31 @@ void DockingCont::drawTabItem(DRAWITEMSTRUCT *pDrawItemStruct)
 		hBrush = ::CreateSolidBrush(RGB(250, 170, 60));
 		::FillRect(hDc, &barRect, hBrush);
 		::DeleteObject((HGDIOBJ)hBrush);
-
 	}
 
 	// draw icon if enabled
 	if (((tTbData*)tcItem.lParam)->uMask & DWS_ICONTAB)
 	{
-		HIMAGELIST	hImageList	= (HIMAGELIST)::SendMessage(_hParent, DMM_GETIMAGELIST, 0, 0);
-		int			iPosImage	= ::SendMessage(_hParent, DMM_GETICONPOS, 0, (LPARAM)((tTbData*)tcItem.lParam)->hClient);
+		HIMAGELIST  hImageList = (HIMAGELIST)::SendMessage(_hParent, DMM_GETIMAGELIST, 0, 0);
+		int         iPosImage  = ::SendMessage(_hParent, DMM_GETICONPOS, 0, (LPARAM)((tTbData*)tcItem.lParam)->hClient);
 
 		if ((hImageList != NULL) && (iPosImage >= 0))
 		{
 			// Get height of image so we
-			IMAGEINFO	info		= {0};
-			RECT &		imageRect	= info.rcImage;
+			IMAGEINFO info      = {0};
+			RECT &    imageRect = info.rcImage;
 			
 			ImageList_GetImageInfo(hImageList, iPosImage, &info);
 			ImageList_Draw(hImageList, iPosImage, hDc, rc.left + 3, 2, ILD_NORMAL);
 
-			if (isSelected == true)
+			if (isSelected)
 			{
 				rc.left += imageRect.right - imageRect.left + 5;
 			}
 		}
 	}
 
-	if (isSelected == true)
+	if (isSelected)
 	{
 		COLORREF _unselectedColor = RGB(0, 0, 0);
 		::SetTextColor(hDc, _unselectedColor);
@@ -911,6 +922,7 @@ BOOL CALLBACK DockingCont::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lPara
 			}
 			break;
 		}
+
 		case WM_INITDIALOG:
 		{
 			_hContTab = ::GetDlgItem(_hSelf, IDC_TAB_CONT);
@@ -928,12 +940,14 @@ BOOL CALLBACK DockingCont::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lPara
 			::SendMessage(_hContTab, TCM_SETMINTABWIDTH, 0, (LPARAM)MIN_TABWIDTH);
 			break;
 		}
+
 		case WM_NCCALCSIZE:
 		case WM_SIZE:
 		{
 			onSize();
 			break;
 		}
+
 		case WM_DRAWITEM :
 		{
 			// draw tab or caption
@@ -949,11 +963,12 @@ BOOL CALLBACK DockingCont::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lPara
 			}
 			break;
 		}
+
 		case WM_NCLBUTTONDBLCLK :
 		{
-			RECT	rcWnd		= {0};
-			RECT	rcClient	= {0};
-			POINT	pt			= {HIWORD(lParam), LOWORD(lParam)};
+			RECT    rcWnd    = {0};
+			RECT    rcClient = {0};
+			POINT   pt       = {HIWORD(lParam), LOWORD(lParam)};
 
 			getWindowRect(rcWnd);
 			getClientRect(rcClient);
@@ -969,6 +984,7 @@ BOOL CALLBACK DockingCont::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lPara
 			}
 			break;
 		}
+
 		case WM_SYSCOMMAND :
 		{
 			switch (wParam & 0xfff0)
@@ -976,15 +992,16 @@ BOOL CALLBACK DockingCont::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lPara
 				case SC_MOVE:
 					NotifyParent(DMM_MOVE);
 					return TRUE;
-				default: 
+				default:
 					break;
 			}
 			return FALSE;
 		}
-		case WM_COMMAND : 
+
+		case WM_COMMAND :
 		{
 			switch (LOWORD(wParam))
-			{   
+			{
 				case IDCANCEL:
 					doClose();
 					return TRUE;
@@ -993,6 +1010,7 @@ BOOL CALLBACK DockingCont::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lPara
 			}
 			break;
 		}
+
 		default:
 			break;
 	}
@@ -1002,11 +1020,11 @@ BOOL CALLBACK DockingCont::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lPara
 
 void DockingCont::onSize()
 {
-	TCITEM	tcItem		= {0};
-	RECT	rc			= {0};
-	RECT	rcTemp		= {0};
-	UINT	iItemCnt	= ::SendMessage(_hContTab, TCM_GETITEMCOUNT, 0, 0);
-	UINT	iTabOff		= 0;
+	TCITEM  tcItem   = {0};
+	RECT    rc       = {0};
+	RECT    rcTemp   = {0};
+	UINT    iItemCnt = ::SendMessage(_hContTab, TCM_GETITEMCOUNT, 0, 0);
+	UINT    iTabOff  = 0;
 
 	getClientRect(rc);
 
@@ -1016,17 +1034,17 @@ void DockingCont::onSize()
 		if (_isFloating == false)
 		{
 			// draw caption
-			if (_isTopCaption == TRUE)
+			if (_isTopCaption)
 			{
 				::SetWindowPos(_hCaption, NULL, rc.left, rc.top, rc.right, HIGH_CAPTION, SWP_NOZORDER | SWP_NOACTIVATE);
-				rc.top		+= HIGH_CAPTION;
-				rc.bottom	-= HIGH_CAPTION;
+				rc.top    += HIGH_CAPTION;
+				rc.bottom -= HIGH_CAPTION;
 			}
 			else
 			{
 				::SetWindowPos(_hCaption, NULL, rc.left, rc.top, HIGH_CAPTION, rc.bottom, SWP_NOZORDER | SWP_NOACTIVATE);
-				rc.left		+= HIGH_CAPTION;
-				rc.right	-= HIGH_CAPTION;
+				rc.left  += HIGH_CAPTION;
+				rc.right -= HIGH_CAPTION;
 			}
 
 			if (iItemCnt >= 2)
@@ -1034,9 +1052,9 @@ void DockingCont::onSize()
 				// resize tab and plugin control if tabs exceeds one
 				// resize tab
 				rcTemp = rc;
-				rcTemp.top		= (rcTemp.bottom + rcTemp.top) - (HIGH_TAB+CAPTION_GAP);
-				rcTemp.bottom	= HIGH_TAB;
-				iTabOff			= HIGH_TAB;
+				rcTemp.top    = (rcTemp.bottom + rcTemp.top) - (HIGH_TAB+CAPTION_GAP);
+				rcTemp.bottom = HIGH_TAB;
+				iTabOff       = HIGH_TAB;
 
 				::SetWindowPos(_hContTab, NULL,
 								rcTemp.left, rcTemp.top, rcTemp.right, rcTemp.bottom, 
@@ -1045,7 +1063,7 @@ void DockingCont::onSize()
 
 			// resize client area for plugin
 			rcTemp = rc;
-			if (_isTopCaption == TRUE)
+			if (_isTopCaption)
 			{
 				rcTemp.top    += CAPTION_GAP;
 				rcTemp.bottom -= (iTabOff + CAPTION_GAP);
@@ -1066,13 +1084,13 @@ void DockingCont::onSize()
 		else
 		{
 			// update floating size
-			if (_isFloating == true)
+			if (_isFloating)
 			{
 				for (size_t iTb = 0, len = _vTbData.size(); iTb < len; ++iTb)
 				{
 					getWindowRect(_vTbData[iTb]->rcFloat);
 				}
-			}			
+			}
 
 			// draw caption
 			if (iItemCnt >= 2)
@@ -1095,15 +1113,14 @@ void DockingCont::onSize()
 							rcTemp.left, rcTemp.top, rcTemp.right, rcTemp.bottom, 
 							SWP_NOZORDER | SWP_NOACTIVATE);
 		}
-		
 
 		// get active item data
-		UINT	iItemCnt = ::SendMessage(_hContTab, TCM_GETITEMCOUNT, 0, 0);
+		UINT iItemCnt = ::SendMessage(_hContTab, TCM_GETITEMCOUNT, 0, 0);
 
 		// resize visible plugin windows
 		for (UINT iItem = 0; iItem < iItemCnt; ++iItem)
 		{
-			tcItem.mask		= TCIF_PARAM;
+			tcItem.mask = TCIF_PARAM;
 			::SendMessage(_hContTab, TCM_GETITEM, iItem, (LPARAM)&tcItem);
 			if (!tcItem.lParam)
 				continue;
@@ -1114,27 +1131,26 @@ void DockingCont::onSize()
 			//::SendMessage(((tTbData*)tcItem.lParam)->hClient, WM_SIZE, 0, MAKELONG(rcTemp.right, rcTemp.bottom));
 			// Notify switch in
 			NMHDR nmhdr;
-			nmhdr.code		= DMN_FLOATDROPPED;
-			nmhdr.hwndFrom	= _hSelf;
-			nmhdr.idFrom	= 0;
+			nmhdr.code      = DMN_FLOATDROPPED;
+			nmhdr.hwndFrom  = _hSelf;
+			nmhdr.idFrom    = 0;
 			::SendMessage(((tTbData*)tcItem.lParam)->hClient, WM_NOTIFY, nmhdr.idFrom, (LPARAM)&nmhdr);
-			
 		}
 	}
 }
 
 void DockingCont::doClose()
 {
-	int	iItemOff	= 0;
-	int	iItemCnt	= ::SendMessage(_hContTab, TCM_GETITEMCOUNT, 0, 0);
+	int iItemOff = 0;
+	int iItemCnt = ::SendMessage(_hContTab, TCM_GETITEMCOUNT, 0, 0);
 
 	for (int iItem = 0; iItem < iItemCnt; ++iItem)
 	{
-		TCITEM		tcItem		= {0};
+		TCITEM tcItem = {0};
 
 		// get item data
 		SelectTab(iItemOff);
-		tcItem.mask	= TCIF_PARAM;
+		tcItem.mask = TCIF_PARAM;
 		::SendMessage(_hContTab, TCM_GETITEM, iItemOff, (LPARAM)&tcItem);
 		if (!tcItem.lParam)
 			continue;
@@ -1173,18 +1189,18 @@ void DockingCont::showToolbar(tTbData* pTbData, BOOL state)
 
 int DockingCont::hideToolbar(tTbData *pTbData, BOOL hideClient)
 {
-	int		iItem	= SearchPosInTab(pTbData);
+	int iItem = SearchPosInTab(pTbData);
 
 	// delete item
 	if (TRUE == ::SendMessage(_hContTab, TCM_DELETEITEM, iItem, 0))
 	{
-		UINT	iItemCnt = ::SendMessage(_hContTab, TCM_GETITEMCOUNT, 0, 0);
+		UINT iItemCnt = ::SendMessage(_hContTab, TCM_GETITEMCOUNT, 0, 0);
 
 		if (iItemCnt != 0)
 		{
-			TCITEM		tcItem = {0};
+			TCITEM tcItem = {0};
 
-			tcItem.mask	= TCIF_PARAM;
+			tcItem.mask = TCIF_PARAM;
 
 			if ((unsigned int)iItem == iItemCnt)
 			{
@@ -1214,7 +1230,7 @@ int DockingCont::hideToolbar(tTbData *pTbData, BOOL hideClient)
 		}
 
 		// keep sure, that client is hide!!!
-		if (hideClient == TRUE)
+		if (hideClient)
 		{
 			::ShowWindow(pTbData->hClient, SW_HIDE);
 		}
@@ -1226,14 +1242,14 @@ int DockingCont::hideToolbar(tTbData *pTbData, BOOL hideClient)
 
 void DockingCont::viewToolbar(tTbData *pTbData)
 {
-	TCITEM		tcItem		= {0};
-	int			iItemCnt	= ::SendMessage(_hContTab, TCM_GETITEMCOUNT, 0, 0);
+	TCITEM tcItem   = {0};
+	int    iItemCnt = ::SendMessage(_hContTab, TCM_GETITEMCOUNT, 0, 0);
 
 	if (iItemCnt > 0)
 	{
-		UINT	iItem	= getActiveTb();
+		UINT iItem = getActiveTb();
 
-		tcItem.mask		= TCIF_PARAM;
+		tcItem.mask = TCIF_PARAM;
 		::SendMessage(_hContTab, TCM_GETITEM, iItem, (LPARAM)&tcItem);
 		if (!tcItem.lParam)
 			return;
@@ -1244,8 +1260,8 @@ void DockingCont::viewToolbar(tTbData *pTbData)
 
 	// create new tab if it not exists
 	int iTabPos = SearchPosInTab(pTbData);
-	tcItem.mask			= TCIF_PARAM;
-	tcItem.lParam		= (LPARAM)pTbData;
+	tcItem.mask   = TCIF_PARAM;
+	tcItem.lParam = (LPARAM)pTbData;
 
 	if (iTabPos == -1)
 	{
@@ -1273,8 +1289,8 @@ void DockingCont::viewToolbar(tTbData *pTbData)
 
 int DockingCont::SearchPosInTab(tTbData* pTbData)
 {
-	TCITEM	tcItem		= {0};
-	int		iItemCnt	= ::SendMessage(_hContTab, TCM_GETITEMCOUNT, 0, 0);
+	TCITEM  tcItem   = {0};
+	int     iItemCnt = ::SendMessage(_hContTab, TCM_GETITEMCOUNT, 0, 0);
 
 	tcItem.mask	= TCIF_PARAM;
 
@@ -1287,6 +1303,7 @@ int DockingCont::SearchPosInTab(tTbData* pTbData)
 		if (((tTbData*)tcItem.lParam)->hClient == pTbData->hClient)
 			return iItem;
 	}
+
 	return -1;
 }
 
@@ -1294,14 +1311,14 @@ void DockingCont::SelectTab(int iTab)
 {
 	if (iTab != -1)
 	{
-		const TCHAR	*pszMaxTxt	= NULL;
-		TCITEM	tcItem		= {0};
-		SIZE	size		= {0};
-		int		maxWidth	= 0;
-		int		iItemCnt	= ::SendMessage(_hContTab, TCM_GETITEMCOUNT, 0, 0);
+		const TCHAR	*pszMaxTxt = NULL;
+		TCITEM  tcItem   = {0};
+		SIZE    size     = {0};
+		int     maxWidth = 0;
+		int     iItemCnt = ::SendMessage(_hContTab, TCM_GETITEMCOUNT, 0, 0);
 
 		// get data of new active dialog
-		tcItem.mask		= TCIF_PARAM;
+		tcItem.mask = TCIF_PARAM;
 		::SendMessage(_hContTab, TCM_GETITEM, iTab, (LPARAM)&tcItem);
 		// show active dialog
 		if (!tcItem.lParam)
@@ -1312,9 +1329,9 @@ void DockingCont::SelectTab(int iTab)
 
 		// Notify switch in
 		NMHDR nmhdr;
-		nmhdr.code		= DMN_SWITCHIN;
-		nmhdr.hwndFrom	= _hSelf;
-		nmhdr.idFrom	= 0;
+		nmhdr.code      = DMN_SWITCHIN;
+		nmhdr.hwndFrom  = _hSelf;
+		nmhdr.idFrom    = 0;
 		::SendMessage(((tTbData*)tcItem.lParam)->hClient, WM_NOTIFY, nmhdr.idFrom, (LPARAM)&nmhdr);
 
 		if ((unsigned int)iTab != _prevItem)
@@ -1328,16 +1345,16 @@ void DockingCont::SelectTab(int iTab)
 		
 			// Notify switch off
 			NMHDR nmhdr;
-			nmhdr.code		= DMN_SWITCHOFF;
-			nmhdr.hwndFrom	= _hSelf;
-			nmhdr.idFrom	= 0;
+			nmhdr.code      = DMN_SWITCHOFF;
+			nmhdr.hwndFrom  = _hSelf;
+			nmhdr.idFrom    = 0;
 			::SendMessage(((tTbData*)tcItem.lParam)->hClient, WM_NOTIFY, nmhdr.idFrom, (LPARAM)&nmhdr);
 		}
 
 		// resize tab item
 
-		// get at first largest item ...
-		HDC		hDc	= ::GetDC(_hContTab);
+		// get at first largest item 
+		HDC hDc = ::GetDC(_hContTab);
 		SelectObject(hDc, _hFont);
 
 		for (int iItem = 0; iItem < iItemCnt; ++iItem)
@@ -1352,22 +1369,22 @@ void DockingCont::SelectTab(int iTab)
 			// get current font width
 			GetTextExtentPoint32(hDc, pszTabTxt, lstrlen(pszTabTxt), &size);
 
-			if (maxWidth < size.cx) 
+			if (maxWidth < size.cx)
 			{
-				maxWidth	= size.cx;
-				pszMaxTxt	= pszTabTxt;
+				maxWidth  = size.cx;
+				pszMaxTxt = pszTabTxt;
 			}
 		}
 		::ReleaseDC(_hSelf, hDc);
 
-		tcItem.mask	= TCIF_TEXT;
+		tcItem.mask = TCIF_TEXT;
 
 		for (int iItem = 0; iItem < iItemCnt; ++iItem)
 		{
 			generic_string szText(TEXT(""));
 			if (iItem == iTab && pszMaxTxt)
 			{
-				// fake here an icon before text ...
+				// fake here an icon before text 
 				szText = TEXT("    ");
 				szText += pszMaxTxt;
 			}
@@ -1391,17 +1408,18 @@ bool DockingCont::updateCaption()
 	if (!_hContTab)
 		return false;
 
-	TCITEM			tcItem	= {0};
-	int				iItem	= getActiveTb();
+	TCITEM tcItem = {0};
+	int    iItem  = getActiveTb();
 
 	if (iItem < 0)
 		return false;
 
 	// get data of new active dialog
-	tcItem.mask		= TCIF_PARAM;
+	tcItem.mask = TCIF_PARAM;
 	::SendMessage(_hContTab, TCM_GETITEM, iItem, (LPARAM)&tcItem);
 
-	if (!tcItem.lParam) return false;
+	if (!tcItem.lParam)
+		return false;
 
 	// update caption text
 	_pszCaption = ((tTbData*)tcItem.lParam)->pszName;
@@ -1414,7 +1432,7 @@ bool DockingCont::updateCaption()
 		_pszCaption += ((tTbData*)tcItem.lParam)->pszAddInfo; 
 	}
 
-	if (_isFloating == true)
+	if (_isFloating)
 	{
 		::SetWindowText(_hSelf, _pszCaption.c_str());
 	}
@@ -1427,13 +1445,13 @@ bool DockingCont::updateCaption()
 
 void DockingCont::focusClient()
 {
-	TCITEM		tcItem	= {0};
-	int			iItem	= getActiveTb();	
+	TCITEM tcItem = {0};
+	int    iItem  = getActiveTb();
 
 	if (iItem != -1)
 	{
 		// get data of new active dialog
-		tcItem.mask		= TCIF_PARAM;
+		tcItem.mask = TCIF_PARAM;
 		::SendMessage(_hContTab, TCM_GETITEM, iItem, (LPARAM)&tcItem);
 
 		// set focus
@@ -1452,4 +1470,3 @@ LPARAM DockingCont::NotifyParent(UINT message)
 {
 	return ::SendMessage(_hParent, message, 0, (LPARAM)this);
 }
-

@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -31,7 +31,8 @@
 
 using namespace std;
 
-struct MenuItemUnit {
+struct MenuItemUnit
+{
 	unsigned long _cmdID;
 	generic_string _itemName;
 	generic_string _parentFolderName;
@@ -41,14 +42,15 @@ struct MenuItemUnit {
 	MenuItemUnit(unsigned long cmdID, const TCHAR *itemName, const TCHAR *parentFolderName=NULL);
 };
 
-class ContextMenu {
+class ContextMenu
+{
 public:
 	ContextMenu() : _hParent(NULL), _hMenu(NULL) {};
 	~ContextMenu();
 
 	void create(HWND hParent, const vector<MenuItemUnit> & menuItemArray);
 	bool isCreated() const {return _hMenu != NULL;};
-	
+
 	void display(const POINT & p) const {
 		::TrackPopupMenu(_hMenu, TPM_LEFTALIGN, p.x, p.y, 0, _hParent, NULL);
 	};

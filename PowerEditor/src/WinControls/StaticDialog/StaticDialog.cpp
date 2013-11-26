@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -30,12 +30,12 @@
 
 void StaticDialog::goToCenter()
 {
-    RECT rc;
-    ::GetClientRect(_hParent, &rc);
-    POINT center;
-    center.x = rc.left + (rc.right - rc.left)/2;
-    center.y = rc.top + (rc.bottom - rc.top)/2;
-    ::ClientToScreen(_hParent, &center);
+	RECT rc;
+	::GetClientRect(_hParent, &rc);
+	POINT center;
+	center.x = rc.left + (rc.right - rc.left)/2;
+	center.y = rc.top + (rc.bottom - rc.top)/2;
+	::ClientToScreen(_hParent, &center);
 
 	int x = center.x - (_rc.right - _rc.left)/2;
 	int y = center.y - (_rc.bottom - _rc.top)/2;
@@ -46,7 +46,8 @@ void StaticDialog::goToCenter()
 
 void StaticDialog::display(bool toShow) const 
 {
-	if (toShow) {
+	if (toShow)
+	{
 		// If the user has switched from a dual monitor to a single monitor since we last
 		// displayed the dialog, then ensure that it's still visible on the single monitor.
 		RECT workAreaRect, rc;
@@ -106,7 +107,9 @@ void StaticDialog::create(int dialogID, bool isRTL, bool msgDestParent)
 		::GlobalFree(hMyDlgTemplate);
 	}
 	else
+	{
 		_hSelf = ::CreateDialogParam(_hInst, MAKEINTRESOURCE(dialogID), _hParent, (DLGPROC)dlgProc, (LPARAM)this);
+	}
 
 	if (!_hSelf)
 	{
@@ -131,7 +134,7 @@ BOOL CALLBACK StaticDialog::dlgProc(HWND hwnd, UINT message, WPARAM wParam, LPAR
 			pStaticDlg->_hSelf = hwnd;
 			::SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)lParam);
 			::GetWindowRect(hwnd, &(pStaticDlg->_rc));
-            pStaticDlg->run_dlgProc(message, wParam, lParam);
+			pStaticDlg->run_dlgProc(message, wParam, lParam);
 			
 			return TRUE;
 		}
@@ -148,34 +151,34 @@ BOOL CALLBACK StaticDialog::dlgProc(HWND hwnd, UINT message, WPARAM wParam, LPAR
 
 void StaticDialog::alignWith(HWND handle, HWND handle2Align, PosAlign pos, POINT & point)
 {
-    RECT rc, rc2;
-    ::GetWindowRect(handle, &rc);
+	RECT rc, rc2;
+	::GetWindowRect(handle, &rc);
 
-    point.x = rc.left;
-    point.y = rc.top;
+	point.x = rc.left;
+	point.y = rc.top;
 
-    switch (pos)
-    {
-        case ALIGNPOS_LEFT :
-            ::GetWindowRect(handle2Align, &rc2);
-            point.x -= rc2.right - rc2.left;
-            break;
+	switch (pos)
+	{
+		case ALIGNPOS_LEFT :
+			::GetWindowRect(handle2Align, &rc2);
+			point.x -= rc2.right - rc2.left;
+			break;
 
-        case ALIGNPOS_RIGHT :
-            ::GetWindowRect(handle, &rc2);
-            point.x += rc2.right - rc2.left;
-            break;
+		case ALIGNPOS_RIGHT :
+			::GetWindowRect(handle, &rc2);
+			point.x += rc2.right - rc2.left;
+			break;
 
-        case ALIGNPOS_TOP :
-            ::GetWindowRect(handle2Align, &rc2);
-            point.y -= rc2.bottom - rc2.top;
-            break;
+		case ALIGNPOS_TOP :
+			::GetWindowRect(handle2Align, &rc2);
+			point.y -= rc2.bottom - rc2.top;
+			break;
 
-        default : //ALIGNPOS_BOTTOM
-            ::GetWindowRect(handle, &rc2);
-            point.y += rc2.bottom - rc2.top;
-            break;
-    }
-    
-    ::ScreenToClient(_hSelf, &point);
+		default : //ALIGNPOS_BOTTOM
+			::GetWindowRect(handle, &rc2);
+			point.y += rc2.bottom - rc2.top;
+			break;
+	}
+
+	::ScreenToClient(_hSelf, &point);
 }

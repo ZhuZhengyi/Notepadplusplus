@@ -29,7 +29,7 @@ distribution.
 
 // Note tha "PutString" hardcodes the same list. This
 // is less flexible than it appears. Changing the entries
-// or order will break putstring.	
+// or order will break putstring.
 TiXmlBaseA::Entity TiXmlBaseA::entity[ NUM_ENTITY ] = 
 {
 	{ "&amp;",  5, '&' },
@@ -47,7 +47,7 @@ class TiXmlParsingDataA
 	//TiXmlParsingDataA( const char* now, const TiXmlParsingDataA* prevData );
 	void Stamp( const char* now );
 
-	const TiXmlCursorA& Cursor()	{ return cursor; }
+	const TiXmlCursorA& Cursor()    { return cursor; }
 	//void Update( const char* now );
 
   private:
@@ -61,9 +61,9 @@ class TiXmlParsingDataA
 		cursor.col = col;
 	}
 
-	TiXmlCursorA		cursor;
-	const char*		stamp;
-	int				tabsize;
+	TiXmlCursorA cursor;
+	const char*  stamp;
+	int          tabsize;
 };
 
 
@@ -86,7 +86,8 @@ void TiXmlParsingDataA::Stamp( const char* now )
 	while ( p < now )
 	{
 		// Code contributed by Fletcher Dunn: (modified by lee)
-		switch (*p) {
+		switch (*p)
+		{
 			case 0:
 				// We *should* never get here, but in case we do, don't
 				// advance past the terminating null character, ever
@@ -95,7 +96,7 @@ void TiXmlParsingDataA::Stamp( const char* now )
 			case '\r':
 				// bump down to the next line
 				++row;
-				col = 0;				
+				col = 0;
 				// Eat the character
 				++p;
 
@@ -223,15 +224,15 @@ const char* TiXmlBaseA::ReadName( const char* p, TIXMLA_STRING * name )
 const char* TiXmlBaseA::GetEntity( const char* p, char* value )
 {
 	// Presume an entity, and pull it out.
-    TIXMLA_STRING ent;
+	TIXMLA_STRING ent;
 	int i;
 
 	// Handle the &#x entities.
-	if (    strncmp( "&#x", p, 3 ) == 0 
-	     && *(p+3) 
+	if (strncmp( "&#x", p, 3 ) == 0 
+		 && *(p+3) 
 		 && *(p+4) 
 		 && ( *(p+4) == ';' || *(p+5) == ';' )
-	   )
+		)
 	{
 		*value = 0;
 
@@ -240,7 +241,7 @@ const char* TiXmlBaseA::GetEntity( const char* p, char* value )
 			// Short, one value entity.
 			if ( isalpha( *(p+3) ) ) 
 				*value += ( (char)tolower( *(p+3) ) - 'a' + 10 );
-			else				     
+			else
 				*value += ( (char)*(p+3) - '0' );
 
 			return p+5;
@@ -249,11 +250,11 @@ const char* TiXmlBaseA::GetEntity( const char* p, char* value )
 		{
 			// two value entity
 			if ( isalpha( *(p+3) ) ) *value += ((char) tolower( *(p+3) ) - 'a' + 10 ) * 16;
-			else				     *value += ((char) *(p+3) - '0' ) * 16;
+			else                     *value += ((char) *(p+3) - '0' ) * 16;
 
 			if ( isalpha( *(p+4) ) ) 
 				*value += ((char) tolower( *(p+4) ) - 'a' + 10 );
-			else				     
+			else
 				*value += ((char) *(p+4) - '0' );
 
 			return p+6;

@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -31,17 +31,20 @@
 #include "ScintillaEditView.h"
 
 #ifndef _WIN32_IE
-#define _WIN32_IE	0x0600
+#define _WIN32_IE   0x0600
 #endif //_WIN32_IE
 
 
 bool DocTabView::_hideTabBarStatus = false;
 
-void DocTabView::addBuffer(BufferID buffer) {
-	if (buffer == BUFFER_INVALID)	//valid only
+void DocTabView::addBuffer(BufferID buffer)
+{
+	if (buffer == BUFFER_INVALID) // valid only
 		return;
-	if (this->getIndexByBuffer(buffer) != -1)	//no duplicates
+
+	if (this->getIndexByBuffer(buffer) != -1) // no duplicates
 		return;
+
 	Buffer * buf = MainFileManager->getBufferByID(buffer);
 	TCITEM tie; 
 	tie.mask = TCIF_TEXT | TCIF_IMAGE | TCIF_PARAM;
@@ -49,6 +52,7 @@ void DocTabView::addBuffer(BufferID buffer) {
 	int index = -1;
 	if (_hasImgLst)
 		index = 0;
+
 	tie.iImage = index; 
 	tie.pszText = (TCHAR *)buf->getFileName();
 	tie.lParam = (LPARAM)buffer;
@@ -58,27 +62,32 @@ void DocTabView::addBuffer(BufferID buffer) {
 	::SendMessage(_hParent, WM_SIZE, 0, 0);
 }
 
-void DocTabView::closeBuffer(BufferID buffer) {
+void DocTabView::closeBuffer(BufferID buffer)
+{
 	int indexToClose = getIndexByBuffer(buffer);
 	deletItemAt((size_t)indexToClose);
 
 	::SendMessage(_hParent, WM_SIZE, 0, 0);
 }
 
-bool DocTabView::activateBuffer(BufferID buffer) {
+bool DocTabView::activateBuffer(BufferID buffer)
+{
 	int indexToActivate = getIndexByBuffer(buffer);
 	if (indexToActivate == -1)
-		return false;	//cannot activate
+		return false; //cannot activate
+
 	activateAt(indexToActivate);
 	return true;
 }
 
-BufferID DocTabView::activeBuffer() {
+BufferID DocTabView::activeBuffer()
+{
 	int index = getCurrentTabIndex();
 	return (BufferID)getBufferByIndex(index);
 }
 
-BufferID DocTabView::findBufferByName(const TCHAR * fullfilename) {	//-1 if not found, something else otherwise
+BufferID DocTabView::findBufferByName(const TCHAR * fullfilename) //-1 if not found, something else otherwise
+{
 	TCITEM tie;
 	tie.lParam = -1;
 	tie.mask = TCIF_PARAM;
@@ -92,10 +101,12 @@ BufferID DocTabView::findBufferByName(const TCHAR * fullfilename) {	//-1 if not 
 			return id;
 		}
 	}
+
 	return BUFFER_INVALID;
 }
 
-int DocTabView::getIndexByBuffer(BufferID id) {
+int DocTabView::getIndexByBuffer(BufferID id)
+{
 	TCITEM tie;
 	tie.lParam = -1;
 	tie.mask = TCIF_PARAM;
@@ -105,10 +116,12 @@ int DocTabView::getIndexByBuffer(BufferID id) {
 		if ((BufferID)tie.lParam == id)
 			return i;
 	}
+
 	return -1;
 }
 
-BufferID DocTabView::getBufferByIndex(int index) {
+BufferID DocTabView::getBufferByIndex(int index)
+{
 	TCITEM tie;
 	tie.lParam = -1;
 	tie.mask = TCIF_PARAM;
@@ -117,7 +130,8 @@ BufferID DocTabView::getBufferByIndex(int index) {
 	return (BufferID)tie.lParam;
 }
 
-void DocTabView::bufferUpdated(Buffer * buffer, int mask) {
+void DocTabView::bufferUpdated(Buffer * buffer, int mask)
+{
 	int index = getIndexByBuffer(buffer->getID());
 	if (index == -1)
 		return;
@@ -127,15 +141,18 @@ void DocTabView::bufferUpdated(Buffer * buffer, int mask) {
 	tie.mask = 0;
 	
 
-	if (mask & BufferChangeReadonly || mask & BufferChangeDirty) {
+	if (mask & BufferChangeReadonly || mask & BufferChangeDirty)
+	{
 		tie.mask |= TCIF_IMAGE;
 		tie.iImage = buffer->isDirty()?UNSAVED_IMG_INDEX:SAVED_IMG_INDEX;
-		if (buffer->isReadOnly()) {
+		if (buffer->isReadOnly())
+		{
 			tie.iImage = REDONLY_IMG_INDEX;
 		}
 	}
 
-	if (mask & BufferChangeFilename) {
+	if (mask & BufferChangeFilename)
+	{
 		tie.mask |= TCIF_TEXT;
 		tie.pszText = (TCHAR *)buffer->getFileName();
 	}
@@ -148,7 +165,8 @@ void DocTabView::bufferUpdated(Buffer * buffer, int mask) {
 		::SendMessage(_hParent, WM_SIZE, 0, 0);
 }
 
-void DocTabView::setBuffer(int index, BufferID id) {
+void DocTabView::setBuffer(int index, BufferID id)
+{
 	if (index < 0 || index >= (int)_nbItem)
 		return;
 
@@ -174,7 +192,7 @@ void DocTabView::reSizeTo(RECT & rc)
 	else
 	{
 		TabBar::reSizeTo(rc);
-		rc.left	 += borderWidth;
+		rc.left  += borderWidth;
 		rc.right -= borderWidth * 2;	
 		rc.top   += borderWidth;
 		rc.bottom -= (borderWidth * 2);	
