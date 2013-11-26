@@ -44,7 +44,7 @@ const int blockSize = 128 * 1024 + 4;
 const int CR = 0x0D;
 const int LF = 0x0A;
 
-Buffer::Buffer(FileManager * pManager, BufferID id, Document doc, DocFileStatus type, const TCHAR *fileName)	//type must be either DOC_REGULAR or DOC_UNNAMED
+Buffer::Buffer(FileManager * pManager, BufferID id, Document doc, DocFileStatus type, const TCHAR *fileName) // type must be either DOC_REGULAR or DOC_UNNAMED
 	: _pManager(pManager), _id(id), _isDirty(false), _doc(doc), _isFileReadOnly(false), _isUserReadOnly(false), _recentTag(-1), _references(0),
 	_canNotify(false), _timeStamp(0), _needReloading(false), _encoding(-1)
 {
@@ -65,7 +65,7 @@ Buffer::Buffer(FileManager * pManager, BufferID id, Document doc, DocFileStatus 
 	_currentStatus = type;
 	_isDirty = false;
 
-	_needLexer = false;	//new buffers do not need lexing, Scintilla takes care of that
+	_needLexer = false; //new buffers do not need lexing, Scintilla takes care of that
 	_canNotify = true;
 }
 
@@ -79,7 +79,7 @@ void Buffer::setLangType(LangType lang, const TCHAR * userLangName)
 	{
 		_userLangExt = userLangName;
 	}
-	_needLexer = true;	//change of lang means lexern needs updating
+	_needLexer = true; //change of lang means lexern needs updating
 	doNotify(BufferChangeLanguage|BufferChangeLexing);
 }
 
@@ -376,7 +376,7 @@ void Buffer::setHideLineChanged(bool isHide, int location)
 }
 void Buffer::setDeferredReload() // Triggers a reload on the next Document access
 {
-	_isDirty = false;    // When reloading, just set to false, since it sohuld be marked as clean
+	_isDirty = false;    // When reloading, just set to false, since it should be marked as clean
 	_needReloading = true;
 	doNotify(BufferChangeDirty);
 }
@@ -776,7 +776,7 @@ BufferID FileManager::bufferFromDocument(Document doc, bool dontIncrease, bool d
 	newTitle += nb;
 
 	if (!dontRef)
-		_pscratchTilla->execute(SCI_ADDREFDOCUMENT, 0, doc);	//set reference for FileManager
+		_pscratchTilla->execute(SCI_ADDREFDOCUMENT, 0, doc); //set reference for FileManager
 	Buffer * newBuf = new Buffer(this, _nextBufferID, doc, DOC_UNNAMED, newTitle.c_str());
 	BufferID id = (BufferID)newBuf;
 	newBuf->_id = id;
@@ -790,7 +790,7 @@ BufferID FileManager::bufferFromDocument(Document doc, bool dontIncrease, bool d
 
 bool FileManager::loadFileData(Document doc, const TCHAR * filename, Utf8_16_Read * UnicodeConvertor, LangType language, int & encoding, formatType *pFormat)
 {
-	const int blockSize = 128 * 1024;	//128 kB
+	const int blockSize = 128 * 1024; //128 kB
 	char data[blockSize+8];
 	FILE *fp = generic_fopen(filename, TEXT("rb"));
 	if (!fp)
@@ -806,13 +806,6 @@ bool FileManager::loadFileData(Document doc, const TCHAR * filename, Utf8_16_Rea
 	if(bufferSizeRequested > INT_MAX)
 	{
 		::MessageBox(NULL, TEXT("File is too big to be opened by Notepad++"), TEXT("File open problem"), MB_OK|MB_APPLMODAL);
-		/*
-		_nativeLangSpeaker.messageBox("NbFileToOpenImportantWarning",
-										_pPublicInterface->getHSelf(),
-										TEXT("File is too big to be opened by Notepad++"),
-										TEXT("File open problem"),
-										MB_OK|MB_APPLMODAL);
-		*/
 		fclose(fp);
 		return false;
 	}
