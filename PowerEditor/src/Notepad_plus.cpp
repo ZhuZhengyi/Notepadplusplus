@@ -4396,8 +4396,8 @@ void Notepad_plus::getCurrentOpenedFiles(Session & session)
 		Buffer * buf = MainFileManager->getBufferByID(bufID);
 		if (!buf->isUntitled() && PathFileExists(buf->getFullPathName()))
 		{
-			generic_string	languageName	= getLangFromMenu( buf );
-			const TCHAR *langName	= languageName.c_str();
+			generic_string languageName = getLangFromMenu( buf );
+			const TCHAR *langName = languageName.c_str();
 
 			sessionFileInfo sfi(buf->getFullPathName(), langName, buf->getEncoding(), buf->getPosition(&_subEditView));
 
@@ -4469,14 +4469,16 @@ bool Notepad_plus::emergency(generic_string emergencySavedDir)
 	return dumpFiles(emergencySavedDir.c_str(), TEXT("File"));
 }
 
-bool Notepad_plus::dumpFiles(const TCHAR * outdir, const TCHAR * fileprefix) {
+bool Notepad_plus::dumpFiles(const TCHAR * outdir, const TCHAR * fileprefix)
+{
 	//start dumping unsaved files to recovery directory
 	bool somethingsaved = false;
 	bool somedirty = false;
 	TCHAR savePath[MAX_PATH] = {0};
 
 	//rescue primary
-	for(int i = 0; i < MainFileManager->getNrBuffers(); ++i) {
+	for(int i = 0; i < MainFileManager->getNrBuffers(); ++i)
+	{
 		Buffer * docbuf = MainFileManager->getBufferByIndex(i);
 		if (!docbuf->isDirty())	//skip saved documents
 			continue;
@@ -4538,15 +4540,15 @@ void Notepad_plus::notifyBufferChanged(Buffer * buffer, int mask)
 		bool didDialog = false;
 		switch(buffer->getStatus())
 		{
-			case DOC_UNNAMED: 	//nothing todo
+			case DOC_UNNAMED:  // nothing to do
 			{
 				break;
 			}
-			case DOC_REGULAR: 	//nothing todo
+			case DOC_REGULAR:  // nothing to do
 			{
 				break;
 			}
-			case DOC_MODIFIED:	//ask for reloading
+			case DOC_MODIFIED: // Ask for reloading
 			{
 				bool autoUpdate = (nppGUI._fileAutoDetection == cdAutoUpdate) || (nppGUI._fileAutoDetection == cdAutoUpdateGo2end);
 				if (!autoUpdate || buffer->isDirty())
@@ -4784,7 +4786,9 @@ void Notepad_plus::loadCommandlineParams(const TCHAR * commandLine, CmdLineParam
 			switchToFile(bufID);       // Switch to the file. No deferred loading, but this way we can easily move the cursor to the right position
 
 			if (cn == -1)
-			_pEditView->execute(SCI_GOTOLINE, ln-1);
+			{
+				_pEditView->execute(SCI_GOTOLINE, ln-1);
+			}
 			else
 			{
 				int pos = _pEditView->execute(SCI_FINDCOLUMN, ln-1, cn-1);
@@ -4793,6 +4797,7 @@ void Notepad_plus::loadCommandlineParams(const TCHAR * commandLine, CmdLineParam
 			switchEditViewTo(iView); // Restore view
 		}
 	}
+
 	if (lastOpened != BUFFER_INVALID)
 	{
 		switchToFile(lastOpened);
@@ -4884,6 +4889,7 @@ vector<generic_string> Notepad_plus::addNppComponents(const TCHAR *destDir, cons
 			}
 		}
 	}
+
 	return copiedFiles;
 }
 
@@ -4915,7 +4921,7 @@ int Notepad_plus::getLangFromMenuName(const TCHAR * langName)
 		{
 			if ( !lstrcmp( langName, menuLangName ) )
 			{
-				id	= i;
+				id = i;
 				break;
 			}
 		}
@@ -4929,7 +4935,7 @@ int Notepad_plus::getLangFromMenuName(const TCHAR * langName)
 			{
 				if ( !lstrcmp( langName, menuLangName ) )
 				{
-					id	= i;
+					id = i;
 					break;
 				}
 			}
@@ -4941,13 +4947,11 @@ int Notepad_plus::getLangFromMenuName(const TCHAR * langName)
 
 generic_string Notepad_plus::getLangFromMenu(const Buffer * buf)
 {
-
-	int id;
 	generic_string userLangName;
 	const int nbChar = 32;
 	TCHAR menuLangName[nbChar];
 
-	id = (NppParameters::getInstance())->langTypeToCommandID( buf->getLangType() );
+	int id = (NppParameters::getInstance())->langTypeToCommandID( buf->getLangType() );
 	if ( ( id != IDM_LANG_USER ) || !( buf->isUserDefineLangExt() ) )
 	{
 		::GetMenuString(_mainMenuHandle, id, menuLangName, nbChar-1, MF_BYCOMMAND);
@@ -4972,6 +4976,7 @@ Style * Notepad_plus::getStyleFromName(const TCHAR *styleName)
 		Style & style = stylers.getStyler(i);
 		st = &style;
 	}
+
 	return st;
 }
 
@@ -5343,7 +5348,8 @@ void Notepad_plus::launchFunctionList()
 	_pEditView->getFocus();
 }
 
-struct TextPlayerParams {
+struct TextPlayerParams
+{
 	HWND _nppHandle;
 	ScintillaEditView *_pCurrentView;
 	const char *_text2display;
@@ -5351,7 +5357,8 @@ struct TextPlayerParams {
 	bool _shouldBeTrolling;
 };
 
-struct TextTrollerParams {
+struct TextTrollerParams
+{
 	ScintillaEditView *_pCurrentView;
 	const char *_text2display;
 	BufferID _targetBufID;
@@ -5401,17 +5408,17 @@ Quote quotes[nbQuote] = {
 {"Anonymous #3", "I'm not totally useless. I can be used as a bad example."},
 {"Anonymous #4", "Life is too short to remove USB safely."},
 {"Anonymous #5", "\"SEX\" is not the answer.\nSex is the question, \"YES\" is the answer."},
-{"Anonymous #6", "Going to Mc Donald's for a salad is like going to a whore for a hug."},
+{"Anonymous #6", "Going to McDonald's for a salad is like going to a whore for a hug."},
 {"Anonymous #7", "I need a six month holiday, TWICE A YEAR!"},
 {"Anonymous #8", "A world without woman would be a pain in the ass!!!"},
 {"Anonymous #9", "I just read a list of \"the 100 things to do before you die\". I'm pretty surprised \"yell for help\" wasn't one of them..."},
 {"Anonymous #10", "Roses are red,\nViolets are red,\nTulips are red,\nBushes are red,\nTrees are red,\nHOLY SHIT MY\nGARDEN'S ON FIRE!!"},
 {"Anonymous #11", "We stopped checking for monsters under our bed, when we realized they were inside us."},
-{"Anonymous #12", "I would rather check my facebook than face my checkbook."},
+{"Anonymous #12", "I would rather check my Facebook than face my chequebook."},
 {"Anonymous #13", "Whoever says Paper beats Rock is an idiot. Next time I see someone say that I will throw a rock at them while they hold up a sheet of paper."},
 {"Anonymous #14", "A better world is where chickens can cross the road without having their motives questioned."},
 {"Anonymous #15", "Life is like a penis, simple, soft, straight, relaxed and hanging freely.\nThen women make it hard."},
-{"Anonymous #16", "What you do after sex?\n  A. Smoke a cigarette\n  B. Kiss your partener\n  C. Clear browser history\n"},
+{"Anonymous #16", "What you do after sex?\n  A. Smoke a cigarette\n  B. Kiss your partner\n  C. Clear browser history\n"},
 {"Anonymous #17", "All you need is love,\nall you want is sex,\nall you have is porn.\n"},
 {"Anonymous #18", "Never get into fights with ugly people, they have nothing to lose."},
 {"Anonymous #19", "F_CK: All I need is U."},
@@ -5422,7 +5429,7 @@ Quote quotes[nbQuote] = {
 {"Anonymous #24", "I'm not saying I hate her.\nI just hope she gets fingered by wolverine"},
 {"Anonymous #25", "In a way, I feel sorry for the kids of this generation.\nThey'll have parents who know how to check browser history."},
 {"Anonymous #26", "I would never bungee jump.\nI came into this world because of a broken rubber, and I'm not going out cause of one."},
-{"Anonymous #27", "I'm no gynecologist, but I know a cunt when I see one."},
+{"Anonymous #27", "I'm no gynaecologist, but I know a cunt when I see one."},
 {"Anonymous #28", "Why 6 afraid of 7?\nBecause 7 8 9 (seven ate nine) while 6 and 9 were flirting."},
 {"Anonymous #29", "The reason women will never be the ones to propose is\nbecause as soon as she gets on her knees,\nhe will start unzipping."},
 {"Anonymous #30", "Why do Java developers wear glasses?\nBecause they don't C#."},
@@ -5431,7 +5438,7 @@ Quote quotes[nbQuote] = {
 {"Anonymous #33", "Programmer - an organism that turns coffee into software."},
 {"Anonymous #34", "It's not a bug - it's an undocumented feature."},
 {"Anonymous #35", "Should array index start at 0 or 1?\nMy compromised solution is 0.5"},
-{"Anonymous #36", "Every single time when I'm about to hug someone extremely sexy, I hit the miror."},
+{"Anonymous #36", "Every single time when I'm about to hug someone extremely sexy, I hit the mirror."},
 {"Anonymous #37", "My software never has bugs. It just develops random features."},
 {"Anonymous #38", "LISP = Lots of Irritating Silly Parentheses."},
 {"Anonymous #39", "Perl, the only language that looks the same before and after RSA encryption."},
@@ -5445,7 +5452,7 @@ Quote quotes[nbQuote] = {
 {"Anonymous #47", "Kids are like fart.\nYou can only stand yours."},
 {"Anonymous #48", "If you were born in Israel, you'd probably be Jewish.\nIf you were born in Saudi Arabia, you'd probably be Muslim.\nIf you were born in India, you'd probably be Hindu.\nBut because you were born in North America, you're Christian.\nYour faith is not inspired by some divine, constant truth.\nIt's simply geography."},
 {"Anonymous #49", "There are 2 types of people in this world:\nPeople who say they pee in the shower, and the dirty fucking liars."},
-{"Anonymous #50", "London 2012 Olympic Games - A bunch of countries coming across the ocean to put their flags in britain and try to get a bunch of gold... it's like history but opposite."},
+{"Anonymous #50", "London 2012 Olympic Games - A bunch of countries coming across the ocean to put their flags in Britain and try to get a bunch of gold... it's like history but opposite."},
 {"Anonymous #51", "I don't need a stable relationship,\nI just need a stable Internet connection."},
 {"Anonymous #52", "What's the difference between religion and bullshit?\nThe bull."},
 {"Anonymous #53", "Today, as I was waiting for my girlfriend in the street, I saw a woman who looked a lot like her. I ran towards her, my arms in the air ready to give her a hug, only to realise it wasn't her. I then had to pass the woman, my arms in the air, still running. FML"},
@@ -5458,7 +5465,7 @@ Quote quotes[nbQuote] = {
 {"Anonymous #60", "Yesterday I named my Wifi network \"hack me if you can\"\nToday when I woke up it was changed to \"challenge accepted\"."},
 {"Anonymous #61", "Your mother is so fat,\nthe recursive function computing her mass causes a stack overflow."},
 {"Anonymous #62", "Oral sex makes my day, but anal sex makes my hole weak."},
-{"Anonymous #63", "I'm not saying I am Batman, I am just saying no one has ever seen me and Batman in the same room togather."},
+{"Anonymous #63", "I'm not saying I am Batman, I am just saying no one has ever seen me and Batman in the same room together."},
 {"Anonymous #64", "I took a taxi today.\nThe driver told me \"I love my job, I own this car, I've got my own business, I'm my own boss, NO ONE tells me what to do!\"\nI said \"TURN LEFT HERE\".\n"},
 {"Anonymous #65", "A man without God is like a fish without a bicycle."},
 {"Anonymous #66", "I hate how spiders just sit there on the walls and act like they pay rent!"},
@@ -5513,7 +5520,7 @@ Quote quotes[nbQuote] = {
 {"Anonymous #115", "YOLOLO:\nYou Only LOL Once."},
 {"Anonymous #116", "Every exit is an entrance to new experiences."},
 {"Anonymous #117", "A Native American was asked:\n\"Do you celebrate Columbus day?\"\nHe replied:\n\"I don't know, do Jews celebrate Hitler's birthday?\""},
-{"Anonymous #118", "I love necrophilia, but i can't stand the awkward silences."},
+{"Anonymous #118", "I love necrophilia, but I can't stand the awkward silences."},
 {"Anonymous #119", "\"I'm gonna Google that. BING that, Bing that, sorry.\"\n- The CEO of Bing (many times per day still)"},
 {"Anonymous #120", "Life is what happens to you while you're looking at your smartphone."},
 {"Anonymous #121", "Thing to do today:\n1. Get up\n2. Go back to bed"},
