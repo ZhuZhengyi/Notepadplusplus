@@ -83,15 +83,19 @@ LRESULT Notepad_plus_Window::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPA
 	{
 		case WM_CREATE:
 		{
-			try{
+			try
+			{
 				_notepad_plus_plus_core._pPublicInterface = this;
 				result = _notepad_plus_plus_core.init(hwnd);
-			} catch (std::exception ex) {
+			}
+			catch (std::exception& ex)
+			{
 				::MessageBoxA(_notepad_plus_plus_core._pPublicInterface->getHSelf(), ex.what(), "Exception On WM_CREATE", MB_OK);
 				exit(-1);
 			}
 		}
 		break;
+
 		default:
 			if (this)
 				return _notepad_plus_plus_core.process(hwnd, Message, wParam, lParam);

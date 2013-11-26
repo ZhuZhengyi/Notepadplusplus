@@ -63,26 +63,30 @@ WORD getMaxIconId(TCHAR* lpFileName)
 	return nMaxID;
 }
 
-class Icon {
+class Icon
+{
 public:
 	// Icon format from http://msdn.microsoft.com/en-us/library/ms997538.aspx
 	// for ICO and EXE files
-	struct ICONDIR {			// File header:
-		WORD	idReserved;		// Reserved (must be 0)
-		WORD	idType;			// Resource Type (1 for icons)
-		WORD	idCount;		// How many images?
+	struct ICONDIR            // File header:
+	{
+		WORD idReserved;      // Reserved (must be 0)
+		WORD idType;          // Resource Type (1 for icons)
+		WORD idCount;         // How many images?
 	};
-	struct ICONDIRENTRY {		// One for each image:
-		BYTE	bWidth;			// Width, in piexels, of the image
-		BYTE	bHeight;		// Height, in pixels, of the image (times 2)
-		BYTE	bColorCount;	// Number of colors in image (0 if >=8bpp)
-		BYTE	bReserved;		// Reserved (must be 0)
-		WORD	wPlanes;		// Color Planes
-		WORD	wBitCount;		// Bits per pixel
-		DWORD	dwBytesInRes;	// How many bytes in this resource?
+
+	struct ICONDIRENTRY       // One for each image:
+	{
+		BYTE  bWidth;         // Width, in piexels, of the image
+		BYTE  bHeight;        // Height, in pixels, of the image (times 2)
+		BYTE  bColorCount;    // Number of colors in image (0 if >=8bpp)
+		BYTE  bReserved;      // Reserved (must be 0)
+		WORD  wPlanes;        // Color Planes
+		WORD  wBitCount;      // Bits per pixel
+		DWORD dwBytesInRes;   // How many bytes in this resource?
 		union {
-			DWORD	dwImageOffset;// Where in the file is this image  (in ICO file)
-			WORD	nID;		// the ID (in EXE file)
+			DWORD dwImageOffset; // Where in the file is this image  (in ICO file)
+			WORD  nID;           // the ID (in EXE file)
 		};
 	};
 	static const UINT sizeof_iconDirEntry_ICO = sizeof(ICONDIRENTRY);
@@ -91,21 +95,26 @@ public:
 	ICONDIR _head;
 	ICONDIRENTRY *_entries;
 	LPBYTE *_imagesData;
-	
+
 	Icon() : _entries(NULL), _imagesData(NULL) { _head.idCount = 0; }
-	void clear() {
+	~Icon() { clear(); }
+	
+	void clear()
+	{
 		if(_imagesData) { for(int i=0; i<_head.idCount; ++i) delete _imagesData[i]; delete[] _imagesData; _imagesData = 0; }
 		if(_entries) delete[] _entries; _entries = 0;
 		_head.idCount = 0;
 	}
-	~Icon() { clear(); }
-	
+
 	bool readICO(TCHAR* filename);
 	bool readEXE(TCHAR* lpFileName, LPCTSTR lpResName, UINT resLangId); // Does not currently read image data
-	
+
 	bool writeToEXE(TCHAR* lpFileName, LPCTSTR lpResName, UINT resLangId);
-	
-	WORD count() { return _head.idCount; }
+
+	WORD count() const
+	{ 
+		return _head.idCount;
+	}
 };
 
 bool Icon::readICO(TCHAR* filename)

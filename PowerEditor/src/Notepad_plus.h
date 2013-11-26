@@ -467,19 +467,22 @@ private:
 	bool viewVisible(int whichOne);
 	void hideView(int whichOne);
 	void hideCurrentView();
-	bool bothActive() { return (_mainWindowStatus & WindowBothActive) == WindowBothActive; };
+	bool bothActive() const { return (_mainWindowStatus & WindowBothActive) == WindowBothActive; }
 	bool reloadLang();
 	bool loadStyles();
 
-	int currentView(){
+	int currentView() const
+	{
 		return _activeView;
 	};
 
-	int otherView(){
+	int otherView() const
+	{
 		return (_activeView == MAIN_VIEW?SUB_VIEW:MAIN_VIEW);
 	};
 
-	int otherFromView(int whichOne){
+	int otherFromView(int whichOne) const
+	{
 		return (whichOne == MAIN_VIEW?SUB_VIEW:MAIN_VIEW);
 	};
 
