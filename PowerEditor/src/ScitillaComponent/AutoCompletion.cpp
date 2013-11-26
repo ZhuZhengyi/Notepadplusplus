@@ -158,7 +158,6 @@ static bool getPathsForPathCompletion(generic_string input, generic_string &rawP
 	}
 	else
 	{
-		locale loc;
 		size_t last_occurrence = rawPath.rfind(L"\\");
 		if(last_occurrence == std::string::npos) // No match.
 		{
