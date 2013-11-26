@@ -110,15 +110,15 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 	case TCN_TABDROPPEDOUTSIDE:
 	case TCN_TABDROPPED:
 	{
-        TabBarPlus *sender = reinterpret_cast<TabBarPlus *>(notification->nmhdr.idFrom);
-        bool isInCtrlStat = (::GetKeyState(VK_LCONTROL) & 0x80000000) != 0;
-        if (notification->nmhdr.code == TCN_TABDROPPEDOUTSIDE)
-        {
-            POINT p = sender->getDraggingPoint();
+		TabBarPlus *sender = reinterpret_cast<TabBarPlus *>(notification->nmhdr.idFrom);
+		bool isInCtrlStat = (::GetKeyState(VK_LCONTROL) & 0x80000000) != 0;
+		if (notification->nmhdr.code == TCN_TABDROPPEDOUTSIDE)
+		{
+			POINT p = sender->getDraggingPoint();
 
 			//It's the coordinate of screen, so we can call 
 			//"WindowFromPoint" function without converting the point
-            HWND hWin = ::WindowFromPoint(p);
+			HWND hWin = ::WindowFromPoint(p);
 			if (hWin == _pEditView->getHSelf()) // In the same view group
 			{
 				if (!_tabPopupDropMenu.isCreated())
@@ -136,12 +136,12 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 			else if ((hWin == _pNonDocTab->getHSelf()) || 
 				     (hWin == _pNonEditView->getHSelf())) // In the another view group
 			{
-                docGotoAnotherEditView(isInCtrlStat?TransferClone:TransferMove);
+				docGotoAnotherEditView(isInCtrlStat?TransferClone:TransferMove);
 			}/*
 			else if ((hWin == _pProjectPanel_1->getTreeHandle()))
 			{
 				
-                //printStr(TEXT("IN!!!"));
+				//printStr(TEXT("IN!!!"));
 			}*/
 			else
 			{
@@ -183,7 +183,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 					{
 						::SendMessage(hWinParent, NPPM_INTERNAL_SWITCHVIEWFROMHWND, 0, (LPARAM)hWin);
 						::SendMessage(hWinParent, WM_COPYDATA, (WPARAM)_pPublicInterface->getHinst(), (LPARAM)&fileNamesData);
-                        if (!isInCtrlStat)
+						if (!isInCtrlStat)
 						{
 							fileClose(bufferToClose, iView);
 							if (noOpenedDoc())
@@ -191,12 +191,12 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 						}
 					}
 				}
-                else // Not Notepad++, we open it here
-                {
+				else // Not Notepad++, we open it here
+				{
 					docOpenInNewInstance(isInCtrlStat?TransferClone:TransferMove, p.x, p.y);
-                }
+				}
 			}
-        }
+		}
 		//break;
 		sender->resetDraggingPoint();
 		return TRUE;
@@ -226,7 +226,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 	case TCN_SELCHANGE:
 	{
 		int iView = -1;
-        if (notification->nmhdr.hwndFrom == _mainDocTab.getHSelf())
+		if (notification->nmhdr.hwndFrom == _mainDocTab.getHSelf())
 		{
 			iView = MAIN_VIEW;
 		}
@@ -248,64 +248,64 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 	}
 
 	case NM_CLICK :
-    {        
+	{
 		if (notification->nmhdr.hwndFrom == _statusBar.getHSelf())
-        {
-            LPNMMOUSE lpnm = (LPNMMOUSE)notification;
+		{
+			LPNMMOUSE lpnm = (LPNMMOUSE)notification;
 			if (lpnm->dwItemSpec == DWORD(STATUSBAR_TYPING_MODE))
 			{
 				bool isOverTypeMode = (_pEditView->execute(SCI_GETOVERTYPE) != 0);
 				_pEditView->execute(SCI_SETOVERTYPE, !isOverTypeMode);
 				_statusBar.setText((_pEditView->execute(SCI_GETOVERTYPE))?TEXT("OVR"):TEXT("INS"), STATUSBAR_TYPING_MODE);
 			}
-        }
+		}
 		else if (notification->nmhdr.hwndFrom == _mainDocTab.getHSelf())
 		{
-            switchEditViewTo(MAIN_VIEW);
+			switchEditViewTo(MAIN_VIEW);
 		}
-        else if (notification->nmhdr.hwndFrom == _subDocTab.getHSelf())
-        {
-            switchEditViewTo(SUB_VIEW);
-        }
+		else if (notification->nmhdr.hwndFrom == _subDocTab.getHSelf())
+		{
+			switchEditViewTo(SUB_VIEW);
+		}
 
 		break;
 	}
 
 	case NM_DBLCLK :
-    {        
+	{
 		if (notification->nmhdr.hwndFrom == _statusBar.getHSelf())
-        {
-            LPNMMOUSE lpnm = (LPNMMOUSE)notification;
+		{
+			LPNMMOUSE lpnm = (LPNMMOUSE)notification;
 			if (lpnm->dwItemSpec == DWORD(STATUSBAR_CUR_POS))
 			{
 				bool isFirstTime = !_goToLineDlg.isCreated();
-                _goToLineDlg.doDialog(_nativeLangSpeaker.isRTL());
+				_goToLineDlg.doDialog(_nativeLangSpeaker.isRTL());
 				if (isFirstTime)
-                    _nativeLangSpeaker.changeDlgLang(_goToLineDlg.getHSelf(), "GoToLine");
+					_nativeLangSpeaker.changeDlgLang(_goToLineDlg.getHSelf(), "GoToLine");
 			}
-            else if (lpnm->dwItemSpec == DWORD(STATUSBAR_DOC_SIZE))
+			else if (lpnm->dwItemSpec == DWORD(STATUSBAR_DOC_SIZE))
 			{
 				command(IDM_VIEW_SUMMARY);
 			}
-        }
+		}
 		break;
 	}
 
-    case NM_RCLICK :
-    {
+	case NM_RCLICK :
+	{
 		POINT p;
 		::GetCursorPos(&p);
 
 		if (notification->nmhdr.hwndFrom == _mainDocTab.getHSelf())
 		{
-            switchEditViewTo(MAIN_VIEW);
+			switchEditViewTo(MAIN_VIEW);
 		}
-        else if (notification->nmhdr.hwndFrom == _subDocTab.getHSelf())
-        {
-            switchEditViewTo(SUB_VIEW);
-        }
+		else if (notification->nmhdr.hwndFrom == _subDocTab.getHSelf())
+		{
+			switchEditViewTo(SUB_VIEW);
+		}
 		else if (_pFileSwitcherPanel && notification->nmhdr.hwndFrom == _pFileSwitcherPanel->getHSelf())
-        {
+		{
 			// Already switched, so do nothing here.
 
 			if (_pFileSwitcherPanel->nbSelectedFiles() > 1)
@@ -324,8 +324,10 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 			}
 		}
 		else // From tool bar or Status Bar
+		{
 			return TRUE;
 			//break;
+		}
 
 		if (!_tabPopupMenu.isCreated())
 		{
@@ -354,7 +356,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 			itemUnitArray.push_back(MenuItemUnit(IDM_VIEW_LOAD_IN_NEW_INSTANCE, TEXT("Open in New Instance")));
 
 			_tabPopupMenu.create(_pPublicInterface->getHSelf(), itemUnitArray);
-            _nativeLangSpeaker.changeLangTabContextMenu(_tabPopupMenu.getMenuHandle());
+			_nativeLangSpeaker.changeLangTabContextMenu(_tabPopupMenu.getMenuHandle());
 		}
 
 		bool isEnable = ((::GetMenuState(_mainMenuHandle, IDM_FILE_SAVE, MF_BYCOMMAND)&MF_DISABLED) == 0);
@@ -379,29 +381,28 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 
 		_tabPopupMenu.display(p);
 		return TRUE;
-    }
+	}
 
-    
 	case SCN_MARGINCLICK:
-    {
-        if (notification->nmhdr.hwndFrom == _mainEditView.getHSelf())
-            switchEditViewTo(MAIN_VIEW);
+	{
+		if (notification->nmhdr.hwndFrom == _mainEditView.getHSelf())
+			switchEditViewTo(MAIN_VIEW);
 		else if (notification->nmhdr.hwndFrom == _subEditView.getHSelf())
-            switchEditViewTo(SUB_VIEW);
+			switchEditViewTo(SUB_VIEW);
 
-        int lineClick = int(_pEditView->execute(SCI_LINEFROMPOSITION, notification->position));
-        
+		int lineClick = int(_pEditView->execute(SCI_LINEFROMPOSITION, notification->position));
+
 		if (notification->margin == ScintillaEditView::_SC_MARGE_FOLDER)
-        {
-            _pEditView->marginClick(notification->position, notification->modifiers);
+		{
+			_pEditView->marginClick(notification->position, notification->modifiers);
 			if (_pDocMap)
 				_pDocMap->fold(lineClick, _pEditView->isFolded(lineClick));
-        }
-        else if ((notification->margin == ScintillaEditView::_SC_MARGE_SYBOLE) && !notification->modifiers)
-        {
+		}
+		else if ((notification->margin == ScintillaEditView::_SC_MARGE_SYBOLE) && !notification->modifiers)
+		{
 			if (!_pEditView->markerMarginClick(lineClick))
 				bookmarkToggle(lineClick);
-        }
+		}
 		break;
 	}
 
@@ -618,7 +619,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 		if (notification->nmhdr.hwndFrom != _pEditView->getHSelf())
 			break;
 		
-        braceMatch();
+		braceMatch();
 
 		NppGUI & nppGui = (NppGUI &)nppParam->getNppGUI();
 
@@ -640,12 +641,13 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 		AutoCompletion * autoC = isFromPrimary?&_autoCompleteMain:&_autoCompleteSub;
 		autoC->update(0);
 
-        break;
+		break;
 	}
 
-    case TTN_GETDISPINFO:
-    {
-		try {
+	case TTN_GETDISPINFO:
+	{
+		try
+		{
 			LPTOOLTIPTEXT lpttt = (LPTOOLTIPTEXT)notification; 
 
 			//Joce's fix
@@ -699,18 +701,20 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 			{
 				return FALSE;
 			}
-		} catch (...) {
+		}
+		catch (...)
+		{
 			//printStr(TEXT("ToolTip crash is caught!"));
 		}
-    }
+	}
 	break;
 
 
-    case SCN_ZOOM:
+	case SCN_ZOOM:
 		break;
 
-    case SCN_MACRORECORD:
-        _macro.push_back(recordedMacroStep(notification->message, notification->wParam, notification->lParam, _pEditView->execute(SCI_GETCODEPAGE)));
+	case SCN_MACRORECORD:
+		_macro.push_back(recordedMacroStep(notification->message, notification->wParam, notification->lParam, _pEditView->execute(SCI_GETCODEPAGE)));
 		break;
 
 	case SCN_PAINTED:
@@ -819,15 +823,15 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 		if (_rebarBottom.getHSelf() == lpnm->hdr.hwndFrom)
 			notifRebar = &_rebarBottom;
 		//If N++ ID, use proper object
-		switch(lpnm->wID) {
-			case REBAR_BAR_TOOLBAR: {
+		switch(lpnm->wID)
+		{
+			case REBAR_BAR_TOOLBAR: 
 				POINT pt;
 				pt.x = lpnm->rc.left;
 				pt.y = lpnm->rc.bottom;
 				ClientToScreen(notifRebar->getHSelf(), &pt);
 				_toolBar.doPopop(pt);
 				return TRUE;
-				break; }
 		}
 		//Else forward notification to window of rebarband
 		REBARBANDINFO rbBand;
@@ -843,7 +847,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 	default :
 		break;
 
-  }
-  return FALSE;
+	}
+	return FALSE;
 }
 
