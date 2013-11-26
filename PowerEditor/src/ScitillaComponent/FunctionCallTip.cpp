@@ -159,30 +159,28 @@ bool FunctionCallTip::getCursorFunction()
 	int line = _pEditView->execute(SCI_LINEFROMPOSITION, _curPos);
 	int startpos = _pEditView->execute(SCI_POSITIONFROMLINE, line);
 	int endpos = _pEditView->execute(SCI_GETLINEENDPOSITION, line);
-	int len = endpos - startpos + 3;	//also take CRLF in account, even if not there
-	int offset = _curPos - startpos;	//offset is cursor location, only stuff before cursor has influence
+	int len = endpos - startpos + 3; // Also take CRLF in account, even if not there
+	int offset = _curPos - startpos; // offset is cursor location, only stuff before cursor has influence
 	const int maxLen = 128;
 
 	if ((offset < 2) || (len >= maxLen))
 	{
 		reset();
-		return false;	//cannot be a func, need name and separator
+		return false; // Cannot be a func, need name and separator
 	}
 	
 	TCHAR lineData[maxLen] = TEXT("");
 
 	_pEditView->getLine(line, lineData, len);
 
-	//line aquired, find the functionname
-	//first split line into tokens to parse
-	//token is identifier or some expression, whitespace is ignored
+	// Line acquired, find the function name
+	// first split line into tokens to parse
+	// token is identifier or some expression, whitespace is ignored
 	std::vector< Token > tokenVector;
 	int tokenLen = 0;
-	TCHAR ch;
-	for (int i = 0; i < offset; ++i) //we dont care about stuff after the offset
+	for (int i = 0; i < offset; ++i) // We don't care about stuff after the offset
 	{
-		//tokenVector.push_back(pair(lineData+i, len));
-		ch = lineData[i];
+		TCHAR ch = lineData[i];
 		if (isBasicWordChar(ch) || isAdditionalWordChar(ch)) //part of identifier
 		{
 			tokenLen = 0;
@@ -194,7 +192,7 @@ bool FunctionCallTip::getCursorFunction()
 				ch = lineData[i];
 			}
 			tokenVector.push_back(Token(begin, tokenLen, true));
-			i--;	 //correct overshooting of while loop
+			i--; //correct overshooting of while loop
 		}
 		else
 		{
@@ -230,7 +228,7 @@ bool FunctionCallTip::getCursorFunction()
 			{
 				++scopeLevel;
 				newValue = curValue;
-				valueVec.push_back(newValue);	//store the current settings, so when this new function doesnt happen to be the 'real' one, we can restore everything
+				valueVec.push_back(newValue); //store the current settings, so when this new function doesn't happen to be the 'real' one, we can restore everything
 				
 				curValue.scopeLevel = scopeLevel;
 				if (i > 0 && curValue.lastIdentifier == int(i)-1) //identifier must be right before (, else we have some expression like "( x + y() )"
@@ -327,21 +325,21 @@ bool FunctionCallTip::loadFunction()
 	_curFunction = NULL;
 	//Iterate through all keywords and find the correct function keyword
 	TiXmlElement *funcNode = _pXmlKeyword;
-	const TCHAR * name = NULL;
+
 	for (; funcNode; funcNode = funcNode->NextSiblingElement(TEXT("KeyWord")) )
 	{
-		name = funcNode->Attribute(TEXT("name"));
+		const TCHAR* name = funcNode->Attribute(TEXT("name"));
 		if (!name) //malformed node
 			continue;
 		int compVal = 0;
 		if (_ignoreCase)
-			compVal = testNameNoCase(name, _funcName); //lstrcmpi doesnt work in this case
+			compVal = testNameNoCase(name, _funcName); //lstrcmpi doesn't work in this case
 		else
 			compVal = lstrcmp(name, _funcName);
 
 		if (!compVal)  //found it!
 		{
-			const TCHAR * val = funcNode->Attribute(TEXT("func"));
+			const TCHAR* val = funcNode->Attribute(TEXT("func"));
 			if (val)
 			{
 				if (!lstrcmp(val, TEXT("yes"))) 
@@ -410,12 +408,12 @@ void FunctionCallTip::showCalltip()
 		return;
 	}
 
-	//Check if the current overload still holds. If the current param exceeds amounti n overload, see if another one fits better (enough params)
+	//Check if the current overload still holds. If the current param exceeds amount in overload, see if another one fits better (enough params)
 	stringVec & params = _overloads.at(_currentOverload);
-	size_t psize = params.size()+1, osize;
+	size_t psize = params.size()+1;
 	if ((size_t)_currentParam >= psize)
 	{
-		osize = _overloads.size();
+		size_t osize = _overloads.size();
 		for(size_t i = 0; i < osize; ++i)
 		{
 			psize = _overloads.at(i).size()+1;
