@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -25,7 +25,6 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-
 #include "precompiledHeaders.h"
 #include "VerticalFileSwitcherListView.h"
 #include "Buffer.h"
@@ -34,28 +33,28 @@ void VerticalFileSwitcherListView::init(HINSTANCE hInst, HWND parent, HIMAGELIST
 {
 	Window::init(hInst, parent);
 	_hImaLst = hImaLst;
-    INITCOMMONCONTROLSEX icex;
-    
-    // Ensure that the common control DLL is loaded. 
-    icex.dwSize = sizeof(INITCOMMONCONTROLSEX);
-    icex.dwICC  = ICC_LISTVIEW_CLASSES;
-    InitCommonControlsEx(&icex);
-    
+	INITCOMMONCONTROLSEX icex;
+
+	// Ensure that the common control DLL is loaded.
+	icex.dwSize = sizeof(INITCOMMONCONTROLSEX);
+	icex.dwICC  = ICC_LISTVIEW_CLASSES;
+	InitCommonControlsEx(&icex);
+
     // Create the list-view window in report view with label editing enabled.
 	int listViewStyles = LVS_REPORT /*| LVS_SINGLESEL*/ | LVS_AUTOARRANGE\
 						| LVS_SHAREIMAGELISTS | LVS_SHOWSELALWAYS;
 
 	_hSelf = ::CreateWindow(WC_LISTVIEW,
-                                TEXT(""),
-                                WS_CHILD | listViewStyles,
-                                0,
-                                0,
-                                0,
-                                0,
-                                _hParent,
-                                (HMENU) NULL,
-                                hInst,
-                                NULL);
+								TEXT(""),
+								WS_CHILD | listViewStyles,
+								0,
+								0,
+								0,
+								0,
+								_hParent,
+								(HMENU) NULL,
+								hInst,
+								NULL);
 	if (!_hSelf)
 	{
 		throw std::runtime_error("VerticalFileSwitcherListView::init : CreateWindowEx() function return null");
@@ -84,7 +83,7 @@ void VerticalFileSwitcherListView::destroy()
 	}
 	::DestroyWindow(_hSelf);
 	_hSelf = NULL;
-} 
+}
 
 LRESULT VerticalFileSwitcherListView::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 {
@@ -107,7 +106,7 @@ void VerticalFileSwitcherListView::initList()
 
 		LVITEM item;
 		item.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
-		
+
 		item.pszText = fn;
 		item.iItem = i;
 		item.iSubItem = 0;
@@ -141,13 +140,14 @@ int VerticalFileSwitcherListView::newItem(int bufferID, int iView)
 	{
 		i = add(bufferID, iView);
 	}
+
 	return i;
 }
 
 void VerticalFileSwitcherListView::setItemIconStatus(int bufferID)
 {
 	Buffer *buf = (Buffer *)bufferID;
-	
+
 	TCHAR fn[MAX_PATH];
 	lstrcpy(fn, ::PathFindFileName(buf->getFileName()));
 	::PathRemoveExtension(fn);
@@ -194,6 +194,7 @@ int VerticalFileSwitcherListView::closeItem(int bufferID, int iView)
 	int i = find(bufferID, iView);
 	if (i != -1)
 		remove(i);
+
 	return i;
 }
 
@@ -226,17 +227,17 @@ int VerticalFileSwitcherListView::add(int bufferID, int iView)
 
 	LVITEM item;
 	item.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
-	
+
 	item.pszText = fn;
 	item.iItem = index;
 	item.iSubItem = 0;
 	item.iImage = buf->getUserReadOnly()||buf->getFileReadOnly()?2:(buf->isDirty()?1:0);
 	item.lParam = (LPARAM)tl;
 	ListView_InsertItem(_hSelf, &item);
-	
+
 	ListView_SetItemText(_hSelf, index, 1, ::PathFindExtension(fileName));
 	ListView_SetItemState(_hSelf, index, LVIS_FOCUSED|LVIS_SELECTED, LVIS_FOCUSED|LVIS_SELECTED);
-	
+
 	return index;
 }
 
@@ -270,13 +271,14 @@ int VerticalFileSwitcherListView::find(int bufferID, int iView) const
 			break;
 		}
 	}
-	return (found?i:-1);	
+
+	return (found ? i : -1);
 }
 
 void VerticalFileSwitcherListView::insertColumn(const TCHAR *name, int width, int index)
 {
 	LVCOLUMN lvColumn;
- 
+
 	lvColumn.mask = LVCF_TEXT | LVCF_WIDTH;
 	lvColumn.cx = width;
 	lvColumn.pszText = (TCHAR *)name;
@@ -288,8 +290,8 @@ std::vector<SwitcherFileInfo> VerticalFileSwitcherListView::getSelectedFiles(boo
 	std::vector<SwitcherFileInfo> files;
 	LVITEM item;
 	int nbItem = ListView_GetItemCount(_hSelf);
-	int i = 0;
-	for (; i < nbItem ; ++i)
+
+	for (int i = 0; i < nbItem ; ++i)
 	{
 		int isSelected = ListView_GetItemState(_hSelf, i, LVIS_SELECTED);
 		bool isChosen = reverse?isSelected != LVIS_SELECTED:isSelected == LVIS_SELECTED;

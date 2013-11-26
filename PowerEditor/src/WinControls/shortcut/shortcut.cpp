@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -37,7 +37,8 @@
 #include "keys.h"
 const int KEY_STR_LEN = 16;
 
-struct KeyIDNAME {
+struct KeyIDNAME
+{
 	const TCHAR * name;
 	UCHAR id;
 };
@@ -188,31 +189,41 @@ generic_string Shortcut::toString() const
 	return sc;
 }
 
-void Shortcut::setName(const TCHAR * name) {
+void Shortcut::setName(const TCHAR * name)
+{
 	lstrcpyn(_menuName, name, nameLenMax);
 	lstrcpyn(_name, name, nameLenMax);
 	int i = 0, j = 0;
-	while(name[j] != 0 && i < nameLenMax) {
-		if (name[j] != '&') {
+	while(name[j] != 0 && i < nameLenMax)
+	{
+		if (name[j] != '&')
+		{
 			_name[i] = name[j];
 			++i;
-		} else {	//check if this ampersand is being escaped
-			if (name[j+1] == '&') {	//escaped ampersand
+		}
+		else //check if this ampersand is being escaped
+		{
+			if (name[j+1] == '&') //escaped ampersand
+			{
 				_name[i] = name[j];
 				++i;
-				++j;	//skip escaped ampersand
+				++j; //skip escaped ampersand
 			}
 		}
+
 		++j;
 	}
+
 	_name[i] = 0;
 }
 
-generic_string ScintillaKeyMap::toString() const {
+generic_string ScintillaKeyMap::toString() const
+{
 	return toString(0);
 }
 
-generic_string ScintillaKeyMap::toString(int index) const {
+generic_string ScintillaKeyMap::toString(int index) const
+{
 	generic_string sc = TEXT("");
 	if (!isEnabled())
 		return sc;
@@ -231,46 +242,60 @@ generic_string ScintillaKeyMap::toString(int index) const {
 	return sc;
 }
 
-KeyCombo ScintillaKeyMap::getKeyComboByIndex(int index) const {
+KeyCombo ScintillaKeyMap::getKeyComboByIndex(int index) const
+{
 	return _keyCombos[index];
 }
 
-void ScintillaKeyMap::setKeyComboByIndex(int index, KeyCombo combo) {
-	if(combo._key == 0 && (size > 1)) {	//remove the item if possible
+void ScintillaKeyMap::setKeyComboByIndex(int index, KeyCombo combo)
+{
+	if(combo._key == 0 && (size > 1)) //remove the item if possible
+	{
 		_keyCombos.erase(_keyCombos.begin() + index);
 	}
+
 	_keyCombos[index] = combo;
 }
 
-void ScintillaKeyMap::removeKeyComboByIndex(int index) {
-	if (size > 1 && index > -1 && index < int(size)) {
+void ScintillaKeyMap::removeKeyComboByIndex(int index)
+{
+	if (size > 1 && index > -1 && index < int(size))
+	{
 		_keyCombos.erase(_keyCombos.begin() + index);
 		size--;
 	}
 }
 
-int ScintillaKeyMap::addKeyCombo(KeyCombo combo) {	//returns index where key is added, or -1 when invalid
-	if (combo._key == 0)	//do not allow to add disabled keycombos
+int ScintillaKeyMap::addKeyCombo(KeyCombo combo) //returns index where key is added, or -1 when invalid
+{
+	if (combo._key == 0) //do not allow to add disabled keycombos
 		return -1;
-	if (!isEnabled()) {	//disabled, override current combo with new enabled one
+
+	if (!isEnabled())    //disabled, override current combo with new enabled one
+	{
 		_keyCombos[0] = combo;
 		return 0;
 	}
-	for(size_t i = 0; i < size; ++i) {	//if already in the list do not add it
+
+	for(size_t i = 0; i < size; ++i) //if already in the list do not add it
+	{
 		KeyCombo & kc = _keyCombos[i];
 		if (combo._key == kc._key && combo._isCtrl == kc._isCtrl && combo._isAlt == kc._isAlt && combo._isShift == kc._isShift)
 			return i;	//already in the list
 	}
+
 	_keyCombos.push_back(combo);
 	++size;
 	return (size - 1);
 }
 
-bool ScintillaKeyMap::isEnabled() const {
+bool ScintillaKeyMap::isEnabled() const
+{
 	return (_keyCombos[0]._key != 0);
 }
 
-size_t ScintillaKeyMap::getSize() const {
+size_t ScintillaKeyMap::getSize() const
+{
 	return size;
 }
 
@@ -279,15 +304,18 @@ void getKeyStrFromVal(UCHAR keyVal, generic_string & str)
 	str = TEXT("");
 	bool found = false;
 	int i;
-	for (i = 0; i < nrKeys; ++i) {
-		if (keyVal == namedKeyArray[i].id) {
+	for (i = 0; i < nrKeys; ++i)
+	{
+		if (keyVal == namedKeyArray[i].id)
+		{
 			found = true;
 			break;
 		}
 	}
+
 	if (found)
 		str = namedKeyArray[i].name;
-	else 
+	else
 		str = TEXT("Unlisted");
 }
 
@@ -354,7 +382,7 @@ void getNameStrFromCmd(DWORD cmd, generic_string & str)
 	return;
 }
 
-BOOL CALLBACK Shortcut::run_dlgProc(UINT Message, WPARAM wParam, LPARAM) 
+BOOL CALLBACK Shortcut::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)
 {
 	switch (Message)
 	{
@@ -386,7 +414,7 @@ BOOL CALLBACK Shortcut::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)
 			return TRUE;
 		}
 
-		case WM_COMMAND : 
+		case WM_COMMAND :
 		{
 			int textlen = (int)::SendDlgItemMessage(_hSelf, IDC_NAME_EDIT, WM_GETTEXTLENGTH, 0, 0);
 			switch (wParam)
@@ -406,10 +434,12 @@ BOOL CALLBACK Shortcut::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)
 					return TRUE;
 
 				case IDOK :
-					if (!isEnabled()) {
+					if (!isEnabled())
+					{
 						_keyCombo._isCtrl = _keyCombo._isAlt = _keyCombo._isShift = false;
 					}
-					if (_canModifyName) {
+					if (_canModifyName)
+					{
 						TCHAR editName[nameLenMax];
 						::SendDlgItemMessage(_hSelf, IDC_NAME_EDIT, WM_GETTEXT, nameLenMax, (LPARAM)editName);
 						setName(editName);
@@ -444,13 +474,14 @@ BOOL CALLBACK Shortcut::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)
 					return FALSE;
 			}
 		}
+
 		default :
 			return FALSE;
 	}
 }
 
 // return true if one of CommandShortcuts is deleted. Otherwise false.
-void Accelerator::updateShortcuts() 
+void Accelerator::updateShortcuts()
 {
 	NppParameters *pNppParam = NppParameters::getInstance();
 
@@ -471,8 +502,10 @@ void Accelerator::updateShortcuts()
 	int offset = 0;
 	size_t i = 0;
 	//no validation performed, it might be that invalid shortcuts are being used by default. Allows user to 'hack', might be a good thing
-	for(i = 0; i < nbMenu; ++i) {
-		if (shortcuts[i].isEnabled()) {// && shortcuts[i].isValid()) {
+	for(i = 0; i < nbMenu; ++i)
+	{
+		if (shortcuts[i].isEnabled()) // && shortcuts[i].isValid())
+		{
 			_pAccelArray[offset].cmd = (WORD)(shortcuts[i].getID());
 			_pAccelArray[offset].fVirt = shortcuts[i].getAcceleratorModifiers();
 			_pAccelArray[offset].key = shortcuts[i].getKeyCombo()._key;
@@ -480,8 +513,10 @@ void Accelerator::updateShortcuts()
 		}
 	}
 
-	for(i = 0; i < nbMacro; ++i) {
-		if (macros[i].isEnabled()) {// && macros[i].isValid()) {
+	for(i = 0; i < nbMacro; ++i)
+	{
+		if (macros[i].isEnabled()) // && macros[i].isValid())
+		{
 			_pAccelArray[offset].cmd = (WORD)(macros[i].getID());
 			_pAccelArray[offset].fVirt = macros[i].getAcceleratorModifiers();
 			_pAccelArray[offset].key = macros[i].getKeyCombo()._key;
@@ -489,8 +524,10 @@ void Accelerator::updateShortcuts()
 		}
 	}
 
-	for(i = 0; i < nbUserCmd; ++i) {
-		if (userCommands[i].isEnabled()) {// && userCommands[i].isValid()) {
+	for(i = 0; i < nbUserCmd; ++i)
+	{
+		if (userCommands[i].isEnabled()) // && userCommands[i].isValid())
+		{
 			_pAccelArray[offset].cmd = (WORD)(userCommands[i].getID());
 			_pAccelArray[offset].fVirt = userCommands[i].getAcceleratorModifiers();
 			_pAccelArray[offset].key = userCommands[i].getKeyCombo()._key;
@@ -498,8 +535,10 @@ void Accelerator::updateShortcuts()
 		}
 	}
 
-	for(i = 0; i < nbPluginCmd; ++i) {
-		if (pluginCommands[i].isEnabled()) {// && pluginCommands[i].isValid()) {
+	for(i = 0; i < nbPluginCmd; ++i)
+	{
+		if (pluginCommands[i].isEnabled()) // && pluginCommands[i].isValid())
+		{
 			_pAccelArray[offset].cmd = (WORD)(pluginCommands[i].getID());
 			_pAccelArray[offset].fVirt = pluginCommands[i].getAcceleratorModifiers();
 			_pAccelArray[offset].key = pluginCommands[i].getKeyCombo()._key;
@@ -510,38 +549,44 @@ void Accelerator::updateShortcuts()
 	_nbAccelItems = offset;
 
 	updateFullMenu();
-	reNew();	//update the table
+	reNew(); // Update the table
 	return;
 }
 
-void Accelerator::updateFullMenu() {
+void Accelerator::updateFullMenu()
+{
 	NppParameters * pNppParam = NppParameters::getInstance();
 	vector<CommandShortcut> commands = pNppParam->getUserShortcuts();
-	for(size_t i = 0; i < commands.size(); ++i) {
+	for(size_t i = 0; i < commands.size(); ++i)
+	{
 		updateMenuItemByCommand(commands[i]);
 	}
 
 	vector<MacroShortcut> mcommands = pNppParam->getMacroList();
-	for(size_t i = 0; i < mcommands.size(); ++i) {
+	for(size_t i = 0; i < mcommands.size(); ++i)
+	{
 		updateMenuItemByCommand(mcommands[i]);
 	}
 
 	vector<UserCommand> ucommands = pNppParam->getUserCommandList();
-	for(size_t i = 0; i < ucommands.size(); ++i) {
+	for(size_t i = 0; i < ucommands.size(); ++i)
+	{
 		updateMenuItemByCommand(ucommands[i]);
 	}
 
 	vector<PluginCmdShortcut> pcommands = pNppParam->getPluginCommandList();
-	for(size_t i = 0; i < pcommands.size(); ++i) {
+	for(size_t i = 0; i < pcommands.size(); ++i)
+	{
 		updateMenuItemByCommand(pcommands[i]);
 	}
 
 	::DrawMenuBar(_hMenuParent);
 }
 
-void Accelerator::updateMenuItemByCommand(CommandShortcut csc) {
+void Accelerator::updateMenuItemByCommand(CommandShortcut csc)
+{
 	int cmdID = (int)csc.getID();
-	
+
 	//  Ensure that the menu item checks set prior to this update remain in affect.
 	UINT cmdFlags = GetMenuState(_hAccelMenu, cmdID, MF_BYCOMMAND );
 	cmdFlags = MF_BYCOMMAND | (cmdFlags&MF_CHECKED) ? ( MF_CHECKED ) : ( MF_UNCHECKED );
@@ -550,9 +595,11 @@ void Accelerator::updateMenuItemByCommand(CommandShortcut csc) {
 
 recordedMacroStep::recordedMacroStep(int iMessage, long wParam, long lParam, int codepage)
 	: message(iMessage), wParameter(wParam), lParameter(lParam), MacroType(mtUseLParameter)
-{ 
-	if (lParameter) {
-		switch (message) {
+{
+	if (lParameter)
+	{
+		switch (message)
+		{
 			case SCI_SETTEXT :
 			case SCI_REPLACESEL :
 			case SCI_REPLACETARGET :
@@ -592,7 +639,7 @@ recordedMacroStep::recordedMacroStep(int iMessage, long wParam, long lParam, int
 			}
 			break;
 
-				
+
 			default : // for all other messages, use lParameter "as is"
 				break;
 		}
@@ -622,11 +669,12 @@ void recordedMacroStep::PlayBack(Window* pNotepad, ScintillaEditView *pEditView)
 
 		pEditView->execute(message, wParameter, lParam);
 		if ( (message == SCI_SETTEXT)
-			|| (message == SCI_REPLACESEL) 
-			|| (message == SCI_ADDTEXT) 
-			|| (message == SCI_ADDSTYLEDTEXT) 
-			|| (message == SCI_INSERTTEXT) 
-			|| (message == SCI_APPENDTEXT) ) {
+			|| (message == SCI_REPLACESEL)
+			|| (message == SCI_ADDTEXT)
+			|| (message == SCI_ADDSTYLEDTEXT)
+			|| (message == SCI_INSERTTEXT)
+			|| (message == SCI_APPENDTEXT) )
+		{
 			SCNotification scnN;
 			scnN.nmhdr.code = SCN_CHARADDED;
 			scnN.nmhdr.hwndFrom = pEditView->getHSelf();
@@ -640,65 +688,70 @@ void recordedMacroStep::PlayBack(Window* pNotepad, ScintillaEditView *pEditView)
 	}
 }
 
-void ScintillaAccelerator::init(vector<HWND> * vScintillas, HMENU hMenu, HWND menuParent) {
+void ScintillaAccelerator::init(vector<HWND> * vScintillas, HMENU hMenu, HWND menuParent)
+{
 	_hAccelMenu = hMenu;
 	_hMenuParent = menuParent;
 	size_t nr = vScintillas->size();
-	for(size_t i = 0; i < nr; ++i) {
+
+	for(size_t i = 0; i < nr; ++i)
+	{
 		_vScintillas.push_back(vScintillas->at(i));
 	}
+
 	_nrScintillas = (int)nr;
 }
 
-void ScintillaAccelerator::updateKeys() 
+void ScintillaAccelerator::updateKeys()
 {
 	NppParameters *pNppParam = NppParameters::getInstance();
 	vector<ScintillaKeyMap> & map = pNppParam->getScintillaKeyList();
 	size_t mapSize = map.size();
-	size_t index;
 
 	for(int i = 0; i < _nrScintillas; ++i)
 	{
 		::SendMessage(_vScintillas[i], SCI_CLEARALLCMDKEYS, 0, 0);
 		for(size_t j = mapSize - 1; j >= 0; j--) //reverse order, top of the list has highest priority
-		{	
+		{
 			ScintillaKeyMap skm = map[j];
-			if (skm.isEnabled()) 
-			{		//no validating, scintilla accepts more keys
+			if (skm.isEnabled()) //no validating, scintilla accepts more keys
+			{
 				size_t size = skm.getSize();
-				for(index = 0; index < size; ++index)
+				for(size_t index = 0; index < size; ++index)
 					::SendMessage(_vScintillas[i], SCI_ASSIGNCMDKEY, skm.toKeyDef(index), skm.getScintillaKeyID());
 			}
-			if (skm.getMenuCmdID() != 0) 
+
+			if (skm.getMenuCmdID() != 0)
 			{
 				updateMenuItemByID(skm, skm.getMenuCmdID());
 			}
-			if (j == 0)	//j is unsigned, so default method doesnt work
+
+			if (j == 0) //j is unsigned, so default method doesn't work
 				break;
 		}
 	}
 }
 
-void ScintillaAccelerator::updateMenuItemByID(ScintillaKeyMap skm, int id) 
+void ScintillaAccelerator::updateMenuItemByID(ScintillaKeyMap skm, int id)
 {
 	const int commandSize = 64;
 	TCHAR cmdName[commandSize];
 	::GetMenuString(_hAccelMenu, id, cmdName, commandSize, MF_BYCOMMAND);
-	int i = 0;
-	while(cmdName[i] != 0)
+
+	for (int i = 0; cmdName[i] != 0; i++)
 	{
 		if (cmdName[i] == '\t')
 		{
 			cmdName[i] = 0;
 			break;
 		}
-		++i;
 	}
+
 	generic_string menuItem = cmdName;
 	if (skm.isEnabled())
 	{
 		menuItem += TEXT("\t");
-		//menuItem += TEXT("Sc:");	//sc: scintilla shortcut
+		//menuItem += TEXT("Sc:"); //sc: scintilla shortcut
 		menuItem += skm.toString();
 	}
 	::ModifyMenu(_hAccelMenu, id, MF_BYCOMMAND, id, menuItem.c_str());
@@ -706,7 +759,8 @@ void ScintillaAccelerator::updateMenuItemByID(ScintillaKeyMap skm, int id)
 }
 
 //This procedure uses _keyCombo as a temp. variable to store current settings which can then later be applied (by pressing OK)
-void ScintillaKeyMap::applyToCurrentIndex() {
+void ScintillaKeyMap::applyToCurrentIndex()
+{
 	int index = (int)::SendDlgItemMessage(_hSelf, IDC_LIST_KEYS, LB_GETCURSEL, 0, 0);
 	if(index == LB_ERR)
 		return;
@@ -716,10 +770,11 @@ void ScintillaKeyMap::applyToCurrentIndex() {
 
 }
 
-void ScintillaKeyMap::validateDialog() {
+void ScintillaKeyMap::validateDialog()
+{
 	bool valid = isValid();	//current combo valid?
 	bool isDisabling = _keyCombo._key == 0;	//true if this keycombo were to disable the shortcut
-	bool isDisabled = !isEnabled();	//true if this shortcut already is 
+	bool isDisabled = !isEnabled();	//true if this shortcut already is
 
 	::EnableWindow(::GetDlgItem(_hSelf, IDC_BUTTON_ADD), valid && !isDisabling);
 	::EnableWindow(::GetDlgItem(_hSelf, IDC_BUTTON_APPLY), valid && (!isDisabling || size == 1));
@@ -727,12 +782,13 @@ void ScintillaKeyMap::validateDialog() {
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_WARNING_STATIC), isDisabled?SW_SHOW:SW_HIDE);
 }
 
-void ScintillaKeyMap::showCurrentSettings() {
+void ScintillaKeyMap::showCurrentSettings()
+{
 	int keyIndex = ::SendDlgItemMessage(_hSelf, IDC_LIST_KEYS, LB_GETCURSEL, 0, 0);
 	_keyCombo = _keyCombos[keyIndex];
-	::SendDlgItemMessage(_hSelf, IDC_CTRL_CHECK,	BM_SETCHECK, _keyCombo._isCtrl?BST_CHECKED:BST_UNCHECKED, 0);
-	::SendDlgItemMessage(_hSelf, IDC_ALT_CHECK,		BM_SETCHECK, _keyCombo._isAlt?BST_CHECKED:BST_UNCHECKED, 0);
-	::SendDlgItemMessage(_hSelf, IDC_SHIFT_CHECK,	BM_SETCHECK, _keyCombo._isShift?BST_CHECKED:BST_UNCHECKED, 0);
+	::SendDlgItemMessage(_hSelf, IDC_CTRL_CHECK,  BM_SETCHECK, _keyCombo._isCtrl?BST_CHECKED:BST_UNCHECKED, 0);
+	::SendDlgItemMessage(_hSelf, IDC_ALT_CHECK,   BM_SETCHECK, _keyCombo._isAlt?BST_CHECKED:BST_UNCHECKED, 0);
+	::SendDlgItemMessage(_hSelf, IDC_SHIFT_CHECK, BM_SETCHECK, _keyCombo._isShift?BST_CHECKED:BST_UNCHECKED, 0);
 	for (size_t i = 0 ; i < nrKeys ; ++i)
 	{
 		if (_keyCombo._key == namedKeyArray[i].id)
@@ -743,14 +799,15 @@ void ScintillaKeyMap::showCurrentSettings() {
 	}
 }
 
-void ScintillaKeyMap::updateListItem(int index) {
+void ScintillaKeyMap::updateListItem(int index)
+{
 	::SendDlgItemMessage(_hSelf, IDC_LIST_KEYS, LB_INSERTSTRING, index, (LPARAM)toString(index).c_str());
 	::SendDlgItemMessage(_hSelf, IDC_LIST_KEYS, LB_DELETESTRING, index+1, 0);
 }
 
-BOOL CALLBACK ScintillaKeyMap::run_dlgProc(UINT Message, WPARAM wParam, LPARAM) 
+BOOL CALLBACK ScintillaKeyMap::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)
 {
-	
+
 	switch (Message)
 	{
 		case WM_INITDIALOG :
@@ -763,7 +820,8 @@ BOOL CALLBACK ScintillaKeyMap::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)
 				::SendDlgItemMessage(_hSelf, IDC_KEY_COMBO, CB_ADDSTRING, 0, (LPARAM)namedKeyArray[i].name);
 			}
 
-			for(size_t i = 0; i < size; ++i) {
+			for(size_t i = 0; i < size; ++i)
+			{
 				::SendDlgItemMessage(_hSelf, IDC_LIST_KEYS, LB_ADDSTRING, 0, (LPARAM)toString(i).c_str());
 			}
 			::SendDlgItemMessage(_hSelf, IDC_LIST_KEYS, LB_SETCURSEL, 0, 0);
@@ -775,7 +833,7 @@ BOOL CALLBACK ScintillaKeyMap::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)
 			return TRUE;
 		}
 
-		case WM_COMMAND : 
+		case WM_COMMAND :
 		{
 			switch (wParam)
 			{
@@ -807,22 +865,29 @@ BOOL CALLBACK ScintillaKeyMap::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)
 					::EndDialog(_hSelf, -1);
 					return TRUE;
 
-				case IDC_BUTTON_ADD: {
+				case IDC_BUTTON_ADD:
+				{
 					int oldsize = size;
 					int res = addKeyCombo(_keyCombo);
-					if (res > -1) {
-						if (res == oldsize) {
+					if (res > -1)
+					{
+						if (res == oldsize
+						{
 							::SendDlgItemMessage(_hSelf, IDC_LIST_KEYS, LB_INSERTSTRING, (WPARAM)-1, (LPARAM)toString(res).c_str());
-						}else {	//update current generic_string, can happen if it was disabled
+						}
+						else //update current generic_string, can happen if it was disabled
+						{
 							updateListItem(res);
 						}
 						::SendDlgItemMessage(_hSelf, IDC_LIST_KEYS, LB_SETCURSEL, res, 0);
 					}
 					showCurrentSettings();
 					validateDialog();
-					return TRUE; }
+					return TRUE;
+				}
 
-				case IDC_BUTTON_RMVE: {
+				case IDC_BUTTON_RMVE:
+				{
 					if (size == 1)	//cannot delete last shortcut
 						return TRUE;
 					int i = ::SendDlgItemMessage(_hSelf, IDC_LIST_KEYS, LB_GETCURSEL, 0, 0);
@@ -833,17 +898,22 @@ BOOL CALLBACK ScintillaKeyMap::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)
 					::SendDlgItemMessage(_hSelf, IDC_LIST_KEYS, LB_SETCURSEL, i, 0);
 					showCurrentSettings();
 					validateDialog();
-					return TRUE; }
+					return TRUE;
+				}
 
-				case IDC_BUTTON_APPLY: {
+				case IDC_BUTTON_APPLY:
+				{
 					applyToCurrentIndex();
 					validateDialog();
-					return TRUE; }
+					return TRUE;
+				}
 
 				default:
+				{
 					if (HIWORD(wParam) == CBN_SELCHANGE || HIWORD(wParam) == LBN_SELCHANGE)
 					{
-						switch(LOWORD(wParam)) {
+						switch(LOWORD(wParam))
+						{
 							case IDC_KEY_COMBO:
 							{
 								int i = ::SendDlgItemMessage(_hSelf, IDC_KEY_COMBO, CB_GETCURSEL, 0, 0);
@@ -852,6 +922,7 @@ BOOL CALLBACK ScintillaKeyMap::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)
 								validateDialog();
 								return TRUE;
 							}
+
 							case IDC_LIST_KEYS:
 							{
 								showCurrentSettings();
@@ -860,8 +931,10 @@ BOOL CALLBACK ScintillaKeyMap::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)
 						}
 					}
 					return FALSE;
+				}
 			}
 		}
+
 		default :
 			return FALSE;
 	}

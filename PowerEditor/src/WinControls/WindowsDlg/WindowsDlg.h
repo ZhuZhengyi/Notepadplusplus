@@ -36,16 +36,17 @@
 class DocTabView;
 class TiXmlNodeA;
 
-typedef enum {
+typedef enum
+{
 	WDT_ACTIVATE = 1,
-	WDT_SAVE = 2,
-	WDT_CLOSE = 3,
-	WDT_SORT = 4,
+	WDT_SAVE     = 2,
+	WDT_CLOSE    = 3,
+	WDT_SORT     = 4,
 } WinDlgNotifyType;
 
 
-struct NMWINDLG : public NMHDR {
-
+struct NMWINDLG : public NMHDR
+{
 	BOOL processed;
 	WinDlgNotifyType type;
 	UINT curSel;
@@ -53,7 +54,10 @@ struct NMWINDLG : public NMHDR {
 	UINT *Items;
 
 	// ctor: initialize to zeroes
-	NMWINDLG() { memset(this,0,sizeof(NMWINDLG)); }
+	NMWINDLG()
+	{ 
+		memset(this, 0, sizeof(NMWINDLG));
+	}
 };
 
 extern const UINT WDN_NOTIFY;
@@ -103,7 +107,7 @@ protected :
 	TiXmlNodeA *_dlgNode;
 
 private:
-	virtual void init(HINSTANCE hInst, HWND parent);	
+	virtual void init(HINSTANCE hInst, HWND parent);
 };
 
 class WindowsMenu
