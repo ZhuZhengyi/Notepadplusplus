@@ -181,7 +181,7 @@ TCHAR * FileDialog::doOpenSingleFileDlg()
 			params->setWorkingDir(dir);
 		}
 	}
-	catch(std::exception e)
+	catch(std::exception& e)
 	{
 		::MessageBoxA(NULL, e.what(), "Exception", MB_OK);
 	}
@@ -270,7 +270,7 @@ TCHAR * FileDialog::doSaveDlg()
 			params->setWorkingDir(dir);
 		}
 	}
-	catch(std::exception e)
+	catch(std::exception& e)
 	{
 		::MessageBoxA(NULL, e.what(), "Exception", MB_OK);
 	}
