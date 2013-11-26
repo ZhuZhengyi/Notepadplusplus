@@ -45,13 +45,13 @@ bool FunctionParsersManager::init(generic_string xmlPath, ScintillaEditView ** p
 
 	if (PathFileExists(xmlPath.c_str()))
 	{
-        _pXmlFuncListDoc = new TiXmlDocument(xmlPath);
-        loadOkay = _pXmlFuncListDoc->LoadFile();
-        if (loadOkay)
-        {
-            loadOkay = getFuncListFromXmlTree();
-        }
-    }
+		_pXmlFuncListDoc = new TiXmlDocument(xmlPath);
+		loadOkay = _pXmlFuncListDoc->LoadFile();
+		if (loadOkay)
+		{
+			loadOkay = getFuncListFromXmlTree();
+		}
+	}
 
 	return loadOkay;
 }
@@ -258,10 +258,10 @@ FunctionParser * FunctionParsersManager::getParser(const AssociationInfo & assoI
 	// langID != -1 && langID != L_USER
 	if (assoInfo._langID != -1 && assoInfo._langID != L_USER)
 		choice = checkLangID;
-	// langID == L_USER, we chack the userDefinedLangName
+	// langID == L_USER, we check the userDefinedLangName
 	else if (assoInfo._langID == L_USER && assoInfo._userDefinedLangName != TEXT(""))
 		choice = checkUserDefined;
-	// langID == -1, we chack the ext
+	// langID == -1, we check the ext
 	else if (assoInfo._langID == -1 && assoInfo._ext != TEXT(""))
 		choice = checkExt;
 	else
@@ -274,21 +274,21 @@ FunctionParser * FunctionParsersManager::getParser(const AssociationInfo & assoI
 			case checkLangID:
 			{
 				if (assoInfo._langID == _associationMap[i]._langID)
-					return _parsers[_associationMap[i]._id];			
+					return _parsers[_associationMap[i]._id];
 			}
 			break;
 
 			case checkUserDefined:
 			{
 				if (assoInfo._userDefinedLangName == _associationMap[i]._userDefinedLangName)
-					return _parsers[_associationMap[i]._id];			
+					return _parsers[_associationMap[i]._id];
 			}
 			break;
 
 			case checkExt:
 			{
 				if (assoInfo._ext == _associationMap[i]._ext)
-					return _parsers[_associationMap[i]._id];		
+					return _parsers[_associationMap[i]._id];
 			}
 			break;
 
@@ -323,7 +323,7 @@ void FunctionParser::funcParse(std::vector<foundInfo> & foundInfos, size_t begin
 		}
 		int foundTextLen = targetEnd - targetStart;
 		if (targetStart + foundTextLen == int(end))
-            break;
+			break;
 
 		foundInfo fi;
 
@@ -520,7 +520,7 @@ void FunctionZoneParser::classParse(vector<foundInfo> & foundInfos, vector< pair
 
 		int foundTextLen = targetEnd - targetStart;
 		if (targetStart + foundTextLen == int(end))
-            break;
+			break;
 
 		// Begin to search all method inside
 		//vector< generic_string > emptyArray;
@@ -559,8 +559,8 @@ void FunctionParser::getCommentZones(vector< pair<int, int> > & commentZone, siz
 
 		int foundTextLen = targetEnd - targetStart;
 		if (targetStart + foundTextLen == int(end))
-            break;
-		
+			break;
+
 		begin = targetStart + foundTextLen;
 		targetStart = (*ppEditView)->searchInTarget(_commentExpr.c_str(), _commentExpr.length(), begin, end);
 	}
@@ -575,6 +575,7 @@ bool FunctionParser::isInZones(int pos2Test, const std::vector< std::pair<int, i
 			return true;
 		}
 	}
+
 	return false;
 }
 
@@ -600,9 +601,10 @@ void FunctionParser::getInvertZones(vector< pair<int, int> > &  destZones, vecto
 			if (newBegin < newEnd)
 				destZones.push_back(pair<int, int>(newBegin, newEnd));
 		}
+
 		int lastBegin = sourceZones[i].second + 1;
 		if (lastBegin < int(end))
-			destZones.push_back(pair<int, int>(lastBegin, end));		
+			destZones.push_back(pair<int, int>(lastBegin, end));
 	}
 }
 
@@ -631,8 +633,10 @@ void FunctionUnitParser::parse(std::vector<foundInfo> & foundInfos, size_t begin
 //
 // SortClass for vector<pair<int, int>>
 // sort in _selLpos : increased order
-struct SortZones {
-	bool operator() (pair<int, int> & l, pair<int, int> & r) {
+struct SortZones
+{
+	bool operator() (pair<int, int> & l, pair<int, int> & r)
+	{
 		return (l.first < r.first);
 	}
 };

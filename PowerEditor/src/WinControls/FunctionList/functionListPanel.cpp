@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -95,7 +95,7 @@ size_t FunctionListPanel::getBodyClosePos(size_t begin, const TCHAR *bodyOpenSym
 
 			// Now we determinate the symbol (open or close)
 			int tmpStart = (*_ppEditView)->searchInTarget(bodyOpenSymbol, lstrlen(bodyOpenSymbol), targetStart, targetEnd);
-			if (tmpStart != -1 && tmpStart != -2) // open symbol found 
+			if (tmpStart != -1 && tmpStart != -2) // open symbol found
 			{
 				++cntOpen;
 			}
@@ -240,7 +240,7 @@ void FunctionListPanel::reload()
 	setSort(false);
 
 	vector<foundInfo> fi;
-	
+
 	const TCHAR *fn = ((*_ppEditView)->getCurrentBuffer())->getFileName();
 	LangType langID = ((*_ppEditView)->getCurrentBuffer())->getLangType();
 	const TCHAR *udln = NULL;
@@ -291,7 +291,7 @@ void FunctionListPanel::reload()
 		else
 		{
 			::SendMessage(_hSearchEdit, WM_SETTEXT, 0, (LPARAM)(previousParams->_searchParameters)._text2Find.c_str());
-			
+
 			_treeView.restoreFoldingStateFrom(previousParams->_treeState, root);
 
 			bool isSort = (previousParams->_searchParameters)._doSort;
@@ -317,7 +317,7 @@ void FunctionListPanel::init(HINSTANCE hInst, HWND hPere, ScintillaEditView **pp
 	{
 		generic_string funcListXmlPath = (NppParameters::getInstance())->getUserPath();
 		PathAppend(funcListXmlPath, TEXT("functionList.xml"));
-		
+
 		if (!PathFileExists(funcListXmlPath.c_str()))
 		{
 			generic_string funcListDefaultXmlPath = (NppParameters::getInstance())->getNppPath();
@@ -377,8 +377,8 @@ void FunctionListPanel::notified(LPNMHDR notification)
 {
 	if (notification->code == TTN_GETDISPINFO)
 	{
-		LPTOOLTIPTEXT lpttt = (LPTOOLTIPTEXT)notification; 
-		lpttt->hinst = NULL; 
+		LPTOOLTIPTEXT lpttt = (LPTOOLTIPTEXT)notification;
+		lpttt->hinst = NULL;
 
 		if (notification->idFrom == IDC_SORTBUTTON_FUNCLIST)
 		{
@@ -399,11 +399,11 @@ void FunctionListPanel::notified(LPNMHDR notification)
 				openSelection(treeView);
 			}
 			break;
-			
+
 			case TVN_KEYDOWN:
 			{
 				LPNMTVKEYDOWN ptvkd = (LPNMTVKEYDOWN)notification;
-				
+
 				if (ptvkd->wVKey == VK_RETURN)
 				{
 					if (!openSelection(treeView))
@@ -429,7 +429,7 @@ BOOL FunctionListPanel::setTreeViewImageList(int root_id, int node_id, int leaf_
 	const int nbBitmaps = 3;
 
 	// Creation of image list
-	if ((_hTreeViewImaLst = ImageList_Create(CX_BITMAP, CY_BITMAP, ILC_COLOR32 | ILC_MASK, nbBitmaps, 0)) == NULL) 
+	if ((_hTreeViewImaLst = ImageList_Create(CX_BITMAP, CY_BITMAP, ILC_COLOR32 | ILC_MASK, nbBitmaps, 0)) == NULL)
 		return FALSE;
 
 	// Add the bmp in the list
@@ -499,7 +499,7 @@ static WNDPROC oldFunclstToolbarProc = NULL;
 static BOOL CALLBACK funclstToolbarProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
-    {
+	{
 		case WM_CTLCOLOREDIT :
 		{
 			return ::SendMessage(::GetParent(hwnd), WM_CTLCOLOREDIT, wParam, lParam);
@@ -511,7 +511,7 @@ static BOOL CALLBACK funclstToolbarProc(HWND hwnd, UINT message, WPARAM wParam, 
 bool FunctionListPanel::shouldSort()
 {
 	TBBUTTONINFO tbbuttonInfo;
-	tbbuttonInfo.cbSize = sizeof(TBBUTTONINFO); 
+	tbbuttonInfo.cbSize = sizeof(TBBUTTONINFO);
 	tbbuttonInfo.dwMask = TBIF_STATE;
 
 	::SendMessage(_hToolbarMenu, TB_GETBUTTONINFO, IDC_SORTBUTTON_FUNCLIST, (LPARAM)&tbbuttonInfo);
@@ -522,7 +522,7 @@ bool FunctionListPanel::shouldSort()
 void FunctionListPanel::setSort(bool isEnabled)
 {
 	TBBUTTONINFO tbbuttonInfo;
-	tbbuttonInfo.cbSize = sizeof(TBBUTTONINFO); 
+	tbbuttonInfo.cbSize = sizeof(TBBUTTONINFO);
 	tbbuttonInfo.dwMask = TBIF_STATE;
 	tbbuttonInfo.fsState = isEnabled ? TBSTATE_ENABLED | TBSTATE_CHECKED : TBSTATE_ENABLED;
 	::SendMessage(_hToolbarMenu, TB_SETBUTTONINFO, IDC_SORTBUTTON_FUNCLIST, (LPARAM)&tbbuttonInfo);
@@ -530,8 +530,8 @@ void FunctionListPanel::setSort(bool isEnabled)
 
 BOOL CALLBACK FunctionListPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
-    switch (message)
-    {
+	switch (message)
+	{
 		// Make edit field red if not found
 		case WM_CTLCOLOREDIT :
 		{
@@ -551,15 +551,17 @@ BOOL CALLBACK FunctionListPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 					return FALSE; // children on root found, use the default color
 			}
 			else
+			{
 				return FALSE; // no root (no parser), use the default color
+			}
 			// text not found
 			SetTextColor((HDC)wParam, TXT_COLOR);
 			SetBkColor((HDC)wParam, BCKGRD_COLOR);
 			return (LRESULT)hBrushBackground;
 		}
 
-        case WM_INITDIALOG :
-        {
+		case WM_INITDIALOG :
+		{
 			int editWidth = 100;
 			int editHeight = 20;
 			// Create toolbar menu
@@ -567,12 +569,12 @@ BOOL CALLBACK FunctionListPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 			int style = WS_CHILD | WS_VISIBLE | CCS_ADJUSTABLE | TBSTYLE_AUTOSIZE | TBSTYLE_FLAT | TBSTYLE_LIST | TBSTYLE_TRANSPARENT | BTNS_AUTOSIZE | BTNS_SEP | TBSTYLE_TOOLTIPS;
 			_hToolbarMenu = CreateWindowEx(0,TOOLBARCLASSNAME,NULL, style,
 								   0,0,0,0,_hSelf,(HMENU)0, _hInst, NULL);
-			
+
 			//::GetWindowLongPtr(_hToolbarMenu, GWL_WNDPROC);
 			oldFunclstToolbarProc = (WNDPROC)::SetWindowLongPtr(_hToolbarMenu, GWLP_WNDPROC, (LONG_PTR)funclstToolbarProc);
 			TBBUTTON tbButtons[3];
 
-			// Add the bmap image into toolbar's imagelist 
+			// Add the bmap image into toolbar's imagelist
 			TBADDBITMAP addbmp = {_hInst, 0};
 			addbmp.nID = IDI_FUNCLIST_SORTBUTTON;
 			::SendMessage(_hToolbarMenu, TB_ADDBITMAP, 1, (LPARAM)&addbmp);
@@ -585,7 +587,7 @@ BOOL CALLBACK FunctionListPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 			tbButtons[0].fsState = TBSTATE_ENABLED;
 			tbButtons[0].fsStyle = BTNS_SEP;
 			tbButtons[0].iString = 0;
-			
+
 			tbButtons[1].idCommand = IDC_SORTBUTTON_FUNCLIST;
 			tbButtons[1].iBitmap = 0;
 			tbButtons[1].fsState =  TBSTATE_ENABLED;
@@ -609,10 +611,10 @@ BOOL CALLBACK FunctionListPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 			NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance())->getNativeLangSpeaker();
 			_sortTipStr = pNativeSpeaker->getAttrNameStr(_sortTipStr.c_str(), FL_FUCTIONLISTROOTNODE, FL_SORTLOCALNODENAME);
 			_reloadTipStr = pNativeSpeaker->getAttrNameStr(_reloadTipStr.c_str(), FL_FUCTIONLISTROOTNODE, FL_RELOADLOCALNODENAME);
-			
-			_hSearchEdit = CreateWindowEx(0L, L"Edit", NULL, 
-                                   WS_CHILD | WS_BORDER | WS_VISIBLE | ES_AUTOVSCROLL, 
-                                   2, 2, editWidth, editHeight, 
+
+			_hSearchEdit = CreateWindowEx(0L, L"Edit", NULL,
+                                   WS_CHILD | WS_BORDER | WS_VISIBLE | ES_AUTOVSCROLL,
+                                   2, 2, editWidth, editHeight,
                                    _hToolbarMenu, (HMENU) IDC_SEARCHFIELD_FUNCLIST, _hInst, 0 );
 
 			HFONT hf = (HFONT)::GetStockObject(DEFAULT_GUI_FONT);
@@ -623,18 +625,18 @@ BOOL CALLBACK FunctionListPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 			_treeViewSearchResult.init(_hInst, _hSelf, IDC_LIST_FUNCLIST_AUX);
 			_treeView.init(_hInst, _hSelf, IDC_LIST_FUNCLIST);
 			setTreeViewImageList(IDI_FUNCLIST_ROOT, IDI_FUNCLIST_NODE, IDI_FUNCLIST_LEAF);
-			
+
 			_treeView.display();
-            return TRUE;
-        }
-		
+			return TRUE;
+		}
+
 		case WM_DESTROY:
 			_treeView.destroy();
 			_treeViewSearchResult.destroy();
 			::DestroyWindow(_hToolbarMenu);
 			break;
 
-		case WM_COMMAND : 
+		case WM_COMMAND :
 		{
 			if (HIWORD(wParam) == EN_CHANGE)
 			{
@@ -649,7 +651,7 @@ BOOL CALLBACK FunctionListPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 			}
 
 			switch (LOWORD(wParam))
-            {
+			{
 				case IDC_SORTBUTTON_FUNCLIST:
 				{
 					sortOrUnsort();
@@ -664,22 +666,22 @@ BOOL CALLBACK FunctionListPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 			}
 		}
 		break;
-		
+
 		case WM_NOTIFY:
 		{
 			notified((LPNMHDR)lParam);
 		}
 		return TRUE;
 
-        case WM_SIZE:
-        {
-            int width = LOWORD(lParam);
-            int height = HIWORD(lParam);
+		case WM_SIZE:
+		{
+			int width = LOWORD(lParam);
+			int height = HIWORD(lParam);
 			RECT toolbarMenuRect;
-            ::GetClientRect(_hToolbarMenu, &toolbarMenuRect);
+			::GetClientRect(_hToolbarMenu, &toolbarMenuRect);
 
-            ::MoveWindow(_hToolbarMenu, 0, 0, width, toolbarMenuRect.bottom, TRUE);
-			
+			::MoveWindow(_hToolbarMenu, 0, 0, width, toolbarMenuRect.bottom, TRUE);
+
 			HWND hwnd = _treeView.getHSelf();
 			if (hwnd)
 				::MoveWindow(hwnd, 0, toolbarMenuRect.bottom + 2, width, height - toolbarMenuRect.bottom - 2, TRUE);
@@ -687,12 +689,12 @@ BOOL CALLBACK FunctionListPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 			HWND hwnd_aux = _treeViewSearchResult.getHSelf();
 			if (hwnd_aux)
 				::MoveWindow(hwnd_aux, 0, toolbarMenuRect.bottom + 2, width, height - toolbarMenuRect.bottom - 2, TRUE);
-			
-            break;
-        }
 
-        default :
-            return DockingDlgInterface::run_dlgProc(message, wParam, lParam);
-    }
+			break;
+		}
+
+		default :
+			return DockingDlgInterface::run_dlgProc(message, wParam, lParam);
+	}
 	return DockingDlgInterface::run_dlgProc(message, wParam, lParam);
 }

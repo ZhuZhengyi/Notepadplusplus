@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -49,10 +49,8 @@ void ColourPicker::init(HINSTANCE hInst, HWND parent)
 		throw std::runtime_error("ColourPicker::init : CreateWindowEx() function return null");
 	}
 
-    
-    ::SetWindowLongPtr(_hSelf, GWLP_USERDATA, (LONG_PTR)this);
-	_buttonDefaultProc = reinterpret_cast<WNDPROC>(::SetWindowLongPtr(_hSelf, GWLP_WNDPROC, (LONG_PTR)staticWinProc));	 
-
+	::SetWindowLongPtr(_hSelf, GWLP_USERDATA, (LONG_PTR)this);
+	_buttonDefaultProc = reinterpret_cast<WNDPROC>(::SetWindowLongPtr(_hSelf, GWLP_WNDPROC, (LONG_PTR)staticWinProc));
 }
 
 void ColourPicker::destroy()
@@ -67,31 +65,31 @@ void ColourPicker::destroy()
 
 void ColourPicker::drawBackground(HDC hDC)
 {
-    RECT rc;
+	RECT rc;
 	HBRUSH hbrush;
 
 	if(!hDC)
 		return;
 
-    getClientRect(rc);
+	getClientRect(rc);
 	hbrush = ::CreateSolidBrush(_currentColour);
 	HGDIOBJ oldObj = ::SelectObject(hDC, hbrush);
 	::Rectangle(hDC, 0, 0, rc.right, rc.bottom);
 	::SelectObject(hDC, oldObj);
 	//FillRect(hDC, &rc, hbrush);
-    ::DeleteObject(hbrush);
+	::DeleteObject(hbrush);
 }
 
 void ColourPicker::drawForeground(HDC hDC)
 {
-    RECT rc;
+	RECT rc;
 	HBRUSH hbrush = NULL;
 
 	if(!hDC || _isEnabled)
 		return;
 
 	int oldMode = ::SetBkMode(hDC, TRANSPARENT);
-    getClientRect(rc);
+	getClientRect(rc);
 	COLORREF strikeOut = RGB(0,0,0);
 	if ((((_currentColour      ) & 0xFF) +
 		 ((_currentColour >>  8) & 0xFF) +
@@ -103,7 +101,7 @@ void ColourPicker::drawForeground(HDC hDC)
 	::Rectangle(hDC, 0, 0, rc.right, rc.bottom);
 	::SelectObject(hDC, oldObj);
 	//FillRect(hDC, &rc, hbrush);
-    ::DeleteObject(hbrush);
+	::DeleteObject(hbrush);
 	::SetBkMode(hDC, oldMode);
 }
 
@@ -111,9 +109,9 @@ LRESULT ColourPicker::runProc(UINT Message, WPARAM wParam, LPARAM lParam)
 {
 	switch (Message)
 	{
-        case WM_LBUTTONDBLCLK :
-        case WM_LBUTTONDOWN :
-        {
+		case WM_LBUTTONDBLCLK :
+		case WM_LBUTTONDOWN :
+		{
 			RECT rc;
 			POINT p;
 			Window::getClientRect(rc);
@@ -133,8 +131,8 @@ LRESULT ColourPicker::runProc(UINT Message, WPARAM wParam, LPARAM lParam)
 				_pColourPopup->doDialog(p);
 				_pColourPopup->display(true);
 			}
-            return TRUE;
-        }
+			return TRUE;
+		}
 		case WM_RBUTTONDOWN:
 		{
 			_isEnabled = !_isEnabled;
@@ -148,37 +146,36 @@ LRESULT ColourPicker::runProc(UINT Message, WPARAM wParam, LPARAM lParam)
 			HDC dc = (HDC)wParam;
 			drawBackground(dc);
 			return TRUE;
-			break;
 		}
 
-        case WM_PAINT :
-        {
+		case WM_PAINT :
+		{
 			PAINTSTRUCT ps;
 			HDC dc = ::BeginPaint(_hSelf, &ps);
-            drawForeground(dc);
+			drawForeground(dc);
 			::EndPaint(_hSelf, &ps);
-            return TRUE;
-        }
+			return TRUE;
+		}
 
-        case WM_PICKUP_COLOR :
-        {
-            _currentColour = (COLORREF)wParam;
-            redraw();
+		case WM_PICKUP_COLOR :
+		{
+			_currentColour = (COLORREF)wParam;
+			redraw();
 
 			_pColourPopup->display(false);
 			::SendMessage(_hParent, WM_COMMAND, MAKELONG(0, CPN_COLOURPICKED), (LPARAM)_hSelf);
-            return TRUE;
-        }
+			return TRUE;
+		}
 
-        case WM_ENABLE :
-        {
-            if ((BOOL)wParam == FALSE)
-            {
-                _currentColour = ::GetSysColor(COLOR_3DFACE);
-                redraw();
-            }
-            return TRUE;
-        }
+		case WM_ENABLE :
+		{
+			if ((BOOL)wParam == FALSE)
+			{
+				_currentColour = ::GetSysColor(COLOR_3DFACE);
+				redraw();
+			}
+			return TRUE;
+		}
 
 		case WM_PICKUP_CANCEL :
 			_pColourPopup->display(false);
