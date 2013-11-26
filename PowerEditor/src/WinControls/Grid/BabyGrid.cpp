@@ -1717,7 +1717,7 @@ LRESULT CALLBACK GridProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			}
 			else
 			{
-				if (wParam < 0)
+				if (wParam <= 0)
 				{
 					BGHS[SelfIndex].rows = 0;
 				}
@@ -1855,9 +1855,6 @@ LRESULT CALLBACK GridProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 		case BGM_SETTITLEHEIGHT:
 		{
-			if (wParam < 0)
-				wParam = 0;
-
 			BGHS[SelfIndex].titleheight = wParam;
 			SetHomeRow(hWnd, SelfIndex, BGHS[SelfIndex].cursorrow, BGHS[SelfIndex].cursorcol);
 			SetHomeCol(hWnd, SelfIndex, BGHS[SelfIndex].cursorrow, BGHS[SelfIndex].cursorcol);
