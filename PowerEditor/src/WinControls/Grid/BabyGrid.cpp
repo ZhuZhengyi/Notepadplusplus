@@ -237,14 +237,7 @@ int GetColOfMouse(int SI, int x)
 
 BOOL OutOfRange(_BGCELL *cell)
 {
-	if ((cell->row > MAX_ROWS) || (cell->col > MAX_COLS))
-	{
-		return TRUE;
-	}
-	else
-	{
-		return FALSE;
-	}
+	return ((cell->row > MAX_ROWS) || (cell->col > MAX_COLS));
 }
 
 void SetCell(_BGCELL *cell, int row, int col)
