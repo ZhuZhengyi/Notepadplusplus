@@ -34,9 +34,9 @@
 
 static bool isInList(generic_string word, const vector<generic_string> & wordArray)
 {
-	for (size_t i = 0, len = wordArray.size(); i < len; ++i)
+	for (const generic_string& wordInArr : wordArray)
 	{
-		if (wordArray[i] == word)
+		if (wordInArr == word)
 			return true;
 	}
 
@@ -59,10 +59,10 @@ bool AutoCompletion::showAutoComplete()
 
 	int offset = len-1;
 	int nrChars = 0;
-	char c;
-	while (offset>=0)
+
+	while (offset >= 0)
 	{
-		c = lineBuffer[offset];
+		char c = lineBuffer[offset];
 		if (isalnum(c) || c == '_')
 		{
 			++nrChars;
@@ -381,12 +381,12 @@ void AutoCompletion::insertMatchedChars(int character, const MatchedPairConf & m
 	char *matchedChars = NULL;
 
 	// User defined matched pairs should be checked firstly
-	for (size_t i = 0, len = matchedPairs.size(); i < len; ++i)
+	for (const std::pair<char, char>& matchedPair : matchedPairs)
 	{
-		if (int(matchedPairs[i].first) == character)
+		if (int(matchedPair.first) == character)
 		{
 			char userMatchedChar[2] = {'\0', '\0'};
-			userMatchedChar[0] = matchedPairs[i].second;
+			userMatchedChar[0] = matchedPair.second;
 			_pEditView->execute(SCI_INSERTTEXT, caretPos, (LPARAM)userMatchedChar);
 			return;
 		}
