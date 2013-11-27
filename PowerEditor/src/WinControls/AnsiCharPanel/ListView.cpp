@@ -183,7 +183,6 @@ generic_string ListView::getAscii(unsigned char value)
 #endif
 			return charStr;
 		}
-
 	}
 	//return TEXT("");
 }

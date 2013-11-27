@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -57,66 +57,66 @@ enum tb_stat {tb_saved, tb_unsaved, tb_ro};
 int docTabIconIDs[] = {IDI_SAVED_ICON, IDI_UNSAVED_ICON, IDI_READONLY_ICON};
 
 ToolBarButtonUnit toolBarIcons[] = {
-	{IDM_FILE_NEW,		IDI_NEW_OFF_ICON,		IDI_NEW_ON_ICON,		IDI_NEW_OFF_ICON, IDR_FILENEW},
-	{IDM_FILE_OPEN,		IDI_OPEN_OFF_ICON,		IDI_OPEN_ON_ICON,		IDI_OPEN_OFF_ICON, IDR_FILEOPEN},
-	{IDM_FILE_SAVE,		IDI_SAVE_OFF_ICON,		IDI_SAVE_ON_ICON,		IDI_SAVE_DISABLE_ICON, IDR_FILESAVE},
-	{IDM_FILE_SAVEALL,	IDI_SAVEALL_OFF_ICON,	IDI_SAVEALL_ON_ICON,	IDI_SAVEALL_DISABLE_ICON, IDR_SAVEALL},
-	{IDM_FILE_CLOSE,	IDI_CLOSE_OFF_ICON,		IDI_CLOSE_ON_ICON,		IDI_CLOSE_OFF_ICON, IDR_CLOSEFILE},
-	{IDM_FILE_CLOSEALL,	IDI_CLOSEALL_OFF_ICON,	IDI_CLOSEALL_ON_ICON,	IDI_CLOSEALL_OFF_ICON, IDR_CLOSEALL},
-	{IDM_FILE_PRINTNOW,	IDI_PRINT_OFF_ICON,		IDI_PRINT_ON_ICON,		IDI_PRINT_OFF_ICON, IDR_PRINT},
+	{IDM_FILE_NEW,      IDI_NEW_OFF_ICON,       IDI_NEW_ON_ICON,        IDI_NEW_OFF_ICON, IDR_FILENEW},
+	{IDM_FILE_OPEN,     IDI_OPEN_OFF_ICON,      IDI_OPEN_ON_ICON,       IDI_OPEN_OFF_ICON, IDR_FILEOPEN},
+	{IDM_FILE_SAVE,     IDI_SAVE_OFF_ICON,      IDI_SAVE_ON_ICON,       IDI_SAVE_DISABLE_ICON, IDR_FILESAVE},
+	{IDM_FILE_SAVEALL,  IDI_SAVEALL_OFF_ICON,   IDI_SAVEALL_ON_ICON,    IDI_SAVEALL_DISABLE_ICON, IDR_SAVEALL},
+	{IDM_FILE_CLOSE,    IDI_CLOSE_OFF_ICON,     IDI_CLOSE_ON_ICON,      IDI_CLOSE_OFF_ICON, IDR_CLOSEFILE},
+	{IDM_FILE_CLOSEALL, IDI_CLOSEALL_OFF_ICON,  IDI_CLOSEALL_ON_ICON,   IDI_CLOSEALL_OFF_ICON, IDR_CLOSEALL},
+	{IDM_FILE_PRINTNOW, IDI_PRINT_OFF_ICON,     IDI_PRINT_ON_ICON,      IDI_PRINT_OFF_ICON, IDR_PRINT},
 
 	//-------------------------------------------------------------------------------------//
-	{0,					IDI_SEPARATOR_ICON,		IDI_SEPARATOR_ICON,		IDI_SEPARATOR_ICON, IDI_SEPARATOR_ICON},
+	{0,                 IDI_SEPARATOR_ICON,     IDI_SEPARATOR_ICON,     IDI_SEPARATOR_ICON, IDI_SEPARATOR_ICON},
 	//-------------------------------------------------------------------------------------//
 
-	{IDM_EDIT_CUT,		IDI_CUT_OFF_ICON,		IDI_CUT_ON_ICON,		IDI_CUT_DISABLE_ICON, IDR_CUT},
-	{IDM_EDIT_COPY,		IDI_COPY_OFF_ICON,		IDI_COPY_ON_ICON,		IDI_COPY_DISABLE_ICON, IDR_COPY},
-	{IDM_EDIT_PASTE,	IDI_PASTE_OFF_ICON,		IDI_PASTE_ON_ICON,		IDI_PASTE_DISABLE_ICON, IDR_PASTE},
+	{IDM_EDIT_CUT,      IDI_CUT_OFF_ICON,       IDI_CUT_ON_ICON,        IDI_CUT_DISABLE_ICON, IDR_CUT},
+	{IDM_EDIT_COPY,     IDI_COPY_OFF_ICON,      IDI_COPY_ON_ICON,       IDI_COPY_DISABLE_ICON, IDR_COPY},
+	{IDM_EDIT_PASTE,    IDI_PASTE_OFF_ICON,     IDI_PASTE_ON_ICON,      IDI_PASTE_DISABLE_ICON, IDR_PASTE},
 
 	//-------------------------------------------------------------------------------------//
-	{0,					IDI_SEPARATOR_ICON,		IDI_SEPARATOR_ICON,		IDI_SEPARATOR_ICON, IDI_SEPARATOR_ICON},
+	{0,                 IDI_SEPARATOR_ICON,     IDI_SEPARATOR_ICON,     IDI_SEPARATOR_ICON, IDI_SEPARATOR_ICON},
 	//-------------------------------------------------------------------------------------//
 
-	{IDM_EDIT_UNDO,		IDI_UNDO_OFF_ICON,		IDI_UNDO_ON_ICON,		IDI_UNDO_DISABLE_ICON, IDR_UNDO},
-	{IDM_EDIT_REDO,		IDI_REDO_OFF_ICON,		IDI_REDO_ON_ICON,		IDI_REDO_DISABLE_ICON, IDR_REDO},
+	{IDM_EDIT_UNDO,     IDI_UNDO_OFF_ICON,      IDI_UNDO_ON_ICON,       IDI_UNDO_DISABLE_ICON, IDR_UNDO},
+	{IDM_EDIT_REDO,     IDI_REDO_OFF_ICON,      IDI_REDO_ON_ICON,       IDI_REDO_DISABLE_ICON, IDR_REDO},
 	//-------------------------------------------------------------------------------------//
-	{0,					IDI_SEPARATOR_ICON,		IDI_SEPARATOR_ICON,		IDI_SEPARATOR_ICON, IDI_SEPARATOR_ICON},
-	//-------------------------------------------------------------------------------------//
-
-	{IDM_SEARCH_FIND,		IDI_FIND_OFF_ICON,		IDI_FIND_ON_ICON,		IDI_FIND_OFF_ICON, IDR_FIND},
-	{IDM_SEARCH_REPLACE,  IDI_REPLACE_OFF_ICON,	IDI_REPLACE_ON_ICON,	IDI_REPLACE_OFF_ICON, IDR_REPLACE},
-
-	//-------------------------------------------------------------------------------------//
-	{0,					IDI_SEPARATOR_ICON,		IDI_SEPARATOR_ICON,		IDI_SEPARATOR_ICON, IDI_SEPARATOR_ICON},
-	//-------------------------------------------------------------------------------------//
-	{IDM_VIEW_ZOOMIN,	IDI_ZOOMIN_OFF_ICON,	IDI_ZOOMIN_ON_ICON,		IDI_ZOOMIN_OFF_ICON, IDR_ZOOMIN},
-	{IDM_VIEW_ZOOMOUT,	IDI_ZOOMOUT_OFF_ICON,	IDI_ZOOMOUT_ON_ICON,	IDI_ZOOMOUT_OFF_ICON, IDR_ZOOMOUT},
-
-	//-------------------------------------------------------------------------------------//
-	{0,					IDI_SEPARATOR_ICON,		IDI_SEPARATOR_ICON,		IDI_SEPARATOR_ICON, IDI_SEPARATOR_ICON},
-	//-------------------------------------------------------------------------------------//
-	{IDM_VIEW_SYNSCROLLV,	IDI_SYNCV_OFF_ICON,	IDI_SYNCV_ON_ICON,	IDI_SYNCV_DISABLE_ICON, IDR_SYNCV},
-	{IDM_VIEW_SYNSCROLLH,	IDI_SYNCH_OFF_ICON,	IDI_SYNCH_ON_ICON,	IDI_SYNCH_DISABLE_ICON, IDR_SYNCH},
-
-	//-------------------------------------------------------------------------------------//
-	{0,					IDI_SEPARATOR_ICON,		IDI_SEPARATOR_ICON,		IDI_SEPARATOR_ICON, IDI_SEPARATOR_ICON},
-	//-------------------------------------------------------------------------------------//
-	{IDM_VIEW_WRAP,  IDI_VIEW_WRAP_OFF_ICON,	IDI_VIEW_WRAP_ON_ICON,	IDI_VIEW_WRAP_OFF_ICON, IDR_WRAP},
-	{IDM_VIEW_ALL_CHARACTERS,  IDI_VIEW_ALL_CHAR_OFF_ICON,	IDI_VIEW_ALL_CHAR_ON_ICON,	IDI_VIEW_ALL_CHAR_OFF_ICON, IDR_INVISIBLECHAR},
-	{IDM_VIEW_INDENT_GUIDE,  IDI_VIEW_INDENT_OFF_ICON,	IDI_VIEW_INDENT_ON_ICON,	IDI_VIEW_INDENT_OFF_ICON, IDR_INDENTGUIDE},
-	{IDM_LANG_USER_DLG,  IDI_VIEW_UD_DLG_OFF_ICON,	IDI_VIEW_UD_DLG_ON_ICON,	IDI_VIEW_UD_DLG_OFF_ICON, IDR_SHOWPANNEL},
-	{IDM_VIEW_DOC_MAP,  IDI_VIEW_UD_DLG_OFF_ICON, IDI_VIEW_UD_DLG_ON_ICON, IDI_VIEW_UD_DLG_OFF_ICON, IDR_DOCMAP},
-	{IDM_VIEW_FUNC_LIST,  IDI_VIEW_UD_DLG_OFF_ICON, IDI_VIEW_UD_DLG_ON_ICON, IDI_VIEW_UD_DLG_OFF_ICON, IDR_FUNC_LIST},
-
-	//-------------------------------------------------------------------------------------//
-	{0,					IDI_SEPARATOR_ICON,		IDI_SEPARATOR_ICON,		IDI_SEPARATOR_ICON, IDI_SEPARATOR_ICON},
+	{0,                 IDI_SEPARATOR_ICON,     IDI_SEPARATOR_ICON,     IDI_SEPARATOR_ICON, IDI_SEPARATOR_ICON},
 	//-------------------------------------------------------------------------------------//
 
-	{IDM_MACRO_STARTRECORDINGMACRO,		IDI_STARTRECORD_OFF_ICON,	IDI_STARTRECORD_ON_ICON,	IDI_STARTRECORD_DISABLE_ICON, IDR_STARTRECORD},
-	{IDM_MACRO_STOPRECORDINGMACRO,		IDI_STOPRECORD_OFF_ICON,	IDI_STOPRECORD_ON_ICON,		IDI_STOPRECORD_DISABLE_ICON, IDR_STOPRECORD},
-	{IDM_MACRO_PLAYBACKRECORDEDMACRO,	IDI_PLAYRECORD_OFF_ICON,	IDI_PLAYRECORD_ON_ICON,		IDI_PLAYRECORD_DISABLE_ICON, IDR_PLAYRECORD},
-	{IDM_MACRO_RUNMULTIMACRODLG,			IDI_MMPLAY_OFF_ICON,		IDI_MMPLAY_ON_ICON,			IDI_MMPLAY_DIS_ICON, IDR_M_PLAYRECORD},
-	{IDM_MACRO_SAVECURRENTMACRO,			IDI_SAVERECORD_OFF_ICON,	IDI_SAVERECORD_ON_ICON,		IDI_SAVERECORD_DISABLE_ICON, IDR_SAVERECORD}
+	{IDM_SEARCH_FIND,     IDI_FIND_OFF_ICON,    IDI_FIND_ON_ICON,       IDI_FIND_OFF_ICON, IDR_FIND},
+	{IDM_SEARCH_REPLACE,  IDI_REPLACE_OFF_ICON, IDI_REPLACE_ON_ICON,    IDI_REPLACE_OFF_ICON, IDR_REPLACE},
+
+	//-------------------------------------------------------------------------------------//
+	{0,                 IDI_SEPARATOR_ICON,     IDI_SEPARATOR_ICON,     IDI_SEPARATOR_ICON, IDI_SEPARATOR_ICON},
+	//-------------------------------------------------------------------------------------//
+	{IDM_VIEW_ZOOMIN,   IDI_ZOOMIN_OFF_ICON,    IDI_ZOOMIN_ON_ICON,     IDI_ZOOMIN_OFF_ICON, IDR_ZOOMIN},
+	{IDM_VIEW_ZOOMOUT,  IDI_ZOOMOUT_OFF_ICON,   IDI_ZOOMOUT_ON_ICON,    IDI_ZOOMOUT_OFF_ICON, IDR_ZOOMOUT},
+
+	//-------------------------------------------------------------------------------------//
+	{0,                 IDI_SEPARATOR_ICON,     IDI_SEPARATOR_ICON,     IDI_SEPARATOR_ICON, IDI_SEPARATOR_ICON},
+	//-------------------------------------------------------------------------------------//
+	{IDM_VIEW_SYNSCROLLV,   IDI_SYNCV_OFF_ICON, IDI_SYNCV_ON_ICON,  IDI_SYNCV_DISABLE_ICON, IDR_SYNCV},
+	{IDM_VIEW_SYNSCROLLH,   IDI_SYNCH_OFF_ICON, IDI_SYNCH_ON_ICON,  IDI_SYNCH_DISABLE_ICON, IDR_SYNCH},
+
+	//-------------------------------------------------------------------------------------//
+	{0,                 IDI_SEPARATOR_ICON,     IDI_SEPARATOR_ICON,     IDI_SEPARATOR_ICON, IDI_SEPARATOR_ICON},
+	//-------------------------------------------------------------------------------------//
+	{IDM_VIEW_WRAP,           IDI_VIEW_WRAP_OFF_ICON,     IDI_VIEW_WRAP_ON_ICON,     IDI_VIEW_WRAP_OFF_ICON,     IDR_WRAP},
+	{IDM_VIEW_ALL_CHARACTERS, IDI_VIEW_ALL_CHAR_OFF_ICON, IDI_VIEW_ALL_CHAR_ON_ICON, IDI_VIEW_ALL_CHAR_OFF_ICON, IDR_INVISIBLECHAR},
+	{IDM_VIEW_INDENT_GUIDE,   IDI_VIEW_INDENT_OFF_ICON,   IDI_VIEW_INDENT_ON_ICON,   IDI_VIEW_INDENT_OFF_ICON,   IDR_INDENTGUIDE},
+	{IDM_LANG_USER_DLG,       IDI_VIEW_UD_DLG_OFF_ICON,   IDI_VIEW_UD_DLG_ON_ICON,   IDI_VIEW_UD_DLG_OFF_ICON,   IDR_SHOWPANNEL},
+	{IDM_VIEW_DOC_MAP,        IDI_VIEW_UD_DLG_OFF_ICON,   IDI_VIEW_UD_DLG_ON_ICON,   IDI_VIEW_UD_DLG_OFF_ICON,   IDR_DOCMAP},
+	{IDM_VIEW_FUNC_LIST,      IDI_VIEW_UD_DLG_OFF_ICON,   IDI_VIEW_UD_DLG_ON_ICON,   IDI_VIEW_UD_DLG_OFF_ICON,   IDR_FUNC_LIST},
+
+	//-------------------------------------------------------------------------------------//
+	{0,                 IDI_SEPARATOR_ICON,     IDI_SEPARATOR_ICON,     IDI_SEPARATOR_ICON, IDI_SEPARATOR_ICON},
+	//-------------------------------------------------------------------------------------//
+
+	{IDM_MACRO_STARTRECORDINGMACRO,     IDI_STARTRECORD_OFF_ICON,   IDI_STARTRECORD_ON_ICON,    IDI_STARTRECORD_DISABLE_ICON, IDR_STARTRECORD},
+	{IDM_MACRO_STOPRECORDINGMACRO,      IDI_STOPRECORD_OFF_ICON,    IDI_STOPRECORD_ON_ICON,     IDI_STOPRECORD_DISABLE_ICON, IDR_STOPRECORD},
+	{IDM_MACRO_PLAYBACKRECORDEDMACRO,   IDI_PLAYRECORD_OFF_ICON,    IDI_PLAYRECORD_ON_ICON,     IDI_PLAYRECORD_DISABLE_ICON, IDR_PLAYRECORD},
+	{IDM_MACRO_RUNMULTIMACRODLG,        IDI_MMPLAY_OFF_ICON,        IDI_MMPLAY_ON_ICON,         IDI_MMPLAY_DIS_ICON, IDR_M_PLAYRECORD},
+	{IDM_MACRO_SAVECURRENTMACRO,        IDI_SAVERECORD_OFF_ICON,    IDI_SAVERECORD_ON_ICON,     IDI_SAVERECORD_DISABLE_ICON, IDR_SAVERECORD}
 
 };
 
@@ -241,7 +241,7 @@ LRESULT Notepad_plus::init(HWND hwnd)
 	_subEditView.init(_pPublicInterface->getHinst(), hwnd);
 
 	_fileEditView.init(_pPublicInterface->getHinst(), hwnd);
-	MainFileManager->init(this, &_fileEditView);	//get it up and running asap.
+	MainFileManager->init(this, &_fileEditView);    //get it up and running asap.
 
 	pNppParam->setFontList(hwnd);
 
@@ -568,7 +568,7 @@ LRESULT Notepad_plus::init(HWND hwnd)
 	{
 		CommandShortcut & csc = shortcuts[i];
 		if (!csc.getName()[0])
-		{	//no predefined name, get name from menu and use that
+		{   //no predefined name, get name from menu and use that
 			::GetMenuString(_mainMenuHandle, csc.getID(), menuName, 64, MF_BYCOMMAND);
 			csc.setName(purgeMenuItemString(menuName, true).c_str());
 		}
@@ -661,7 +661,7 @@ LRESULT Notepad_plus::init(HWND hwnd)
 
 	_dockingManager.setDockedContSize(CONT_LEFT  , nppGUI._dockingData._leftWidth);
 	_dockingManager.setDockedContSize(CONT_RIGHT , nppGUI._dockingData._rightWidth);
-	_dockingManager.setDockedContSize(CONT_TOP	 , nppGUI._dockingData._topHeight);
+	_dockingManager.setDockedContSize(CONT_TOP   , nppGUI._dockingData._topHeight);
 	_dockingManager.setDockedContSize(CONT_BOTTOM, nppGUI._dockingData._bottomHight);
 
 	for (size_t i = 0, len = dmd._pluginDockInfo.size(); i < len ; ++i)
@@ -690,7 +690,7 @@ LRESULT Notepad_plus::init(HWND hwnd)
 	loadBufferIntoView(_subEditView.getCurrentBufferID(), SUB_VIEW);
 	activateBuffer(_mainEditView.getCurrentBufferID(), MAIN_VIEW);
 	activateBuffer(_subEditView.getCurrentBufferID(), SUB_VIEW);
-	MainFileManager->increaseDocNr();	//so next doc starts at 2
+	MainFileManager->increaseDocNr();   //so next doc starts at 2
 
 	::SetFocus(_mainEditView.getHSelf());
 	return TRUE;
@@ -862,7 +862,7 @@ void Notepad_plus::saveDockingParams()
 
 		if (isStored == FALSE)
 		{
-			int floatCont	= 0;
+			int floatCont   = 0;
 
 			if (nppGUI._dockingData._pluginDockInfo[i]._currContainer >= DOCKCONT_MAX)
 				floatCont = nppGUI._dockingData._pluginDockInfo[i]._currContainer;
@@ -1002,7 +1002,7 @@ bool Notepad_plus::replaceInOpenedFiles() {
 	ScintillaEditView *pOldView = _pEditView;
 	_pEditView = &_invisibleEditView;
 	Document oldDoc = _invisibleEditView.execute(SCI_GETDOCPOINTER);
-	Buffer * oldBuf = _invisibleEditView.getCurrentBuffer();	//for manually setting the buffer, so notifications can be handled properly
+	Buffer * oldBuf = _invisibleEditView.getCurrentBuffer();    //for manually setting the buffer, so notifications can be handled properly
 
 	Buffer * pBuf = NULL;
 
@@ -1301,11 +1301,11 @@ void Notepad_plus::doTrim(trimOp whichPart)
 	FindOption env;
 	if (whichPart == lineHeader)
 	{
-		env._str2Search = TEXT("^[	 ]+");
+		env._str2Search = TEXT("^[   ]+");
 	}
 	else if (whichPart == lineTail)
 	{
-		env._str2Search = TEXT("[	 ]+$");
+		env._str2Search = TEXT("[    ]+$");
 	}
 	else
 	{
@@ -1439,7 +1439,7 @@ bool Notepad_plus::replaceInFiles()
 	ScintillaEditView *pOldView = _pEditView;
 	_pEditView = &_invisibleEditView;
 	Document oldDoc = _invisibleEditView.execute(SCI_GETDOCPOINTER);
-	Buffer * oldBuf = _invisibleEditView.getCurrentBuffer();	//for manually setting the buffer, so notifications can be handled properly
+	Buffer * oldBuf = _invisibleEditView.getCurrentBuffer();    //for manually setting the buffer, so notifications can be handled properly
 	HANDLE CancelThreadHandle = NULL;
 
 	vector<generic_string> patterns2Match;
@@ -2226,7 +2226,7 @@ void Notepad_plus::addHotSpot()
 		}
 		else // generize a new style and add it into a array
 		{
-			style_hotspot = idStyle | mask;	// set "hotspot bit"
+			style_hotspot = idStyle | mask; // set "hotspot bit"
 			hotspotPairs.push_back(style_hotspot);
 			unsigned char idStyleMSBunset = idStyle & ~mask;
 			char fontNameA[128];
@@ -2289,7 +2289,7 @@ void Notepad_plus::MaintainIndentation(TCHAR ch)
 	int indentAmount = 0;
 
 	if (((eolMode == SC_EOL_CRLF || eolMode == SC_EOL_LF) && ch == '\n') ||
-	     (eolMode == SC_EOL_CR && ch == '\r'))
+		 (eolMode == SC_EOL_CR && ch == '\r'))
 	{
 		while (lastLine >= 0 && _pEditView->getLineLength(lastLine) == 0)
 			lastLine--;
@@ -2438,7 +2438,7 @@ enum LangType Notepad_plus::menuID2LangType(int cmdID)
 {
 	switch (cmdID)
 	{
-		case IDM_LANG_C	:
+		case IDM_LANG_C :
 			return L_C;
 		case IDM_LANG_CPP :
 			return L_CPP;
@@ -2800,7 +2800,7 @@ size_t Notepad_plus::getSelectedBytes()
 int Notepad_plus::wordCount()
 {
 	FindOption env;
-	env._str2Search = TEXT("[^ 	\\\\.,;:!?()+\\-\\*/=\\]\\[{}&~\"'`|@$%<>\\^]+");
+	env._str2Search = TEXT("[^  \\\\.,;:!?()+\\-\\*/=\\]\\[{}&~\"'`|@$%<>\\^]+");
 	env._searchType = FindRegex;
 	return _findReplaceDlg.processAll(ProcessCountAll, &env, true);
 }
@@ -3056,7 +3056,7 @@ bool Notepad_plus::removeBufferFromView(BufferID id, int whichOne)
 	int active = tabToClose->getCurrentTabIndex();
 	if (active == index) // Need an alternative (close real doc, put empty one back)
 	{
-		if (tabToClose->nbItem() == 1) 	//need alternative doc, add new one. Use special logic to prevent flicker of adding new tab then closing other
+		if (tabToClose->nbItem() == 1)  //need alternative doc, add new one. Use special logic to prevent flicker of adding new tab then closing other
 		{
 			BufferID newID = MainFileManager->newEmptyDocument();
 			MainFileManager->addBufferReference(newID, viewToClose);
@@ -3075,8 +3075,8 @@ bool Notepad_plus::removeBufferFromView(BufferID id, int whichOne)
 			{
 				toActivate = active;    // Activate the 'active' index. Since we remove the tab first, the indices shift (on the right side)
 			}
-			tabToClose->deletItemAt((size_t)index);	//delete first
-			activateBuffer(tabToClose->getBufferByIndex(toActivate), whichOne);	//then activate. The prevent jumpy tab behaviour
+			tabToClose->deletItemAt((size_t)index); //delete first
+			activateBuffer(tabToClose->getBufferByIndex(toActivate), whichOne); //then activate. The prevent jumpy tab behaviour
 		}
 	}
 	else 
@@ -3112,7 +3112,7 @@ int Notepad_plus::switchEditViewTo(int gid)
 	_pNonEditView = tempView;
 
 	_pEditView->beSwitched();
-	_pEditView->getFocus();	//set the focus
+	_pEditView->getFocus(); //set the focus
 
 	if (_pDocMap)
 	{
@@ -3232,17 +3232,17 @@ void Notepad_plus::docGotoAnotherEditView(FileTransferMode mode)
 	BufferID current = _pEditView->getCurrentBufferID();
 	int viewToGo = otherView();
 	int indexFound = _pNonDocTab->getIndexByBuffer(current);
-	if (indexFound != -1)	//activate it
+	if (indexFound != -1)   //activate it
 	{
 		activateBuffer(current, otherView());
 	}
-	else	//open the document, also copying the position
+	else    //open the document, also copying the position
 	{
 		loadBufferIntoView(current, viewToGo);
 		Buffer * buf = MainFileManager->getBufferByID(current);
-		_pEditView->saveCurrentPos();	//allow copying of position
+		_pEditView->saveCurrentPos();   //allow copying of position
 		buf->setPosition(buf->getPosition(_pEditView), _pNonEditView);
-		_pNonEditView->restoreCurrentPos();	//set position
+		_pNonEditView->restoreCurrentPos(); //set position
 		activateBuffer(current, viewToGo);
 	}
 
@@ -3270,7 +3270,7 @@ void Notepad_plus::docGotoAnotherEditView(FileTransferMode mode)
 
 bool Notepad_plus::activateBuffer(BufferID id, int whichOne)
 {
-	//scnN.nmhdr.code = NPPN_DOCSWITCHINGOFF;		// superseded by NPPN_BUFFERACTIVATED
+	//scnN.nmhdr.code = NPPN_DOCSWITCHINGOFF;       // superseded by NPPN_BUFFERACTIVATED
 	Buffer * pBuf = MainFileManager->getBufferByID(id);
 	bool reload = pBuf->getNeedReload();
 	if (reload)
@@ -3280,7 +3280,7 @@ bool Notepad_plus::activateBuffer(BufferID id, int whichOne)
 	}
 	if (whichOne == MAIN_VIEW)
 	{
-		if (_mainDocTab.activateBuffer(id))	//only activate if possible
+		if (_mainDocTab.activateBuffer(id)) //only activate if possible
 			_mainEditView.activateBuffer(id);
 		else
 			return false;
@@ -3300,7 +3300,7 @@ bool Notepad_plus::activateBuffer(BufferID id, int whichOne)
 
 	notifyBufferActivated(id, whichOne);
 
-	//scnN.nmhdr.code = NPPN_DOCSWITCHINGIN;		// superseded by NPPN_BUFFERACTIVATED
+	//scnN.nmhdr.code = NPPN_DOCSWITCHINGIN;        // superseded by NPPN_BUFFERACTIVATED
 	return true;
 }
 
@@ -3712,9 +3712,9 @@ bool Notepad_plus::doStreamComment()
 	}
 
 	// if ((!commentStart) || (!commentStart[0]))
-	// 		return false;
+	//      return false;
 	// if ((!commentEnd) || (!commentEnd[0]))
-	// 		return false;
+	//      return false;
 	//--FLS: BlockToStreamComment: If there is no stream-comment symbol, try the block comment:
 	if ((commentStart == NULL) || (!commentStart[0]) || (commentEnd == NULL) || (!commentEnd[0]))
 	{
@@ -3786,10 +3786,10 @@ bool Notepad_plus::addCurrentMacro()
 	if (ms.doDialog() != -1)
 	{
 		HMENU hMacroMenu = ::GetSubMenu(_mainMenuHandle, MENUINDEX_MACRO);
-		int const posBase = 6;	//separator at index 5
+		int const posBase = 6;  //separator at index 5
 		if (nbMacro == 0)
 		{
-			::InsertMenu(hMacroMenu, posBase-1, MF_BYPOSITION, (unsigned int)-1, 0);	//no separator yet, add one
+			::InsertMenu(hMacroMenu, posBase-1, MF_BYPOSITION, (unsigned int)-1, 0);    //no separator yet, add one
 
 			// Insert the separator and modify/delete command
 			::InsertMenu(hMacroMenu, posBase + nbMacro + 1, MF_BYPOSITION, (unsigned int)-1, 0);
@@ -3910,7 +3910,7 @@ bool Notepad_plus::goToPreviousIndicator(int indicID2Search, bool isWrap) const
 		nppGUI._disableSmartHiliteTmp = true;
 
 		int currentline = _pEditView->execute(SCI_LINEFROMPOSITION, posEnd);
-		_pEditView->execute(SCI_ENSUREVISIBLE, currentline);	// make sure target line is unfolded
+		_pEditView->execute(SCI_ENSUREVISIBLE, currentline);    // make sure target line is unfolded
 
 		_pEditView->execute(SCI_SETSEL, posEnd, posStart);
 		_pEditView->execute(SCI_SCROLLCARET);
@@ -3963,7 +3963,7 @@ bool Notepad_plus::goToNextIndicator(int indicID2Search, bool isWrap) const
 		nppGUI._disableSmartHiliteTmp = true;
 
 		int currentline = _pEditView->execute(SCI_LINEFROMPOSITION, posEnd);
-		_pEditView->execute(SCI_ENSUREVISIBLE, currentline);	// make sure target line is unfolded
+		_pEditView->execute(SCI_ENSUREVISIBLE, currentline);    // make sure target line is unfolded
 
 		_pEditView->execute(SCI_SETSEL, posStart, posEnd);
 		_pEditView->execute(SCI_SCROLLCARET);
@@ -3974,12 +3974,12 @@ bool Notepad_plus::goToNextIndicator(int indicID2Search, bool isWrap) const
 
 void Notepad_plus::fullScreenToggle()
 {
-	if (!_beforeSpecialView.isFullScreen)	//toggle fullscreen on
+	if (!_beforeSpecialView.isFullScreen)   //toggle fullscreen on
 	{
 		_beforeSpecialView._winPlace.length = sizeof(_beforeSpecialView._winPlace);
 		::GetWindowPlacement(_pPublicInterface->getHSelf(), &_beforeSpecialView._winPlace);
 
-		RECT fullscreenArea;		//RECT used to calculate window fullscreen size
+		RECT fullscreenArea;        //RECT used to calculate window fullscreen size
 		//Preset view area, in case something fails, primary monitor values
 		fullscreenArea.top = 0;
 		fullscreenArea.left = 0;
@@ -3988,10 +3988,10 @@ void Notepad_plus::fullScreenToggle()
 
 		//if (_winVersion != WV_NT)
 		{
-			HMONITOR currentMonitor;	//Handle to monitor where fullscreen should go
-			MONITORINFO mi;				//Info of that monitor
+			HMONITOR currentMonitor;    //Handle to monitor where fullscreen should go
+			MONITORINFO mi;             //Info of that monitor
 			//Caution, this will not work on windows 95, so probably add some checking of some sorts like Unicode checks, IF 95 were to be supported
-			currentMonitor = ::MonitorFromWindow(_pPublicInterface->getHSelf(), MONITOR_DEFAULTTONEAREST);	//should always be valid monitor handle
+			currentMonitor = ::MonitorFromWindow(_pPublicInterface->getHSelf(), MONITOR_DEFAULTTONEAREST);  //should always be valid monitor handle
 			mi.cbSize = sizeof(MONITORINFO);
 			if (::GetMonitorInfo(currentMonitor, &mi) != FALSE)
 			{
@@ -4027,7 +4027,7 @@ void Notepad_plus::fullScreenToggle()
 		if (!_beforeSpecialView.isPostIt)
 		{
 			_beforeSpecialView.preStyle = ::SetWindowLongPtr(_pPublicInterface->getHSelf(), GWL_STYLE, WS_POPUP);
-			if (!_beforeSpecialView.preStyle) {	//something went wrong, use default settings
+			if (!_beforeSpecialView.preStyle) { //something went wrong, use default settings
 				_beforeSpecialView.preStyle = WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN;
 			}
 		}
@@ -4053,7 +4053,7 @@ void Notepad_plus::fullScreenToggle()
 
 		_pEditView->getFocus();
 	}
-	else	//toggle fullscreen off
+	else    //toggle fullscreen off
 	{
 		//Hide window for updating, restore style and menu then restore position and Z-Order
 		::ShowWindow(_pPublicInterface->getHSelf(), SW_HIDE);
@@ -4093,7 +4093,7 @@ void Notepad_plus::fullScreenToggle()
 				::SetWindowPlacement(_pPublicInterface->getHSelf(), &_beforeSpecialView._winPlace);
 			}
 		}
-		else	//fallback
+		else    //fallback
 		{
 			::ShowWindow(_pPublicInterface->getHSelf(), SW_SHOW);
 		}
@@ -4120,7 +4120,7 @@ void Notepad_plus::fullScreenToggle()
 void Notepad_plus::postItToggle()
 {
 	NppParameters * pNppParam = NppParameters::getInstance();
-	if (!_beforeSpecialView.isPostIt)	// PostIt disabled, enable it
+	if (!_beforeSpecialView.isPostIt)   // PostIt disabled, enable it
 	{
 		NppGUI & nppGUI = (NppGUI &)pNppParam->getNppGUI();
 		// get current status before switch to postIt
@@ -4162,7 +4162,7 @@ void Notepad_plus::postItToggle()
 			//Hide window so windows can properly update it
 			::ShowWindow(_pPublicInterface->getHSelf(), SW_HIDE);
 			_beforeSpecialView.preStyle = ::SetWindowLongPtr( _pPublicInterface->getHSelf(), GWL_STYLE, WS_POPUP );
-			if (!_beforeSpecialView.preStyle) {	//something went wrong, use default settings
+			if (!_beforeSpecialView.preStyle) { //something went wrong, use default settings
 				_beforeSpecialView.preStyle = WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN;
 			}
 			//Redraw the window and refresh windowmanager cache, dont do anything else, sizing is done later on
@@ -4186,7 +4186,7 @@ void Notepad_plus::postItToggle()
 
 		_pEditView->getFocus();
 	}
-	else	//PostIt enabled, disable it
+	else    //PostIt enabled, disable it
 	{
 		_restoreButton.setButtonStatus(buttonStatus_postit ^ _restoreButton.getButtonStatus());
 		_restoreButton.display(false);
@@ -4480,7 +4480,7 @@ bool Notepad_plus::dumpFiles(const TCHAR * outdir, const TCHAR * fileprefix)
 	for(int i = 0; i < MainFileManager->getNrBuffers(); ++i)
 	{
 		Buffer * docbuf = MainFileManager->getBufferByIndex(i);
-		if (!docbuf->isDirty())	//skip saved documents
+		if (!docbuf->isDirty()) //skip saved documents
 			continue;
 		else
 			somedirty = true;
@@ -4536,7 +4536,7 @@ void Notepad_plus::notifyBufferChanged(Buffer * buffer, int mask)
 
 	//Only event that applies to non-active Buffers
 	if (mask & BufferChangeStatus)
-	{	//reload etc
+	{   //reload etc
 		bool didDialog = false;
 		switch(buffer->getStatus())
 		{
@@ -4558,12 +4558,12 @@ void Notepad_plus::notifyBufferChanged(Buffer * buffer, int mask)
 					int iView = currentView();
 					if (index == -1)
 						iView = otherView();
-					activateBuffer(buffer->getID(), iView);	//activate the buffer in the first view possible
+					activateBuffer(buffer->getID(), iView); //activate the buffer in the first view possible
 
 					// Then we ask user to update
 					didDialog = true;
 					if (doReloadOrNot(buffer->getFullPathName(), buffer->isDirty()) != IDYES)
-						break;	//abort
+						break;  //abort
 				}
 
 				doReload(buffer->getID(), false);
@@ -4573,14 +4573,14 @@ void Notepad_plus::notifyBufferChanged(Buffer * buffer, int mask)
 				}
 				break;
 			}
-			case DOC_DELETED: 	//ask for keep
+			case DOC_DELETED:   //ask for keep
 			{
 				int index = _pDocTab->getIndexByBuffer(buffer->getID());
 				int iView = currentView();
 				if (index == -1)
 					iView = otherView();
 
-				activateBuffer(buffer->getID(), iView);	//activate the buffer in the first view possible
+				activateBuffer(buffer->getID(), iView); //activate the buffer in the first view possible
 				didDialog = true;
 				if (doCloseOrNot(buffer->getFullPathName()) == IDNO)
 				{
@@ -4654,7 +4654,7 @@ void Notepad_plus::notifyBufferChanged(Buffer * buffer, int mask)
 
 	if (mask & (BufferChangeLanguage))
 	{
-		checkLangsMenu(-1);	//let N++ do search for the item
+		checkLangsMenu(-1); //let N++ do search for the item
 		setLangStatus(buffer->getLangType());
 		if (_mainEditView.getCurrentBuffer() == buffer)
 			_autoCompleteMain.setLanguage(buffer->getLangType());
@@ -4693,7 +4693,7 @@ void Notepad_plus::notifyBufferActivated(BufferID bufid, int view)
 	}
 
 	if (view != currentView())
-		return;	//dont care if another view did something
+		return; //dont care if another view did something
 
 
 	checkDocState();
@@ -5034,23 +5034,19 @@ bool Notepad_plus::reloadLang()
 	}
 	// Update scintilla context menu strings
 	vector<MenuItemUnit> & tmp = pNppParam->getContextMenuItems();
-	size_t len = tmp.size();
 	TCHAR menuName[64];
-	for (size_t i = 0 ; i < len ; ++i)
+	for (MenuItemUnit& unit : tmp)
 	{
-		if (tmp[i]._itemName == TEXT(""))
+		if (unit._itemName == TEXT(""))
 		{
-			::GetMenuString(_mainMenuHandle, tmp[i]._cmdID, menuName, 64, MF_BYCOMMAND);
-			tmp[i]._itemName = purgeMenuItemString(menuName);
+			::GetMenuString(_mainMenuHandle, unit._cmdID, menuName, 64, MF_BYCOMMAND);
+			unit._itemName = purgeMenuItemString(menuName);
 		}
 	}
 
 	vector<CommandShortcut> & shortcuts = pNppParam->getUserShortcuts();
-	len = shortcuts.size();
-
-	for(size_t i = 0; i < len; ++i)
+	for (CommandShortcut& csc : shortcuts)
 	{
-		CommandShortcut & csc = shortcuts[i];
 		::GetMenuString(_mainMenuHandle, csc.getID(), menuName, 64, MF_BYCOMMAND);
 		csc.setName(purgeMenuItemString(menuName, true).c_str());
 	}
@@ -5129,7 +5125,7 @@ void Notepad_plus::launchClipboardHistoryPanel()
 
 		_pClipboardHistoryPanel->init(_pPublicInterface->getHinst(), _pPublicInterface->getHSelf(), &_pEditView);
 
-		tTbData	data = {0};
+		tTbData data = {0};
 		_pClipboardHistoryPanel->create(&data);
 
 		::SendMessage(_pPublicInterface->getHSelf(), NPPM_MODELESSDIALOG, MODELESSDIALOGREMOVE, (WPARAM)_pClipboardHistoryPanel->getHSelf());
@@ -5163,7 +5159,7 @@ void Notepad_plus::launchFileSwitcherPanel()
 		HIMAGELIST hImgLst = _docTabIconList.getHandle();
 		_pFileSwitcherPanel->init(_pPublicInterface->getHinst(), _pPublicInterface->getHSelf(), hImgLst);
 
-		tTbData	data = {0};
+		tTbData data = {0};
 		_pFileSwitcherPanel->create(&data);
 
 		::SendMessage(_pPublicInterface->getHSelf(), NPPM_MODELESSDIALOG, MODELESSDIALOGREMOVE, (WPARAM)_pFileSwitcherPanel->getHSelf());
@@ -5198,7 +5194,7 @@ void Notepad_plus::launchAnsiCharPanel()
 
 		_pAnsiCharPanel->init(_pPublicInterface->getHinst(), _pPublicInterface->getHSelf(), &_pEditView);
 
-		tTbData	data = {0};
+		tTbData data = {0};
 		_pAnsiCharPanel->create(&data);
 
 		::SendMessage(_pPublicInterface->getHSelf(), NPPM_MODELESSDIALOG, MODELESSDIALOGREMOVE, (WPARAM)_pAnsiCharPanel->getHSelf());
@@ -5235,7 +5231,7 @@ void Notepad_plus::launchProjectPanel(int cmdID, ProjectPanel ** pProjPanel, int
 		(*pProjPanel)->init(_pPublicInterface->getHinst(), _pPublicInterface->getHSelf());
 		(*pProjPanel)->setWorkSpaceFilePath(pNppParam->getworkSpaceFilePath(panelID));
 
-		tTbData	data;
+		tTbData data;
 		memset(&data, 0, sizeof(data));
 		(*pProjPanel)->create(&data);
 		data.pszName = TEXT("ST");
@@ -5278,7 +5274,7 @@ void Notepad_plus::launchDocMap()
 		_pDocMap = new DocumentMap();
 		_pDocMap->init(_pPublicInterface->getHinst(), _pPublicInterface->getHSelf(), &_pEditView);
 		
-		tTbData	data = {0};
+		tTbData data = {0};
 		_pDocMap->create(&data);
 
 		::SendMessage(_pPublicInterface->getHSelf(), NPPM_MODELESSDIALOG, MODELESSDIALOGREMOVE, (WPARAM)_pDocMap->getHSelf());
@@ -5317,7 +5313,7 @@ void Notepad_plus::launchFunctionList()
 		_pFuncList = new FunctionListPanel();
 		_pFuncList->init(_pPublicInterface->getHinst(), _pPublicInterface->getHSelf(), &_pEditView);
 		
-		tTbData	data = {0};
+		tTbData data = {0};
 		_pFuncList->create(&data);
 
 		::SendMessage(_pPublicInterface->getHSelf(), NPPM_MODELESSDIALOG, MODELESSDIALOGREMOVE, (WPARAM)_pFuncList->getHSelf());
@@ -5642,7 +5638,7 @@ DWORD WINAPI Notepad_plus::threadTextPlayer(void *params)
 				
 				::CloseHandle(hThread);
 				//writeLog(TEXT("c:\\tmp\\log.txt"), "trolling end");
-			}	
+			}
 		}
 
 		char charToShow[2] = {text2display[i], '\0'};
@@ -5688,7 +5684,6 @@ DWORD WINAPI Notepad_plus::threadTextPlayer(void *params)
 
 			::SendMessage(curScintilla, SCI_APPENDTEXT, 1, (LPARAM)charToShow);
 			::SendMessage(curScintilla, SCI_GOTOPOS, ::SendMessage(curScintilla, SCI_GETLENGTH, 0, 0), 0);
-
 		}
 	}
 
@@ -5943,11 +5938,10 @@ bool Notepad_plus::undoStreamComment()
 		bool blnStartCommentBefore[N_CMNT], blnEndCommentBefore[N_CMNT], blnStartCommentAfter[N_CMNT], blnEndCommentAfter[N_CMNT];
 		int posStartComment, posEndComment;
 		int selectionStartMove, selectionEndMove;
-		int flags;
 
 		//-- Directly use Scintilla-Functions 
 		//   rather than _findReplaceDlg.processFindNext()which does not return the find-position and is not quiet!
-		flags = SCFIND_WORDSTART;
+		int flags = SCFIND_WORDSTART;
 		_pEditView->execute(SCI_SETSEARCHFLAGS, flags);
 		//-- Find all start- and end-comments before and after the selectionStart position.
 		//-- When searching upwards the start-position for searching must be moved one after the current position
@@ -5969,13 +5963,15 @@ bool Notepad_plus::undoStreamComment()
 		//-- First, check if there is a stream-comment around the selectionStart position:
 		if ((blnStartCommentBefore[iSelStart] && blnEndCommentAfter[iSelStart]) 
 			&& (!blnEndCommentBefore[iSelStart] || (posStartCommentBefore[iSelStart] >= posEndCommentBefore[iSelStart])) 
-			&& (!blnStartCommentAfter[iSelStart] || (posEndCommentAfter[iSelStart] <= posStartCommentAfter[iSelStart]))) {
-				blnCommentFound = true;
-				posStartComment = posStartCommentBefore[iSelStart];
-				posEndComment   = posEndCommentAfter[iSelStart];
+			&& (!blnStartCommentAfter[iSelStart] || (posEndCommentAfter[iSelStart] <= posStartCommentAfter[iSelStart])))
+		{
+			blnCommentFound = true;
+			posStartComment = posStartCommentBefore[iSelStart];
+			posEndComment   = posEndCommentAfter[iSelStart];
 		}
 		//-- Second, check if there is a stream-comment around the selectionEnd position:
-		else {
+		else
+		{
 			//-- Find all start- and end-comments before and after the selectionEnd position.
 			//-- Direction DIR_UP ---
 			posStartCommentBefore[iSelEnd] = _pEditView->searchInTarget(start_comment.c_str(), start_comment_length, selectionEnd, 0);
@@ -5987,23 +5983,26 @@ bool Notepad_plus::undoStreamComment()
 			(posStartCommentAfter[iSelEnd] == -1 ? blnStartCommentAfter[iSelEnd] = false : blnStartCommentAfter[iSelEnd] = true);
 			posEndCommentAfter[iSelEnd] = _pEditView->searchInTarget(end_comment.c_str(), end_comment_length, selectionEnd, docLength);
 			(posEndCommentAfter[iSelEnd] == -1 ? blnEndCommentAfter[iSelEnd] = false : blnEndCommentAfter[iSelEnd] = true);
-			if ((blnStartCommentBefore[iSelEnd] && blnEndCommentAfter[iSelEnd]) 
+			if ((blnStartCommentBefore[iSelEnd] && blnEndCommentAfter[iSelEnd])
 				&& (!blnEndCommentBefore[iSelEnd] || (posStartCommentBefore[iSelEnd] >= posEndCommentBefore[iSelEnd])) 
-				&& (!blnStartCommentAfter[iSelEnd] || (posEndCommentAfter[iSelEnd] <= posStartCommentAfter[iSelEnd]))) {
-					blnCommentFound = true;
-					posStartComment = posStartCommentBefore[iSelEnd];
-					posEndComment   = posEndCommentAfter[iSelEnd];
+				&& (!blnStartCommentAfter[iSelEnd] || (posEndCommentAfter[iSelEnd] <= posStartCommentAfter[iSelEnd])))
+			{
+				blnCommentFound = true;
+				posStartComment = posStartCommentBefore[iSelEnd];
+				posEndComment   = posEndCommentAfter[iSelEnd];
 			}
 			//-- Third, check if there is a stream-comment within the selected area:
 			else if ( (blnStartCommentAfter[iSelStart] && (posStartCommentAfter[iSelStart] < selectionEnd))
-				&& (blnEndCommentBefore[iSelEnd] && (posEndCommentBefore[iSelEnd] >  selectionStart))) {
-					//-- If there are more than one stream-comment within the selection, take the first one after selectionStart!!
-					blnCommentFound = true;
-					posStartComment = posStartCommentAfter[iSelStart];
-					posEndComment   = posEndCommentAfter[iSelStart];
+				&& (blnEndCommentBefore[iSelEnd] && (posEndCommentBefore[iSelEnd] >  selectionStart)))
+			{
+				//-- If there are more than one stream-comment within the selection, take the first one after selectionStart!!
+				blnCommentFound = true;
+				posStartComment = posStartCommentAfter[iSelStart];
+				posEndComment   = posEndCommentAfter[iSelStart];
 			}
 			//-- Finally, if there is no stream-comment, return
-			else {
+			else
+			{
 				return retVal;
 			}
 		}
@@ -6026,7 +6025,8 @@ bool Notepad_plus::undoStreamComment()
 
 		//-- Get character after start-comment to decide, if there is a white character after the start-comment, which will be removed too!
 		_pEditView->getGenericText(charbuf, charbufLen, posStartComment+startCommentLength, posStartComment+startCommentLength+1);
-		if (generic_strncmp(charbuf, white_space.c_str(), white_space.length()) == 0) {
+		if (generic_strncmp(charbuf, white_space.c_str(), white_space.length()) == 0)
+		{
 			startCommentLength +=1;
 		}
 		//-- Delete starting stream-comment string ---------
@@ -6037,21 +6037,26 @@ bool Notepad_plus::undoStreamComment()
 		//-- Reset selection before calling the routine
 		//-- Determine selection movement
 		//   selectionStart
-		if (selectionStart > posStartComment) {
+		if (selectionStart > posStartComment)
+		{
 			if (selectionStart >= posStartComment+startCommentLength)
 				selectionStartMove = -(int)startCommentLength;
 			else
 				selectionStartMove = -(int)(selectionStart - posStartComment);
 		}
 		else
+		{
 			selectionStartMove = 0;
+		}
+
 		//   selectionEnd
 		if (selectionEnd >= posEndComment+endCommentLength)
 			selectionEndMove = -(int)(startCommentLength+endCommentLength);
 		else if (selectionEnd <= posEndComment)
-				selectionEndMove = -(int)startCommentLength;
+			selectionEndMove = -(int)startCommentLength;
 		else
-				selectionEndMove = -(int)(startCommentLength + (selectionEnd - posEndComment));
+			selectionEndMove = -(int)(startCommentLength + (selectionEnd - posEndComment));
+
 		//-- Reset selection of text without deleted stream-comment-string
 		if (move_caret)
 		{
