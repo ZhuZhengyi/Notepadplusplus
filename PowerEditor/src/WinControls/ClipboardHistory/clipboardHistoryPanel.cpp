@@ -166,7 +166,9 @@ int ClipboardHistoryPanel::getClipboardDataIndex(ClipboardData cbd)
 void ClipboardHistoryPanel::addToClipboadHistory(ClipboardData cbd)
 {
 	int i = getClipboardDataIndex(cbd);
-	if (i == 0) return;
+	if (i == 0)
+		return;
+
 	if (i != -1)
 	{
 		_clipboardDataVector.erase(_clipboardDataVector.begin() + i);
@@ -229,7 +231,9 @@ BOOL CALLBACK ClipboardHistoryPanel::run_dlgProc(UINT message, WPARAM wParam, LP
 								codepage = cp==SC_CP_UTF8?SC_CP_UTF8:0;
 							}
 							else
+							{
 								codepage = SC_CP_UTF8;
+							}
 
 							ByteArray ba(_clipboardDataVector[i]);
 

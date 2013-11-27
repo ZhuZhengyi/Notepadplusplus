@@ -176,13 +176,14 @@ tTbData* DockingCont::findToolbarByWnd(HWND hClient)
 	tTbData* pTbData = NULL;
 
 	// find entry by handle
-	for (size_t iTb = 0, len = _vTbData.size(); iTb < len; ++iTb)
+	for (tTbData* tbData : _vTbData)
 	{
-		if (hClient == _vTbData[iTb]->hClient)
+		if (hClient == tbData->hClient)
 		{
-			pTbData = _vTbData[iTb];
+			pTbData = tbData;
 		}
 	}
+
 	return pTbData;
 }
 
@@ -191,13 +192,14 @@ tTbData* DockingCont::findToolbarByName(TCHAR* pszName)
 	tTbData* pTbData = NULL;
 
 	// find entry by handle
-	for (size_t iTb = 0, len = _vTbData.size(); iTb < len; ++iTb)
+	for (tTbData* tbData : _vTbData)
 	{
-		if (lstrcmp(pszName, _vTbData[iTb]->pszName) == 0)
+		if (lstrcmp(pszName, tbData->pszName) == 0)
 		{
-			pTbData = _vTbData[iTb];
+			pTbData = tbData;
 		}
 	}
+
 	return pTbData;
 }
 

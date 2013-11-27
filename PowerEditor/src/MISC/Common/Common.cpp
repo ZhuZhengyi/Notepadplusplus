@@ -244,6 +244,7 @@ bool isInList(const TCHAR *token, const TCHAR *list)
 			++j;
 		}
 	}
+
 	return false;
 }
 
@@ -271,6 +272,7 @@ generic_string purgeMenuItemString(const TCHAR * menuItemStr, bool keepAmpersand
 			cleanedName[j++] = menuItemStr[k];
 		}
 	}
+
 	cleanedName[j] = 0;
 	return cleanedName;
 };
@@ -509,7 +511,9 @@ generic_string uintToString(unsigned int val)
 
 	vt.push_back('0' + (TCHAR)(val % 10));
 	val /= 10;
-	while (val != 0) {
+
+	while (val != 0)
+	{
 		vt.push_back('0' + (TCHAR)(val % 10));
 		val /= 10;
 	}

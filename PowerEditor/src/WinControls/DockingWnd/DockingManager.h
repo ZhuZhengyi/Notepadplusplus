@@ -44,7 +44,7 @@ class DockingSplitter;
 using namespace std;
 
 
-#define	CONT_MAP_MAX    50
+#define CONT_MAP_MAX    50
 
 
 class DockingManager : public Window
@@ -104,8 +104,10 @@ public :
 
 	void setTabStyle(BOOL orangeLine)
 	{
-		for (size_t i = 0; i < _vContainer.size(); ++i)
-			_vContainer[i]->setTabStyle(orangeLine);
+		for (DockingCont* dc : _vContainer)
+		{
+			dc->setTabStyle(orangeLine);
+		}
 	};
 
 	int getDockedContSize(int iCont);
@@ -121,8 +123,8 @@ private :
 	void toggleTb(DockingCont* pContSrc, DockingCont* pContTgt, tTbData TbData);
 
 	// test if container exists
-	BOOL ContExists(size_t iCont);
-	int	 FindEmptyContainer();
+	bool ContExists(size_t iCont);
+	int FindEmptyContainer();
 	LRESULT SendNotify(HWND hWnd, UINT message);
 
 private:

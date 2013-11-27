@@ -29,12 +29,14 @@
 #include "precompiledHeaders.h"
 #include "ControlsTab.h"
 
-void ControlsTab::createTabs(WindowVector & winVector)
+void ControlsTab::createTabs(WindowVector& winVector)
 {
 	_pWinVector = &winVector;
 
-	for (size_t i = 0, len = winVector.size(); i < len; ++i)
-		TabBar::insertAtEnd(winVector[i]._name.c_str());
+	for (DlgInfo win : winVector)
+	{
+		TabBar::insertAtEnd(win._name.c_str());
+	}
 
 	TabBar::activateAt(0);
 	activateWindowAt(0);

@@ -46,9 +46,9 @@ ContextMenu::~ContextMenu()
 {
 	if (isCreated())
 	{
-		for (size_t i = 0, len = _subMenus.size(); i < len; ++i)
+		for (HMENU subMenu : _subMenus)
 		{
-			::DestroyMenu(_subMenus[i]);
+			::DestroyMenu(subMenu);
 		}
 
 		::DestroyMenu(_hMenu);

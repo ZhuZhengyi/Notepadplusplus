@@ -43,7 +43,7 @@
 class DockingSplitter : public Window
 {
 public :
-	DockingSplitter() : _isLeftButtonDown(FALSE), _hMessage(NULL) {};
+	DockingSplitter() : _isLeftButtonDown(false), _hMessage(NULL) {};
 	~DockingSplitter(){};
 
 	virtual void destroy() {};
@@ -59,12 +59,12 @@ protected:
 private:
 	HWND        _hMessage;
 
-	BOOL        _isLeftButtonDown;
+	bool        _isLeftButtonDown;
 	POINT       _ptOldPos;
 	UINT        _flags;
 
-	static BOOL _isVertReg;
-	static BOOL _isHoriReg;
+	static bool _isVertReg;
+	static bool _isHoriReg;
 };
 
 #endif // DOCKINGSPLITTER_H

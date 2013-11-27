@@ -31,8 +31,8 @@
 #include "Notepad_plus_msgs.h"
 #include "Parameters.h"
 
-BOOL DockingSplitter::_isVertReg = FALSE;
-BOOL DockingSplitter::_isHoriReg = FALSE;
+bool DockingSplitter::_isVertReg = false;
+bool DockingSplitter::_isHoriReg = false;
 
 static HWND  hWndMouse = NULL;
 static HHOOK hookMouse = NULL;
@@ -84,8 +84,8 @@ void DockingSplitter::init(HINSTANCE hInst, HWND hWnd, HWND hMessage, UINT flags
 		wc.lpszClassName = TEXT("wedockspliter");
 	}
 
-	if (((_isHoriReg == FALSE) && (flags & DMS_HORIZONTAL)) ||
-		((_isVertReg == FALSE) && (flags & DMS_VERTICAL)))
+	if (((_isHoriReg == false) && (flags & DMS_HORIZONTAL)) ||
+		((_isVertReg == false) && (flags & DMS_VERTICAL)))
 	{
 		wc.style = CS_HREDRAW | CS_VREDRAW;
 		wc.lpfnWndProc = staticWinProc;
@@ -102,11 +102,11 @@ void DockingSplitter::init(HINSTANCE hInst, HWND hWnd, HWND hMessage, UINT flags
 		}
 		else if (flags & DMS_HORIZONTAL)
 		{
-			_isHoriReg = TRUE;
+			_isHoriReg = true;
 		}
 		else
 		{
-			_isVertReg = TRUE;
+			_isVertReg = true;
 		}
 	}
 
@@ -165,7 +165,7 @@ LRESULT DockingSplitter::runProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 			{
 				::SetCapture(_hSelf);
 				::GetCursorPos(&_ptOldPos);
-				_isLeftButtonDown = TRUE;
+				_isLeftButtonDown = true;
 			}
 			break;
 		}
@@ -180,14 +180,14 @@ LRESULT DockingSplitter::runProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 				::SetCapture(NULL);
 				hookMouse = NULL;
 			}
-			_isLeftButtonDown = FALSE;
+			_isLeftButtonDown = false;
 			break;
 		}
 
 		case WM_MOUSEMOVE:
 		case WM_NCMOUSEMOVE:
 		{
-			if (_isLeftButtonDown == TRUE)
+			if (_isLeftButtonDown)
 			{
 				POINT pt;
 				::GetCursorPos(&pt);

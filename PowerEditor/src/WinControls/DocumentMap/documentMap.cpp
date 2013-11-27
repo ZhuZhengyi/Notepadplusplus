@@ -479,6 +479,7 @@ BOOL CALLBACK ViewZoneDlg::canvasStaticProc(HWND hwnd, UINT message, WPARAM wPar
 	ViewZoneDlg *pViewZoneDlg = reinterpret_cast<ViewZoneDlg *>(::GetWindowLongPtr(hwnd, GWL_USERDATA));
 	if (!pViewZoneDlg)
 		return FALSE;
+
 	return pViewZoneDlg->canvas_runProc(hwnd, message, wParam, lParam);
 }
 
@@ -493,6 +494,7 @@ BOOL CALLBACK ViewZoneDlg::canvas_runProc(HWND hwnd, UINT message, WPARAM wParam
 		}
 
 		case WM_KEYDOWN:
+		{
 			if (wParam == VK_UP)
 			{
 				::SendMessage(_hParent, DOCUMENTMAP_SCROLL, (WPARAM)moveUp, 0);
@@ -510,6 +512,7 @@ BOOL CALLBACK ViewZoneDlg::canvas_runProc(HWND hwnd, UINT message, WPARAM wParam
 				::SendMessage(_hParent, DOCUMENTMAP_SCROLL, (WPARAM)moveDown, 1);
 			}
 			break;
+		}
 
 		case WM_SIZE:
 		{

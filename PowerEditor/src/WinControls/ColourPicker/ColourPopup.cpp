@@ -30,14 +30,14 @@
 #include "ColourPopup.h"
 
 DWORD colourItems[] = {
-	RGB(  0,   0,   0),	RGB( 64,   0,   0),	RGB(128,   0,   0),	RGB(128,  64,  64),	RGB(255,   0,   0),	RGB(255, 128, 128),
-	RGB(255, 255, 128),	RGB(255, 255,   0),	RGB(255, 128,  64),	RGB(255, 128,   0),	RGB(128,  64,   0),	RGB(128, 128,   0),
-	RGB(128, 128,  64),	RGB(  0,  64,   0),	RGB(  0, 128,   0),	RGB(  0, 255,   0),	RGB(128, 255,   0),	RGB(128, 255, 128),
-	RGB(  0, 255, 128),	RGB(  0, 255,  64),	RGB(  0, 128, 128),	RGB(  0, 128,  64),	RGB(  0,  64,  64),	RGB(128, 128, 128),
-	RGB( 64, 128, 128),	RGB(  0,   0, 128),	RGB(  0,   0, 255),	RGB(  0,  64, 128),	RGB(  0, 255, 255), RGB(128, 255, 255),
-	RGB(  0, 128, 255),	RGB(  0, 128, 192),	RGB(128, 128, 255),	RGB(  0,   0, 160),	RGB(  0,   0,  64),	RGB(192, 192, 192),
-	RGB( 64,   0,  64),	RGB( 64,   0,  64),	RGB(128,   0, 128),	RGB(128,   0,  64),	RGB(128, 128, 192),	RGB(255, 128, 192),
-	RGB(255, 128, 255),	RGB(255,   0, 255), RGB(255,   0, 128),	RGB(128,   0, 255), RGB( 64,   0, 128),	RGB(255, 255, 255),
+	RGB(  0,   0,   0), RGB( 64,   0,   0), RGB(128,   0,   0), RGB(128,  64,  64), RGB(255,   0,   0), RGB(255, 128, 128),
+	RGB(255, 255, 128), RGB(255, 255,   0), RGB(255, 128,  64), RGB(255, 128,   0), RGB(128,  64,   0), RGB(128, 128,   0),
+	RGB(128, 128,  64), RGB(  0,  64,   0), RGB(  0, 128,   0), RGB(  0, 255,   0), RGB(128, 255,   0), RGB(128, 255, 128),
+	RGB(  0, 255, 128), RGB(  0, 255,  64), RGB(  0, 128, 128), RGB(  0, 128,  64), RGB(  0,  64,  64), RGB(128, 128, 128),
+	RGB( 64, 128, 128), RGB(  0,   0, 128), RGB(  0,   0, 255), RGB(  0,  64, 128), RGB(  0, 255, 255), RGB(128, 255, 255),
+	RGB(  0, 128, 255), RGB(  0, 128, 192), RGB(128, 128, 255), RGB(  0,   0, 160), RGB(  0,   0,  64), RGB(192, 192, 192),
+	RGB( 64,   0,  64), RGB( 64,   0,  64), RGB(128,   0, 128), RGB(128,   0,  64), RGB(128, 128, 192), RGB(255, 128, 192),
+	RGB(255, 128, 255), RGB(255,   0, 255), RGB(255,   0, 128), RGB(128,   0, 255), RGB( 64,   0, 128), RGB(255, 255, 255),
 };
 
 void ColourPopup::create(int dialogID) 
@@ -106,12 +106,11 @@ BOOL CALLBACK ColourPopup::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPara
 
 		case WM_DRAWITEM:
 		{
-			HDC hdc;
-			COLORREF	cr;
-			HBRUSH		hbrush;
+			COLORREF cr;
+			HBRUSH hbrush;
 	
 			DRAWITEMSTRUCT *pdis = (DRAWITEMSTRUCT *)lParam;
-			hdc = pdis->hDC;
+			HDC hdc = pdis->hDC;
 			RECT rc = pdis->rcItem;
 	
 			// Transparent.
