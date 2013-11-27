@@ -37,8 +37,8 @@
 #include "dockingResource.h"
 #endif //DOCKING_RESOURCE_H
 
-#define	DMS_VERTICAL   0x00000001
-#define	DMS_HORIZONTAL 0x00000002
+#define DMS_VERTICAL   0x00000001
+#define DMS_HORIZONTAL 0x00000002
 
 class DockingSplitter : public Window
 {
