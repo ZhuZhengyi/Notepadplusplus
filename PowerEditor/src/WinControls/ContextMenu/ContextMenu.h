@@ -49,22 +49,29 @@ public:
 	~ContextMenu();
 
 	void create(HWND hParent, const vector<MenuItemUnit> & menuItemArray);
-	bool isCreated() const {return _hMenu != NULL;};
+	bool isCreated() const
+	{
+		return _hMenu != NULL;
+	};
 
-	void display(const POINT & p) const {
+	void display(const POINT & p) const
+	{
 		::TrackPopupMenu(_hMenu, TPM_LEFTALIGN, p.x, p.y, 0, _hParent, NULL);
 	};
 
-	void enableItem(int cmdID, bool doEnable) const {
+	void enableItem(int cmdID, bool doEnable) const
+	{
 		int flag = doEnable?MF_ENABLED | MF_BYCOMMAND:MF_DISABLED | MF_GRAYED | MF_BYCOMMAND;
 		::EnableMenuItem(_hMenu, cmdID, flag);
 	};
 
-	void checkItem(int cmdID, bool doCheck) const {
+	void checkItem(int cmdID, bool doCheck) const
+	{
 		::CheckMenuItem(_hMenu, cmdID, MF_BYCOMMAND | (doCheck?MF_CHECKED:MF_UNCHECKED));
 	};
 
-	HMENU getMenuHandle() {
+	HMENU getMenuHandle()
+	{
 		return _hMenu;
 	};
 

@@ -469,10 +469,9 @@ int Notepad_plus::setFileOpenSaveDlgFilters(FileDialog & fDlg, int langType)
 		LangType lid = l->getLangID();
 
 		bool inExcludedList = false;
-		
-		for (size_t j = 0, len = nppGUI._excludedLangList.size() ; j < len ; ++j)
+		for (LangMenuItem& item : nppGUI._excludedLangList)
 		{
-			if (lid == nppGUI._excludedLangList[j]._langType)
+			if (lid == item._langType)
 			{
 				inExcludedList = true;
 				break;
@@ -536,8 +535,6 @@ bool Notepad_plus::fileClose(BufferID id, int curView)
 		bufferID = _pEditView->getCurrentBufferID();
 	Buffer * buf = MainFileManager->getBufferByID(bufferID);
 
-	int res;
-
 	//process the fileNamePath into LRF
 	const TCHAR *fileNamePath = buf->getFullPathName();
 
@@ -547,8 +544,7 @@ bool Notepad_plus::fileClose(BufferID id, int curView)
 	}
 	else if (buf->isDirty())
 	{
-		
-		res = doSaveOrNot(fileNamePath);
+		int res = doSaveOrNot(fileNamePath);
 		if (res == IDYES)
 		{
 			if (!fileSave(id)) // the cancel button of savedialog is pressed, aborts closing
@@ -556,7 +552,7 @@ bool Notepad_plus::fileClose(BufferID id, int curView)
 		}
 		else if (res == IDCANCEL)
 		{
-			return false;	//cancel aborts closing
+			return false; //cancel aborts closing
 		}
 		else
 		{
@@ -657,13 +653,10 @@ bool Notepad_plus::fileCloseAll()
 bool Notepad_plus::fileCloseAllGiven(const std::vector<int> &krvecBufferIndexes)
 {
 	// First check if we need to save any file.
-
-	std::vector<int>::const_iterator itIndexesEnd = krvecBufferIndexes.end();
-
-	for(std::vector<int>::const_iterator itIndex = krvecBufferIndexes.begin(); itIndex != itIndexesEnd; ++itIndex)
+	for (const int& index : krvecBufferIndexes)
 	{
-		BufferID id = _pDocTab->getBufferByIndex(*itIndex);
-		Buffer * buf = MainFileManager->getBufferByID(id);
+		BufferID id = _pDocTab->getBufferByIndex(index);
+		Buffer* buf = MainFileManager->getBufferByID(id);
 		if (buf->isUntitled() && buf->docLength() == 0)
 		{
 			// Do nothing.
@@ -686,8 +679,8 @@ bool Notepad_plus::fileCloseAllGiven(const std::vector<int> &krvecBufferIndexes)
 			if (res == IDYES) 
 			{
 				if (!fileSave(id))
-					return false;	// Abort entire procedure.
-			} 
+					return false; // Abort entire procedure.
+			}
 			else if (res == IDCANCEL)
 			{
 					return false;
@@ -696,9 +689,9 @@ bool Notepad_plus::fileCloseAllGiven(const std::vector<int> &krvecBufferIndexes)
 	}
 
 	// Now we close.
-	for(std::vector<int>::const_iterator itIndex = krvecBufferIndexes.begin(); itIndex != itIndexesEnd; ++itIndex)
+	for (const int& index : krvecBufferIndexes)
 	{
-		doClose(_pDocTab->getBufferByIndex(*itIndex), currentView());
+		doClose(_pDocTab->getBufferByIndex(index), currentView());
 	}
 
 	return true;
@@ -1057,10 +1050,9 @@ void Notepad_plus::fileOpen()
 	BufferID lastOpened = BUFFER_INVALID;
 	if (stringVector *pfns = fDlg.doOpenMultiFilesDlg())
 	{
-		size_t sz = pfns->size();
-		for (size_t i = 0 ; i < sz ; ++i)
+		for (generic_string& pfn : *pfns)
 		{
-			BufferID test = doOpen(pfns->at(i).c_str(), fDlg.isReadOnly());
+			BufferID test = doOpen(pfn.c_str(), fDlg.isReadOnly());
 			if (test != BUFFER_INVALID)
 				lastOpened = test;
 		}

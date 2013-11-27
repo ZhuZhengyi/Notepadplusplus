@@ -39,13 +39,13 @@
 class trayIconControler
 {
 public:
-  trayIconControler(HWND hwnd, UINT uID, UINT uCBMsg, HICON hicon, TCHAR *tip);
-  int doTrayIcon(DWORD op);
-  bool isInTray() const {return _isIconShowed;};
+	trayIconControler(HWND hwnd, UINT uID, UINT uCBMsg, HICON hicon, TCHAR *tip);
+	int doTrayIcon(DWORD op);
+	bool isInTray() const {return _isIconShowed;};
 
 private:
-  NOTIFYICONDATA    _nid;
-  bool              _isIconShowed;
+	NOTIFYICONDATA    _nid;
+	bool              _isIconShowed;
 };
 
 #endif //TRAY_ICON_CONTROLER_H

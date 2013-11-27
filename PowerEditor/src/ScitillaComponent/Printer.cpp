@@ -78,11 +78,7 @@ void Printer::init(HINSTANCE hInst, HWND hwnd, ScintillaEditView *pSEView, bool 
 
 
 size_t Printer::doPrint(bool justDoIt)
-{/*
-	if (!::PrintDlg(&_pdlg))
-			return 0;
-*/
-
+{
 	const NppGUI & nppGUI = (NppParameters::getInstance())->getNppGUI();
 
 	POINT ptPage;
@@ -149,8 +145,6 @@ size_t Printer::doPrint(bool justDoIt)
 	const TCHAR *fontFace = (nppGUI._printSettings._headerFontName != TEXT(""))?nppGUI._printSettings._headerFontName.c_str():TEXT("Arial");
 
 	int headerLineHeight = ::MulDiv(fontSize, ptDpi.y, 72);
-	//TCHAR toto[10];
-	//::MessageBox(NULL, itoa(nppGUI._printSettings._headerFontStyle, toto, 10), TEXT("header"), MB_OK);
 
 	HFONT fontHeader = ::CreateFont(headerLineHeight,
 	                                0, 0, 0,
@@ -169,7 +163,6 @@ size_t Printer::doPrint(bool justDoIt)
 	fontWeight = nppGUI._printSettings._footerFontStyle & FONTSTYLE_BOLD?FW_BOLD:FW_NORMAL;
 	isFontItalic = nppGUI._printSettings._footerFontStyle & FONTSTYLE_ITALIC?TRUE:FALSE;
 	fontFace = (nppGUI._printSettings._footerFontName != TEXT(""))?nppGUI._printSettings._footerFontName.c_str():TEXT("Arial");
-	//::MessageBox(NULL, itoa(nppGUI._printSettings._footerFontStyle, , 10), TEXT("footer"), MB_OK);
 
 	int footerLineHeight = ::MulDiv(fontSize, ptDpi.y, 72);
 	HFONT fontFooter = ::CreateFont(footerLineHeight,
@@ -335,7 +328,6 @@ size_t Printer::doPrint(bool justDoIt)
 		}
 	}
 
-	
 	bool isShown = _pSEView->hasMarginShowed(ScintillaEditView::_SC_MARGE_LINENUMBER);
 	if (!nppGUI._printSettings._printLineNumber)
 		_pSEView->showMargin(ScintillaEditView::_SC_MARGE_LINENUMBER, false);
@@ -348,7 +340,7 @@ size_t Printer::doPrint(bool justDoIt)
 	{
 		printPage = (!(_pdlg.Flags & PD_PAGENUMS) ||
 		             (pageNum >= _pdlg.nFromPage) && (pageNum <= _pdlg.nToPage));
-					 
+
 		if (!justDoIt)
 			printPage = false;
 
@@ -371,9 +363,8 @@ size_t Printer::doPrint(bool justDoIt)
 							frPrint.rc.right, frPrint.rc.top - headerLineHeight / 2};
 				rcw.bottom = rcw.top + headerLineHeight;
 
-
 				SIZE size;
-				
+
 				// Left part
 				if (headerL[0] != '\0')
 				{

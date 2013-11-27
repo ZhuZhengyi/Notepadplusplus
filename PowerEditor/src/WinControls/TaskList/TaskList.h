@@ -57,7 +57,10 @@ public:
 		return ListView_GetImageList(_hSelf, LVSIL_SMALL);
 	};
 
-	HFONT GetFontSelected() {return _hFontSelected;}
+	HFONT GetFontSelected()
+	{
+		return _hFontSelected;
+	}
 
 protected:
 

@@ -110,19 +110,26 @@ protected :
 
 	void initTabInformation();
 
-	void CalcRectToScreen(HWND hWnd, RECT *rc) {
+	void CalcRectToScreen(HWND hWnd, RECT *rc)
+	{
 		ClientRectToScreenRect(hWnd, rc);
 		ShrinkRcToSize(rc);
 	};
-	void CalcRectToClient(HWND hWnd, RECT *rc) {
+
+	void CalcRectToClient(HWND hWnd, RECT *rc)
+	{
 		ScreenRectToClientRect(hWnd, rc);
 		ShrinkRcToSize(rc);
 	};
-	void ShrinkRcToSize(RECT *rc) {
+
+	void ShrinkRcToSize(RECT *rc)
+	{
 		rc->right	-= rc->left;
 		rc->bottom	-= rc->top;
 	};
-	void DoCalcGripperRect(RECT* rc, RECT rcCorr, POINT pt) {
+
+	void DoCalcGripperRect(RECT* rc, RECT rcCorr, POINT pt)
+	{
 		if ((rc->left + rc->right) < pt.x)
 			rc->left = pt.x - 20;
 		if ((rc->top + rc->bottom) < pt.y)
@@ -154,7 +161,7 @@ private:
 	HWND _hTab;
 	HWND _hTabSource;
 	BOOL _startMovingFromTab;
-	int	_iItem;
+	int _iItem;
 	RECT _rcItem;
 	TCITEM _tcItem;
 

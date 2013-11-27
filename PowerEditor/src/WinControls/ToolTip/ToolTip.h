@@ -36,7 +36,8 @@ class ToolTip : public Window
 public :
 	ToolTip() : _bTrackMouse(FALSE) {};
 
-	void destroy(){
+	void destroy()
+	{
 		::DestroyWindow(_hSelf);
 		_hSelf = NULL;
 	};

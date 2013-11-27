@@ -78,7 +78,9 @@ public:
 			::GlobalFree(hMyDlgTemplate);
 		}
 		else
+		{
 			::DialogBoxParam(_hInst, MAKEINTRESOURCE(IDD_SHORTCUTMAPPER_DLG), _hParent, (DLGPROC)dlgProc, (LPARAM)this);
+		}
 	};
 
 	void getClientRect(RECT & rc) const

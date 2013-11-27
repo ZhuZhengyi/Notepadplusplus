@@ -37,58 +37,69 @@
 #include "VerticalFileSwitcher_rc.h"
 #include "VerticalFileSwitcherListView.h"
 
-#define FS_PROJECTPANELTITLE		TEXT("Doc Switcher")
-#define FS_ROOTNODE					"DocSwitcher"
-#define FS_CLMNNAME					"ColumnName"
-#define FS_CLMNEXT					"ColumnExt"
+#define FS_PROJECTPANELTITLE  TEXT("Doc Switcher")
+#define FS_ROOTNODE           "DocSwitcher"
+#define FS_CLMNNAME           "ColumnName"
+#define FS_CLMNEXT            "ColumnExt"
 
-class VerticalFileSwitcher : public DockingDlgInterface {
+class VerticalFileSwitcher : public DockingDlgInterface
+{
 public:
 	VerticalFileSwitcher(): DockingDlgInterface(IDD_FILESWITCHER_PANEL) {};
 
-	void init(HINSTANCE hInst, HWND hPere, HIMAGELIST hImaLst) {
+	void init(HINSTANCE hInst, HWND hPere, HIMAGELIST hImaLst)
+	{
 		DockingDlgInterface::init(hInst, hPere);
 		_hImaLst = hImaLst;
 	};
 
-    virtual void display(bool toShow = true) const {
-        DockingDlgInterface::display(toShow);
-    };
+	virtual void display(bool toShow = true) const
+	{
+		DockingDlgInterface::display(toShow);
+	};
 
-    void setParent(HWND parent2set){
-        _hParent = parent2set;
-    };
-	
+	void setParent(HWND parent2set)
+	{
+		_hParent = parent2set;
+	};
+
 	//Activate document in scintilla by using the internal index
 	void activateDoc(TaskLstFnStatus *tlfs) const;
 
-	int newItem(int bufferID, int iView){
+	int newItem(int bufferID, int iView)
+	{
 		return _fileListView.newItem(bufferID, iView);
 	};
 
-	int closeItem(int bufferID, int iView){
+	int closeItem(int bufferID, int iView)
+	{
 		return _fileListView.closeItem(bufferID, iView);
 	};
 
-	void activateItem(int bufferID, int iView) {
+	void activateItem(int bufferID, int iView)
+	{
 		_fileListView.activateItem(bufferID, iView);
 	};
 
-	void setItemIconStatus(int bufferID) {
+	void setItemIconStatus(int bufferID)
+	{
 		_fileListView.setItemIconStatus(bufferID) ;
 	};
 
-	generic_string getFullFilePath(size_t i) const {
+	generic_string getFullFilePath(size_t i) const
+	{
 		return _fileListView.getFullFilePath(i);
 	};
 
 	int setHeaderOrder(LPNMLISTVIEW pnm_list_view);
 
-	int nbSelectedFiles() const {
+	int nbSelectedFiles() const
+	{
 		return _fileListView.nbSelectedFiles();
 	};
 
-	std::vector<SwitcherFileInfo> getSelectedFiles(bool reverse = false) const {
+	std::vector<SwitcherFileInfo> getSelectedFiles(bool reverse = false) const
+	{
 		return _fileListView.getSelectedFiles(reverse);
 	};
 

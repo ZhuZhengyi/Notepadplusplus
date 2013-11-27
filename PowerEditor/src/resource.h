@@ -50,26 +50,26 @@
 #define IDI_CHAMELEON           101
 #define IDR_RT_MANIFEST         103
 
-#define IDI_NEW_OFF_ICON      201
-#define IDI_OPEN_OFF_ICON     202
-#define IDI_CLOSE_OFF_ICON    203
-#define IDI_CLOSEALL_OFF_ICON 204
-#define IDI_SAVE_OFF_ICON     205
-#define IDI_SAVEALL_OFF_ICON  206
-#define IDI_CUT_OFF_ICON      207
-#define IDI_COPY_OFF_ICON     208
-#define IDI_PASTE_OFF_ICON    209
-#define IDI_UNDO_OFF_ICON     210
-#define IDI_REDO_OFF_ICON     211
-#define IDI_FIND_OFF_ICON     212
-#define IDI_REPLACE_OFF_ICON  213
-#define IDI_ZOOMIN_OFF_ICON   214
-#define IDI_ZOOMOUT_OFF_ICON  215
-#define IDI_VIEW_UD_DLG_OFF_ICON 216
-#define IDI_PRINT_OFF_ICON    217
+#define IDI_NEW_OFF_ICON           201
+#define IDI_OPEN_OFF_ICON          202
+#define IDI_CLOSE_OFF_ICON         203
+#define IDI_CLOSEALL_OFF_ICON      204
+#define IDI_SAVE_OFF_ICON          205
+#define IDI_SAVEALL_OFF_ICON       206
+#define IDI_CUT_OFF_ICON           207
+#define IDI_COPY_OFF_ICON          208
+#define IDI_PASTE_OFF_ICON         209
+#define IDI_UNDO_OFF_ICON          210
+#define IDI_REDO_OFF_ICON          211
+#define IDI_FIND_OFF_ICON          212
+#define IDI_REPLACE_OFF_ICON       213
+#define IDI_ZOOMIN_OFF_ICON        214
+#define IDI_ZOOMOUT_OFF_ICON       215
+#define IDI_VIEW_UD_DLG_OFF_ICON   216
+#define IDI_PRINT_OFF_ICON         217
 #define IDI_VIEW_ALL_CHAR_ON_ICON  218
-#define IDI_VIEW_INDENT_ON_ICON 219
-#define IDI_VIEW_WRAP_ON_ICON 220
+#define IDI_VIEW_INDENT_ON_ICON    219
+#define IDI_VIEW_WRAP_ON_ICON      220
 
 
 #define IDI_STARTRECORD_OFF_ICON     221
@@ -86,43 +86,43 @@
 #define IDI_SAVERECORD_DISABLE_ICON  232
 
 // multi run macro
-#define IDI_MMPLAY_DIS_ICON                 233
-#define IDI_MMPLAY_OFF_ICON                 234
-#define IDI_MMPLAY_ON_ICON                  235
+#define IDI_MMPLAY_DIS_ICON         233
+#define IDI_MMPLAY_OFF_ICON         234
+#define IDI_MMPLAY_ON_ICON          235
 
-#define IDI_NEW_ON_ICON      301
-#define IDI_OPEN_ON_ICON     302
-#define IDI_CLOSE_ON_ICON    303
-#define IDI_CLOSEALL_ON_ICON 304
-#define IDI_SAVE_ON_ICON     305
-#define IDI_SAVEALL_ON_ICON  306
-#define IDI_CUT_ON_ICON      307
-#define IDI_COPY_ON_ICON     308
-#define IDI_PASTE_ON_ICON    309
-#define IDI_UNDO_ON_ICON     310
-#define IDI_REDO_ON_ICON     311
-#define IDI_FIND_ON_ICON     312
-#define IDI_REPLACE_ON_ICON  313
-#define IDI_ZOOMIN_ON_ICON   314
-#define IDI_ZOOMOUT_ON_ICON  315
-#define IDI_VIEW_UD_DLG_ON_ICON 316
-#define IDI_PRINT_ON_ICON    317
+#define IDI_NEW_ON_ICON             301
+#define IDI_OPEN_ON_ICON            302
+#define IDI_CLOSE_ON_ICON           303
+#define IDI_CLOSEALL_ON_ICON        304
+#define IDI_SAVE_ON_ICON            305
+#define IDI_SAVEALL_ON_ICON         306
+#define IDI_CUT_ON_ICON             307
+#define IDI_COPY_ON_ICON            308
+#define IDI_PASTE_ON_ICON           309
+#define IDI_UNDO_ON_ICON            310
+#define IDI_REDO_ON_ICON            311
+#define IDI_FIND_ON_ICON            312
+#define IDI_REPLACE_ON_ICON         313
+#define IDI_ZOOMIN_ON_ICON          314
+#define IDI_ZOOMOUT_ON_ICON         315
+#define IDI_VIEW_UD_DLG_ON_ICON     316
+#define IDI_PRINT_ON_ICON           317
 #define IDI_VIEW_ALL_CHAR_OFF_ICON  318
-#define IDI_VIEW_INDENT_OFF_ICON 319
-#define IDI_VIEW_WRAP_OFF_ICON 320
+#define IDI_VIEW_INDENT_OFF_ICON    319
+#define IDI_VIEW_WRAP_OFF_ICON      320
 
 //#define   IDI_NEW_DISABLE_ICON  401
 //#define   IDI_OPEN_ON_ICON      402
-#define IDI_SAVE_DISABLE_ICON   403
+#define IDI_SAVE_DISABLE_ICON    403
 #define IDI_SAVEALL_DISABLE_ICON 404
-//#define   IDI_CLOSE_ON_ICON       405
-//#define   IDI_CLOSEALL_ON_ICON    406
-#define IDI_CUT_DISABLE_ICON      407
-#define IDI_COPY_DISABLE_ICON     408
+//#define   IDI_CLOSE_ON_ICON      405
+//#define   IDI_CLOSEALL_ON_ICON   406
+#define IDI_CUT_DISABLE_ICON     407
+#define IDI_COPY_DISABLE_ICON    408
 #define IDI_PASTE_DISABLE_ICON   409
 #define IDI_UNDO_DISABLE_ICON    410
 #define IDI_REDO_DISABLE_ICON    411
-#define IDI_DELETE_ICON             412
+#define IDI_DELETE_ICON          412
 
 #define IDI_SYNCV_OFF_ICON      413
 #define IDI_SYNCV_ON_ICON       414
@@ -132,8 +132,8 @@
 #define IDI_SYNCH_ON_ICON       417
 #define IDI_SYNCH_DISABLE_ICON  418
 
-#define IDI_SAVED_ICON       501
-#define IDI_UNSAVED_ICON     502
+#define IDI_SAVED_ICON        501
+#define IDI_UNSAVED_ICON      502
 #define IDI_READONLY_ICON     503
 #define IDI_FIND_RESULT_ICON  504
 
@@ -152,49 +152,49 @@
 #define IDI_FUNCLIST_SORTBUTTON     631
 #define IDI_FUNCLIST_RELOADBUTTON   632
 
-#define IDC_MY_CUR     1402
-#define IDC_UP_ARROW  1403
-#define IDC_DRAG_TAB    1404
+#define IDC_MY_CUR            1402
+#define IDC_UP_ARROW          1403
+#define IDC_DRAG_TAB          1404
 #define IDC_DRAG_INTERDIT_TAB 1405
-#define IDC_DRAG_PLUS_TAB 1406
-#define IDC_DRAG_OUT_TAB 1407
+#define IDC_DRAG_PLUS_TAB     1406
+#define IDC_DRAG_OUT_TAB      1407
 
-#define IDC_MACRO_RECORDING 1408
+#define IDC_MACRO_RECORDING   1408
 
-#define IDR_SAVEALL         1500
-#define IDR_CLOSEFILE       1501
-#define IDR_CLOSEALL        1502
-#define IDR_FIND                1503
-#define IDR_REPLACE         1504
-#define IDR_ZOOMIN          1505
-#define IDR_ZOOMOUT     1506
-#define IDR_WRAP            1507
-#define IDR_INVISIBLECHAR   1508
-#define IDR_INDENTGUIDE     1509
-#define IDR_SHOWPANNEL      1510
-#define IDR_STARTRECORD     1511
-#define IDR_STOPRECORD      1512
-#define IDR_PLAYRECORD      1513
-#define IDR_SAVERECORD      1514
-#define IDR_SYNCV       1515
-#define IDR_SYNCH       1516
-#define IDR_FILENEW     1517
-#define IDR_FILEOPEN    1518
-#define IDR_FILESAVE    1519
-#define IDR_PRINT       1520
-#define IDR_CUT         1521
-#define IDR_COPY        1522
-#define IDR_PASTE       1523
-#define IDR_UNDO        1524
-#define IDR_REDO        1525
-#define IDR_M_PLAYRECORD    1526
-#define IDR_DOCMAP      1527
-#define IDR_FUNC_LIST   1528
+#define IDR_SAVEALL        1500
+#define IDR_CLOSEFILE      1501
+#define IDR_CLOSEALL       1502
+#define IDR_FIND           1503
+#define IDR_REPLACE        1504
+#define IDR_ZOOMIN         1505
+#define IDR_ZOOMOUT        1506
+#define IDR_WRAP           1507
+#define IDR_INVISIBLECHAR  1508
+#define IDR_INDENTGUIDE    1509
+#define IDR_SHOWPANNEL     1510
+#define IDR_STARTRECORD    1511
+#define IDR_STOPRECORD     1512
+#define IDR_PLAYRECORD     1513
+#define IDR_SAVERECORD     1514
+#define IDR_SYNCV          1515
+#define IDR_SYNCH          1516
+#define IDR_FILENEW        1517
+#define IDR_FILEOPEN       1518
+#define IDR_FILESAVE       1519
+#define IDR_PRINT          1520
+#define IDR_CUT            1521
+#define IDR_COPY           1522
+#define IDR_PASTE          1523
+#define IDR_UNDO           1524
+#define IDR_REDO           1525
+#define IDR_M_PLAYRECORD   1526
+#define IDR_DOCMAP         1527
+#define IDR_FUNC_LIST      1528
 
-#define IDR_CLOSETAB     1530
-#define IDR_CLOSETAB_INACT     1531
-#define IDR_CLOSETAB_HOVER     1532
-#define IDR_CLOSETAB_PUSH     1533
+#define IDR_CLOSETAB       1530
+#define IDR_CLOSETAB_INACT 1531
+#define IDR_CLOSETAB_HOVER 1532
+#define IDR_CLOSETAB_PUSH  1533
 
 #define ID_MACRO 20000
 #define ID_MACRO_LIMIT 20200
@@ -225,10 +225,10 @@
 	#define IDC_PREV_DOC                    (IDCMD+3)
 	#define IDC_NEXT_DOC                    (IDCMD+4)
 	#define IDC_EDIT_TOGGLEMACRORECORDING   (IDCMD+5)
-	//#define   IDC_KEY_HOME                    (IDCMD+6)
-	//#define   IDC_KEY_END                     (IDCMD+7)
-	//#define   IDC_KEY_SELECT_2_HOME           (IDCMD+8)
-	//#define   IDC_KEY_SELECT_2_END            (IDCMD+9)
+	//#define   IDC_KEY_HOME                  (IDCMD+6)
+	//#define   IDC_KEY_END                   (IDCMD+7)
+	//#define   IDC_KEY_SELECT_2_HOME         (IDCMD+8)
+	//#define   IDC_KEY_SELECT_2_END          (IDCMD+9)
 
 #define IDCMD_LIMIT                     (IDCMD+20)
 
@@ -250,11 +250,11 @@
 	#define IDSCINTILLA_KEY_OUTDENT     (IDSCINTILLA+14)
 	#define IDSCINTILLA_KEY_UNDO        (IDSCINTILLA+15)
 	#define IDSCINTILLA_KEY_REDO        (IDSCINTILLA+16)
-#define IDSCINTILLA_LIMIT       (IDSCINTILLA+30)
+#define IDSCINTILLA_LIMIT               (IDSCINTILLA+30)
 
 #define IDD_FILEVIEW_DIALOG             1000
 
-#define IDC_MINIMIZED_TRAY         67001
+#define IDC_MINIMIZED_TRAY              67001
 
 #define IDD_CREATE_DIRECTORY            1100
 #define IDC_STATIC_CURRENT_FOLDER       1101
@@ -271,26 +271,26 @@
 
 // #define  IDD_FIND_REPLACE_DLG        1600
 
-#define IDD_ABOUTBOX 1700
-#define IDC_LICENCE_EDIT 1701
+#define IDD_ABOUTBOX        1700
+#define IDC_LICENCE_EDIT    1701
 #define IDC_HOME_ADDR       1702
 #define IDC_EMAIL_ADDR      1703
 #define IDC_ONLINEHELP_ADDR 1704
-#define IDC_AUTHOR_NAME 1705
-#define IDC_BUILD_DATETIME 1706     //LS: CompileDateInAboutDialog: Automatically insert compile date as additional version info in About-dialog!
+#define IDC_AUTHOR_NAME     1705
+#define IDC_BUILD_DATETIME  1706     //LS: CompileDateInAboutDialog: Automatically insert compile date as additional version info in About-dialog!
 //#define   IDD_USER_DEFINE_BOX                  1800
 
 //#define   IDD_RUN_DLG      1900
 
 #define IDD_GOLINE      2000
-#define ID_GOLINE_EDIT  (IDD_GOLINE + 1)
-#define ID_CURRLINE     (IDD_GOLINE + 2)
-#define ID_LASTLINE     (IDD_GOLINE + 3)
-#define ID_URHERE_STATIC           (IDD_GOLINE + 4)
-#define ID_UGO_STATIC                 (IDD_GOLINE + 5)
-#define ID_NOMORETHAN_STATIC   (IDD_GOLINE + 6)
+#define ID_GOLINE_EDIT       (IDD_GOLINE + 1)
+#define ID_CURRLINE          (IDD_GOLINE + 2)
+#define ID_LASTLINE          (IDD_GOLINE + 3)
+#define ID_URHERE_STATIC     (IDD_GOLINE + 4)
+#define ID_UGO_STATIC        (IDD_GOLINE + 5)
+#define ID_NOMORETHAN_STATIC (IDD_GOLINE + 6)
 #define IDC_RADIO_GOTOLINE   (IDD_GOLINE + 7)
-#define IDC_RADIO_GOTOOFFSET   (IDD_GOLINE + 8)
+#define IDC_RADIO_GOTOOFFSET (IDD_GOLINE + 8)
 
 // voir columnEditor_rc.h
 //#define   IDD_COLUMNEDIT   2020
@@ -303,15 +303,15 @@
 //#define IDD_GLOBAL_STYLER_DLG 2300
 
 #define IDD_VALUE_DLG       2400
-#define IDC_VALUE_STATIC  2401
+#define IDC_VALUE_STATIC    2401
 #define IDC_VALUE_EDIT      2402
 
 #define IDD_BUTTON_DLG       2410
-#define IDC_RESTORE_BUTTON  2411
+#define IDC_RESTORE_BUTTON   2411
 
 // see TaskListDlg_rc.h
-//#define   IDD_TASKLIST_DLG    2450
-#define IDD_SETTING_DLG    2500
+//#define   IDD_TASKLIST_DLG 2450
+#define IDD_SETTING_DLG      2500
 
 
 
@@ -319,36 +319,36 @@
 //#define   IDD_SHORTCUTMAPPER_DLG      2600
 
 //See ansiCharPanel_rc.h
-//#define   IDD_ANSIASCII_PANEL      2700
+//#define   IDD_ANSIASCII_PANEL         2700
 
 //See clipboardHistoryPanel_rc.h
-//#define   IDD_CLIPBOARDHISTORY_PANEL      2800
+//#define   IDD_CLIPBOARDHISTORY_PANEL  2800
 
 //See findCharsInRange_rc.h
-//#define   IDD_FINDCHARACTERS      2900
+//#define   IDD_FINDCHARACTERS          2900
 
 //See VerticalFileSwitcher_rc.h
 //#define   IDD_FILESWITCHER_PANEL      3000
 
 //See ProjectPanel_rc.h
-//#define   IDD_PROJECTPANEL      3100
+//#define   IDD_PROJECTPANEL            3100
 //#define   IDD_FILERELOCALIZER_DIALOG  3200
 
 //See documentMap_rc.h
-//#define   IDD_DOCUMENTMAP      3300
+//#define   IDD_DOCUMENTMAP             3300
 
 //See functionListPanel_rc.h
-//#define   IDD_FUNCLIST_PANEL   3400
+//#define   IDD_FUNCLIST_PANEL          3400
 
 
 // See regExtDlg.h
-//#define   IDD_REGEXT 4000
+//#define   IDD_REGEXT                  4000
 
 // See shortcutRc.h
-//#define   IDD_SHORTCUT_DLG      5000
+//#define   IDD_SHORTCUT_DLG            5000
 
 // See preference.rc
-//#define   IDD_PREFERENCE_BOX 6000
+//#define   IDD_PREFERENCE_BOX          6000
 
 #define NOTEPADPLUS_USER_INTERNAL     (WM_USER + 0000)
 	#define NPPM_INTERNAL_USERCMDLIST_MODIFIED      (NOTEPADPLUS_USER_INTERNAL + 1)

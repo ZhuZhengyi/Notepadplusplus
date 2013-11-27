@@ -30,7 +30,7 @@
 #define IMAGE_LIST_H
 
 const int nbMax = 45;
-#define	IDI_SEPARATOR_ICON -1
+#define IDI_SEPARATOR_ICON -1
 
 class IconList
 {
@@ -39,9 +39,11 @@ public :
 	void create(HINSTANCE hInst, int iconSize);
 	void create(int iconSize, HINSTANCE hInst, int *iconIDArray, int iconIDArraySize);
 
-	void destroy() {
+	void destroy()
+	{
 		ImageList_Destroy(_hImglst);
 	};
+
 	HIMAGELIST getHandle() const {return _hImglst;};
 	void addIcon(int iconID) const;
 	bool changeIcon(int index, const TCHAR *iconLocation) const;
@@ -74,7 +76,8 @@ class IconLists
 {
 public :
 	IconLists() {};
-	HIMAGELIST getImageListHandle(int index) const {
+	HIMAGELIST getImageListHandle(int index) const
+	{
 		return _iconListVector[index].getHandle();
 	};
 
@@ -95,35 +98,49 @@ public :
 	void create(HINSTANCE hInst, int iconSize);
 	void destroy();
 
-	HIMAGELIST getDefaultLst() const {
+	HIMAGELIST getDefaultLst() const
+	{
 		return IconLists::getImageListHandle(HLIST_DEFAULT);
 	};
 
-	HIMAGELIST getHotLst() const {
+	HIMAGELIST getHotLst() const
+	{
 		return IconLists::getImageListHandle(HLIST_HOT);
 	};
 
-	HIMAGELIST getDisableLst() const {
+	HIMAGELIST getDisableLst() const
+	{
 		return IconLists::getImageListHandle(HLIST_DISABLE);
 	};
 
-	unsigned int getNbCommand() const {return _nbCmd;};
-	int getCommandAt(int index) const {return _cmdArray[index];};
-	void resizeIcon(int size) {
+	unsigned int getNbCommand() const
+	{
+		return _nbCmd;
+	};
+	int getCommandAt(int index) const
+	{
+		return _cmdArray[index];
+	};
+
+	void resizeIcon(int size)
+	{
 		reInit(size);
 	};
 
 	void reInit(int size);
 
-	int getNbIcon() const {
+	int getNbIcon() const
+	{
 		return int(_tbiis.size());
 	};
 
-	int getStdIconAt(int i) const {
+	int getStdIconAt(int i) const
+	{
 		return _tbiis[i]._stdIcon;
 	};
 
-	bool replaceIcon(int witchList, int iconIndex, const TCHAR *iconLocation) const {
+	bool replaceIcon(int witchList, int iconIndex, const TCHAR *iconLocation) const
+	{
 		if ((witchList != HLIST_DEFAULT) && (witchList != HLIST_HOT) && (witchList != HLIST_DISABLE))
 			return false;
 		return _iconListVector[witchList].changeIcon(iconIndex, iconLocation);

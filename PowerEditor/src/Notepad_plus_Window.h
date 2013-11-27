@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -31,7 +31,8 @@
 
 #include "Notepad_plus.h"
 
-class Notepad_plus_Window : public Window {
+class Notepad_plus_Window : public Window
+{
 public:
 	Notepad_plus_Window() {};
 	void init(HINSTANCE, HWND, const TCHAR *cmdLine, CmdLineParams *cmdLineParams);
@@ -47,19 +48,23 @@ public:
 		return _notepad_plus_plus_core.emergency(emergencySavedDir);
 	};
 
-	bool isPrelaunch() const {
+	bool isPrelaunch() const
+	{
 		return _isPrelaunch;
 	};
 
-	void setIsPrelaunch(bool val) {
+	void setIsPrelaunch(bool val)
+	{
 		_isPrelaunch = val;
 	};
 
-    virtual void destroy(){
-        ::DestroyWindow(_hSelf);
-    };
+	virtual void destroy()
+	{
+		::DestroyWindow(_hSelf);
+	};
 
-	static const TCHAR * Notepad_plus_Window::getClassName() {
+	static const TCHAR * Notepad_plus_Window::getClassName()
+	{
 		return _className;
 	};
 	static HWND gNppHWND;	//static handle to Notepad++ window, NULL if non-existant

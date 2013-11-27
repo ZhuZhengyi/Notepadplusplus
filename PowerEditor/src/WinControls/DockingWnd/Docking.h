@@ -81,7 +81,7 @@ typedef struct
 } tDockMgr;
 
 
-#define	HIT_TEST_THICKNESS  20
+#define HIT_TEST_THICKNESS  20
 #define SPLITTER_WIDTH      4
 
 

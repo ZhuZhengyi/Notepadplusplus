@@ -333,57 +333,88 @@ friend class ScintillaEditView;
 public :
 	UserDefineDialog();
 	~UserDefineDialog();
-	void init(HINSTANCE hInst, HWND hPere, ScintillaEditView *pSev) {
+
+	void init(HINSTANCE hInst, HWND hPere, ScintillaEditView *pSev)
+	{
 		if (!_pScintilla)
 		{
 			Window::init(hInst, hPere);
 			_pScintilla = pSev;
 		}
 	};
-	void setScintilla(ScintillaEditView *pScinView) {
+
+	void setScintilla(ScintillaEditView *pScinView)
+	{
 		_pScintilla = pScinView;
 	};
-	 virtual void create(int dialogID, bool isRTL = false) {
+
+	virtual void create(int dialogID, bool isRTL = false)
+	{
 		StaticDialog::create(dialogID, isRTL);
 	}
-	void destroy() {
+
+	void destroy()
+	{
 		// A Ajouter les fils...
 	};
-	int getWidth() const {
+
+	int getWidth() const
+	{
 		return _dlgPos.right;
 	};
-	int getHeight() const {
+
+	int getHeight() const
+	{
 		return _dlgPos.bottom;
 	};
-	void doDialog(bool willBeShown = true, bool isRTL = false) {
+
+	void doDialog(bool willBeShown = true, bool isRTL = false)
+	{
 		if (!isCreated())
 			create(IDD_GLOBAL_USERDEFINE_DLG, isRTL);
 		display(willBeShown);
 	};
+
 	virtual void reSizeTo(RECT & rc) // should NEVER be const !!!
 	{
 		Window::reSizeTo(rc);
 		display(false);
 		display();
 	};
+
 	void reloadLangCombo();
 	void changeStyle();
+
 	bool isDocked() const {return _status == DOCK;};
 	void setDockStatus(bool isDocked) {_status = isDocked;};
-	bool isDirty() const {return _isDirty;};
-	HWND getFolderHandle() const {
+
+	bool isDirty() const
+	{
+		return _isDirty;
+	};
+
+	HWND getFolderHandle() const
+	{
 		return _folderStyleDlg.getHSelf();
 	};
-	HWND getKeywordsHandle() const {
+
+	HWND getKeywordsHandle() const
+	{
 		return _keyWordsStyleDlg.getHSelf();
 	};
-	HWND getCommentHandle() const {
+
+	HWND getCommentHandle() const
+	{
 		return _commentStyleDlg.getHSelf();
 	};
-	HWND getSymbolHandle() const {
+
+	HWND getSymbolHandle() const
+	{
 		return _symbolsStyleDlg.getHSelf();
 	};
-	void setTabName(int index, const TCHAR *name2set) {
+
+	void setTabName(int index, const TCHAR *name2set)
+	{
 		_ctrlTab.renameTab(index, name2set);
 	};
 protected :
@@ -402,7 +433,9 @@ private :
 	int _yScrollPos;
 	int _prevHightVal;
 	bool _isDirty;
-	void getActualPosSize() {
+
+	void getActualPosSize()
+	{
 		::GetWindowRect(_hSelf, &_dlgPos);
 		_dlgPos.right -= _dlgPos.left;
 		_dlgPos.bottom -= _dlgPos.top;

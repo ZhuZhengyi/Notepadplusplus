@@ -45,8 +45,8 @@
 #include "Notepad_plus_msgs.h"
 #endif //NOTEPAD_PLUS_MSGS_H
 
-#define	TASKLIST_USER    (WM_USER + 8000)
-	#define WM_GETTASKLISTINFO (TASKLIST_USER + 01)
+#define TASKLIST_USER      (WM_USER + 8000)
+#define WM_GETTASKLISTINFO (TASKLIST_USER + 01)
 
 struct TaskLstFnStatus
 {

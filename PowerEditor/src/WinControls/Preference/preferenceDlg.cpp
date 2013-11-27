@@ -219,10 +219,11 @@ BOOL CALLBACK PreferenceDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lPa
 
 void PreferenceDlg::makeCategoryList()
 {
-	for (size_t i = 0, len = _wVector.size(); i < len; ++i)
+	for (DlgInfo& di : _wVector)
 	{
-		::SendDlgItemMessage(_hSelf, IDC_LIST_DLGTITLE, LB_ADDSTRING, 0, (LPARAM)_wVector[i]._name.c_str());
+		::SendDlgItemMessage(_hSelf, IDC_LIST_DLGTITLE, LB_ADDSTRING, 0, (LPARAM)di._name.c_str());
 	}
+
 	setListSelection(0);
 }
 
@@ -269,10 +270,9 @@ bool PreferenceDlg::renameDialogTitle(const TCHAR *internalName, const TCHAR *ne
 
 void PreferenceDlg::showDialogByIndex(int index)
 {
-	size_t len = _wVector.size();
-	for (size_t i = 0; i < len; ++i)
+	for (DlgInfo& di : _wVector)
 	{
-		_wVector[i]._dlg->display(false);
+		di._dlg->display(false);
 	}
 
 	_wVector[index]._dlg->display(true);
@@ -570,7 +570,6 @@ void MarginsDlg::initScintParam()
 	
 	::SetDlgItemInt(_hSelf, IDC_COLONENUMBER_STATIC, svp._edgeNbColumn, FALSE);
 	::ShowWindow(::GetDlgItem(_hSelf, IDC_COLONENUMBER_STATIC), isEnable);
-
 }
 
 
@@ -642,7 +641,7 @@ BOOL CALLBACK MarginsDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lParam
 		}
 
 		case WM_COMMAND : 
-		{			
+		{
 			ScintillaViewParams & svp = (ScintillaViewParams &)pNppParam->getSVP();
 			int iView = 1;
 			switch (wParam)
@@ -1103,17 +1102,17 @@ BOOL CALLBACK DefaultNewDocDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)
 			int selIndex = -1;
 			generic_string str;
 			EncodingMapper *em = EncodingMapper::getInstance();
-			for (int i = 0 ; i < sizeof(encodings)/sizeof(int) ; ++i)
+			for (int& encoding : encodings)
 			{
-				int cmdID = em->getIndexFromEncoding(encodings[i]);
+				int cmdID = em->getIndexFromEncoding(encoding);
 				if (cmdID != -1)
 				{
 					cmdID += IDM_FORMAT_ENCODE;
 					getNameStrFromCmd(cmdID, str);
 					int index = ::SendDlgItemMessage(_hSelf, IDC_COMBO_OTHERCP, CB_ADDSTRING, 0, (LPARAM)str.c_str());
-					if (ndds._codepage == encodings[i])
+					if (ndds._codepage == encoding)
 						selIndex = index;
-					::SendDlgItemMessage(_hSelf, IDC_COMBO_OTHERCP, CB_SETITEMDATA, index, (LPARAM)encodings[i]);
+					::SendDlgItemMessage(_hSelf, IDC_COMBO_OTHERCP, CB_SETITEMDATA, index, (LPARAM)encoding);
 				}
 			}
 
@@ -1514,6 +1513,7 @@ BOOL CALLBACK LangMenuDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lPara
 
 			return TRUE;
 		}
+
 		case WM_COMMAND : 
 		{
 			if (HIWORD(wParam) == LBN_SELCHANGE)
@@ -1679,7 +1679,7 @@ BOOL CALLBACK TabSettings::run_dlgProc(UINT Message, WPARAM wParam, LPARAM/* lPa
 			::SendDlgItemMessage(_hSelf, IDC_LIST_TABSETTNG, LB_SETCURSEL, 0, index2Begin);
 			::ShowWindow(::GetDlgItem(_hSelf, IDC_GR_TABVALUE_STATIC), SW_HIDE);
 			::ShowWindow(::GetDlgItem(_hSelf, IDC_CHECK_DEFAULTTABVALUE), SW_HIDE);
-			::EnableWindow(::GetDlgItem(_hSelf, IDC_TABSIZEVAL_DISABLE_STATIC), FALSE);            
+			::EnableWindow(::GetDlgItem(_hSelf, IDC_TABSIZEVAL_DISABLE_STATIC), FALSE);
 			::ShowWindow(::GetDlgItem(_hSelf, IDC_TABSIZEVAL_DISABLE_STATIC), SW_HIDE);
 
 			ETDTProc enableDlgTheme = (ETDTProc)pNppParam->getEnableThemeDlgTexture();
@@ -1688,7 +1688,7 @@ BOOL CALLBACK TabSettings::run_dlgProc(UINT Message, WPARAM wParam, LPARAM/* lPa
 
 			return TRUE;
 		}
-		case WM_COMMAND : 
+		case WM_COMMAND :
 		{
 			if (HIWORD(wParam) == LBN_SELCHANGE)
 			{
@@ -1749,18 +1749,22 @@ BOOL CALLBACK TabSettings::run_dlgProc(UINT Message, WPARAM wParam, LPARAM/* lPa
 					POINT p;
 					::GetCursorPos(&p);
 					int size = tabSizeDlg.doDialog(p);
-					if (size == -1) return FALSE;
+					if (size == -1)
+						return FALSE;
 
 					::SetDlgItemInt(_hSelf, IDC_TABSIZEVAL_STATIC, size, FALSE);
 					::SetDlgItemInt(_hSelf, IDC_TABSIZEVAL_DISABLE_STATIC, size, FALSE);
 
 					int index = ::SendDlgItemMessage(_hSelf, IDC_LIST_TABSETTNG, LB_GETCURSEL, 0, 0);
-					if (index == LB_ERR) return FALSE;
+					if (index == LB_ERR)
+						return FALSE;
 
 					if (index != 0)
 					{
 						Lang *lang = pNppParam->getLangFromIndex(index - 1);
-						if (!lang) return FALSE;
+						if (!lang)
+							return FALSE;
+
 						lang->_tabSize = size;
 
 						// write in langs.xml
@@ -1779,13 +1783,18 @@ BOOL CALLBACK TabSettings::run_dlgProc(UINT Message, WPARAM wParam, LPARAM/* lPa
 				{
 					bool isTabReplacedBySpace = BST_CHECKED == ::SendMessage(::GetDlgItem(_hSelf, IDC_CHECK_REPLACEBYSPACE), BM_GETCHECK, 0, 0);
 					int index = ::SendDlgItemMessage(_hSelf, IDC_LIST_TABSETTNG, LB_GETCURSEL, 0, 0);
-					if (index == LB_ERR) return FALSE;
+					if (index == LB_ERR)
+						return FALSE;
+
 					if (index != 0)
 					{
 						Lang *lang = pNppParam->getLangFromIndex(index - 1);
-						if (!lang) return FALSE;
+						if (!lang)
+							return FALSE;
+
 						if (!lang->_tabSize || lang->_tabSize == -1)
 							lang->_tabSize = nppGUI._tabSize;
+
 						lang->_isTabReplacedBySpace = isTabReplacedBySpace;
 
 						// write in langs.xml
@@ -1812,7 +1821,7 @@ BOOL CALLBACK TabSettings::run_dlgProc(UINT Message, WPARAM wParam, LPARAM/* lPa
 
 					//- Set tab setting in choosed language
 					lang->_tabSize = useDefaultTab?0:nppGUI._tabSize;
-					lang->_isTabReplacedBySpace = useDefaultTab?false:nppGUI._tabReplacedBySpace;
+					lang->_isTabReplacedBySpace = useDefaultTab ? false : nppGUI._tabReplacedBySpace;
 
 					//- set visual effect
 					::EnableWindow(::GetDlgItem(_hSelf, IDC_TABSIZE_STATIC), !useDefaultTab);
@@ -1843,9 +1852,14 @@ void trim(generic_string & str)
 	{
 		str.erase(pos + 1);
 		pos = str.find_first_not_of(' ');
-		if(pos != generic_string::npos) str.erase(0, pos);
+
+		if(pos != generic_string::npos)
+			str.erase(0, pos);
 	}
-	else str.erase(str.begin(), str.end());
+	else
+	{
+		str.erase(str.begin(), str.end());
+	}
 };
 
 BOOL CALLBACK PrintSettingsDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)
@@ -1896,14 +1910,15 @@ BOOL CALLBACK PrintSettingsDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)
 				::SendDlgItemMessage(_hSelf, IDC_COMBO_HFONTSIZE, CB_ADDSTRING, 0, (LPARAM)intStr);
 				::SendDlgItemMessage(_hSelf, IDC_COMBO_FFONTSIZE, CB_ADDSTRING, 0, (LPARAM)intStr);
 			}
-			const std::vector<generic_string> & fontlist = pNppParam->getFontList();
-			for (size_t i = 0, len = fontlist.size() ; i < len ; ++i)
-			{
-				int j = ::SendDlgItemMessage(_hSelf, IDC_COMBO_HFONTNAME, CB_ADDSTRING, 0, (LPARAM)fontlist[i].c_str());
-				::SendDlgItemMessage(_hSelf, IDC_COMBO_FFONTNAME, CB_ADDSTRING, 0, (LPARAM)fontlist[i].c_str());
 
-				::SendDlgItemMessage(_hSelf, IDC_COMBO_HFONTNAME, CB_SETITEMDATA, j, (LPARAM)fontlist[i].c_str());
-				::SendDlgItemMessage(_hSelf, IDC_COMBO_FFONTNAME, CB_SETITEMDATA, j, (LPARAM)fontlist[i].c_str());
+			const std::vector<generic_string> & fontlist = pNppParam->getFontList();
+			for (const generic_string& font : fontlist)
+			{
+				int j = ::SendDlgItemMessage(_hSelf, IDC_COMBO_HFONTNAME, CB_ADDSTRING, 0, (LPARAM)font.c_str());
+				::SendDlgItemMessage(_hSelf, IDC_COMBO_FFONTNAME, CB_ADDSTRING, 0, (LPARAM)font.c_str());
+
+				::SendDlgItemMessage(_hSelf, IDC_COMBO_HFONTNAME, CB_SETITEMDATA, j, (LPARAM)font.c_str());
+				::SendDlgItemMessage(_hSelf, IDC_COMBO_FFONTNAME, CB_SETITEMDATA, j, (LPARAM)font.c_str());
 			}
 
 			int index = ::SendDlgItemMessage(_hSelf, IDC_COMBO_HFONTNAME, CB_FINDSTRINGEXACT, (WPARAM)-1, (LPARAM)nppGUI._printSettings._headerFontName.c_str());
@@ -1933,13 +1948,12 @@ BOOL CALLBACK PrintSettingsDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)
 			varList.push_back(strCouple(TEXT("Long date format"), TEXT("$(LONG_DATE)")));
 			varList.push_back(strCouple(TEXT("Time"), TEXT("$(TIME)")));
 
-			for (size_t i = 0, len = varList.size() ; i < len ; ++i)
+			for (strCouple& var : varList)
 			{
-				int j = ::SendDlgItemMessage(_hSelf, IDC_COMBO_VARLIST, CB_ADDSTRING, 0, (LPARAM)varList[i]._varDesc.c_str());
-				::SendDlgItemMessage(_hSelf, IDC_COMBO_VARLIST, CB_SETITEMDATA, j, (LPARAM)varList[i]._var.c_str());
+				int j = ::SendDlgItemMessage(_hSelf, IDC_COMBO_VARLIST, CB_ADDSTRING, 0, (LPARAM)var._varDesc.c_str());
+				::SendDlgItemMessage(_hSelf, IDC_COMBO_VARLIST, CB_SETITEMDATA, j, (LPARAM)var._var.c_str());
 			}
 			::SendDlgItemMessage(_hSelf, IDC_COMBO_VARLIST, CB_SETCURSEL, 0, 0);
-
 
 
 			ETDTProc enableDlgTheme = (ETDTProc)pNppParam->getEnableThemeDlgTexture();

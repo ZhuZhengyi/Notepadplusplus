@@ -41,18 +41,11 @@ bool PluginsManager::unloadPlugin(int index, HWND nppHandle)
 	scnN.nmhdr.idFrom = 0;
 	_pluginInfos[index]->_pBeNotified(&scnN);
 
-	//::DestroyMenu(_pluginInfos[index]->_pluginMenu);
-	//_pluginInfos[index]->_pluginMenu = NULL;
-
 	if (::FreeLibrary(_pluginInfos[index]->_hLib))
 		_pluginInfos[index]->_hLib = NULL;
 	else
 		printStr(TEXT("not ok"));
-	//delete _pluginInfos[index];
-//      printInt(index);
-	//vector<PluginInfo *>::iterator it = _pluginInfos.begin() + index;
-	//_pluginInfos.erase(it);
-	//printStr(TEXT("remove"));
+
 	return true;
 }
 
@@ -75,7 +68,6 @@ int PluginsManager::loadPlugin(const TCHAR *pluginFilePath, vector<generic_strin
 			throw generic_string(TEXT("This ANSI plugin is not compatible with your Unicode Notepad++."));
 
 		pi->_pFuncSetInfo = (PFUNCSETINFO)GetProcAddress(pi->_hLib, "setInfo");
-					
 		if (!pi->_pFuncSetInfo)
 			throw generic_string(TEXT("Missing \"setInfo\" function"));
 
@@ -257,14 +249,16 @@ bool PluginsManager::loadPlugins(const TCHAR *dir)
 		}
 		::FindClose(hFindFile);
 
-		for (size_t i = 0, len = dllNames.size(); i < len ; ++i)
+		for (generic_string& dllName : dllNames)
 		{
-			loadPlugin(dllNames[i].c_str(),  dll2Remove);
+			loadPlugin(dllName.c_str(),  dll2Remove);
 		}
 	}
 
-	for (size_t j = 0, len = dll2Remove.size() ; j < len ; ++j)
-		::DeleteFile(dll2Remove[j].c_str());
+	for (generic_string& dll : dll2Remove)
+	{
+		::DeleteFile(dll.c_str());
+	}
 
 	return true;
 }
@@ -278,11 +272,11 @@ bool PluginsManager::getShortcutByCmdID(int cmdID, ShortcutKey *sk)
 
 	const vector<PluginCmdShortcut> & pluginCmdSCList = (NppParameters::getInstance())->getPluginCommandList();
 
-	for (size_t i = 0, len = pluginCmdSCList.size(); i < len ; ++i)
+	for (const PluginCmdShortcut& pluginCmdShortcut : pluginCmdSCList)
 	{
-		if (pluginCmdSCList[i].getID() == (unsigned long)cmdID)
+		if (pluginCmdShortcut.getID() == (unsigned long)cmdID)
 		{
-			const KeyCombo & kc = pluginCmdSCList[i].getKeyCombo();
+			const KeyCombo & kc = pluginCmdShortcut.getKeyCombo();
 			if (kc._key == 0x00)
 				return false;
 
@@ -393,15 +387,15 @@ void PluginsManager::runPluginCommand(size_t i)
 
 void PluginsManager::runPluginCommand(const TCHAR *pluginName, int commandID)
 {
-	for (size_t i = 0, len = _pluginsCommands.size() ; i < len ; ++i)
+	for (PluginCommand& pluginCommand : _pluginsCommands)
 	{
-		if (!generic_stricmp(_pluginsCommands[i]._pluginName.c_str(), pluginName))
+		if (!generic_stricmp(pluginCommand._pluginName.c_str(), pluginName))
 		{
-			if (_pluginsCommands[i]._funcID == commandID)
+			if (pluginCommand._funcID == commandID)
 			{
 				try
 				{
-					_pluginsCommands[i]._pFunc();
+					pluginCommand._pFunc();
 				}
 				catch(std::exception& e)
 				{
@@ -411,7 +405,7 @@ void PluginsManager::runPluginCommand(const TCHAR *pluginName, int commandID)
 				{
 					TCHAR funcInfo[128];
 					generic_sprintf(funcInfo, TEXT("runPluginCommand(const TCHAR *pluginName : %s, int commandID : %d)"), pluginName, commandID);
-					pluginCrashAlert(_pluginsCommands[i]._pluginName.c_str(), funcInfo);
+					pluginCrashAlert(pluginCommand._pluginName.c_str(), funcInfo);
 				}
 			}
 		}

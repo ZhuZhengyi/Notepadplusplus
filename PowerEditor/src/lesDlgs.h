@@ -72,7 +72,9 @@ public :
 
 		void doDialog(bool isRTL = false);
 		void destroy() {};
-		int getButtonStatus() const {
+
+		int getButtonStatus() const
+		{
 			return _buttonStatus;
 		};
 		void setButtonStatus(int buttonStatus)

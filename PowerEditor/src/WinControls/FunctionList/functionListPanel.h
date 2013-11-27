@@ -48,7 +48,8 @@
 
 class ScintillaEditView;
 
-struct FuncInfo {
+struct FuncInfo
+{
 	generic_string _displayText;
 	size_t _offsetPos;
 };

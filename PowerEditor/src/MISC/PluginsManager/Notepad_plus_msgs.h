@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -51,24 +51,25 @@ enum winVer{WV_UNKNOWN, WV_WIN32S, WV_95, WV_98, WV_ME, WV_NT, WV_W2K, WV_XP, WV
 	#define NPPM_GETCURRENTLANGTYPE  (NPPMSG + 5)
 	#define NPPM_SETCURRENTLANGTYPE  (NPPMSG + 6)
 
-	#define NPPM_GETNBOPENFILES			(NPPMSG + 7)
-		#define ALL_OPEN_FILES			0
-		#define PRIMARY_VIEW			1
-		#define SECOND_VIEW				2
+	#define NPPM_GETNBOPENFILES         (NPPMSG + 7)
+		#define ALL_OPEN_FILES          0
+		#define PRIMARY_VIEW            1
+		#define SECOND_VIEW             2
 
-	#define NPPM_GETOPENFILENAMES		(NPPMSG + 8)
+	#define NPPM_GETOPENFILENAMES       (NPPMSG + 8)
 
 
-	#define NPPM_MODELESSDIALOG		 (NPPMSG + 12)
-		#define MODELESSDIALOGADD		0
-		#define MODELESSDIALOGREMOVE	1
+	#define NPPM_MODELESSDIALOG         (NPPMSG + 12)
+		#define MODELESSDIALOGADD       0
+		#define MODELESSDIALOGREMOVE    1
 
 	#define NPPM_GETNBSESSIONFILES (NPPMSG + 13)
 	#define NPPM_GETSESSIONFILES (NPPMSG + 14)
 	#define NPPM_SAVESESSION (NPPMSG + 15)
 	#define NPPM_SAVECURRENTSESSION (NPPMSG + 16)
 
-		struct sessionInfo {
+		struct sessionInfo
+		{
 			TCHAR* sessionFilePathName;
 			int nbFile;
 			TCHAR** files;
@@ -118,7 +119,7 @@ enum winVer{WV_UNKNOWN, WV_WIN32S, WV_95, WV_98, WV_ME, WV_NT, WV_W2K, WV_XP, WV
 	#define NPPM_DMMSHOW (NPPMSG + 30)
 	//void NPPM_DMMSHOW(0, tTbData->hClient)
 
-	#define NPPM_DMMHIDE	(NPPMSG + 31)
+	#define NPPM_DMMHIDE (NPPMSG + 31)
 	//void NPPM_DMMHIDE(0, tTbData->hClient)
 
 	#define NPPM_DMMUPDATEDISPINFO (NPPMSG + 32)
@@ -142,15 +143,16 @@ enum winVer{WV_UNKNOWN, WV_WIN32S, WV_95, WV_98, WV_ME, WV_NT, WV_W2K, WV_XP, WV
 	#define NPPM_SAVECURRENTFILE (NPPMSG + 38)
 	//BOOL NPPM_SAVECURRENTFILE(0, 0)
 
-	#define NPPM_SAVEALLFILES	(NPPMSG + 39)
+	#define NPPM_SAVEALLFILES (NPPMSG + 39)
 	//BOOL NPPM_SAVEALLFILES(0, 0)
 
-	#define NPPM_SETMENUITEMCHECK	(NPPMSG + 40)
-	//void WM_PIMENU_CHECK(UINT	funcItem[X]._cmdID, TRUE/FALSE)
+	#define NPPM_SETMENUITEMCHECK (NPPMSG + 40)
+	//void WM_PIMENU_CHECK(UINT funcItem[X]._cmdID, TRUE/FALSE)
 
 	#define NPPM_ADDTOOLBARICON (NPPMSG + 41)
 	//void WM_ADDTOOLBARICON(UINT funcItem[X]._cmdID, toolbarIcons icon)
-		struct toolbarIcons {
+		struct toolbarIcons
+		{
 			HBITMAP	hToolbarBmp;
 			HICON	hToolbarIcon;
 		};
@@ -176,7 +178,8 @@ enum winVer{WV_UNKNOWN, WV_WIN32S, WV_95, WV_98, WV_ME, WV_NT, WV_W2K, WV_XP, WV
 	//BOOL NPPM_MSGTOPLUGIN(TCHAR *destModuleName, CommunicationInfo *info)
 	// return value is TRUE when the message arrive to the destination plugins.
 	// if destModule or info is NULL, then return value is FALSE
-		struct CommunicationInfo {
+		struct CommunicationInfo
+		{
 			long internalMsg;
 			const TCHAR * srcModuleName;
 			void * info; // defined by plugin
@@ -392,23 +395,23 @@ enum winVer{WV_UNKNOWN, WV_WIN32S, WV_95, WV_98, WV_ME, WV_NT, WV_W2K, WV_XP, WV
 	// Return: current edit view of Notepad++. Only 2 possible values: 0 = Main, 1 = Secondary
 
 #define	RUNCOMMAND_USER    (WM_USER + 3000)
-	#define NPPM_GETFULLCURRENTPATH		(RUNCOMMAND_USER + FULL_CURRENT_PATH)
-	#define NPPM_GETCURRENTDIRECTORY	(RUNCOMMAND_USER + CURRENT_DIRECTORY)
-	#define NPPM_GETFILENAME			(RUNCOMMAND_USER + FILE_NAME)
-	#define NPPM_GETNAMEPART			(RUNCOMMAND_USER + NAME_PART)
-	#define NPPM_GETEXTPART				(RUNCOMMAND_USER + EXT_PART)
-	#define NPPM_GETCURRENTWORD			(RUNCOMMAND_USER + CURRENT_WORD)
-	#define NPPM_GETNPPDIRECTORY		(RUNCOMMAND_USER + NPP_DIRECTORY)
+	#define NPPM_GETFULLCURRENTPATH     (RUNCOMMAND_USER + FULL_CURRENT_PATH)
+	#define NPPM_GETCURRENTDIRECTORY    (RUNCOMMAND_USER + CURRENT_DIRECTORY)
+	#define NPPM_GETFILENAME            (RUNCOMMAND_USER + FILE_NAME)
+	#define NPPM_GETNAMEPART            (RUNCOMMAND_USER + NAME_PART)
+	#define NPPM_GETEXTPART             (RUNCOMMAND_USER + EXT_PART)
+	#define NPPM_GETCURRENTWORD         (RUNCOMMAND_USER + CURRENT_WORD)
+	#define NPPM_GETNPPDIRECTORY        (RUNCOMMAND_USER + NPP_DIRECTORY)
 	// BOOL NPPM_GETXXXXXXXXXXXXXXXX(size_t strLen, TCHAR *str)
 	// where str is the allocated TCHAR array,
 	//	     strLen is the allocated array size
 	// The return value is TRUE when get generic_string operation success
 	// Otherwise (allocated array size is too small) FALSE
 
-	#define NPPM_GETCURRENTLINE			(RUNCOMMAND_USER + CURRENT_LINE)
+	#define NPPM_GETCURRENTLINE    (RUNCOMMAND_USER + CURRENT_LINE)
 	// INT NPPM_GETCURRENTLINE(0, 0)
 	// return the caret current position line
-	#define NPPM_GETCURRENTCOLUMN			(RUNCOMMAND_USER + CURRENT_COLUMN)
+	#define NPPM_GETCURRENTCOLUMN  (RUNCOMMAND_USER + CURRENT_COLUMN)
 	// INT NPPM_GETCURRENTCOLUMN(0, 0)
 	// return the caret current position column
 

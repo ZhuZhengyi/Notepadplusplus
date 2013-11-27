@@ -195,13 +195,15 @@ BOOL CALLBACK RegExtDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lParam)
 							for (count -= 1 ; count >= 0 ; count--)
 								::SendDlgItemMessage(_hSelf, IDC_REGEXT_LANGEXT_LIST, LB_DELETESTRING, count, 0);
 
-							for (int j = 1 ; j < nbExtMax ; ++j)
+							for (int j = 1; j < nbExtMax; ++j)
+							{
 								if (lstrcmp(TEXT(""), defExtArray[i][j]))
 								{
 									int index = ::SendDlgItemMessage(_hSelf, IDC_REGEXT_REGISTEREDEXTS_LIST, LB_FINDSTRINGEXACT, 0, (LPARAM)defExtArray[i][j]);
 									if (index == -1)
 										::SendDlgItemMessage(_hSelf, IDC_REGEXT_LANGEXT_LIST, LB_ADDSTRING, 0, (LPARAM)defExtArray[i][j]);
 								}
+							}
 						}
 
 						::EnableWindow(::GetDlgItem(_hSelf, IDC_ADDFROMLANGEXT_BUTTON), false);
@@ -225,7 +227,6 @@ BOOL CALLBACK RegExtDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lParam)
 		default :
 			return FALSE;
 	}
-	//return FALSE;
 }
 
 void RegExtDlg::getRegisteredExts()
@@ -239,7 +240,6 @@ void RegExtDlg::getRegisteredExts()
 		int res = ::RegEnumKeyEx(HKEY_CLASSES_ROOT, i, extName, (LPDWORD)&extNameActualLen, NULL, NULL, NULL, NULL);
 		if ((res == ERROR_SUCCESS) && (extName[0] == '.'))
 		{
-			//TCHAR valName[extNameLen];
 			TCHAR valData[extNameLen];
 			int valDataLen = extNameLen * sizeof(TCHAR);
 			int valType;
@@ -247,7 +247,6 @@ void RegExtDlg::getRegisteredExts()
 			extNameActualLen = extNameLen;
 			::RegOpenKeyEx(HKEY_CLASSES_ROOT, extName, 0, KEY_ALL_ACCESS, &hKey2Check);
 			::RegQueryValueEx(hKey2Check, TEXT(""), NULL, (LPDWORD)&valType, (LPBYTE)valData, (LPDWORD)&valDataLen);
-			//::RegEnumValue(hKey2Check, 0, valName, (LPDWORD)&extNameActualLen, NULL, (LPDWORD)&valType, (LPBYTE)valData, (LPDWORD)&valDataLen);
 			if ((valType == REG_SZ) && (!lstrcmp(valData, nppName)))
 				::SendDlgItemMessage(_hSelf, IDC_REGEXT_REGISTEREDEXTS_LIST, LB_ADDSTRING, 0, (LPARAM)extName);
 			::RegCloseKey(hKey2Check);

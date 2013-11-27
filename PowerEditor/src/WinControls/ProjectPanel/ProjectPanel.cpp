@@ -40,7 +40,7 @@
 #define INDEX_CLEAN_ROOT     0
 #define INDEX_DIRTY_ROOT     1
 #define INDEX_PROJECT        2
-#define INDEX_OPEN_NODE	     3
+#define INDEX_OPEN_NODE      3
 #define INDEX_CLOSED_NODE    4
 #define INDEX_LEAF           5
 #define INDEX_LEAF_INVALID   6
@@ -174,8 +174,6 @@ void ProjectPanel::checkIfNeedSave(const TCHAR *title)
 			if (!saveWorkSpace())
 				::MessageBox(_hSelf, TEXT("Your workspace was not saved."), title, MB_OK | MB_ICONERROR);
 		}
-		//else if (res == IDNO)
-			// Don't save so do nothing here
 	}
 }
 
@@ -403,15 +401,14 @@ bool ProjectPanel::writeWorkSpace(TCHAR *projectFileName)
 	//for each project, write <Project>
 	HTREEITEM tvRoot = _treeView.getRoot();
 	if (!tvRoot)
-	  return false;
+		return false;
 
 	for (HTREEITEM tvProj = _treeView.getChildFrom(tvRoot);
 		tvProj != NULL;
 		tvProj = _treeView.getNextSibling(tvProj))
-	{        
+	{
 		tvItem.hItem = tvProj;
 		SendMessage(_treeView.getHSelf(), TVM_GETITEM, 0,(LPARAM)&tvItem);
-		//printStr(tvItem.pszText);
 
 		TiXmlNode *projRoot = root->InsertEndChild(TiXmlElement(TEXT("Project")));
 		projRoot->ToElement()->SetAttribute(TEXT("name"), tvItem.pszText);
@@ -684,9 +681,7 @@ void ProjectPanel::notified(LPNMHDR notification)
 
 			case TVN_BEGINDRAG:
 			{
-				//printStr(TEXT("hello"));
 				_treeView.beginDrag((LPNMTREEVIEW)notification);
-				
 			}
 			break;
 		}
@@ -799,8 +794,8 @@ void ProjectPanel::popupMenuCmd(int cmdID)
 		//
 		case IDB_PROJECT_BTN:
 		{
-		  POINT p = getMenuDisplyPoint(0);
-		  TrackPopupMenu(_hWorkSpaceMenu, TPM_LEFTALIGN, p.x, p.y, 0, _hSelf, NULL);
+			POINT p = getMenuDisplyPoint(0);
+			TrackPopupMenu(_hWorkSpaceMenu, TPM_LEFTALIGN, p.x, p.y, 0, _hSelf, NULL);
 		}
 		break;
 
@@ -1062,8 +1057,10 @@ bool ProjectPanel::saveWorkSpaceAs(bool saveCopyAs)
 			_workSpaceFilePath = fn;
 			setWorkSpaceDirty(false);
 		}
+
 		return true;
 	}
+
 	return false;
 }
 
@@ -1074,11 +1071,10 @@ void ProjectPanel::addFiles(HTREEITEM hTreeItem)
 
 	if (stringVector *pfns = fDlg.doOpenMultiFilesDlg())
 	{
-		size_t sz = pfns->size();
-		for (size_t i = 0 ; i < sz ; ++i)
+		for (generic_string& pfn : *pfns)
 		{
-			TCHAR *strValueLabel = ::PathFindFileName(pfns->at(i).c_str());
-			_treeView.addItem(strValueLabel, hTreeItem, INDEX_LEAF, pfns->at(i).c_str());
+			TCHAR *strValueLabel = ::PathFindFileName(pfn.c_str());
+			_treeView.addItem(strValueLabel, hTreeItem, INDEX_LEAF, pfn.c_str());
 		}
 		_treeView.expand(hTreeItem);
 		setWorkSpaceDirty(true);
@@ -1128,14 +1124,14 @@ void ProjectPanel::recursiveAddFilesFrom(const TCHAR *folderPath, HTREEITEM hTre
 			files.push_back(foundData.cFileName);
 		}
 	} while (::FindNextFile(hFile, &foundData));
-	
-	for (size_t i = 0, len = files.size() ; i < len ; ++i)
+
+	for (generic_string& file : files)
 	{
 		generic_string pathFile(folderPath);
 		if (folderPath[lstrlen(folderPath)-1] != '\\')
 			pathFile += TEXT("\\");
-		pathFile += files[i];
-		_treeView.addItem(files[i].c_str(), hTreeItem, INDEX_LEAF, pathFile.c_str());
+		pathFile += file;
+		_treeView.addItem(file.c_str(), hTreeItem, INDEX_LEAF, pathFile.c_str());
 	}
 
 	::FindClose(hFile);

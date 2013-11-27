@@ -39,52 +39,65 @@ public :
 	BabyGridWrapper() : Window(){};
 	~BabyGridWrapper(){};
 	virtual void init(HINSTANCE hInst, HWND parent, int id);
-	virtual void destroy() {
+
+	virtual void destroy()
+	{
 		::DestroyWindow(_hSelf);
 	};
-	void setLineColNumber(size_t nbRow, size_t nbCol) {
+
+	void setLineColNumber(size_t nbRow, size_t nbCol)
+	{
 		::SendMessage(_hSelf, BGM_SETGRIDDIM, nbRow, nbCol);
 	};
 
-	void setCursorColour(COLORREF coulour) {
+	void setCursorColour(COLORREF coulour)
+	{
 		::SendMessage(_hSelf, BGM_SETCURSORCOLOR, (UINT)coulour, 0);
 	};
 
-	void hideCursor() {
+	void hideCursor()
+	{
 		setCursorColour(RGB(0, 0, 0));
 	};
 
-	void setColsNumbered(bool isNumbered = true) {
+	void setColsNumbered(bool isNumbered = true)
+	{
 		::SendMessage(_hSelf, BGM_SETCOLSNUMBERED, isNumbered?TRUE:FALSE, 0);
 	}
 
-	void setText(size_t row, size_t col, const TCHAR *text) {
+	void setText(size_t row, size_t col, const TCHAR *text)
+	{
 		_BGCELL cell;
 		cell.row = row;
 		cell.col = col;
 		::SendMessage(_hSelf, BGM_SETCELLDATA, (UINT)&cell, (long)text);
 	};
 
-	void makeColAutoWidth(bool autoWidth = true) {
+	void makeColAutoWidth(bool autoWidth = true)
+	{
 		::SendMessage(_hSelf, BGM_SETCOLAUTOWIDTH, autoWidth?TRUE:FALSE, 0);
 	};
 
-	int getSelectedRow() {
+	int getSelectedRow()
+	{
 		return ::SendMessage(_hSelf, BGM_GETROW, 0, 0);
 	};
 
-	void deleteCell(int row, int col) {
+	void deleteCell(int row, int col)
+	{
 		_BGCELL cell;
 		cell.row = row;
 		cell.col = col;
 		::SendMessage(_hSelf, BGM_DELETECELL, (UINT)&cell, 0);
 	};
 
-	void setColWidth(unsigned int col, unsigned int width) {
+	void setColWidth(unsigned int col, unsigned int width)
+	{
 		::SendMessage(_hSelf, BGM_SETCOLWIDTH, col, width);
 	};
 
-	void clear() {
+	void clear()
+	{
 		::SendMessage(_hSelf, BGM_CLEARGRID, 0, 0);
 	};
 

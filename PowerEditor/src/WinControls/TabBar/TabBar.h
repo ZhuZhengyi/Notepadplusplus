@@ -30,7 +30,7 @@
 #define TAB_BAR_H
 
 #ifndef _WIN32_IE
-#define _WIN32_IE	0x0600
+#define _WIN32_IE  0x0600
 #endif //_WIN32_IE
 
 #ifndef MENUCMDID_H
@@ -155,8 +155,14 @@ public :
 
 	TabBarPlus() : TabBar(), _isDragging(false), _tabBarDefaultProc(NULL), _currentHoverTabItem(-1),\
 		_isCloseHover(false), _whichCloseClickDown(-1), _lmbdHit(false) {};
-	enum tabColourIndex {
-		activeText, activeFocusedTop, activeUnfocusedTop, inactiveText, inactiveBg
+
+	enum tabColourIndex
+	{
+		activeText,
+		activeFocusedTop,
+		activeUnfocusedTop,
+		inactiveText,
+		inactiveBg
 	};
 
 	static void doDragNDrop(bool justDoIt)
@@ -186,7 +192,8 @@ public :
 		return _draggingPoint;
 	};
 
-	void resetDraggingPoint() {
+	void resetDraggingPoint()
+	{
 		_draggingPoint.x = 0;
 		_draggingPoint.y = 0;
 	};

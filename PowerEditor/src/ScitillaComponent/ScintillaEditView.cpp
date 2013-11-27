@@ -2348,20 +2348,18 @@ void ScintillaEditView::convertSelectedTextTo(bool Case)
 	{
 		execute(SCI_BEGINUNDOACTION);
 
-		ColumnModeInfos cmi = getColumnModeSelectInfo();
-
-		for (size_t i = 0, cmiLen = cmi.size(); i < cmiLen ; ++i)
+		ColumnModeInfos cmis = getColumnModeSelectInfo();
+		for (ColumnModeInfo& cmi : cmis)
 		{
-			const int len = cmi[i]._selRpos - cmi[i]._selLpos;
+			const int len = cmi._selRpos - cmi._selLpos;
 			char *srcStr = new char[len+1];
 			wchar_t *destStr = new wchar_t[len+1];
 
-			int start = cmi[i]._selLpos;
-			int end = cmi[i]._selRpos;
+			int start = cmi._selLpos;
+			int end = cmi._selRpos;
 			getText(srcStr, start, end);
 
 			int nbChar = ::MultiByteToWideChar(codepage, 0, srcStr, len, destStr, len);
-
 			for (int j = 0 ; j < nbChar ; ++j)
 			{
 				if (Case == UPPERCASE)
@@ -2379,10 +2377,7 @@ void ScintillaEditView::convertSelectedTextTo(bool Case)
 			delete [] destStr;
 		}
 
-		setMultiSelections(cmi);
-
-		//execute(SCI_SETSELECTIONSTART, selStart);
-		//execute(SCI_SETSELECTIONEND, selEnd);
+		setMultiSelections(cmis);
 
 		execute(SCI_ENDUNDOACTION);
 		return;
@@ -2524,40 +2519,45 @@ ColumnModeInfos ScintillaEditView::getColumnModeSelectInfo()
 				columnModeInfos.push_back(ColumnModeInfo(absPosSelStartPerLine, absPosSelEndPerLine, i, dir, nbVirtualAnchorSpc, nbVirtualCaretSpc));
 			}
 			else if (absPosSelStartPerLine > absPosSelEndPerLine)
+			{
 				columnModeInfos.push_back(ColumnModeInfo(absPosSelEndPerLine, absPosSelStartPerLine, i, R2L, nbVirtualAnchorSpc, nbVirtualCaretSpc));
+			}
 			else
+			{
 				columnModeInfos.push_back(ColumnModeInfo(absPosSelStartPerLine, absPosSelEndPerLine, i, L2R, nbVirtualAnchorSpc, nbVirtualCaretSpc));
+			}
 		}
 	}
 	return columnModeInfos;
 }
 
-void ScintillaEditView::columnReplace(ColumnModeInfos & cmi, const TCHAR *str)
+void ScintillaEditView::columnReplace(ColumnModeInfos & cmis, const TCHAR *str)
 {
 	int totalDiff = 0;
-	for (size_t i = 0, len = cmi.size(); i < len ; ++i)
+
+	for (ColumnModeInfo& cmi : cmis)
 	{
-		if (cmi[i].isValid())
+		if (cmi.isValid())
 		{
-			int len2beReplace = cmi[i]._selRpos - cmi[i]._selLpos;
+			int len2beReplace = cmi._selRpos - cmi._selLpos;
 			int diff = lstrlen(str) - len2beReplace;
 
-			cmi[i]._selLpos += totalDiff;
-			cmi[i]._selRpos += totalDiff;
-			bool hasVirtualSpc = cmi[i]._nbVirtualAnchorSpc > 0;
+			cmi._selLpos += totalDiff;
+			cmi._selRpos += totalDiff;
+			bool hasVirtualSpc = cmi._nbVirtualAnchorSpc > 0;
 
 			if (hasVirtualSpc) // if virtual space is present, then insert space
 			{
-				for (int j = 0, k = cmi[i]._selLpos; j < cmi[i]._nbVirtualCaretSpc ; ++j, ++k)
+				for (int j = 0, k = cmi._selLpos; j < cmi._nbVirtualCaretSpc ; ++j, ++k)
 				{
 					execute(SCI_INSERTTEXT, k, (LPARAM)" ");
 				}
-				cmi[i]._selLpos += cmi[i]._nbVirtualAnchorSpc;
-				cmi[i]._selRpos += cmi[i]._nbVirtualCaretSpc;
+				cmi._selLpos += cmi._nbVirtualAnchorSpc;
+				cmi._selRpos += cmi._nbVirtualCaretSpc;
 			}
 
-			execute(SCI_SETTARGETSTART, cmi[i]._selLpos);
-			execute(SCI_SETTARGETEND, cmi[i]._selRpos);
+			execute(SCI_SETTARGETSTART, cmi._selLpos);
+			execute(SCI_SETTARGETEND, cmi._selRpos);
 
 			WcharMbcsConvertor *wmc = WcharMbcsConvertor::getInstance();
 			unsigned int cp = execute(SCI_GETCODEPAGE);
@@ -2566,22 +2566,22 @@ void ScintillaEditView::columnReplace(ColumnModeInfos & cmi, const TCHAR *str)
 
 			if (hasVirtualSpc)
 			{
-				totalDiff += cmi[i]._nbVirtualAnchorSpc + lstrlen(str);
+				totalDiff += cmi._nbVirtualAnchorSpc + lstrlen(str);
 
 				// Now there's no more virtual space
-				cmi[i]._nbVirtualAnchorSpc = 0;
-				cmi[i]._nbVirtualCaretSpc = 0;
+				cmi._nbVirtualAnchorSpc = 0;
+				cmi._nbVirtualCaretSpc = 0;
 			}
 			else
 			{
 				totalDiff += diff;
 			}
-			cmi[i]._selRpos += diff;
+			cmi._selRpos += diff;
 		}
 	}
 }
 
-void ScintillaEditView::columnReplace(ColumnModeInfos & cmi, int initial, int incr, UCHAR format)
+void ScintillaEditView::columnReplace(ColumnModeInfos & cmis, int initial, int incr, UCHAR format)
 {
 	// 0000 00 00 : Dec BASE_10
 	// 0000 00 01 : Hex BASE_16
@@ -2591,10 +2591,10 @@ void ScintillaEditView::columnReplace(ColumnModeInfos & cmi, int initial, int in
 	// 0000 01 00 : 0 leading
 
 	//Defined in ScintillaEditView.h :
-	//const UCHAR MASK_FORMAT = 0x03;
-	//const UCHAR MASK_ZERO_LEADING = 0x04;
+	//const unsigned char MASK_FORMAT = 0x03;
+	//const unsigned char MASK_ZERO_LEADING = 0x04;
 
-	UCHAR f = format & MASK_FORMAT;
+	unsigned char f = format & MASK_FORMAT;
 	bool isZeroLeading = (MASK_ZERO_LEADING & format) != 0;
 
 	int base = 10;
@@ -2605,7 +2605,7 @@ void ScintillaEditView::columnReplace(ColumnModeInfos & cmi, int initial, int in
 	else if (f == BASE_02)
 		base = 2;
 
-	int endNumber = initial + incr * (cmi.size() - 1);
+	int endNumber = initial + incr * (cmis.size() - 1);
 	int nbEnd = getNbDigits(endNumber, base);
 	int nbInit = getNbDigits(initial, base);
 	int nb = max(nbInit, nbEnd);
@@ -2614,30 +2614,30 @@ void ScintillaEditView::columnReplace(ColumnModeInfos & cmi, int initial, int in
 	TCHAR str[stringSize];
 
 	int totalDiff = 0;
-	for (size_t i = 0, len = cmi.size() ; i < len ; ++i)
+	for (ColumnModeInfo& cmi : cmis)
 	{
-		if (cmi[i].isValid())
+		if (cmi.isValid())
 		{
-			int len2beReplace = cmi[i]._selRpos - cmi[i]._selLpos;
+			int len2beReplace = cmi._selRpos - cmi._selLpos;
 			int diff = nb - len2beReplace;
 
-			cmi[i]._selLpos += totalDiff;
-			cmi[i]._selRpos += totalDiff;
+			cmi._selLpos += totalDiff;
+			cmi._selRpos += totalDiff;
 
 			int2str(str, stringSize, initial, base, nb, isZeroLeading);
 
-			bool hasVirtualSpc = cmi[i]._nbVirtualAnchorSpc > 0;
+			bool hasVirtualSpc = cmi._nbVirtualAnchorSpc > 0;
 			if (hasVirtualSpc) // if virtual space is present, then insert space
 			{
-				for (int j = 0, k = cmi[i]._selLpos; j < cmi[i]._nbVirtualCaretSpc ; ++j, ++k)
+				for (int j = 0, k = cmi._selLpos; j < cmi._nbVirtualCaretSpc ; ++j, ++k)
 				{
 					execute(SCI_INSERTTEXT, k, (LPARAM)" ");
 				}
-				cmi[i]._selLpos += cmi[i]._nbVirtualAnchorSpc;
-				cmi[i]._selRpos += cmi[i]._nbVirtualCaretSpc;
+				cmi._selLpos += cmi._nbVirtualAnchorSpc;
+				cmi._selRpos += cmi._nbVirtualCaretSpc;
 			}
-			execute(SCI_SETTARGETSTART, cmi[i]._selLpos);
-			execute(SCI_SETTARGETEND, cmi[i]._selRpos);
+			execute(SCI_SETTARGETSTART, cmi._selLpos);
+			execute(SCI_SETTARGETEND, cmi._selRpos);
 
 			WcharMbcsConvertor *wmc = WcharMbcsConvertor::getInstance();
 			unsigned int cp = execute(SCI_GETCODEPAGE);
@@ -2647,16 +2647,16 @@ void ScintillaEditView::columnReplace(ColumnModeInfos & cmi, int initial, int in
 			initial += incr;
 			if (hasVirtualSpc)
 			{
-				totalDiff += cmi[i]._nbVirtualAnchorSpc + lstrlen(str);
+				totalDiff += cmi._nbVirtualAnchorSpc + lstrlen(str);
 				// Now there's no more virtual space
-				cmi[i]._nbVirtualAnchorSpc = 0;
-				cmi[i]._nbVirtualCaretSpc = 0;
+				cmi._nbVirtualAnchorSpc = 0;
+				cmi._nbVirtualCaretSpc = 0;
 			}
 			else
 			{
 				totalDiff += diff;
 			}
-			cmi[i]._selRpos += diff;
+			cmi._selRpos += diff;
 		}
 	}
 }

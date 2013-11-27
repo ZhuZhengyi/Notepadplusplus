@@ -75,23 +75,37 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 		case SCN_SAVEPOINTLEFT:
 		{
 			Buffer * buf = 0;
-			if (isFromPrimary) {
+			if (isFromPrimary)
+			{
 				buf = _mainEditView.getCurrentBuffer();
-			} else if (isFromSecondary) {
+			}
+			else if (isFromSecondary)
+			{
 				buf = _subEditView.getCurrentBuffer();
-			} else {
+			}
+			else
+			{
 				//Done by invisibleEditView?
 				BufferID id = BUFFER_INVALID;
-				if (notification->nmhdr.hwndFrom == _invisibleEditView.getHSelf()) {
+				if (notification->nmhdr.hwndFrom == _invisibleEditView.getHSelf())
+				{
 					id = MainFileManager->getBufferFromDocument(_invisibleEditView.execute(SCI_GETDOCPOINTER));
-				} else if (notification->nmhdr.hwndFrom == _fileEditView.getHSelf()) {
+				}
+				else if (notification->nmhdr.hwndFrom == _fileEditView.getHSelf())
+				{
 					id = MainFileManager->getBufferFromDocument(_fileEditView.execute(SCI_GETDOCPOINTER));
-				} else {
+				}
+				else
+				{
 					break;	//wrong scintilla
 				}
-				if (id != BUFFER_INVALID) {
+
+				if (id != BUFFER_INVALID)
+				{
 					buf = MainFileManager->getBufferByID(id);
-				} else {
+				}
+				else
+				{
 					break;
 				}
 			}
@@ -137,12 +151,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 				     (hWin == _pNonEditView->getHSelf())) // In the another view group
 			{
 				docGotoAnotherEditView(isInCtrlStat?TransferClone:TransferMove);
-			}/*
-			else if ((hWin == _pProjectPanel_1->getTreeHandle()))
-			{
-
-				//printStr(TEXT("IN!!!"));
-			}*/
+			}
 			else
 			{
 				RECT nppZone;
@@ -197,7 +206,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 				}
 			}
 		}
-		//break;
+
 		sender->resetDraggingPoint();
 		return TRUE;
 	}
@@ -208,17 +217,17 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 		BufferID bufferToClose = notifyDocTab->getBufferByIndex(index);
 		Buffer * buf = MainFileManager->getBufferByID(bufferToClose);
 		int iView = isFromPrimary?MAIN_VIEW:SUB_VIEW;
-		if (buf->isDirty()) {	//activate and use fileClose() (for save and abort)
+		if (buf->isDirty()) //activate and use fileClose() (for save and abort)
+		{
 			activateBuffer(bufferToClose, iView);
 			fileClose(bufferToClose, iView);
 			break;
 		}
+
 		int open = 1;
 		if (isFromPrimary || isFromSecondary)
 			open = notifyDocTab->nbItem();
 		doClose(bufferToClose, iView);
-		//if (open == 1 && canHideView(iView))
-		//	hideView(iView);
 		break;
 
 	}
@@ -326,7 +335,6 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 		else // From tool bar or Status Bar
 		{
 			return TRUE;
-			//break;
 		}
 
 		if (!_tabPopupMenu.isCreated())
@@ -553,9 +561,11 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 
 				for(unsigned int i = 0; i < bufstring.length(); ++i)
 				{
-					if(bufstring.at(i) == nppGUI._leftmostDelimiter)
+					if (bufstring.at(i) == nppGUI._leftmostDelimiter)
+					{
 						leftmost_delimiter_positions.push(i);
-					else if(bufstring.at(i) == nppGUI._rightmostDelimiter && ! leftmost_delimiter_positions.empty())
+					}
+					else if (bufstring.at(i) == nppGUI._rightmostDelimiter && ! leftmost_delimiter_positions.empty())
 					{
 						unsigned int matching_leftmost = leftmost_delimiter_positions.top();
 						leftmost_delimiter_positions.pop();

@@ -63,8 +63,12 @@
 #define PM_MOVEUPENTRY             TEXT("Move Up\tCtrl+Up")
 #define PM_MOVEDOWNENTRY           TEXT("Move Down\tCtrl+Down")
 
-enum NodeType {
-	nodeType_root = 0, nodeType_project = 1, nodeType_folder = 2, nodeType_file = 3
+enum NodeType
+{
+	nodeType_root    = 0,
+	nodeType_project = 1,
+	nodeType_folder  = 2,
+	nodeType_file    = 3
 };
 
 class TiXmlNode;
@@ -77,7 +81,8 @@ public:
 		_hFolderMenu(NULL), _hFileMenu(NULL){};
 
 
-	void init(HINSTANCE hInst, HWND hPere) {
+	void init(HINSTANCE hInst, HWND hPere)
+	{
 		DockingDlgInterface::init(hInst, hPere);
 	}
 
@@ -95,15 +100,22 @@ public:
 	bool openWorkSpace(const TCHAR *projectFileName);
 	bool saveWorkSpace();
 	bool saveWorkSpaceAs(bool saveCopyAs);
-	void setWorkSpaceFilePath(const TCHAR *projectFileName){
+
+	void setWorkSpaceFilePath(const TCHAR *projectFileName)
+	{
 		_workSpaceFilePath = projectFileName;
 	};
-	const TCHAR * getWorkSpaceFilePath() const {
+
+	const TCHAR* getWorkSpaceFilePath() const
+	{
 		return _workSpaceFilePath.c_str();
 	};
-	bool isDirty() const {
+
+	bool isDirty() const
+	{
 		return _isDirty;
 	};
+
 	void checkIfNeedSave(const TCHAR *title);
 
 protected:
@@ -142,7 +154,8 @@ class FileRelocalizerDlg : public StaticDialog
 {
 public :
 	FileRelocalizerDlg() : StaticDialog() {};
-	void init(HINSTANCE hInst, HWND parent){
+	void init(HINSTANCE hInst, HWND parent)
+	{
 		Window::init(hInst, parent);
 	};
 
@@ -150,7 +163,8 @@ public :
 
 	virtual void destroy() {};
 
-	generic_string getFullFilePath() {
+	generic_string getFullFilePath()
+	{
 		return _fullFilePath;
 	};
 

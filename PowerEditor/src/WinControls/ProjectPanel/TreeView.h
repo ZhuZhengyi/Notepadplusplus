@@ -54,53 +54,74 @@ public:
 	void removeItem(HTREEITEM hTreeItem);
 	void removeAllItems();
 
-	HTREEITEM getChildFrom(HTREEITEM hTreeItem) const {
+	HTREEITEM getChildFrom(HTREEITEM hTreeItem) const
+	{
 		return TreeView_GetChild(_hSelf, hTreeItem);
 	};
-	HTREEITEM getSelection() const {
+
+	HTREEITEM getSelection() const
+	{
 		return TreeView_GetSelection(_hSelf);
 	};
-	bool selectItem(HTREEITEM hTreeItem2Select) const {
+
+	bool selectItem(HTREEITEM hTreeItem2Select) const
+	{
 		return TreeView_SelectItem(_hSelf, hTreeItem2Select) == TRUE;
 	};
-	HTREEITEM getRoot() const {
+
+	HTREEITEM getRoot() const
+	{
 		return TreeView_GetRoot(_hSelf);
 	};
-	HTREEITEM getParent(HTREEITEM hItem) const {
+
+	HTREEITEM getParent(HTREEITEM hItem) const
+	{
 		return TreeView_GetParent(_hSelf, hItem);
 	};
-	HTREEITEM getNextSibling(HTREEITEM hItem) const {
+
+	HTREEITEM getNextSibling(HTREEITEM hItem) const
+	{
 		return TreeView_GetNextSibling(_hSelf, hItem);
 	};
-	HTREEITEM getPrevSibling(HTREEITEM hItem) const {
+
+	HTREEITEM getPrevSibling(HTREEITEM hItem) const
+	{
 		return TreeView_GetPrevSibling(_hSelf, hItem);
 	};
 
-	void expand(HTREEITEM hItem) const {
+	void expand(HTREEITEM hItem) const
+	{
 		TreeView_Expand(_hSelf, hItem, TVE_EXPAND);
 	};
 
-	void fold(HTREEITEM hItem) const {
+	void fold(HTREEITEM hItem) const
+	{
 		TreeView_Expand(_hSelf, hItem, TVE_COLLAPSE);
 	};
 
-	void toggleExpandCollapse(HTREEITEM hItem) const {
+	void toggleExpandCollapse(HTREEITEM hItem) const
+	{
 		TreeView_Expand(_hSelf, hItem, TVE_TOGGLE);
 	};
+
 	void setItemImage(HTREEITEM hTreeItem, int iImage, int iSelectedImage);
 
 	// Drag and Drop operations
 	void beginDrag(NMTREEVIEW* tv);
 	void dragItem(HWND parentHandle, int x, int y);
-	bool isDragging() const {
+	bool isDragging() const
+	{
 		return _isItemDragged;
 	};
+
 	bool dropItem();
-	void addCanNotDropInList(int val2set) {
+	void addCanNotDropInList(int val2set)
+	{
 		_canNotDropInList.push_back(val2set);
 	};
 
-	void addCanNotDragOutList(int val2set) {
+	void addCanNotDragOutList(int val2set)
+	{
 		_canNotDragOutList.push_back(val2set);
 	};
 
@@ -116,9 +137,11 @@ protected:
 	WNDPROC _defaultProc;
 	LRESULT runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam);
 
-	static LRESULT CALLBACK staticProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) {
+	static LRESULT CALLBACK staticProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
+	{
 		return (((TreeView *)(::GetWindowLongPtr(hwnd, GWL_USERDATA)))->runProc(hwnd, Message, wParam, lParam));
 	};
+
 	void cleanSubEntries(HTREEITEM hTreeItem);
 	void dupTree(HTREEITEM hTree2Dup, HTREEITEM hParentItem);
 	bool searchLeafRecusivelyAndBuildTree(HTREEITEM tree2Build, const generic_string & text2Search, int index2Search, HTREEITEM tree2Search);

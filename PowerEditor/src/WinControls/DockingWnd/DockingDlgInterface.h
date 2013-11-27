@@ -107,7 +107,7 @@ protected :
 
 			case WM_NOTIFY:
 			{
-				LPNMHDR	pnmh = (LPNMHDR)lParam;
+				LPNMHDR pnmh = (LPNMHDR)lParam;
 
 				if (pnmh->hwndFrom == _hParent)
 				{

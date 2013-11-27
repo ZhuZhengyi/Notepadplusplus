@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -108,7 +108,8 @@ std::string wstring2string(const std::wstring & rwString, UINT codepage);
 bool isInList(const TCHAR *token, const TCHAR *list);
 generic_string BuildMenuFileName(int filenameLen, unsigned int pos, const generic_string &filename);
 
-class WcharMbcsConvertor {
+class WcharMbcsConvertor
+{
 public:
 	static WcharMbcsConvertor * getInstance() {return _pSelf;};
 	static void destroyInstance() {delete _pSelf;};
@@ -118,26 +119,31 @@ public:
 	const char * wchar2char(const wchar_t *wcStr, UINT codepage, int lenIn=-1, int *pLenOut=NULL);
 	const char * wchar2char(const wchar_t *wcStr, UINT codepage, long *mstart, long *mend);
 	
-	const char * encode(UINT fromCodepage, UINT toCodepage, const char *txt2Encode, int lenIn=-1, int *pLenOut=NULL, int *pBytesNotProcessed=NULL) {
+	const char * encode(UINT fromCodepage, UINT toCodepage, const char *txt2Encode, int lenIn=-1, int *pLenOut=NULL, int *pBytesNotProcessed=NULL)
+	{
 		int lenWc = 0;
-        const wchar_t * strW = char2wchar(txt2Encode, fromCodepage, lenIn, &lenWc, pBytesNotProcessed);
-        return wchar2char(strW, toCodepage, lenWc, pLenOut);
-    };
+		const wchar_t * strW = char2wchar(txt2Encode, fromCodepage, lenIn, &lenWc, pBytesNotProcessed);
+		return wchar2char(strW, toCodepage, lenWc, pLenOut);
+	};
 
 protected:
-	WcharMbcsConvertor() {
+	WcharMbcsConvertor()
+	{
 	};
-	~WcharMbcsConvertor() {
+	~WcharMbcsConvertor()
+	{
 	};
 	static WcharMbcsConvertor * _pSelf;
 
 	template <class T>
-	class StringBuffer {
+	class StringBuffer
+	{
 	public:
 		StringBuffer() : _str(0), _allocLen(0) { }
 		~StringBuffer() { if(_allocLen) delete [] _str; }
 
-		void sizeTo(size_t size) {
+		void sizeTo(size_t size)
+		{
 			if(_allocLen < size)
 			{
 				if(_allocLen) delete[] _str;
@@ -145,7 +151,9 @@ protected:
 				_str = new T[_allocLen];
 			}
 		}
-		void empty() {
+
+		void empty()
+		{
 			static T nullStr = 0; // routines may return an empty string, with null terminator, without allocating memory; a pointer to this null character will be returned in that case
 			if(_allocLen == 0)
 				_str = &nullStr;
@@ -153,7 +161,10 @@ protected:
 				_str[0] = 0;
 		}
 
-		operator T*() { return _str; }
+		operator T*()
+		{ 
+			return _str;
+		}
 
 	protected:
 		static const int initSize = 1024;

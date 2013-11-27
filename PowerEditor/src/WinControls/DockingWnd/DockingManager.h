@@ -128,18 +128,18 @@ private :
 	LRESULT SendNotify(HWND hWnd, UINT message);
 
 private:
-	Window						**_ppWindow;
-	RECT						_rcWork;
-	RECT						_rect;
-	Window						**_ppMainWindow;
-	vector<HWND>				_vImageList;
-	HIMAGELIST					_hImageList;
-	vector<DockingCont*>		_vContainer;
-	tDockMgr					_dockData;
-	static BOOL					_isRegistered;
-	BOOL						_isInitialized;
-	int							_iContMap[CONT_MAP_MAX];
-	vector<DockingSplitter *>	_vSplitter;
+	Window                      **_ppWindow;
+	RECT                        _rcWork;
+	RECT                        _rect;
+	Window                      **_ppMainWindow;
+	vector<HWND>                _vImageList;
+	HIMAGELIST                  _hImageList;
+	vector<DockingCont*>        _vContainer;
+	tDockMgr                    _dockData;
+	static BOOL                 _isRegistered;
+	BOOL                        _isInitialized;
+	int                         _iContMap[CONT_MAP_MAX];
+	vector<DockingSplitter *>   _vSplitter;
 };
 
 #endif //DOCKINGMANAGER_H

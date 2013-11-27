@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -198,9 +198,9 @@
 	#define    IDM_FILESWITCHER_FILESCLOSEOTHERS      (IDM_MISC + 2)
 
 
-#define IDM_VIEW    (IDM + 4000)                
+#define IDM_VIEW    (IDM + 4000)
     //#define    IDM_VIEW_TOOLBAR_HIDE            (IDM_VIEW + 1)
-    #define    IDM_VIEW_TOOLBAR_REDUCE            (IDM_VIEW + 2)    
+    #define    IDM_VIEW_TOOLBAR_REDUCE            (IDM_VIEW + 2)
     #define    IDM_VIEW_TOOLBAR_ENLARGE           (IDM_VIEW + 3)
     #define    IDM_VIEW_TOOLBAR_STANDARD          (IDM_VIEW + 4)
     #define    IDM_VIEW_REDUCETABBAR              (IDM_VIEW + 5)
@@ -244,12 +244,12 @@
     #define    IDM_VIEW_DRAWTABBAR_VERTICAL       (IDM_VIEW + 43)
     #define    IDM_VIEW_DRAWTABBAR_MULTILINE      (IDM_VIEW + 44)
     #define    IDM_VIEW_DOCCHANGEMARGIN           (IDM_VIEW + 45)
-    #define    IDM_VIEW_LWDEF					  (IDM_VIEW + 46)
-    #define    IDM_VIEW_LWALIGN					  (IDM_VIEW + 47)
-    #define    IDM_VIEW_LWINDENT				  (IDM_VIEW + 48)
-    #define    IDM_VIEW_SUMMARY 				  (IDM_VIEW + 49)
+    #define    IDM_VIEW_LWDEF                     (IDM_VIEW + 46)
+    #define    IDM_VIEW_LWALIGN                   (IDM_VIEW + 47)
+    #define    IDM_VIEW_LWINDENT                  (IDM_VIEW + 48)
+    #define    IDM_VIEW_SUMMARY                   (IDM_VIEW + 49)
 
-    #define    IDM_VIEW_FOLD                      (IDM_VIEW + 50)
+    #define    IDM_VIEW_FOLD          (IDM_VIEW + 50)
         #define    IDM_VIEW_FOLD_1    (IDM_VIEW_FOLD + 1)
         #define    IDM_VIEW_FOLD_2    (IDM_VIEW_FOLD + 2)
         #define    IDM_VIEW_FOLD_3    (IDM_VIEW_FOLD + 3)
@@ -259,7 +259,7 @@
         #define    IDM_VIEW_FOLD_7    (IDM_VIEW_FOLD + 7)
         #define    IDM_VIEW_FOLD_8    (IDM_VIEW_FOLD + 8)
 
-    #define    IDM_VIEW_UNFOLD                    (IDM_VIEW + 60)
+    #define    IDM_VIEW_UNFOLD          (IDM_VIEW + 60)
         #define    IDM_VIEW_UNFOLD_1    (IDM_VIEW_UNFOLD + 1)
         #define    IDM_VIEW_UNFOLD_2    (IDM_VIEW_UNFOLD + 2)
         #define    IDM_VIEW_UNFOLD_3    (IDM_VIEW_UNFOLD + 3)
@@ -280,17 +280,17 @@
 
 	#define    IDM_VIEW_FUNC_LIST                 (IDM_VIEW + 84)
 	
-	#define	   IDM_VIEW_TAB1					  (IDM_VIEW + 86)
-	#define	   IDM_VIEW_TAB2					  (IDM_VIEW + 87)
-	#define	   IDM_VIEW_TAB3					  (IDM_VIEW + 88)
-	#define	   IDM_VIEW_TAB4					  (IDM_VIEW + 89)
-	#define	   IDM_VIEW_TAB5					  (IDM_VIEW + 90)
-	#define	   IDM_VIEW_TAB6					  (IDM_VIEW + 91)
-	#define	   IDM_VIEW_TAB7					  (IDM_VIEW + 92)
-	#define	   IDM_VIEW_TAB8					  (IDM_VIEW + 93)
-	#define	   IDM_VIEW_TAB9					  (IDM_VIEW + 94)
-	#define	   IDM_VIEW_TAB_NEXT				  (IDM_VIEW + 95)
-	#define	   IDM_VIEW_TAB_PREV				  (IDM_VIEW + 96)
+	#define	   IDM_VIEW_TAB1                      (IDM_VIEW + 86)
+	#define	   IDM_VIEW_TAB2                      (IDM_VIEW + 87)
+	#define	   IDM_VIEW_TAB3                      (IDM_VIEW + 88)
+	#define	   IDM_VIEW_TAB4                      (IDM_VIEW + 89)
+	#define	   IDM_VIEW_TAB5                      (IDM_VIEW + 90)
+	#define	   IDM_VIEW_TAB6                      (IDM_VIEW + 91)
+	#define	   IDM_VIEW_TAB7                      (IDM_VIEW + 92)
+	#define	   IDM_VIEW_TAB8                      (IDM_VIEW + 93)
+	#define	   IDM_VIEW_TAB9                      (IDM_VIEW + 94)
+	#define	   IDM_VIEW_TAB_NEXT                  (IDM_VIEW + 95)
+	#define	   IDM_VIEW_TAB_PREV                  (IDM_VIEW + 96)
 
     #define    IDM_VIEW_GOTO_ANOTHER_VIEW        10001
     #define    IDM_VIEW_CLONE_TO_ANOTHER_VIEW    10002
@@ -338,8 +338,8 @@
     #define    IDM_FORMAT_ISO_8859_14       (IDM_FORMAT_ENCODE + 21)
     #define    IDM_FORMAT_ISO_8859_15       (IDM_FORMAT_ENCODE + 22)
     #define    IDM_FORMAT_ISO_8859_16       (IDM_FORMAT_ENCODE + 23)
-	#define    IDM_FORMAT_DOS_437           (IDM_FORMAT_ENCODE + 24)
-	#define    IDM_FORMAT_DOS_720           (IDM_FORMAT_ENCODE + 25)
+    #define    IDM_FORMAT_DOS_437           (IDM_FORMAT_ENCODE + 24)
+    #define    IDM_FORMAT_DOS_720           (IDM_FORMAT_ENCODE + 25)
     #define    IDM_FORMAT_DOS_737           (IDM_FORMAT_ENCODE + 26)
     #define    IDM_FORMAT_DOS_775           (IDM_FORMAT_ENCODE + 27)
     #define    IDM_FORMAT_DOS_850           (IDM_FORMAT_ENCODE + 28)
@@ -423,7 +423,7 @@
     #define    IDM_LANG_POWERSHELL         (IDM_LANG + 53)
     #define    IDM_LANG_R                  (IDM_LANG + 54)
     #define    IDM_LANG_JSP                (IDM_LANG + 55)
-	#define    IDM_LANG_COFFEESCRIPT       (IDM_LANG + 56)
+    #define    IDM_LANG_COFFEESCRIPT       (IDM_LANG + 56)
 
     #define    IDM_LANG_EXTERNAL           (IDM_LANG + 65)
     #define    IDM_LANG_EXTERNAL_LIMIT     (IDM_LANG + 79)
@@ -443,7 +443,7 @@
     #define    IDM_UPDATE_NPP       (IDM_ABOUT  + 6)
     #define    IDM_WIKIFAQ          (IDM_ABOUT  + 7)
     #define    IDM_HELP             (IDM_ABOUT  + 8)
-	#define    IDM_CONFUPDATERPROXY (IDM_ABOUT  + 9)
+    #define    IDM_CONFUPDATERPROXY (IDM_ABOUT  + 9)
 
 
 #define    IDM_SETTING    (IDM + 8000)
@@ -458,9 +458,9 @@
     #define    IDM_SETTING_REMEMBER_LAST_SESSION    (IDM_SETTING + 10)
     #define    IDM_SETTING_PREFERECE                (IDM_SETTING + 11)
 //    #define    IDM_SETTING_AUTOCNBCHAR              (IDM_SETTING + 15)
-    #define	   IDM_SETTING_SHORTCUT_MAPPER_MACRO	(IDM_SETTING + 16)
-	#define	   IDM_SETTING_SHORTCUT_MAPPER_RUN		(IDM_SETTING + 17)
-	#define	   IDM_SETTING_EDITCONTEXTMENU  	    (IDM_SETTING + 18)
+    #define    IDM_SETTING_SHORTCUT_MAPPER_MACRO    (IDM_SETTING + 16)
+    #define    IDM_SETTING_SHORTCUT_MAPPER_RUN      (IDM_SETTING + 17)
+    #define    IDM_SETTING_EDITCONTEXTMENU          (IDM_SETTING + 18)
 
 #define    IDM_EXECUTE  (IDM + 9000)
 

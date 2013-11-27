@@ -73,7 +73,8 @@ static int keyTranslate(int keyIn) {
 	}
 };
 
-struct KeyCombo {
+struct KeyCombo
+{
 	bool _isCtrl;
 	bool _isAlt;
 	bool _isShift;
@@ -168,7 +169,8 @@ public:
 		return true;
 	};
 
-	virtual bool isEnabled() const { //true if _keyCombo != 0, false if _keyCombo == 0, in which case no accelerator should be made
+	virtual bool isEnabled() const //true if _keyCombo != 0, false if _keyCombo == 0, in which case no accelerator should be made
+	{
 		return (_keyCombo._key != 0);
 	};
 
@@ -223,7 +225,8 @@ private :
 class ScintillaKeyMap : public Shortcut
 {
 public:
-	ScintillaKeyMap(Shortcut sc, unsigned long scintillaKeyID, unsigned long id): Shortcut(sc), _menuCmdID(id), _scintillaKeyID(scintillaKeyID) {
+	ScintillaKeyMap(Shortcut sc, unsigned long scintillaKeyID, unsigned long id): Shortcut(sc), _menuCmdID(id), _scintillaKeyID(scintillaKeyID)
+	{
 		_keyCombos.clear();
 		_keyCombos.push_back(_keyCombo);
 		_keyCombo._key = 0;
@@ -324,7 +327,11 @@ struct recordedMacroStep
 	{
 		return true;
 	};
-	bool isPlayable() const {return MacroType <= mtMenuCommand;};
+
+	bool isPlayable() const
+	{
+		return MacroType <= mtMenuCommand;
+	};
 
 	void PlayBack(Window* pNotepad, ScintillaEditView *pEditView);
 };
@@ -378,7 +385,8 @@ private :
 	int _internalID;
 };
 
-class Accelerator { //Handles accelerator keys for Notepad++ menu, including custom commands
+class Accelerator //Handles accelerator keys for Notepad++ menu, including custom commands
+{
 friend class ShortcutMapper;
 public:
 	Accelerator():_hAccelMenu(NULL), _hMenuParent(NULL), _hAccTable(NULL), _pAccelArray(NULL), _nbAccelItems(0){};

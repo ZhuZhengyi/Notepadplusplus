@@ -659,8 +659,8 @@ public:
 
 	ColumnModeInfos getColumnModeSelectInfo();
 
-	void columnReplace(ColumnModeInfos & cmi, const TCHAR *str);
-	void columnReplace(ColumnModeInfos & cmi, int initial, int incr, UCHAR format);
+	void columnReplace(ColumnModeInfos & cmis, const TCHAR *str);
+	void columnReplace(ColumnModeInfos & cmis, int initial, int incr, UCHAR format);
 
 	void foldChanged(int line, int levelNow, int levelPrev);
 	void clearIndicator(int indicatorNumber)

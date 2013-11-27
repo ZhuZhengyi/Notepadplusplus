@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -47,18 +47,21 @@
 
 typedef BOOL (__cdecl * PFUNCISUNICODE)();
 
-struct PluginCommand {
+struct PluginCommand
+{
 	generic_string _pluginName;
 	int _funcID;
 	PFUNCPLUGINCMD _pFunc;
 	PluginCommand(const TCHAR *pluginName, int funcID, PFUNCPLUGINCMD pFunc): _funcID(funcID), _pFunc(pFunc), _pluginName(pluginName){};
 };
 
-struct PluginInfo {
+struct PluginInfo
+{
 	PluginInfo() :_hLib(NULL), _pluginMenu(NULL), _pFuncSetInfo(NULL),\
 		_pFuncGetFuncsArray(NULL), _pFuncGetName(NULL), _funcItems(NULL),\
 		_nbFuncItem(0){};
-	~PluginInfo(){
+	~PluginInfo()
+	{
 		if (_pluginMenu)
 			::DestroyMenu(_pluginMenu);
 
@@ -81,31 +84,34 @@ struct PluginInfo {
 	generic_string _moduleName;
 };
 
-class PluginsManager {
+class PluginsManager
+{
 public:
 	PluginsManager() : _hPluginsMenu(NULL), _isDisabled(false), _dynamicIDAlloc(ID_PLUGINS_CMD_DYNAMIC, ID_PLUGINS_CMD_DYNAMIC_LIMIT),
 					   _markerAlloc(MARKER_PLUGINS, MARKER_PLUGINS_LIMIT)	{};
-	~PluginsManager() {
-		
+	~PluginsManager()
+	{
 		for (size_t i = 0, len = _pluginInfos.size(); i < len; ++i)
 			delete _pluginInfos[i];
 
 		if (_hPluginsMenu)
 			DestroyMenu(_hPluginsMenu);
 	};
-	void init(const NppData & nppData) {
+
+	void init(const NppData & nppData)
+	{
 		_nppData = nppData;
 	};
 
-    int loadPlugin(const TCHAR *pluginFilePath, vector<generic_string> & dll2Remove);
+	int loadPlugin(const TCHAR *pluginFilePath, vector<generic_string> & dll2Remove);
 	bool loadPlugins(const TCHAR *dir = NULL);
-	
-    bool unloadPlugin(int index, HWND nppHandle);
+
+	bool unloadPlugin(int index, HWND nppHandle);
 
 	void runPluginCommand(size_t i);
 	void runPluginCommand(const TCHAR *pluginName, int commandID);
 
-    void addInMenuFromPMIndex(int i);
+	void addInMenuFromPMIndex(int i);
 	HMENU setMenu(HMENU hMenu, const TCHAR *menuName);
 	bool getShortcutByCmdID(int cmdID, ShortcutKey *sk);
 
@@ -113,7 +119,8 @@ public:
 	void relayNppMessages(UINT Message, WPARAM wParam, LPARAM lParam);
 	bool relayPluginMessages(UINT Message, WPARAM wParam, LPARAM lParam);
 
-	HMENU getMenuHandle() {
+	HMENU getMenuHandle()
+	{
 		return _hPluginsMenu;
 	};
 
@@ -135,20 +142,27 @@ private:
 	bool _isDisabled;
 	IDAllocator _dynamicIDAlloc;
 	IDAllocator _markerAlloc;
-	void pluginCrashAlert(const TCHAR *pluginName, const TCHAR *funcSignature) {
+	void pluginCrashAlert(const TCHAR *pluginName, const TCHAR *funcSignature)
+	{
 		generic_string msg = pluginName;
 		msg += TEXT(" just crash in\r");
 		msg += funcSignature;
 		::MessageBox(NULL, msg.c_str(), TEXT(" just crash in\r"), MB_OK|MB_ICONSTOP);
 	};
-	bool isInLoadedDlls(const TCHAR *fn) const {
-		for (size_t i = 0; i < _loadedDlls.size(); ++i)
-			if (generic_stricmp(fn, _loadedDlls[i].c_str()) == 0)
+
+	bool isInLoadedDlls(const TCHAR *fn) const
+	{
+		for (const generic_string& loadedDll : _loadedDlls)
+		{
+			if (generic_stricmp(fn, loadedDll.c_str()) == 0)
 				return true;
+		}
+
 		return false;
 	};
 
-	void addInLoadedDlls(const TCHAR *fn) {
+	void addInLoadedDlls(const TCHAR *fn)
+	{
 		_loadedDlls.push_back(fn);
 	};
 };

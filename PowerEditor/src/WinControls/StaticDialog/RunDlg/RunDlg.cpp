@@ -56,7 +56,6 @@ void Command::extractArgs(TCHAR *cmd2Exec, TCHAR *args, const TCHAR *cmdEntier)
 			for (l -= 2 ; (l > 0) && (args[l] == ' ') ; l--);
 			args[l+1] = '\0';
 		}
-
 	}
 	else
 	{

@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -35,7 +35,8 @@
 #define SORT_DIRECTION_UP     0
 #define SORT_DIRECTION_DOWN   1
 
-struct SwitcherFileInfo {
+struct SwitcherFileInfo
+{
 	int _bufID;
 	int _iView;
 	SwitcherFileInfo(int buf, int view): _bufID(buf), _iView(view){};
@@ -51,9 +52,6 @@ public:
 	virtual void destroy();
 	void initList();
 	int getBufferInfoFromIndex(int index, int & view) const;
-	void setBgColour(int i) {
-		ListView_SetItemState(_hSelf, i, LVIS_SELECTED|LVIS_FOCUSED, 0xFF);
-	}
 	int newItem(int bufferID, int iView);
 	int closeItem(int bufferID, int iView);
 	void activateItem(int bufferID, int iView);
@@ -61,7 +59,14 @@ public:
 	generic_string getFullFilePath(size_t i) const;
 	
 	void insertColumn(const TCHAR *name, int width, int index);
-	int nbSelectedFiles() const {
+
+	void setBgColour(int i)
+	{
+		ListView_SetItemState(_hSelf, i, LVIS_SELECTED | LVIS_FOCUSED, 0xFF);
+	}
+
+	int nbSelectedFiles() const
+	{
 		return SendMessage(_hSelf, LVM_GETSELECTEDCOUNT, 0, 0);
 	};
 
@@ -72,7 +77,8 @@ protected:
 	WNDPROC _defaultProc;
 	LRESULT runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam);
 
-	static LRESULT CALLBACK staticProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) {
+	static LRESULT CALLBACK staticProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
+	{
 		return (((VerticalFileSwitcherListView *)(::GetWindowLongPtr(hwnd, GWL_USERDATA)))->runProc(hwnd, Message, wParam, lParam));
 	};
 

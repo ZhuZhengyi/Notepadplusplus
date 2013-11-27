@@ -44,7 +44,8 @@ class RunMacroDlg : public StaticDialog
 {
 public :
 	RunMacroDlg() : StaticDialog(), m_Mode(RM_RUN_MULTI), m_Times(1) {};
-	~RunMacroDlg() {
+	~RunMacroDlg()
+	{
 	};
 
 	void init(HINSTANCE hInst, HWND hPere/*, ScintillaEditView **ppEditView*/)

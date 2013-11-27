@@ -40,13 +40,26 @@ public :
 	~ColourPicker(){};
 	virtual void init(HINSTANCE hInst, HWND parent);
 	virtual void destroy();
-	void setColour(COLORREF c) {
+
+	void setColour(COLORREF c)
+	{
 		_currentColour = c;
 	};
 
-	COLORREF getColour() const {return _currentColour;};
-	bool isEnabled() {return _isEnabled;};
-	void setEnabled(bool enabled) {_isEnabled = enabled;};
+	COLORREF getColour() const
+	{
+		return _currentColour;
+	};
+
+	bool isEnabled()
+	{
+		return _isEnabled;
+	};
+
+	void setEnabled(bool enabled)
+	{
+		_isEnabled = enabled;
+	};
 
 private :
 	COLORREF _currentColour;
@@ -54,7 +67,8 @@ private :
 	ColourPopup *_pColourPopup;
 	bool _isEnabled;
 
-	static LRESULT CALLBACK staticWinProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) {
+	static LRESULT CALLBACK staticWinProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
+	{
 		return (((ColourPicker *)(::GetWindowLongPtr(hwnd, GWL_USERDATA)))->runProc(Message, wParam, lParam));
 	};
 	LRESULT runProc(UINT Message, WPARAM wParam, LPARAM lParam);

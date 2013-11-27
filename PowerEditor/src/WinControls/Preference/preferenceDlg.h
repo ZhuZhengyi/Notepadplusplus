@@ -74,7 +74,8 @@ class MarginsDlg : public StaticDialog
 {
 public :
 	MarginsDlg() {};
-	virtual void destroy() {
+	virtual void destroy()
+	{
 		_verticalEdgeLineNbColVal.destroy();
 	};
 
@@ -98,11 +99,13 @@ public :
 
 private :
 	std::vector<LangID_Name> _langList;
-	void makeOpenAnsiAsUtf8(bool doIt){
+	void makeOpenAnsiAsUtf8(bool doIt)
+	{
 		if (!doIt)
 			::SendDlgItemMessage(_hSelf, IDC_CHECK_OPENANSIASUTF8, BM_SETCHECK, BST_UNCHECKED, 0);
 		::EnableWindow(::GetDlgItem(_hSelf, IDC_CHECK_OPENANSIASUTF8), doIt);
 	};
+
 	BOOL CALLBACK run_dlgProc(UINT Message, WPARAM wParam, LPARAM lParam);
 };
 
@@ -119,7 +122,8 @@ class RecentFilesHistoryDlg : public StaticDialog
 {
 public :
 	RecentFilesHistoryDlg() {};
-	virtual void destroy() {
+	virtual void destroy()
+	{
 		_nbHistoryVal.destroy();
 		_customLenVal.destroy();
 	};
@@ -146,7 +150,8 @@ class TabSettings : public StaticDialog
 {
 public :
 	TabSettings() {};
-	virtual void destroy() {
+	virtual void destroy()
+	{
 		_tabSizeVal.destroy();
 	};
 
@@ -156,7 +161,8 @@ private :
 };
 
 
-struct strCouple {
+struct strCouple
+{
 	generic_string _varDesc;
 	generic_string _var;
 	strCouple(TCHAR *varDesc, TCHAR *var): _varDesc(varDesc), _var(var){};
@@ -220,11 +226,13 @@ friend class NativeLangSpeaker;
 public :
 	PreferenceDlg(){};
 
-	void init(HINSTANCE hInst, HWND parent)	{
+	void init(HINSTANCE hInst, HWND parent)
+	{
 		Window::init(hInst, parent);
 	};
 
-	void doDialog(bool isRTL = false) {
+	void doDialog(bool isRTL = false)
+	{
 		if (!isCreated())
 		{
 			create(IDD_PREFERENCE_BOX, isRTL);
@@ -234,9 +242,11 @@ public :
 	};
 	bool renameDialogTitle(const TCHAR *internalName, const TCHAR *newName);
 
-	int getListSelectedIndex() const {
+	int getListSelectedIndex() const
+	{
 		return ::SendDlgItemMessage(_hSelf, IDC_LIST_DLGTITLE, LB_GETCURSEL, 0, 0);
 	};
+
 	void setListSelection(size_t currentSel) const;
 
 	virtual void destroy();
