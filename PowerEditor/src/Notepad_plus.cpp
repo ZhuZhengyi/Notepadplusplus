@@ -484,14 +484,14 @@ LRESULT Notepad_plus::init(HWND hwnd)
 
 	if (nppGUI._excludedLangList.size() > 0)
 	{
-		for (size_t i = 0, len = nppGUI._excludedLangList.size(); i < len ; ++i)
+		for (LangMenuItem& excludedLang : nppGUI._excludedLangList)
 		{
-			int cmdID = pNppParam->langTypeToCommandID(nppGUI._excludedLangList[i]._langType);
+			int cmdID = pNppParam->langTypeToCommandID(excludedLang._langType);
 			const int itemSize = 256;
 			TCHAR itemName[itemSize];
 			::GetMenuString(hLangMenu, cmdID, itemName, itemSize, MF_BYCOMMAND);
-			nppGUI._excludedLangList[i]._cmdID = cmdID;
-			nppGUI._excludedLangList[i]._langName = itemName;
+			excludedLang._cmdID = cmdID;
+			excludedLang._langName = itemName;
 			::DeleteMenu(hLangMenu, cmdID, MF_BYCOMMAND);
 			DrawMenuBar(hwnd);
 		}
@@ -548,27 +548,23 @@ LRESULT Notepad_plus::init(HWND hwnd)
 
 	// Update context menu strings (translated)
 	vector<MenuItemUnit> & tmp = pNppParam->getContextMenuItems();
-	size_t len = tmp.size();
 	TCHAR menuName[64];
-	for (size_t i = 0 ; i < len ; ++i)
+	for (MenuItemUnit& unit : tmp)
 	{
-		if (tmp[i]._itemName == TEXT(""))
+		if (unit._itemName == TEXT(""))
 		{
-			::GetMenuString(_mainMenuHandle, tmp[i]._cmdID, menuName, 64, MF_BYCOMMAND);
-			tmp[i]._itemName = purgeMenuItemString(menuName);
+			::GetMenuString(_mainMenuHandle, unit._cmdID, menuName, 64, MF_BYCOMMAND);
+			unit._itemName = purgeMenuItemString(menuName);
 		}
 	}
 
 	//Input all the menu item names into shortcut list
 	//This will automatically do all translations, since menu translation has been done already
 	vector<CommandShortcut> & shortcuts = pNppParam->getUserShortcuts();
-	len = shortcuts.size();
-
-	for(size_t i = 0; i < len; ++i)
+	for(CommandShortcut& csc : shortcuts)
 	{
-		CommandShortcut & csc = shortcuts[i];
-		if (!csc.getName()[0])
-		{   //no predefined name, get name from menu and use that
+		if (!csc.getName()[0]) //no predefined name, get name from menu and use that
+		{
 			::GetMenuString(_mainMenuHandle, csc.getID(), menuName, 64, MF_BYCOMMAND);
 			csc.setName(purgeMenuItemString(menuName, true).c_str());
 		}
@@ -664,9 +660,8 @@ LRESULT Notepad_plus::init(HWND hwnd)
 	_dockingManager.setDockedContSize(CONT_TOP   , nppGUI._dockingData._topHeight);
 	_dockingManager.setDockedContSize(CONT_BOTTOM, nppGUI._dockingData._bottomHight);
 
-	for (size_t i = 0, len = dmd._pluginDockInfo.size(); i < len ; ++i)
+	for (PluginDlgDockingInfo& pdi : dmd._pluginDockInfo)
 	{
-		PluginDlgDockingInfo & pdi = dmd._pluginDockInfo[i];
 		if (pdi._isVisible)
 		{
 			if (pdi._name == NPP_INTERNAL_FUCTION_STR)
@@ -680,11 +675,11 @@ LRESULT Notepad_plus::init(HWND hwnd)
 		}
 	}
 
-	for (size_t i = 0, len = dmd._containerTabInfo.size(); i < len; ++i)
+	for (ContainerTabInfo& cti : dmd._containerTabInfo)
 	{
-		ContainerTabInfo & cti = dmd._containerTabInfo[i];
 		_dockingManager.setActiveTab(cti._cont, cti._activeTab);
 	}
+
 	//Load initial docs into doctab
 	loadBufferIntoView(_mainEditView.getCurrentBufferID(), MAIN_VIEW);
 	loadBufferIntoView(_subEditView.getCurrentBufferID(), SUB_VIEW);
@@ -884,7 +879,7 @@ void Notepad_plus::saveDockingParams()
 	}
 
 	nppGUI._dockingData._pluginDockInfo = vPluginDockInfo;
-	nppGUI._dockingData._flaotingWindowInfo = vFloatingWindowInfo;
+	nppGUI._dockingData._floatingWindowInfo = vFloatingWindowInfo;
 }
 
 

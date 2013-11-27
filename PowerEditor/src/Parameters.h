@@ -250,20 +250,20 @@ struct DockingManagerData
 
 	DockingManagerData() : _leftWidth(200), _rightWidth(200), _topHeight(200), _bottomHight(200) {};
 
-	vector<FloatingWindowInfo>      _flaotingWindowInfo;
+	vector<FloatingWindowInfo>      _floatingWindowInfo;
 	vector<PluginDlgDockingInfo>    _pluginDockInfo;
 	vector<ContainerTabInfo>        _containerTabInfo;
 
 	bool getFloatingRCFrom(int floatCont, RECT & rc)
 	{
-		for (size_t i = 0, fwiLen = _flaotingWindowInfo.size(); i < fwiLen; ++i)
+		for (FloatingWindowInfo& fwi : _floatingWindowInfo)
 		{
-			if (_flaotingWindowInfo[i]._cont == floatCont)
+			if (fwi._cont == floatCont)
 			{
-				rc.left = _flaotingWindowInfo[i]._pos.left;
-				rc.top = _flaotingWindowInfo[i]._pos.top;
-				rc.right = _flaotingWindowInfo[i]._pos.right;
-				rc.bottom = _flaotingWindowInfo[i]._pos.bottom;
+				rc.left   = fwi._pos.left;
+				rc.top    = fwi._pos.top;
+				rc.right  = fwi._pos.right;
+				rc.bottom = fwi._pos.bottom;
 				return true;
 			}
 		}

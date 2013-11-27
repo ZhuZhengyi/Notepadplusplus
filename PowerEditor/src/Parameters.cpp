@@ -4377,7 +4377,7 @@ void NppParameters::feedDockingManager(TiXmlNode *node)
 			floatElement->Attribute(TEXT("y"), &y);
 			floatElement->Attribute(TEXT("width"), &w);
 			floatElement->Attribute(TEXT("height"), &h);
-			_nppGUI._dockingData._flaotingWindowInfo.push_back(FloatingWindowInfo(cont, x, y, w, h));
+			_nppGUI._dockingData._floatingWindowInfo.push_back(FloatingWindowInfo(cont, x, y, w, h));
 		}
 	}
 
@@ -5192,10 +5192,12 @@ bool NppParameters::writeGUIParams()
 
 bool NppParameters::writeFindHistory()
 {
-	if (!_pXmlUserDoc) return false;
+	if (!_pXmlUserDoc)
+		return false;
 
 	TiXmlNode *nppRoot = _pXmlUserDoc->FirstChild(TEXT("NotepadPlus"));
-	if (!nppRoot) return false;
+	if (!nppRoot)
+		return false;
 
 	TiXmlNode *findHistoryRoot = nppRoot->FirstChildElement(TEXT("FindHistory"));
 	if (!findHistoryRoot)
@@ -5229,30 +5231,30 @@ bool NppParameters::writeFindHistory()
 	TiXmlElement hist_element(TEXT(""));
 
 	hist_element.SetValue(TEXT("Path"));
-	for (size_t i = 0, len = _findHistory._findHistoryPaths.size(); i < len; ++i)
+	for (generic_string& findHistoryPath : _findHistory._findHistoryPaths)
 	{
-		(hist_element.ToElement())->SetAttribute(TEXT("name"), _findHistory._findHistoryPaths[i].c_str());
+		(hist_element.ToElement())->SetAttribute(TEXT("name"), findHistoryPath.c_str());
 		findHistoryRoot->InsertEndChild(hist_element);
 	}
 
 	hist_element.SetValue(TEXT("Filter"));
-	for (size_t i = 0, len = _findHistory._findHistoryFilters.size(); i < len; ++i)
+	for (generic_string& findHistoryFilter : _findHistory._findHistoryFilters)
 	{
-		(hist_element.ToElement())->SetAttribute(TEXT("name"), _findHistory._findHistoryFilters[i].c_str());
+		(hist_element.ToElement())->SetAttribute(TEXT("name"), findHistoryFilter.c_str());
 		findHistoryRoot->InsertEndChild(hist_element);
 	}
 
 	hist_element.SetValue(TEXT("Find"));
-	for (size_t i = 0, len = _findHistory._findHistoryFinds.size(); i < len; ++i)
+	for (generic_string& findHistoryFind : _findHistory._findHistoryFinds)
 	{
-		(hist_element.ToElement())->SetAttribute(TEXT("name"), _findHistory._findHistoryFinds[i].c_str());
+		(hist_element.ToElement())->SetAttribute(TEXT("name"), findHistoryFind.c_str());
 		findHistoryRoot->InsertEndChild(hist_element);
 	}
 
 	hist_element.SetValue(TEXT("Replace"));
-	for (size_t i = 0, len = _findHistory._findHistoryReplaces.size(); i < len; ++i)
+	for (generic_string& findHistoryFind : _findHistory._findHistoryFinds)
 	{
-		(hist_element.ToElement())->SetAttribute(TEXT("name"), _findHistory._findHistoryReplaces[i].c_str());
+		(hist_element.ToElement())->SetAttribute(TEXT("name"), findHistoryFind.c_str());
 		findHistoryRoot->InsertEndChild(hist_element);
 	}
 
@@ -5268,9 +5270,8 @@ void NppParameters::insertDockingParamNode(TiXmlNode *GUIRoot)
 	DMNode.SetAttribute(TEXT("topHeight"), _nppGUI._dockingData._topHeight);
 	DMNode.SetAttribute(TEXT("bottomHeight"), _nppGUI._dockingData._bottomHight);
 	
-	for (size_t i = 0, len = _nppGUI._dockingData._flaotingWindowInfo.size(); i < len ; ++i)
+	for (FloatingWindowInfo& fwi : _nppGUI._dockingData._floatingWindowInfo)
 	{
-		FloatingWindowInfo & fwi = _nppGUI._dockingData._flaotingWindowInfo[i];
 		TiXmlElement FWNode(TEXT("FloatingWindow"));
 		FWNode.SetAttribute(TEXT("cont"), fwi._cont);
 		FWNode.SetAttribute(TEXT("x"), fwi._pos.left);
@@ -5281,9 +5282,8 @@ void NppParameters::insertDockingParamNode(TiXmlNode *GUIRoot)
 		DMNode.InsertEndChild(FWNode);
 	}
 
-	for (size_t i = 0, len = _nppGUI._dockingData._pluginDockInfo.size() ; i < len ; ++i)
+	for (PluginDlgDockingInfo& pdi : _nppGUI._dockingData._pluginDockInfo)
 	{
-		PluginDlgDockingInfo & pdi = _nppGUI._dockingData._pluginDockInfo[i];
 		TiXmlElement PDNode(TEXT("PluginDlg"));
 		PDNode.SetAttribute(TEXT("pluginName"), pdi._name);
 		PDNode.SetAttribute(TEXT("id"), pdi._internalID);
@@ -5294,9 +5294,8 @@ void NppParameters::insertDockingParamNode(TiXmlNode *GUIRoot)
 		DMNode.InsertEndChild(PDNode);
 	}
 
-	for (size_t i = 0, len = _nppGUI._dockingData._containerTabInfo.size(); i < len ; ++i)
+	for (ContainerTabInfo& cti : _nppGUI._dockingData._containerTabInfo)
 	{
-		ContainerTabInfo & cti = _nppGUI._dockingData._containerTabInfo[i];
 		TiXmlElement CTNode(TEXT("ActiveTabs"));
 		CTNode.SetAttribute(TEXT("cont"), cti._cont);
 		CTNode.SetAttribute(TEXT("activeTab"), cti._activeTab);
