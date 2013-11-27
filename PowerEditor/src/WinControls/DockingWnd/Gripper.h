@@ -152,7 +152,7 @@ private:
 
 	// remembers old mouse point
 	POINT _ptOld;
-	BOOL _bPtOldValid;
+	bool _bPtOldValid;
 
 	// remember last drawn rectangle (jg)
 	RECT _rcPrev;

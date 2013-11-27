@@ -101,7 +101,7 @@ Gripper::Gripper()
 
 	_ptOld.x     = 0;
 	_ptOld.y     = 0;
-	_bPtOldValid = FALSE;
+	_bPtOldValid = false;
 	
 	_hTab               = NULL;
 	_hTabSource         = NULL;
@@ -340,7 +340,7 @@ void Gripper::onButtonUp()
 	getMousePoints(&pt, &ptBuf);
 
 	// do nothing, when old point is not valid 
-	if (_bPtOldValid == FALSE)
+	if (_bPtOldValid == false)
 		return;
 
 	// erase last drawn rectangle
@@ -666,7 +666,7 @@ void Gripper::drawRectangle(const POINT* pPt)
 		#if defined(USE_LOCKWINDOWUPDATE)
 		::LockWindowUpdate(NULL);
 		#endif
-		_bPtOldValid = FALSE;
+		_bPtOldValid = false;
 		if (_hdc) 
 		{
 			::ReleaseDC(0, _hdc);
@@ -675,7 +675,7 @@ void Gripper::drawRectangle(const POINT* pPt)
 	}
 	else
 	{
-		_bPtOldValid = TRUE;
+		_bPtOldValid = true;
 	}
 }
 
@@ -701,7 +701,7 @@ void Gripper::getMovingRect(POINT pt, RECT *rc)
 		::GetWindowRect(pContHit->getHSelf(), rc);
 
 		/* get rect for correction */
-		if (_pCont->isFloating() == TRUE)
+		if (_pCont->isFloating())
 			rcCorr = _pCont->getDataOfActiveTb()->rcFloat;
 		else
 			_pCont->getClientRect(rcCorr);
