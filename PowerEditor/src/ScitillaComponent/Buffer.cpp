@@ -289,13 +289,13 @@ void Buffer::setHeaderLineState(const std::vector<size_t> & folds, ScintillaEdit
 	int index = indexOfReference(identifier);
 	if (index == -1)
 		return;
+
 	//deep copy
 	std::vector<size_t> & local = _foldStates[index];
 	local.clear();
-	size_t size = folds.size();
-	for(size_t i = 0; i < size; ++i)
+	for (const size_t& fold : folds)
 	{
-		local.push_back(folds[i]);
+		local.push_back(fold);
 	}
 }
 
@@ -414,7 +414,7 @@ void Buffer::setLineUndoState(size_t currentLine, size_t undoLevel, bool isSaved
 
 FileManager::~FileManager()
 {
-	for (std::vector<Buffer *>::iterator it = _buffers.begin(), end = _buffers.end(); it != end; ++it)
+	for (auto it = _buffers.begin(), end = _buffers.end(); it != end; ++it)
 	{
 		delete *it;
 	}
@@ -431,16 +431,13 @@ void FileManager::init(Notepad_plus * pNotepadPlus, ScintillaEditView * pscratch
 
 void FileManager::checkFilesystemChanges()
 {
-	for(int i = int(_nrBufs -1) ; i >= 0 ; i--)
+	for (Buffer* buffer : _buffers)
 	{
-		if (i >= int(_nrBufs))
+		if (buffer)
 		{
-			if (_nrBufs == 0)
-				return;
-
-			i = _nrBufs - 1;
+			// something has changed.Triggers update automatically
+			buffer->checkFileState();
 		}
-		_buffers[i]->checkFileState();	//something has changed. Triggers update automatically
 	}
 }
 
@@ -936,10 +933,10 @@ BufferID FileManager::getBufferFromName(const TCHAR * name)
 	::GetFullPathName(name, MAX_PATH, fullpath, NULL);
 	::GetLongPathName(fullpath, fullpath, MAX_PATH);
 
-	for(size_t i = 0; i < _buffers.size(); i++)
+	for (Buffer* buffer : _buffers)
 	{
-		if (!lstrcmpi(name, _buffers.at(i)->getFullPathName()))
-			return _buffers.at(i)->getID();
+		if (!lstrcmpi(name, buffer->getFullPathName()))
+			return buffer->getID();
 	}
 
 	return BUFFER_INVALID;
@@ -947,10 +944,10 @@ BufferID FileManager::getBufferFromName(const TCHAR * name)
 
 BufferID FileManager::getBufferFromDocument(Document doc)
 {
-	for(size_t i = 0; i < _nrBufs; ++i)
+	for (Buffer* buffer : _buffers)
 	{
-		if (_buffers[i]->_doc == doc)
-			return _buffers[i]->_id;
+		if (buffer->_doc == doc)
+			return buffer->_id;
 	}
 
 	return BUFFER_INVALID;
