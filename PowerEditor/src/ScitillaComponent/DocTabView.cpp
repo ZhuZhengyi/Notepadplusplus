@@ -175,7 +175,7 @@ void DocTabView::setBuffer(int index, BufferID id)
 	tie.mask = TCIF_PARAM;
 	::SendMessage(_hSelf, TCM_SETITEM, index, reinterpret_cast<LPARAM>(&tie));
 
-	bufferUpdated(MainFileManager->getBufferByID(id), BufferChangeMask);	//update tab, everything has changed
+	bufferUpdated(MainFileManager->getBufferByID(id), BufferChangeMask); //update tab, everything has changed
 
 	::SendMessage(_hParent, WM_SIZE, 0, 0);
 }
@@ -193,9 +193,9 @@ void DocTabView::reSizeTo(RECT & rc)
 	{
 		TabBar::reSizeTo(rc);
 		rc.left  += borderWidth;
-		rc.right -= borderWidth * 2;	
+		rc.right -= borderWidth * 2;
 		rc.top   += borderWidth;
-		rc.bottom -= (borderWidth * 2);	
+		rc.bottom -= (borderWidth * 2);
 		_pView->reSizeTo(rc);
 	}
 }

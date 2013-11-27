@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -42,28 +42,32 @@ class GoToLineDlg : public StaticDialog
 public :
 	GoToLineDlg() : StaticDialog(), _mode(go2line) {};
 
-	void init(HINSTANCE hInst, HWND hPere, ScintillaEditView **ppEditView) {
+	void init(HINSTANCE hInst, HWND hPere, ScintillaEditView **ppEditView)
+	{
 		Window::init(hInst, hPere);
 		if (!ppEditView)
 			throw std::runtime_error("GoToLineDlg::init : ppEditView is null.");
 		_ppEditView = ppEditView;
 	};
 
-	virtual void create(int dialogID, bool isRTL = false) {
+	virtual void create(int dialogID, bool isRTL = false)
+	{
 		StaticDialog::create(dialogID, isRTL);
 	};
 
-	void doDialog(bool isRTL = false) {
+	void doDialog(bool isRTL = false)
+	{
 		if (!isCreated())
 			create(IDD_GOLINE, isRTL);
 		display();
 	};
 
-    virtual void display(bool toShow = true) const {
-        Window::display(toShow);
-        if (toShow)
-            ::SetFocus(::GetDlgItem(_hSelf, ID_GOLINE_EDIT));
-    };
+	virtual void display(bool toShow = true) const
+	{
+		Window::display(toShow);
+		if (toShow)
+			::SetFocus(::GetDlgItem(_hSelf, ID_GOLINE_EDIT));
+	};
 
 protected :
 	enum mode {go2line, go2offsset};
@@ -72,19 +76,21 @@ protected :
 
 private :
 
-    ScintillaEditView **_ppEditView;
+	ScintillaEditView **_ppEditView;
 
-    void updateLinesNumbers() const;
+	void updateLinesNumbers() const;
 
-    void cleanLineEdit() const {
-        ::SetDlgItemText(_hSelf, ID_GOLINE_EDIT, TEXT(""));
-    };
+	void cleanLineEdit() const
+	{
+		::SetDlgItemText(_hSelf, ID_GOLINE_EDIT, TEXT(""));
+	};
 
-    int getLine() const {
-        BOOL isSuccessful;
-        int line = ::GetDlgItemInt(_hSelf, ID_GOLINE_EDIT, &isSuccessful, FALSE);
-        return (isSuccessful?line:-1);
-    };
+	int getLine() const
+	{
+		BOOL isSuccessful;
+		int line = ::GetDlgItemInt(_hSelf, ID_GOLINE_EDIT, &isSuccessful, FALSE);
+		return (isSuccessful?line:-1);
+	};
 
 };
 

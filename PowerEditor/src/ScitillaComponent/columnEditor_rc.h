@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -29,21 +29,20 @@
 #ifndef COLUMNEDITOR_RC_H
 #define COLUMNEDITOR_RC_H
 
-#define	IDD_COLUMNEDIT   2020
-	#define	IDC_COL_INITNUM_EDIT		(IDD_COLUMNEDIT + 1)
-	#define	IDC_COL_INCREASENUM_EDIT	(IDD_COLUMNEDIT + 2)
-	#define	IDC_COL_TEXT_GRP_STATIC		(IDD_COLUMNEDIT + 3)
-	#define	IDC_COL_DEC_RADIO			(IDD_COLUMNEDIT + 4)
-	#define	IDC_COL_OCT_RADIO			(IDD_COLUMNEDIT + 5)
-	#define	IDC_COL_HEX_RADIO			(IDD_COLUMNEDIT + 6)
-	#define	IDC_COL_BIN_RADIO			(IDD_COLUMNEDIT + 7)
-	#define	IDC_COL_TEXT_RADIO			(IDD_COLUMNEDIT + 8)
-	#define	IDC_COL_NUM_RADIO			(IDD_COLUMNEDIT + 9)
-	#define	IDC_COL_INITNUM_STATIC		(IDD_COLUMNEDIT + 10)
-	#define	IDC_COL_INCRNUM_STATIC		(IDD_COLUMNEDIT + 11)
-	#define	IDC_COL_FORMAT_GRP_STATIC	(IDD_COLUMNEDIT + 12)
-	#define	IDC_COL_NUM_GRP_STATIC		(IDD_COLUMNEDIT + 13)
-	#define	IDC_COL_TEXT_EDIT			(IDD_COLUMNEDIT + 14)
-	#define	IDC_COL_LEADZERO_CHECK		(IDD_COLUMNEDIT + 15)
-	
+#define IDD_COLUMNEDIT   2020
+	#define IDC_COL_INITNUM_EDIT        (IDD_COLUMNEDIT + 1)
+	#define IDC_COL_INCREASENUM_EDIT    (IDD_COLUMNEDIT + 2)
+	#define IDC_COL_TEXT_GRP_STATIC     (IDD_COLUMNEDIT + 3)
+	#define IDC_COL_DEC_RADIO           (IDD_COLUMNEDIT + 4)
+	#define IDC_COL_OCT_RADIO           (IDD_COLUMNEDIT + 5)
+	#define IDC_COL_HEX_RADIO           (IDD_COLUMNEDIT + 6)
+	#define IDC_COL_BIN_RADIO           (IDD_COLUMNEDIT + 7)
+	#define IDC_COL_TEXT_RADIO          (IDD_COLUMNEDIT + 8)
+	#define IDC_COL_NUM_RADIO           (IDD_COLUMNEDIT + 9)
+	#define IDC_COL_INITNUM_STATIC      (IDD_COLUMNEDIT + 10)
+	#define IDC_COL_INCRNUM_STATIC      (IDD_COLUMNEDIT + 11)
+	#define IDC_COL_FORMAT_GRP_STATIC   (IDD_COLUMNEDIT + 12)
+	#define IDC_COL_NUM_GRP_STATIC      (IDD_COLUMNEDIT + 13)
+	#define IDC_COL_TEXT_EDIT           (IDD_COLUMNEDIT + 14)
+	#define IDC_COL_LEADZERO_CHECK      (IDD_COLUMNEDIT + 15)
 #endif// COLUMNEDITOR_RC_H

@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -43,18 +43,21 @@ class ColumnEditorDlg : public StaticDialog
 public :
 	ColumnEditorDlg() : StaticDialog() {};
 
-	void init(HINSTANCE hInst, HWND hPere, ScintillaEditView **ppEditView) {
+	void init(HINSTANCE hInst, HWND hPere, ScintillaEditView **ppEditView)
+	{
 		Window::init(hInst, hPere);
 		if (!ppEditView)
 			throw std::runtime_error("StaticDialog::init : ppEditView is null.");
 		_ppEditView = ppEditView;
 	};
 
-	virtual void create(int dialogID, bool isRTL = false) {
+	virtual void create(int dialogID, bool isRTL = false)
+	{
 		StaticDialog::create(dialogID, isRTL);
 	};
 
-	void doDialog(bool isRTL = false) {
+	void doDialog(bool isRTL = false)
+	{
 		if (!isCreated())
 			create(IDD_COLUMNEDIT, isRTL);
 		bool isTextMode = (BST_CHECKED == ::SendDlgItemMessage(_hSelf, IDC_COL_TEXT_RADIO, BM_GETCHECK, 0, 0));
@@ -62,7 +65,7 @@ public :
 		::SetFocus(::GetDlgItem(_hSelf, isTextMode?IDC_COL_TEXT_EDIT:IDC_COL_INITNUM_EDIT));
 	};
 
-    virtual void display(bool toShow = true) const;
+	virtual void display(bool toShow = true) const;
 
 	void switchTo(bool toText);
 
@@ -72,8 +75,7 @@ protected :
 	virtual BOOL CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
 
 private :
-
-    ScintillaEditView **_ppEditView;
+	ScintillaEditView **_ppEditView;
 
 
 };

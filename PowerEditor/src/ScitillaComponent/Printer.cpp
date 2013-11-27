@@ -93,8 +93,8 @@ size_t Printer::doPrint(bool justDoIt)
 	RECT userMargins;
 
 	// Get printer resolution
-	ptDpi.x = GetDeviceCaps(_pdlg.hDC, LOGPIXELSX);    // dpi in X direction
-	ptDpi.y = GetDeviceCaps(_pdlg.hDC, LOGPIXELSY);    // dpi in Y direction
+	ptDpi.x = GetDeviceCaps(_pdlg.hDC, LOGPIXELSX);    // DPI in X direction
+	ptDpi.y = GetDeviceCaps(_pdlg.hDC, LOGPIXELSY);    // DPI in Y direction
 
 	// Start by getting the physical page size (in device units).
 	ptPage.x = GetDeviceCaps(_pdlg.hDC, PHYSICALWIDTH);   // device units
@@ -108,13 +108,13 @@ size_t Printer::doPrint(bool justDoIt)
 	// To get the right and lower unprintable area,
 	// we take the entire width and height of the paper and
 	// subtract everything else.
-	rectPhysMargins.right = ptPage.x                            // total paper width
-	                        - GetDeviceCaps(_pdlg.hDC, HORZRES) // printable width
-	                        - rectPhysMargins.left;             // left unprintable margin
+	rectPhysMargins.right = ptPage.x                             // total paper width
+	                        - GetDeviceCaps(_pdlg.hDC, HORZRES)  // printable width
+	                        - rectPhysMargins.left;              // left unprintable margin
 
-	rectPhysMargins.bottom = ptPage.y                           // total paper height
-	                         - GetDeviceCaps(_pdlg.hDC, VERTRES)	// printable height
-	                         - rectPhysMargins.top;             // right unprintable margin
+	rectPhysMargins.bottom = ptPage.y                            // total paper height
+	                         - GetDeviceCaps(_pdlg.hDC, VERTRES) // printable height
+	                         - rectPhysMargins.top;              // right unprintable margin
 	if (nppGUI._printSettings.isUserMargePresent())
 	{
 		userMargins.left  = MulDiv(nppGUI._printSettings._marge.left*100, ptDpi.x, 2540);
@@ -350,7 +350,7 @@ size_t Printer::doPrint(bool justDoIt)
 		             (pageNum >= _pdlg.nFromPage) && (pageNum <= _pdlg.nToPage));
 					 
 		if (!justDoIt)
-			printPage = false;		 
+			printPage = false;
 
 		TCHAR pageString[32];
 		wsprintf(pageString, TEXT("%0d"), pageNum);

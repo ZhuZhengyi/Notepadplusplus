@@ -30,7 +30,7 @@
 #include "ScintillaEditView.h"
 #include "FindReplaceDlg.h"
 
-#define MAXLINEHIGHLIGHT 400	//prevent highlighter from doing too much work when a lot is visible
+#define MAXLINEHIGHLIGHT 400 //prevent highlighter from doing too much work when a lot is visible
 
 SmartHighlighter::SmartHighlighter(FindReplaceDlg * pFRDlg)
 : _pFRDlg(pFRDlg)

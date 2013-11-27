@@ -76,64 +76,64 @@ const int ScintillaEditView::_markersArray[][NB_FOLDER_STATE] = {
 
 //Array with all the names of all languages
 LanguageName ScintillaEditView::langNames[L_EXTERNAL+1] = {
-{TEXT("normal"),		TEXT("Normal text"),		TEXT("Normal text file"),								L_TEXT,			SCLEX_NULL},
-{TEXT("php"),			TEXT("PHP"),				TEXT("PHP Hypertext Preprocessor file"),				L_PHP,			SCLEX_HTML},
-{TEXT("c"),				TEXT("C"),					TEXT("C source file"),									L_C,			SCLEX_CPP},
-{TEXT("cpp"),			TEXT("C++"),				TEXT("C++ source file"),								L_CPP,			SCLEX_CPP},
-{TEXT("cs"),			TEXT("C#"),					TEXT("C# source file"),									L_CS,			SCLEX_CPP},
-{TEXT("objc"),			TEXT("Objective-C"),		TEXT("Objective-C source file"),						L_OBJC,			SCLEX_CPP},
-{TEXT("java"),			TEXT("Java"),				TEXT("Java source file"),								L_JAVA,			SCLEX_CPP},
-{TEXT("rc"),			TEXT("RC"),					TEXT("Windows Resource file"),							L_RC,			SCLEX_CPP},
-{TEXT("html"),			TEXT("HTML"),				TEXT("Hyper Text Markup Language file"),				L_HTML,			SCLEX_HTML},
-{TEXT("xml"),			TEXT("XML"),				TEXT("eXtensible Markup Language file"),				L_XML,			SCLEX_XML},
-{TEXT("makefile"),		TEXT("Makefile"),			TEXT("Makefile"),										L_MAKEFILE,		SCLEX_MAKEFILE},
-{TEXT("pascal"),		TEXT("Pascal"),				TEXT("Pascal source file"),								L_PASCAL,		SCLEX_PASCAL},
-{TEXT("batch"),			TEXT("Batch"),				TEXT("Batch file"),										L_BATCH,		SCLEX_BATCH},
-{TEXT("ini"),			TEXT("ini"),				TEXT("MS ini file"),									L_INI,			SCLEX_PROPERTIES},
-{TEXT("nfo"),			TEXT("NFO"),				TEXT("MSDOS Style/ASCII Art"),							L_ASCII,		SCLEX_NULL},
-{TEXT("udf"),			TEXT("udf"),				TEXT("User Define File"),								L_USER,			SCLEX_USER},
-{TEXT("asp"),			TEXT("ASP"),				TEXT("Active Server Pages script file"),				L_ASP,			SCLEX_HTML},
-{TEXT("sql"),			TEXT("SQL"),				TEXT("Structured Query Language file"),					L_SQL,			SCLEX_SQL},
-{TEXT("vb"),			TEXT("VB"),					TEXT("Visual Basic file"),								L_VB,			SCLEX_VB},
-{TEXT("javascript"),	TEXT("JavaScript"),			TEXT("JavaScript file"),								L_JS,			SCLEX_CPP},
-{TEXT("css"),			TEXT("CSS"),				TEXT("Cascade Style Sheets File"),						L_CSS,			SCLEX_CSS},
-{TEXT("perl"),			TEXT("Perl"),				TEXT("Perl source file"),								L_PERL,			SCLEX_PERL},
-{TEXT("python"),		TEXT("Python"),				TEXT("Python file"),									L_PYTHON,		SCLEX_PYTHON},
-{TEXT("lua"),			TEXT("Lua"),				TEXT("Lua source File"),								L_LUA,			SCLEX_LUA},
-{TEXT("tex"),			TEXT("TeX"),				TEXT("TeX file"),										L_TEX,			SCLEX_TEX},
-{TEXT("fortran"),		TEXT("Fortran"),			TEXT("Fortran source file"),							L_FORTRAN,		SCLEX_FORTRAN},
-{TEXT("bash"),			TEXT("Shell"),				TEXT("Unix script file"),								L_BASH,			SCLEX_BASH},
-{TEXT("actionscript"),	TEXT("Flash Action"),		TEXT("Flash Action script file"),						L_FLASH,		SCLEX_CPP},//WARNING, was "flash"
-{TEXT("nsis"),			TEXT("NSIS"),				TEXT("Nullsoft Scriptable Install System script file"),	L_NSIS,			SCLEX_NSIS},
-{TEXT("tcl"),			TEXT("TCL"),				TEXT("Tool Command Language file"),						L_TCL,			SCLEX_TCL},
-{TEXT("lisp"),			TEXT("Lisp"),				TEXT("List Processing language file"),					L_LISP,			SCLEX_LISP},
-{TEXT("scheme"),		TEXT("Scheme"),				TEXT("Scheme file"),									L_SCHEME,		SCLEX_LISP},
-{TEXT("asm"),			TEXT("Assembly"),			TEXT("Assembly language source file"),					L_ASM,			SCLEX_ASM},
-{TEXT("diff"),			TEXT("Diff"),				TEXT("Diff file"),										L_DIFF,			SCLEX_DIFF},
-{TEXT("props"),			TEXT("Properties file"),	TEXT("Properties file"),								L_PROPS,		SCLEX_PROPERTIES},
-{TEXT("postscript"),	TEXT("Postscript"),			TEXT("Postscript file"),								L_PS,			SCLEX_PS},
-{TEXT("ruby"),			TEXT("Ruby"),				TEXT("Ruby file"),										L_RUBY,			SCLEX_RUBY},
-{TEXT("smalltalk"),		TEXT("Smalltalk"),			TEXT("Smalltalk file"),									L_SMALLTALK,	SCLEX_SMALLTALK},
-{TEXT("vhdl"),			TEXT("VHDL"),				TEXT("VHSIC Hardware Description Language file"),		L_VHDL,			SCLEX_VHDL},
-{TEXT("kix"),			TEXT("KiXtart"),			TEXT("KiXtart file"),									L_KIX,			SCLEX_KIX},
-{TEXT("autoit"),		TEXT("AutoIt"),				TEXT("AutoIt"),											L_AU3,			SCLEX_AU3},
-{TEXT("caml"),			TEXT("CAML"),				TEXT("Categorical Abstract Machine Language"),			L_CAML,			SCLEX_CAML},
-{TEXT("ada"),			TEXT("Ada"),				TEXT("Ada file"),										L_ADA,			SCLEX_ADA},
-{TEXT("verilog"),		TEXT("Verilog"),			TEXT("Verilog file"),									L_VERILOG,		SCLEX_VERILOG},
-{TEXT("matlab"),		TEXT("MATLAB"),				TEXT("MATrix LABoratory"),								L_MATLAB,		SCLEX_MATLAB},
-{TEXT("haskell"),		TEXT("Haskell"),			TEXT("Haskell"),										L_HASKELL,		SCLEX_HASKELL},
-{TEXT("inno"),			TEXT("Inno"),				TEXT("Inno Setup script"),								L_INNO,			SCLEX_INNOSETUP},
-{TEXT("searchResult"),	TEXT("Internal Search"),	TEXT("Internal Search"),								L_SEARCHRESULT,	SCLEX_SEARCHRESULT},
-{TEXT("cmake"),			TEXT("CMAKEFILE"),			TEXT("CMAKEFILE"),										L_CMAKE,		SCLEX_CMAKE},
-{TEXT("yaml"),			TEXT("YAML"),				TEXT("YAML Ain't Markup Language"),						L_YAML,			SCLEX_YAML},
-{TEXT("cobol"),			TEXT("COBOL"),				TEXT("COmmon Business Oriented Language"),				L_COBOL,		SCLEX_COBOL},
-{TEXT("gui4cli"),		TEXT("Gui4Cli"),			TEXT("Gui4Cli file"),									L_GUI4CLI,		SCLEX_GUI4CLI},
-{TEXT("d"),				TEXT("D"),					TEXT("D programming language"),							L_D,			SCLEX_D},
-{TEXT("powershell"),	TEXT("PowerShell"),			TEXT("Windows PowerShell"),								L_POWERSHELL,	SCLEX_POWERSHELL},
-{TEXT("r"),				TEXT("R"),					TEXT("R programming language"),							L_R,			SCLEX_R},
-{TEXT("jsp"),			TEXT("JSP"),				TEXT("JavaServer Pages script file"),					L_JSP,			SCLEX_HTML},
-{TEXT("coffeescript"),	TEXT("CoffeeScript"),		TEXT("CoffeeScript file"),								L_COFFEESCRIPT,	SCLEX_COFFEESCRIPT},
-{TEXT("ext"),			TEXT("External"),			TEXT("External"),										L_EXTERNAL,		SCLEX_NULL}
+{TEXT("normal"),        TEXT("Normal text"),        TEXT("Normal text file"),                               L_TEXT,         SCLEX_NULL},
+{TEXT("php"),           TEXT("PHP"),                TEXT("PHP Hypertext Preprocessor file"),                L_PHP,          SCLEX_HTML},
+{TEXT("c"),             TEXT("C"),                  TEXT("C source file"),                                  L_C,            SCLEX_CPP},
+{TEXT("cpp"),           TEXT("C++"),                TEXT("C++ source file"),                                L_CPP,          SCLEX_CPP},
+{TEXT("cs"),            TEXT("C#"),                 TEXT("C# source file"),                                 L_CS,           SCLEX_CPP},
+{TEXT("objc"),          TEXT("Objective-C"),        TEXT("Objective-C source file"),                        L_OBJC,         SCLEX_CPP},
+{TEXT("java"),          TEXT("Java"),               TEXT("Java source file"),                               L_JAVA,         SCLEX_CPP},
+{TEXT("rc"),            TEXT("RC"),                 TEXT("Windows Resource file"),                          L_RC,           SCLEX_CPP},
+{TEXT("html"),          TEXT("HTML"),               TEXT("Hyper Text Markup Language file"),                L_HTML,         SCLEX_HTML},
+{TEXT("xml"),           TEXT("XML"),                TEXT("eXtensible Markup Language file"),                L_XML,          SCLEX_XML},
+{TEXT("makefile"),      TEXT("Makefile"),           TEXT("Makefile"),                                       L_MAKEFILE,     SCLEX_MAKEFILE},
+{TEXT("pascal"),        TEXT("Pascal"),             TEXT("Pascal source file"),                             L_PASCAL,       SCLEX_PASCAL},
+{TEXT("batch"),         TEXT("Batch"),              TEXT("Batch file"),                                     L_BATCH,        SCLEX_BATCH},
+{TEXT("ini"),           TEXT("ini"),                TEXT("MS ini file"),                                    L_INI,          SCLEX_PROPERTIES},
+{TEXT("nfo"),           TEXT("NFO"),                TEXT("MSDOS Style/ASCII Art"),                          L_ASCII,        SCLEX_NULL},
+{TEXT("udf"),           TEXT("udf"),                TEXT("User Define File"),                               L_USER,         SCLEX_USER},
+{TEXT("asp"),           TEXT("ASP"),                TEXT("Active Server Pages script file"),                L_ASP,          SCLEX_HTML},
+{TEXT("sql"),           TEXT("SQL"),                TEXT("Structured Query Language file"),                 L_SQL,          SCLEX_SQL},
+{TEXT("vb"),            TEXT("VB"),                 TEXT("Visual Basic file"),                              L_VB,           SCLEX_VB},
+{TEXT("javascript"),    TEXT("JavaScript"),         TEXT("JavaScript file"),                                L_JS,           SCLEX_CPP},
+{TEXT("css"),           TEXT("CSS"),                TEXT("Cascade Style Sheets File"),                      L_CSS,          SCLEX_CSS},
+{TEXT("perl"),          TEXT("Perl"),               TEXT("Perl source file"),                               L_PERL,         SCLEX_PERL},
+{TEXT("python"),        TEXT("Python"),             TEXT("Python file"),                                    L_PYTHON,       SCLEX_PYTHON},
+{TEXT("lua"),           TEXT("Lua"),                TEXT("Lua source File"),                                L_LUA,          SCLEX_LUA},
+{TEXT("tex"),           TEXT("TeX"),                TEXT("TeX file"),                                       L_TEX,          SCLEX_TEX},
+{TEXT("fortran"),       TEXT("Fortran"),            TEXT("Fortran source file"),                            L_FORTRAN,      SCLEX_FORTRAN},
+{TEXT("bash"),          TEXT("Shell"),              TEXT("Unix script file"),                               L_BASH,         SCLEX_BASH},
+{TEXT("actionscript"),  TEXT("Flash Action"),       TEXT("Flash Action script file"),                       L_FLASH,        SCLEX_CPP},//WARNING, was "flash"
+{TEXT("nsis"),          TEXT("NSIS"),               TEXT("Nullsoft Scriptable Install System script file"), L_NSIS,         SCLEX_NSIS},
+{TEXT("tcl"),           TEXT("TCL"),                TEXT("Tool Command Language file"),                     L_TCL,          SCLEX_TCL},
+{TEXT("lisp"),          TEXT("Lisp"),               TEXT("List Processing language file"),                  L_LISP,         SCLEX_LISP},
+{TEXT("scheme"),        TEXT("Scheme"),             TEXT("Scheme file"),                                    L_SCHEME,       SCLEX_LISP},
+{TEXT("asm"),           TEXT("Assembly"),           TEXT("Assembly language source file"),                  L_ASM,          SCLEX_ASM},
+{TEXT("diff"),          TEXT("Diff"),               TEXT("Diff file"),                                      L_DIFF,         SCLEX_DIFF},
+{TEXT("props"),         TEXT("Properties file"),    TEXT("Properties file"),                                L_PROPS,        SCLEX_PROPERTIES},
+{TEXT("postscript"),    TEXT("Postscript"),         TEXT("Postscript file"),                                L_PS,           SCLEX_PS},
+{TEXT("ruby"),          TEXT("Ruby"),               TEXT("Ruby file"),                                      L_RUBY,         SCLEX_RUBY},
+{TEXT("smalltalk"),     TEXT("Smalltalk"),          TEXT("Smalltalk file"),                                 L_SMALLTALK,    SCLEX_SMALLTALK},
+{TEXT("vhdl"),          TEXT("VHDL"),               TEXT("VHSIC Hardware Description Language file"),       L_VHDL,         SCLEX_VHDL},
+{TEXT("kix"),           TEXT("KiXtart"),            TEXT("KiXtart file"),                                   L_KIX,          SCLEX_KIX},
+{TEXT("autoit"),        TEXT("AutoIt"),             TEXT("AutoIt"),                                         L_AU3,          SCLEX_AU3},
+{TEXT("caml"),          TEXT("CAML"),               TEXT("Categorical Abstract Machine Language"),          L_CAML,         SCLEX_CAML},
+{TEXT("ada"),           TEXT("Ada"),                TEXT("Ada file"),                                       L_ADA,          SCLEX_ADA},
+{TEXT("verilog"),       TEXT("Verilog"),            TEXT("Verilog file"),                                   L_VERILOG,      SCLEX_VERILOG},
+{TEXT("matlab"),        TEXT("MATLAB"),             TEXT("MATrix LABoratory"),                              L_MATLAB,       SCLEX_MATLAB},
+{TEXT("haskell"),       TEXT("Haskell"),            TEXT("Haskell"),                                        L_HASKELL,      SCLEX_HASKELL},
+{TEXT("inno"),          TEXT("Inno"),               TEXT("Inno Setup script"),                              L_INNO,         SCLEX_INNOSETUP},
+{TEXT("searchResult"),  TEXT("Internal Search"),    TEXT("Internal Search"),                                L_SEARCHRESULT, SCLEX_SEARCHRESULT},
+{TEXT("cmake"),         TEXT("CMAKEFILE"),          TEXT("CMAKEFILE"),                                      L_CMAKE,        SCLEX_CMAKE},
+{TEXT("yaml"),          TEXT("YAML"),               TEXT("YAML Ain't Markup Language"),                     L_YAML,         SCLEX_YAML},
+{TEXT("cobol"),         TEXT("COBOL"),              TEXT("COmmon Business Oriented Language"),              L_COBOL,        SCLEX_COBOL},
+{TEXT("gui4cli"),       TEXT("Gui4Cli"),            TEXT("Gui4Cli file"),                                   L_GUI4CLI,      SCLEX_GUI4CLI},
+{TEXT("d"),             TEXT("D"),                  TEXT("D programming language"),                         L_D,            SCLEX_D},
+{TEXT("powershell"),    TEXT("PowerShell"),         TEXT("Windows PowerShell"),                             L_POWERSHELL,   SCLEX_POWERSHELL},
+{TEXT("r"),             TEXT("R"),                  TEXT("R programming language"),                         L_R,            SCLEX_R},
+{TEXT("jsp"),           TEXT("JSP"),                TEXT("JavaServer Pages script file"),                   L_JSP,          SCLEX_HTML},
+{TEXT("coffeescript"),  TEXT("CoffeeScript"),       TEXT("CoffeeScript file"),                              L_COFFEESCRIPT, SCLEX_COFFEESCRIPT},
+{TEXT("ext"),           TEXT("External"),           TEXT("External"),                                       L_EXTERNAL,     SCLEX_NULL}
 };
 
 //const int MASK_RED   = 0xFF0000;
@@ -217,7 +217,7 @@ void ScintillaEditView::init(HINSTANCE hInst, HWND hPere)
 
 	execute(SCI_SETFOLDFLAGS, 16);
 	execute(SCI_SETSCROLLWIDTHTRACKING, true);
-	execute(SCI_SETSCROLLWIDTH, 1);	//default empty document: override default width of 2000
+	execute(SCI_SETSCROLLWIDTH, 1); //default empty document: override default width of 2000
 
 	// smart hilighting
 	execute(SCI_INDICSETSTYLE, SCE_UNIVERSAL_FOUND_STYLE_SMART, INDIC_ROUNDBOX);
@@ -448,25 +448,39 @@ void ScintillaEditView::setStyle(Style styleToSet)
 			Style & style = stylers.getStyler(i);
 
 			if (go.enableFg) {
-				if (style._colorStyle & COLORSTYLE_FOREGROUND) {
+				if (style._colorStyle & COLORSTYLE_FOREGROUND)
+				{
 					styleToSet._colorStyle |= COLORSTYLE_FOREGROUND;
 					styleToSet._fgColor = style._fgColor;
-				} else {
-					if (styleToSet._styleID == STYLE_DEFAULT) {	//if global is set to transparent, use default style color
+				}
+				else
+				{
+					if (styleToSet._styleID == STYLE_DEFAULT) //if global is set to transparent, use default style color
+					{
 						styleToSet._colorStyle |= COLORSTYLE_FOREGROUND;
-					} else {
+					}
+					else
+					{
 						styleToSet._colorStyle &= ~COLORSTYLE_FOREGROUND;
 					}
 				}
 			}
-			if (go.enableBg) {
-				if (style._colorStyle & COLORSTYLE_BACKGROUND) {
+
+			if (go.enableBg)
+			{
+				if (style._colorStyle & COLORSTYLE_BACKGROUND)
+				{
 					styleToSet._colorStyle |= COLORSTYLE_BACKGROUND;
 					styleToSet._bgColor = style._bgColor;
-				} else {
-					if (styleToSet._styleID == STYLE_DEFAULT) {	//if global is set to transparent, use default style color
+				}
+				else
+				{
+					if (styleToSet._styleID == STYLE_DEFAULT) //if global is set to transparent, use default style color
+					{
 						styleToSet._colorStyle |= COLORSTYLE_BACKGROUND;
-					} else {
+					}
+					else
+					{
 						styleToSet._colorStyle &= ~COLORSTYLE_BACKGROUND;
 					}
 				}
@@ -610,7 +624,7 @@ void ScintillaEditView::setUserLexer(const TCHAR *userLangName)
 	}
 	else
 	{
-		codepage = CP_OEMCP;	// system OEM code page might not match user selection for character set,
+		codepage = CP_OEMCP;    // system OEM code page might not match user selection for character set,
 								// but this is the best match WideCharToMultiByte offers
 	}
 
@@ -665,7 +679,7 @@ void ScintillaEditView::setUserLexer(const TCHAR *userLangName)
 
 				if (inDoubleQuote || inSingleQuote)
 				{
-					if (keyWords_char[j] > ' ')		// copy non-whitespace unconditionally
+					if (keyWords_char[j] > ' ')     // copy non-whitespace unconditionally
 					{
 						temp[index++] = keyWords_char[j];
 						if (nonWSFound == false)
@@ -1016,7 +1030,7 @@ void ScintillaEditView::defineDocType(LangType typeDoc)
 	if (iStyleDefault != -1)
 	{
 		Style & styleDefault = stylers.getStyler(iStyleDefault);
-		styleDefault._colorStyle = COLORSTYLE_ALL;	//override transparency
+		styleDefault._colorStyle = COLORSTYLE_ALL;  //override transparency
 		setStyle(styleDefault);
 	}
 
@@ -1407,7 +1421,7 @@ void ScintillaEditView::defineDocType(LangType typeDoc)
 		setSpecialStyle(styleLN);
 	}
 	setTabSettings(_pParameter->getLangFromID(typeDoc));
-	execute(SCI_SETSTYLEBITS, 8);	// Always use 8 bit mask in Document class (Document::stylingBitsMask),
+	execute(SCI_SETSTYLEBITS, 8);   // Always use 8 bit mask in Document class (Document::stylingBitsMask),
 									// in that way Editor::PositionIsHotspot will return correct hotspot styleID.
 									// This value has no effect on LexAccessor::mask.
 }
@@ -1417,7 +1431,7 @@ BufferID ScintillaEditView::attachDefaultDoc()
 	// get the doc pointer attached (by default) on the view Scintilla
 	Document doc = execute(SCI_GETDOCPOINTER, 0, 0);
 	execute(SCI_ADDREFDOCUMENT, 0, doc);
-	BufferID id = MainFileManager->bufferFromDocument(doc, false, true);//true, true);	//keep counter on 1
+	BufferID id = MainFileManager->bufferFromDocument(doc, false, true);//true, true);  //keep counter on 1
 	Buffer * buf = MainFileManager->getBufferByID(id);
 
 	MainFileManager->addBufferReference(id, this); // Add a reference. Notepad only shows the buffer in tabbar
@@ -1504,7 +1518,7 @@ void ScintillaEditView::activateBuffer(BufferID buffer)
 	// put the state into the future ex buffer
 	_currentBuffer->setHeaderLineState(lineStateVector, this);
 
-	_currentBufferID = buffer;	//the magical switch happens here
+	_currentBufferID = buffer;  //the magical switch happens here
 	_currentBuffer = newBuf;
 	// change the doc, this operation will decrease
 	// the ref count of old current doc and increase the one of the new doc. FileManager should manage the rest
@@ -1527,7 +1541,7 @@ void ScintillaEditView::activateBuffer(BufferID buffer)
 
 	restoreCurrentPos();
 
-	bufferUpdated(_currentBuffer, (BufferChangeMask & ~BufferChangeLanguage));	//everything should be updated, but the language (which undoes some operations done here like folding)
+	bufferUpdated(_currentBuffer, (BufferChangeMask & ~BufferChangeLanguage));  //everything should be updated, but the language (which undoes some operations done here like folding)
 
 	//setup line number margin
 	int numLines = execute(SCI_GETLINECOUNT);
@@ -1584,7 +1598,7 @@ void ScintillaEditView::bufferUpdated(Buffer * buffer, int mask)
 			if (buffer->getNeedsLexing())
 			{
 				restyleBuffer(); // Sets to false, this will apply to any other view as well
-			}	// Else nothing, otherwise infinite loop
+			}   // Else nothing, otherwise infinite loop
 		}
 
 		if (mask & BufferChangeFormat)
@@ -1813,9 +1827,9 @@ char * ScintillaEditView::getSelectedText(char * txt, int size, bool expand)
 		expandWordSelection();
 		range = getSelection();
 	}
-	if (!(size > (range.cpMax - range.cpMin)))	//there must be atleast 1 byte left for zero terminator
+	if (!(size > (range.cpMax - range.cpMin)))  //there must be atleast 1 byte left for zero terminator
 	{
-		range.cpMax = range.cpMin+size-1;	//keep room for zero terminator
+		range.cpMax = range.cpMin+size-1;   //keep room for zero terminator
 	}
 	//getText(txt, range.cpMin, range.cpMax);
 	return getWordFromRange(txt, size, range.cpMin, range.cpMax);
@@ -2417,7 +2431,7 @@ pair<int, int> ScintillaEditView::getWordRange()
 
 bool ScintillaEditView::expandWordSelection()
 {
-	pair<int, int> wordRange = 	getWordRange();
+	pair<int, int> wordRange =  getWordRange();
 	if (wordRange.first != wordRange.second)
 	{
 		execute(SCI_SETSELECTIONSTART, wordRange.first);
@@ -2670,7 +2684,7 @@ void ScintillaEditView::foldChanged(int line, int levelNow, int levelPrev)
 		}
 	}
 	else if (!(levelNow & SC_FOLDLEVELWHITEFLAG) &&
-		    ((levelPrev & SC_FOLDLEVELNUMBERMASK) > (levelNow & SC_FOLDLEVELNUMBERMASK)))
+			((levelPrev & SC_FOLDLEVELNUMBERMASK) > (levelNow & SC_FOLDLEVELNUMBERMASK)))
 	{
 		// See if should still be hidden
 		int parentLine = execute(SCI_GETFOLDPARENT, line);
@@ -2711,7 +2725,7 @@ void ScintillaEditView::hideLines()
 	//Offset them one off the edges, and then check if they are within the reasonable
 	int nrLines = execute(SCI_GETLINECOUNT);
 	if (nrLines < 3)
-		return;	//cannot possibly hide anything
+		return; //cannot possibly hide anything
 	if (!startLine)
 		++startLine;
 	if (endLine == (nrLines-1))
@@ -2801,7 +2815,7 @@ bool ScintillaEditView::markerMarginClick(int lineNumber)
 
 void ScintillaEditView::notifyMarkers(Buffer * buf, bool isHide, int location, bool del)
 {
-	if (buf != _currentBuffer)	//if not visible buffer dont do a thing
+	if (buf != _currentBuffer)  //if not visible buffer dont do a thing
 		return;
 
 	runMarkers(isHide, location, false, del);
@@ -2889,8 +2903,8 @@ void ScintillaEditView::runMarkers(bool doHide, int searchStart, bool endOfDoc, 
 					}
 					execute(SCI_SHOWLINES, startShowing, i-1);
 					if (!endOfDoc) {
-						return;	//done, only single section requested
-					}	//otherwise keep going
+						return; //done, only single section requested
+					}   //otherwise keep going
 					isInSection = false;
 				}
 			}
@@ -3050,7 +3064,7 @@ size_t ScintillaEditView::getRightLineIndex(size_t rightIndex, size_t pivotIndex
 size_t ScintillaEditView::getGreaterLineBetween(size_t l1, size_t l2)
 {
 	int line1Len = execute(SCI_LINELENGTH, l1);
-	int	line2Len = execute(SCI_LINELENGTH, l2);
+	int line2Len = execute(SCI_LINELENGTH, l2);
 
 	char *line1text = new char[line1Len + 1];
 	char *line2text = new char[line2Len + 1];
@@ -3164,7 +3178,7 @@ bool ScintillaEditView::swapLines(size_t line1, size_t line2)
 	}
 
 	int line1Len = execute(SCI_LINELENGTH, lowerLine);
-	int	line2Len = execute(SCI_LINELENGTH, higherLine);
+	int line2Len = execute(SCI_LINELENGTH, higherLine);
 
 	char *line1text = new char[line1Len + 1 ];
 	char *line2text = new char[line2Len + 1 + extraEOLLength];
