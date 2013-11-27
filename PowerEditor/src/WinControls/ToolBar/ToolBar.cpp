@@ -337,11 +337,11 @@ void ToolBar::doPopop(POINT chevPoint)
 	if (start < _nrCurrentButtons) //some buttons are hidden
 	{
 		HMENU menu = ::CreatePopupMenu();
-		int cmd;
 		generic_string text;
+
 		while (start < _nrCurrentButtons)
 		{
-			cmd = _pTBB[start].idCommand;
+			int cmd = _pTBB[start].idCommand;
 			getNameStrFromCmd(cmd, text);
 			if (_pTBB[start].idCommand != 0)
 			{
@@ -494,10 +494,10 @@ int ReBar::getNewID()
 {
 	int idToUse = REBAR_BAR_EXTERNAL;
 	int curVal = 0;
-	size_t size = usedIDs.size();
-	for(size_t i = 0; i < size; ++i)
+
+	for (const int& usedId : usedIDs)
 	{
-		curVal = usedIDs.at(i);
+		curVal = usedId;
 		if (curVal < idToUse)
 		{
 			continue;
@@ -531,10 +531,9 @@ void ReBar::releaseID(int id)
 
 bool ReBar::isIDTaken(int id)
 {
-	size_t size = usedIDs.size();
-	for(size_t i = 0; i < size; ++i)
+	for (const int& usedId : usedIDs)
 	{
-		if (usedIDs.at(i) == id)
+		if (usedId == id)
 		{
 			return true;
 		}

@@ -227,13 +227,11 @@ void VerticalFileSwitcher::activateDoc(TaskLstFnStatus *tlfs) const
 
 int VerticalFileSwitcher::setHeaderOrder(LPNMLISTVIEW pnm_list_view)
 {
-	HWND hListView,colHeader;
 	LVCOLUMN lvc;
-	int q,cols;
 	int index = pnm_list_view->iSubItem;
 
 	lvc.mask = LVCF_FMT;
-	hListView = pnm_list_view->hdr.hwndFrom;
+	HWND hListView = pnm_list_view->hdr.hwndFrom;
 	SendMessage(hListView, LVM_GETCOLUMN, (WPARAM)index, (LPARAM)&lvc);
 	if(HDF_SORTUP & lvc.fmt)
 	{
@@ -254,9 +252,9 @@ int VerticalFileSwitcher::setHeaderOrder(LPNMLISTVIEW pnm_list_view)
 
 	// this is the case our clicked column wasn't the one being sorted up until now
 	// so first  we need to iterate through all columns and send LVM_SETCOLUMN to them with fmt set to NOT include these HDFs
-	colHeader = (HWND)SendMessage(hListView,LVM_GETHEADER,0,0);
-	cols = SendMessage(colHeader,HDM_GETITEMCOUNT,0,0);
-	for(q=0; q<cols; ++q)
+	HWND colHeader = (HWND)SendMessage(hListView,LVM_GETHEADER,0,0);
+	int cols = SendMessage(colHeader,HDM_GETITEMCOUNT,0,0);
+	for(int q=0; q<cols; ++q)
 	{
 		//Get current fmt
 		SendMessage(hListView,LVM_GETCOLUMN,(WPARAM) q, (LPARAM) &lvc);

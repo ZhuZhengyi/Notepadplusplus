@@ -204,11 +204,11 @@ LRESULT URLCtrl::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 			DWORD dwDTStyle = DT_SINGLELINE;
 			
 			//Test if centered horizontally or vertically
-			if(dwStyle & SS_CENTER)	     dwDTStyle |= DT_CENTER;
-			if(dwStyle & SS_RIGHT)		 dwDTStyle |= DT_RIGHT;
+			if(dwStyle & SS_CENTER)      dwDTStyle |= DT_CENTER;
+			if(dwStyle & SS_RIGHT)       dwDTStyle |= DT_RIGHT;
 			if(dwStyle & SS_CENTERIMAGE) dwDTStyle |= DT_VCENTER;
 
-			RECT		rect;
+			RECT rect;
 			::GetClientRect(hwnd, &rect);
 
 			PAINTSTRUCT ps;
