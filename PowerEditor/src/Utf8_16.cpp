@@ -191,7 +191,7 @@ size_t Utf8_16_Read::convert(char* buf, size_t len)
 
 void Utf8_16_Read::determineEncoding()
 {
-	INT uniTest = IS_TEXT_UNICODE_STATISTICS;
+	int uniTest = IS_TEXT_UNICODE_STATISTICS;
 	m_eEncoding = uni8Bit;
 	m_nSkip = 0;
 
@@ -616,5 +616,4 @@ void Utf16_Iter::operator++()
 			break;
 	}
 }
-
 
