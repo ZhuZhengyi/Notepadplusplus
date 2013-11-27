@@ -141,7 +141,8 @@ struct Position
 
 struct sessionFileInfo : public Position
 {
-	sessionFileInfo(const TCHAR *fn, const TCHAR *ln, int encoding, Position pos) : _encoding(encoding), Position(pos) {
+	sessionFileInfo(const TCHAR *fn, const TCHAR *ln, int encoding, Position pos) : _encoding(encoding), Position(pos)
+	{
 		if (fn) _fileName = fn;
 		if (ln) _langName = ln;
 	};
@@ -182,7 +183,8 @@ struct CmdLineParams
 	POINT _point;
 	bool _isPointXValid;
 	bool _isPointYValid;
-	bool isPointValid() {
+	bool isPointValid()
+	{
 		return _isPointXValid && _isPointYValid;
 	};
 	bool _isSessionFile;
@@ -340,9 +342,13 @@ struct Style
 			this->_nesting = style._nesting;
 
 			if (!(this->_keywords) && style._keywords)
+			{
 				this->_keywords = new generic_string(*(style._keywords));
+			}
 			else if (this->_keywords && style._keywords)
+			{
 				this->_keywords->assign(*(style._keywords));
+			}
 			else if (this->_keywords && !(style._keywords))
 			{
 				delete (this->_keywords);
@@ -416,9 +422,11 @@ public:
 
 	int getStylerIndexByID(int id)
 	{
-		for (int i = 0 ; i < _nbStyler ; ++i)
+		for (int i = 0; i < _nbStyler; ++i)
+		{
 			if (_styleArray[i]._styleID == id)
 				return i;
+		}
 
 		return -1;
 	};
@@ -428,9 +436,11 @@ public:
 		if (!name)
 			return -1;
 
-		for (int i = 0 ; i < _nbStyler ; ++i)
+		for (int i = 0; i < _nbStyler; ++i)
+		{
 			if (!lstrcmp(_styleArray[i]._styleDesc, name))
 				return i;
+		}
 
 		return -1;
 	};
@@ -497,10 +507,14 @@ public :
 			for (int i = 0 ; i < this->_nbLexerStyler ; ++i)
 				this->_lexerStylerArray[i] = lsa._lexerStylerArray[i];
 		}
+
 		return *this;
 	}
 
-	int getNbLexer() const {return _nbLexerStyler;};
+	int getNbLexer() const
+	{
+		return _nbLexerStyler;
+	};
 
 	LexerStyler & getLexerFromIndex(int index)
 	{
@@ -522,7 +536,12 @@ public :
 		}
 		return NULL;
 	};
-	bool hasEnoughSpace() {return (_nbLexerStyler < MAX_LEXER_STYLE);};
+
+	bool hasEnoughSpace()
+	{
+		return (_nbLexerStyler < MAX_LEXER_STYLE);
+	};
+
 	void addLexerStyler(const TCHAR *lexerName, const TCHAR *lexerDesc, const TCHAR *lexerUserExt, TiXmlNode *lexerNode);
 	void eraseAll();
 private :
@@ -937,7 +956,8 @@ struct Lang
 		_pCommentEnd = commentEnd;
 	};
 
-	void setTabInfo(int tabInfo) {
+	void setTabInfo(int tabInfo)
+	{
 		if (tabInfo != -1 && tabInfo & MASK_TabSize)
 		{
 			_isTabReplacedBySpace = (tabInfo & MASK_ReplaceBySpc) != 0;
@@ -1039,6 +1059,7 @@ public :
 				if (st._fgColor == COLORREF(-1))
 					st._fgColor = black;
 			}
+
 			for (int i = 0 ; i < SCE_USER_KWLIST_TOTAL ; ++i)
 				lstrcpy(this->_keywordLists[i], ulc._keywordLists[i]);
 
@@ -1157,6 +1178,7 @@ public :
 	{
 		if (index >= _localizationList.size())
 			return pair<wstring, wstring>(TEXT(""), TEXT(""));
+
 		return _localizationList[index];
 	};
 
@@ -1201,6 +1223,7 @@ public :
 	{
 		if (!themeName || themeName[0])
 			return TEXT("");
+
 		generic_string themePath = _stylesXmlPath;
 		return themePath;
 	};
@@ -1209,8 +1232,10 @@ public :
 	{
 		for (size_t i = 0; i < _themeList.size(); ++i )
 		{
-			if (! (getElementFromIndex(i)).first.compare(themeName) ) return true;
+			if (! (getElementFromIndex(i)).first.compare(themeName) )
+				return true;
 		}
+
 		return false;
 	}
 
@@ -1272,7 +1297,10 @@ public:
 	const TCHAR * getWordList(LangType langID, int typeIndex) const
 	{
 		Lang *pLang = getLangFromID(langID);
-		if (!pLang) return NULL;
+		if (!pLang)
+		{
+			return NULL;
+		}
 
 		return pLang->getWords(typeIndex);
 	};
@@ -1284,16 +1312,22 @@ public:
 			if ((_langList[i]->_langID == langID) || (!_langList[i]))
 				return _langList[i];
 		}
+
 		return NULL;
 	};
 
 	Lang * getLangFromIndex(int i) const
 	{
-		if (i >= _nbLang) return NULL;
+		if (i >= _nbLang)
+			return NULL;
+
 		return _langList[i];
 	};
 
-	int getNbLang() const {return _nbLang;};
+	int getNbLang() const
+	{
+		return _nbLang;
+	};
 
 	LangType getLangFromExt(const TCHAR *ext);
 
@@ -1304,6 +1338,7 @@ public:
 			if (_langList[i]->_langName == langName)
 				return _langList[i]->_defaultExtList;
 		}
+
 		return NULL;
 	};
 
@@ -1314,10 +1349,14 @@ public:
 			if (_langList[i]->_langID == langType)
 				return _langList[i]->_defaultExtList;
 		}
+
 		return NULL;
 	};
 
-	int getNbLRFile() const {return _nbRecentFile;};
+	int getNbLRFile() const
+	{
+		return _nbRecentFile;
+	};
 
 	generic_string *getLRFile(int index) const
 	{
@@ -1329,22 +1368,30 @@ public:
 		_nbMaxRecentFile = nb;
 	};
 
-	int getNbMaxRecentFile() const {return _nbMaxRecentFile;};
+	int getNbMaxRecentFile() const
+	{
+		return _nbMaxRecentFile;
+	};
 
 	void setPutRecentFileInSubMenu(bool doSubmenu)
 	{
 		_putRecentFileInSubMenu = doSubmenu;
 	};
 
-	bool putRecentFileInSubMenu() const {return _putRecentFileInSubMenu;};
+	bool putRecentFileInSubMenu() const
+	{
+		return _putRecentFileInSubMenu;
+	};
 
 	void setRecentFileCustomLength(int len)
 	{
 		_recentFileCustomLength = len;
 	};
 
-	int getRecentFileCustomLength() const {return _recentFileCustomLength;};
-
+	int getRecentFileCustomLength() const
+	{
+		return _recentFileCustomLength;
+	};
 
 	const ScintillaViewParams & getSVP() const
 	{
@@ -1372,30 +1419,41 @@ public:
 	StyleArray & getMiscStylerArray() {return _widgetStyleArray;};
 	GlobalOverride & getGlobalOverrideStyle() {return _nppGUI._globalOverride;};
 
-	COLORREF getCurLineHilitingColour() {
+	COLORREF getCurLineHilitingColour()
+	{
 		int i = _widgetStyleArray.getStylerIndexByName(TEXT("Current line background colour"));
-		if (i == -1) return i;
+		if (i == -1)
+			return i;
+
 		Style & style = _widgetStyleArray.getStyler(i);
 		return style._bgColor;
 	};
 	void setCurLineHilitingColour(COLORREF colour2Set)
 	{
 		int i = _widgetStyleArray.getStylerIndexByName(TEXT("Current line background colour"));
-		if (i == -1) return;
+		if (i == -1)
+			return;
+
 		Style & style = _widgetStyleArray.getStyler(i);
 		style._bgColor = colour2Set;
 	};
 
 	void setFontList(HWND hWnd);
-	const vector<generic_string> & getFontList() const {return _fontlist;};
+	const vector<generic_string> & getFontList() const
+	{
+		return _fontlist;
+	};
 
 	int getNbUserLang() const {return _nbUserLang;};
 	UserLangContainer & getULCFromIndex(int i) {return *_userLangArray[i];};
 	UserLangContainer * getULCFromName(const TCHAR *userLangName)
 	{
-		for (int i = 0 ; i < _nbUserLang ; ++i)
+		for (int i = 0; i < _nbUserLang; ++i)
+		{
 			if (!lstrcmp(userLangName, _userLangArray[i]->_name.c_str()))
 				return _userLangArray[i];
+		}
+
 		//qui doit etre jamais passer
 		return NULL;
 	};
@@ -1408,14 +1466,22 @@ public:
 			if (!lstrcmp(externalLangName, _externalLangArray[i]->_name))
 				return i;
 		}
+
 		return -1;
 	};
-	ExternalLangContainer & getELCFromIndex(int i) {return *_externalLangArray[i];};
+
+	ExternalLangContainer & getELCFromIndex(int i)
+	{
+		return *_externalLangArray[i];
+	};
 
 	bool ExternalLangHasRoom() const {return _nbExternalLang < NB_MAX_EXTERNAL_LANG;};
 
 	void getExternalLexerFromXmlTree(TiXmlDocument *doc);
-	vector<TiXmlDocument *> * getExternalLexerDoc() { return &_pXmlExternalLexerDoc;};
+	vector<TiXmlDocument *> * getExternalLexerDoc()
+	{
+		return &_pXmlExternalLexerDoc;
+	};
 
 	void writeUserDefinedLang();
 	void writeShortcuts();
@@ -1424,7 +1490,7 @@ public:
 
 	bool isExistingUserLangName(const TCHAR *newName) const
 	{
-		if ((!newName) || (!newName[0]))
+		if (!newName || !newName[0])
 			return true;
 
 		for (int i = 0 ; i < _nbUserLang ; ++i)
@@ -1432,12 +1498,13 @@ public:
 			if (!lstrcmp(_userLangArray[i]->_name.c_str(), newName))
 				return true;
 		}
+
 		return false;
 	};
 
-	const TCHAR * getUserDefinedLangNameFromExt(TCHAR *ext, TCHAR *fullName)
+	const TCHAR* getUserDefinedLangNameFromExt(TCHAR *ext, TCHAR *fullName)
 	{
-		if ((!ext) || (!ext[0]))
+		if (!ext || !ext[0])
 			return NULL;
 
 		for (int i = 0 ; i < _nbUserLang ; ++i)
@@ -1445,10 +1512,13 @@ public:
 			vector<generic_string> extVect;
 			cutString(_userLangArray[i]->_ext.c_str(), extVect);
 
-			for (size_t j = 0, len = extVect.size(); j < len; ++j)
-				if (!generic_stricmp(extVect[j].c_str(), ext) || (_tcschr(fullName, '.') && !generic_stricmp(extVect[j].c_str(), fullName)))
+			for (generic_string& extension : extVect)
+			{
+				if (!generic_stricmp(extension.c_str(), ext) || (_tcschr(fullName, '.') && !generic_stricmp(extension.c_str(), fullName)))
 					return _userLangArray[i]->_name.c_str();
+			}
 		}
+
 		return NULL;
 	};
 
@@ -1457,7 +1527,7 @@ public:
 
 	bool isExistingExternalLangName(const TCHAR *newName) const
 	{
-		if ((!newName) || (!newName[0]))
+		if (!newName || !newName[0])
 			return true;
 
 		for (int i = 0 ; i < _nbExternalLang ; ++i)
@@ -1465,16 +1535,24 @@ public:
 			if (!lstrcmp(_externalLangArray[i]->_name, newName))
 				return true;
 		}
+
 		return false;
 	};
 
 	int addExternalLangToEnd(ExternalLangContainer * externalLang);
 
-	TiXmlDocumentA * getNativeLangA() const {return _pXmlNativeLangDocA;};
+	TiXmlDocumentA * getNativeLangA() const
+	{
+		return _pXmlNativeLangDocA;
+	};
 
-	TiXmlDocument * getToolIcons() const {return _pXmlToolIconsDoc;};
+	TiXmlDocument * getToolIcons() const
+	{
+		return _pXmlToolIconsDoc;
+	};
 
-	bool isTransparentAvailable() const {
+	bool isTransparentAvailable() const
+	{
 		return (_transparentFuncAddr != NULL);
 	};
 
@@ -1537,13 +1615,17 @@ public:
 	const TCHAR * getWorkingDir() const {return _currentDirectory.c_str();};
 	const TCHAR * getworkSpaceFilePath(int i) const
 	{
-		if (i < 0 || i > 2) return NULL;
+		if (i < 0 || i > 2)
+			return NULL;
+
 		return _workSpaceFilePathes[i].c_str();
 	};
 
 	void setWorkSpaceFilePath(int i, const TCHAR *wsFile)
 	{
-		if (i < 0 || i > 2 || !wsFile) return;
+		if (i < 0 || i > 2 || !wsFile)
+			return;
+
 		_workSpaceFilePathes[i] = wsFile;
 	};
 
@@ -1567,9 +1649,15 @@ public:
 		FindDlgTabTitiles() : _find(TEXT("")), _replace(TEXT("")), _findInFiles(TEXT("")), _mark(TEXT("")) {};
 	};
 
-	FindDlgTabTitiles & getFindDlgTabTitiles() { return _findDlgTabTitiles;};
+	FindDlgTabTitiles& getFindDlgTabTitiles()
+	{
+		return _findDlgTabTitiles;
+	};
 
-	bool asNotepadStyle() const {return _asNotepadStyle;};
+	bool asNotepadStyle() const
+	{
+		return _asNotepadStyle;
+	};
 
 	bool reloadPluginCmds()
 	{
@@ -1595,20 +1683,31 @@ public:
 	};
 
 
-	vector<generic_string> & getBlackList() {return _blacklist;};
+	vector<generic_string>& getBlackList()
+	{
+		return _blacklist;
+	};
 	bool isInBlackList(TCHAR *fn)
 	{
-		for (size_t i = 0, len = _blacklist.size(); i < len ; ++i)
-			if (_blacklist[i] == fn)
+		for (generic_string& blacklistItem : _blacklist)
+		{
+			if (blacklistItem == fn)
 				return true;
+		}
 
 		return false;
 	};
 
-	PluginList & getPluginList() {return _pluginList;};
+	PluginList& getPluginList()
+	{
+		return _pluginList;
+	};
+
 	bool importUDLFromFile(generic_string sourceFile);
 	bool exportUDLToFile(int langIndex2export, generic_string fileName2save);
-	NativeLangSpeaker * getNativeLangSpeaker() {
+
+	NativeLangSpeaker* getNativeLangSpeaker()
+	{
 		return _pNativeLangSpeaker;
 	};
 	void setNativeLangSpeaker(NativeLangSpeaker *nls)
