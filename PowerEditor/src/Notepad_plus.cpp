@@ -988,8 +988,8 @@ int Notepad_plus::getHtmlXmlEncoding(const TCHAR *fileName) const
 }
 
 
-bool Notepad_plus::replaceInOpenedFiles() {
-
+bool Notepad_plus::replaceInOpenedFiles()
+{
 	ScintillaEditView *pOldView = _pEditView;
 	_pEditView = &_invisibleEditView;
 	Document oldDoc = _invisibleEditView.execute(SCI_GETDOCPOINTER);
@@ -2285,10 +2285,13 @@ void Notepad_plus::MaintainIndentation(TCHAR ch)
 		while (lastLine >= 0 && _pEditView->getLineLength(lastLine) == 0)
 			lastLine--;
 
-		if (lastLine >= 0) {
+		if (lastLine >= 0)
+		{
 			indentAmount = _pEditView->getLineIndent(lastLine);
 		}
-		if (indentAmount > 0) {
+
+		if (indentAmount > 0)
+		{
 			_pEditView->setLineIndent(curLine, indentAmount);
 		}
 	}
@@ -4029,7 +4032,8 @@ void Notepad_plus::fullScreenToggle()
 		if (!_beforeSpecialView.isPostIt)
 		{
 			_beforeSpecialView.preStyle = ::SetWindowLongPtr(_pPublicInterface->getHSelf(), GWL_STYLE, WS_POPUP);
-			if (!_beforeSpecialView.preStyle) { //something went wrong, use default settings
+			if (!_beforeSpecialView.preStyle) //something went wrong, use default settings
+			{
 				_beforeSpecialView.preStyle = WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN;
 			}
 		}
@@ -4164,7 +4168,8 @@ void Notepad_plus::postItToggle()
 			//Hide window so windows can properly update it
 			::ShowWindow(_pPublicInterface->getHSelf(), SW_HIDE);
 			_beforeSpecialView.preStyle = ::SetWindowLongPtr( _pPublicInterface->getHSelf(), GWL_STYLE, WS_POPUP );
-			if (!_beforeSpecialView.preStyle) { //something went wrong, use default settings
+			if (!_beforeSpecialView.preStyle) //something went wrong, use default settings
+			{
 				_beforeSpecialView.preStyle = WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN;
 			}
 			//Redraw the window and refresh windowmanager cache, dont do anything else, sizing is done later on
@@ -5922,8 +5927,8 @@ bool Notepad_plus::undoStreamComment()
 	int end_comment_length = end_comment.length();
 	int startCommentLength, endCommentLength;
 
-	do { // do as long as stream-comments are within selection
-
+	do // do as long as stream-comments are within selection
+	{
 		int selectionStart = _pEditView->execute(SCI_GETSELECTIONSTART);
 		int selectionEnd = _pEditView->execute(SCI_GETSELECTIONEND);
 		int caretPosition = _pEditView->execute(SCI_GETCURRENTPOS);
@@ -6017,7 +6022,8 @@ bool Notepad_plus::undoStreamComment()
 		//-- First delete end-comment, so that posStartCommentBefore does not change!
 		//-- Get character before end-comment to decide, if there is a white character before the end-comment, which will be removed too!
 		_pEditView->getGenericText(charbuf, charbufLen, posEndComment-1, posEndComment);
-		if (generic_strncmp(charbuf, white_space.c_str(), white_space.length()) == 0) {
+		if (generic_strncmp(charbuf, white_space.c_str(), white_space.length()) == 0)
+		{
 			endCommentLength +=1;
 			posEndComment-=1;
 		}
