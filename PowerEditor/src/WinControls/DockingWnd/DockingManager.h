@@ -45,7 +45,8 @@ using namespace std;
 
 
 #define CONT_MAP_MAX    50
-
+const bool HIDE_TOOLBAR = false;
+const bool SHOW_TOOLBAR = true;
 
 class DockingManager : public Window
 {
@@ -73,8 +74,8 @@ public :
 	void updateContainerInfo(HWND hClient);
 	void createDockableDlg(tTbData data, int iCont = CONT_LEFT, bool isVisible = false);
 	void setActiveTab(int iCont, int iItem);
-	void showDockableDlg(HWND hDlg, BOOL view);
-	void showDockableDlg(TCHAR* pszName, BOOL view);
+	void showDockableDlg(HWND hDlg, bool view);
+	void showDockableDlg(TCHAR* pszName, bool view);
 
 	DockingCont* toggleActiveTb(DockingCont* pContSrc, UINT message, BOOL bNew = FALSE, LPRECT rcFloat = NULL);
 	DockingCont* toggleVisTb(DockingCont* pContSrc, UINT message, LPRECT rcFloat = NULL);
@@ -96,13 +97,13 @@ public :
 	};
 
 	// setting styles of docking
-	void setStyleCaption(BOOL captionOnTop)
+	void setStyleCaption(bool captionOnTop)
 	{
 		_vContainer[CONT_TOP]->setCaptionTop(captionOnTop);
 		_vContainer[CONT_BOTTOM]->setCaptionTop(captionOnTop);
 	};
 
-	void setTabStyle(BOOL orangeLine)
+	void setTabStyle(bool orangeLine)
 	{
 		for (DockingCont* dc : _vContainer)
 		{

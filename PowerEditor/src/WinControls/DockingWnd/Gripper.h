@@ -160,7 +160,7 @@ private:
 	// for sorting tabs
 	HWND _hTab;
 	HWND _hTabSource;
-	BOOL _startMovingFromTab;
+	bool _startMovingFromTab;
 	int _iItem;
 	RECT _rcItem;
 	TCITEM _tcItem;

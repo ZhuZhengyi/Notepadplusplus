@@ -105,7 +105,7 @@ Gripper::Gripper()
 	
 	_hTab               = NULL;
 	_hTabSource         = NULL;
-	_startMovingFromTab = FALSE;
+	_startMovingFromTab = false;
 	_iItem              = 0;
 
 	_hdc    = NULL;
@@ -319,7 +319,7 @@ void Gripper::onMove()
 	getMousePoints(&pt, &ptBuf);
 
 	/* tab reordering only when tab was selected */
-	if (_startMovingFromTab == TRUE)
+	if (_startMovingFromTab)
 	{
 		doTabReordering(pt);
 	}
@@ -371,7 +371,7 @@ void Gripper::onButtonUp()
 		DoCalcGripperRect(&rc, rcCorr, pt);
 
 		/* change location of toolbars */
-		if (_startMovingFromTab == TRUE)
+		if (_startMovingFromTab)
 		{
 			/* when tab is moved */
 			if ((!_pCont->isFloating()) || 
@@ -399,7 +399,7 @@ void Gripper::onButtonUp()
 	else if (_pCont != pDockCont)
 	{
 		/* change location of toolbars */
-		if ((_startMovingFromTab == TRUE) && (::SendMessage(_hTabSource, TCM_GETITEMCOUNT, 0, 0) != 1))
+		if (_startMovingFromTab && (::SendMessage(_hTabSource, TCM_GETITEMCOUNT, 0, 0) != 1))
 		{
 			/* when tab is moved */
 			_pDockMgr->toggleActiveTb(_pCont, pDockCont);
@@ -876,9 +876,9 @@ void Gripper::initTabInformation()
 	/* remember handle */
 	_hTabSource = _pCont->getTabWnd();
 	_startMovingFromTab = _pCont->startMovingFromTab();
-	if ((_startMovingFromTab == FALSE) && (::SendMessage(_hTabSource, TCM_GETITEMCOUNT, 0, 0) == 1))
+	if ((_startMovingFromTab == false) && (::SendMessage(_hTabSource, TCM_GETITEMCOUNT, 0, 0) == 1))
 	{
-		_startMovingFromTab = TRUE;
+		_startMovingFromTab = true;
 		_iItem              = 0;
 	}
 	else

@@ -1594,13 +1594,13 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPa
 
 		case NPPM_DMMSHOW:
 		{
-			_dockingManager.showDockableDlg((HWND)lParam, SW_SHOW);
+			_dockingManager.showDockableDlg((HWND)lParam, SHOW_TOOLBAR);
 			return TRUE;
 		}
 
 		case NPPM_DMMHIDE:
 		{
-			_dockingManager.showDockableDlg((HWND)lParam, SW_HIDE);
+			_dockingManager.showDockableDlg((HWND)lParam, HIDE_TOOLBAR);
 			return TRUE;
 		}
 
@@ -1624,7 +1624,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPa
 
 		case NPPM_DMMVIEWOTHERTAB:
 		{
-			_dockingManager.showDockableDlg((TCHAR*)lParam, SW_SHOW);
+			_dockingManager.showDockableDlg((TCHAR*)lParam, SHOW_TOOLBAR);
 			return TRUE;
 		}
 

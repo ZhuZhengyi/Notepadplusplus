@@ -56,7 +56,7 @@ enum eMousePos
 };
 
 // some fix modify values for GUI
-#define	HIGH_CAPTION        18
+#define HIGH_CAPTION        18
 #define HIGH_TAB            20
 #define CAPTION_GAP         2
 #define CLOSEBTN_POS_LEFT   3
@@ -87,19 +87,19 @@ public:
 	tTbData* findToolbarByWnd(HWND hClient);
 	tTbData* findToolbarByName(TCHAR* pszName);
 
-	void showToolbar(tTbData *pTbData, BOOL state);
+	void showToolbar(tTbData *pTbData, bool show);
 
-	BOOL updateInfo(HWND hClient)
+	bool updateInfo(HWND hClient)
 	{
 		for (tTbData* tb : _vTbData)
 		{
 			if (tb->hClient == hClient)
 			{
 				updateCaption();
-				return TRUE;
+				return true;
 			}
 		}
-		return FALSE;
+		return false;
 	};
 
 	void setActiveTb(tTbData* pTbData);
@@ -126,16 +126,16 @@ public:
 	}
 
 	// interface function for gripper
-	BOOL startMovingFromTab()
+	bool startMovingFromTab()
 	{
-		BOOL dragFromTabTemp = _dragFromTab;
-		_dragFromTab = FALSE;
+		bool dragFromTabTemp = _dragFromTab;
+		_dragFromTab = false;
 		return dragFromTabTemp;
 	};
 
-	void setCaptionTop(BOOL isTopCaption)
+	void setCaptionTop(bool isTopCaption)
 	{
-		_isTopCaption = (isTopCaption == CAPTION_TOP);
+		_isTopCaption = isTopCaption;
 		onSize();
 	};
 
@@ -147,7 +147,7 @@ public:
 		updateCaption();
 	};
 
-	void setTabStyle(const BOOL & bDrawOgLine)
+	void setTabStyle(const bool& bDrawOgLine)
 	{
 		_bDrawOgLine = bDrawOgLine;
 		RedrawWindow(_hContTab, NULL, NULL, 0);
@@ -195,11 +195,11 @@ protected :
 	int  SearchPosInTab(tTbData* pTbData);
 	void SelectTab(int iTab);
 
-	int  hideToolbar(tTbData* pTbData, BOOL hideClient = TRUE);
+	int  hideToolbar(tTbData* pTbData, bool hideClient = true);
 	void viewToolbar(tTbData *pTbData);
 	int  removeTab(tTbData* pTbData)
 	{
-		return hideToolbar(pTbData, FALSE);
+		return hideToolbar(pTbData, false);
 	};
 
 	bool updateCaption();
@@ -216,19 +216,19 @@ private:
 	HFONT           _hFont;
 
 	// caption params
-	BOOL            _isTopCaption;
+	bool            _isTopCaption;
 	generic_string  _pszCaption;
 
-	BOOL            _isMouseDown;
-	BOOL            _isMouseClose;
-	BOOL            _isMouseOver;
+	bool            _isMouseDown;
+	bool            _isMouseClose;
+	bool            _isMouseOver;
 	RECT            _rcCaption;
 	
 	// tab style
-	BOOL            _bDrawOgLine;
+	bool            _bDrawOgLine;
 
 	// Important value for DlgMoving class
-	BOOL            _dragFromTab;
+	bool            _dragFromTab;
 
 	// subclassing handle for caption
 	WNDPROC         _hDefaultCaptionProc;
@@ -238,15 +238,15 @@ private:
 
 	// for moving and reordering
 	UINT            _prevItem;
-	BOOL            _beginDrag;
+	bool            _beginDrag;
 	HIMAGELIST      _hImageList;
 
 	// Is tooltip
-	BOOL            _bTabTTHover;
+	bool            _bTabTTHover;
 	int             _iLastHovered;
 
-	BOOL            _bCaptionTT;
-	BOOL            _bCapTTHover;
+	bool            _bCaptionTT;
+	bool            _bCapTTHover;
 	eMousePos       _hoverMPos;
 
 	// data of added windows

@@ -68,22 +68,22 @@ static LRESULT CALLBACK hookProcMouse(UINT nCode, WPARAM wParam, LPARAM lParam)
 
 DockingCont::DockingCont()
 {
-	_isMouseOver     = FALSE;
-	_isMouseClose    = FALSE;
-	_isMouseDown     = FALSE;
+	_isMouseOver     = false;
+	_isMouseClose    = false;
+	_isMouseDown     = false;
 	_isFloating      = false;
-	_isTopCaption    = CAPTION_TOP;
-	_dragFromTab     = FALSE;
+	_isTopCaption    = true;
+	_dragFromTab     = false;
 	_hContTab        = NULL;
 	_hDefaultTabProc = NULL;
-	_beginDrag       = FALSE;
+	_beginDrag       = false;
 	_prevItem        = 0;
 	_hFont           = NULL;
-	_bTabTTHover     = FALSE;
-	_bCaptionTT      = FALSE;
-	_bCapTTHover     = FALSE;
+	_bTabTTHover     = false;
+	_bCaptionTT      = false;
+	_bCapTTHover     = false;
 	_hoverMPos       = posClose;
-	_bDrawOgLine     = TRUE;
+	_bDrawOgLine     = true;
 	_vTbData.clear();
 }
 
@@ -286,12 +286,12 @@ LRESULT DockingCont::runProcCaption(HWND hwnd, UINT Message, WPARAM wParam, LPAR
 	{
 		case WM_LBUTTONDOWN:
 		{
-			_isMouseDown = TRUE;
+			_isMouseDown = true;
 
 			if (isInRect(hwnd, LOWORD(lParam), HIWORD(lParam)) == posClose)
 			{
-				_isMouseClose = TRUE;
-				_isMouseOver  = TRUE;
+				_isMouseClose = true;
+				_isMouseOver  = true;
 
 				// start hooking
 				hWndServer = _hCaption;
@@ -314,7 +314,7 @@ LRESULT DockingCont::runProcCaption(HWND hwnd, UINT Message, WPARAM wParam, LPAR
 
 		case WM_LBUTTONUP:
 		{
-			_isMouseDown = FALSE;
+			_isMouseDown = false;
 			if (_isMouseClose)
 			{
 				// end hooking
@@ -324,8 +324,8 @@ LRESULT DockingCont::runProcCaption(HWND hwnd, UINT Message, WPARAM wParam, LPAR
 				{
 					doClose();
 				}
-				_isMouseClose = FALSE;
-				_isMouseOver  = FALSE;
+				_isMouseClose = false;
+				_isMouseOver  = false;
 			}
 			
 			focusClient();
@@ -351,24 +351,24 @@ LRESULT DockingCont::runProcCaption(HWND hwnd, UINT Message, WPARAM wParam, LPAR
 
 			if (_isMouseDown)
 			{
-				if (_isMouseClose == FALSE)
+				if (_isMouseClose == false)
 				{
 					// keep sure that button is still down and within caption
 					if ((wParam == MK_LBUTTON) && (isInRect(hwnd, pt.x, pt.y) == posCaption))
 					{
-						_dragFromTab = FALSE;
+						_dragFromTab = false;
 						NotifyParent(DMM_MOVE);
-						_isMouseDown = FALSE;
+						_isMouseDown = false;
 					}
 					else
 					{
-						_isMouseDown = FALSE;
+						_isMouseDown = false;
 					}
 				}
 				else
 				{
-					BOOL isMouseOver = _isMouseOver;
-					_isMouseOver = (isInRect(hwnd, pt.x, pt.y) == posClose ? TRUE : FALSE);
+					bool isMouseOver = _isMouseOver;
+					_isMouseOver = (isInRect(hwnd, pt.x, pt.y) == posClose);
 
 					// if state is changed draw new
 					if (_isMouseOver != isMouseOver)
@@ -378,7 +378,7 @@ LRESULT DockingCont::runProcCaption(HWND hwnd, UINT Message, WPARAM wParam, LPAR
 					}
 				}
 			}
-			else if (_bCapTTHover == FALSE)
+			else if (_bCapTTHover == false)
 			{
 				_hoverMPos = isInRect(hwnd, LOWORD(lParam), HIWORD(lParam));
 
@@ -389,13 +389,13 @@ LRESULT DockingCont::runProcCaption(HWND hwnd, UINT Message, WPARAM wParam, LPAR
 					tme.hwndTrack = hwnd;
 					tme.dwFlags = TME_LEAVE | TME_HOVER;
 					tme.dwHoverTime = 1000;
-					_bCapTTHover = _TrackMouseEvent(&tme);
+					_bCapTTHover = (_TrackMouseEvent(&tme) != 0);
 				}
 			}
 			else if (_bCapTTHover && (_hoverMPos != isInRect(hwnd, LOWORD(lParam), HIWORD(lParam))))
 			{
 				toolTip.destroy();
-				_bCapTTHover = FALSE;
+				_bCapTTHover = false;
 			}
 
 			return TRUE;
@@ -424,7 +424,7 @@ LRESULT DockingCont::runProcCaption(HWND hwnd, UINT Message, WPARAM wParam, LPAR
 		case WM_MOUSELEAVE:
 		{
 			toolTip.destroy();
-			_bCapTTHover = FALSE;
+			_bCapTTHover = false;
 			return TRUE;
 		}
 
@@ -512,7 +512,7 @@ void DockingCont::drawCaptionItem(DRAWITEMSTRUCT *pDrawItemStruct)
 		// calculate text size and if its truncated
 		SIZE size = {0};
 		GetTextExtentPoint32(hDc, _pszCaption.c_str(), length, &size);
-		_bCaptionTT = (((rc.right - rc.left) < size.cx) ? TRUE : FALSE);
+		_bCaptionTT = ((rc.right - rc.left) < size.cx);
 
 		::SelectObject(hDc, hOldFont);
 	}
@@ -560,10 +560,10 @@ void DockingCont::drawCaptionItem(DRAWITEMSTRUCT *pDrawItemStruct)
 		hOldFont = (HFONT)::SelectObject(hDc, hFont);
 		::DrawText(hDc, _pszCaption.c_str(), length, &rc, DT_BOTTOM | DT_SINGLELINE | DT_END_ELLIPSIS | DT_NOPREFIX);
 
-		// calculate text size and if its trankated...
+		// calculate text size and if its truncated
 		SIZE size = {0};
 		GetTextExtentPoint32(hDc, _pszCaption.c_str(), length, &size);
-		_bCaptionTT = (((rc.bottom - rc.top) < size.cy) ? TRUE : FALSE);
+		_bCaptionTT = ((rc.bottom - rc.top) < size.cy);
 
 		::SelectObject(hDc, hOldFont);
 		::DeleteObject(hFont);
@@ -649,7 +649,7 @@ LRESULT DockingCont::runProcTab(HWND hwnd, UINT Message, WPARAM wParam, LPARAM l
 	{
 		case WM_LBUTTONDOWN:
 		{
-			_beginDrag = TRUE;
+			_beginDrag = true;
 			return TRUE;
 		}
 
@@ -664,7 +664,7 @@ LRESULT DockingCont::runProcTab(HWND hwnd, UINT Message, WPARAM wParam, LPARAM l
 			iItem = ::SendMessage(hwnd, TCM_HITTEST, 0, (LPARAM)&info);
 
 			SelectTab(iItem);
-			_beginDrag = FALSE;
+			_beginDrag = false;
 			return TRUE;
 		}
 
@@ -717,29 +717,29 @@ LRESULT DockingCont::runProcTab(HWND hwnd, UINT Message, WPARAM wParam, LPARAM l
 				SelectTab(iItem);
 
 				// send moving message to parent window
-				_dragFromTab = TRUE;
+				_dragFromTab = true;
 				NotifyParent(DMM_MOVE);
-				_beginDrag = FALSE;
+				_beginDrag = false;
 			}
 			else
 			{
 				int iItemSel = ::SendMessage(hwnd, TCM_GETCURSEL, 0, 0);
 
-				if ((_bTabTTHover == FALSE) && (iItem != iItemSel))
+				if ((_bTabTTHover == false) && (iItem != iItemSel))
 				{
 					TRACKMOUSEEVENT tme;
 					tme.cbSize = sizeof(tme);
 					tme.hwndTrack = hwnd;
 					tme.dwFlags = TME_LEAVE | TME_HOVER;
 					tme.dwHoverTime = 1000;
-					_bTabTTHover = _TrackMouseEvent(&tme);
+					_bTabTTHover = (_TrackMouseEvent(&tme) != 0);
 				}
 				else
 				{
 					if (iItem == iItemSel)
 					{
 						toolTip.destroy();
-						_bTabTTHover = FALSE;
+						_bTabTTHover = false;
 					}
 					else if (iItem != _iLastHovered)
 					{
@@ -766,7 +766,7 @@ LRESULT DockingCont::runProcTab(HWND hwnd, UINT Message, WPARAM wParam, LPARAM l
 				// save last hovered item
 				_iLastHovered = iItem;
 
-				_beginDrag = FALSE;
+				_beginDrag = false;
 			}
 			return TRUE;
 		}
@@ -800,7 +800,7 @@ LRESULT DockingCont::runProcTab(HWND hwnd, UINT Message, WPARAM wParam, LPARAM l
 		case WM_MOUSELEAVE:
 		{
 			toolTip.destroy();
-			_bTabTTHover = FALSE;
+			_bTabTTHover = false;
 			return TRUE;
 		}
 
@@ -1177,9 +1177,9 @@ void DockingCont::doClose()
 	}
 }
 
-void DockingCont::showToolbar(tTbData* pTbData, BOOL state)
+void DockingCont::showToolbar(tTbData* pTbData, bool show)
 {
-	if (state == SW_SHOW)
+	if (show)
 	{
 		viewToolbar(pTbData);
 	}
@@ -1189,12 +1189,12 @@ void DockingCont::showToolbar(tTbData* pTbData, BOOL state)
 	}
 }
 
-int DockingCont::hideToolbar(tTbData *pTbData, BOOL hideClient)
+int DockingCont::hideToolbar(tTbData *pTbData, bool hideClient)
 {
 	int iItem = SearchPosInTab(pTbData);
 
 	// delete item
-	if (TRUE == ::SendMessage(_hContTab, TCM_DELETEITEM, iItem, 0))
+	if (::SendMessage(_hContTab, TCM_DELETEITEM, iItem, 0) == TRUE)
 	{
 		UINT iItemCnt = ::SendMessage(_hContTab, TCM_GETITEMCOUNT, 0, 0);
 
@@ -1204,7 +1204,7 @@ int DockingCont::hideToolbar(tTbData *pTbData, BOOL hideClient)
 
 			tcItem.mask = TCIF_PARAM;
 
-			if ((unsigned int)iItem == iItemCnt)
+			if ((UINT)iItem == iItemCnt)
 			{
 				iItem--;
 			}

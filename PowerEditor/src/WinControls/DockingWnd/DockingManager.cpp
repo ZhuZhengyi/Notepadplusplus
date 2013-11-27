@@ -204,7 +204,7 @@ void DockingManager::updateContainerInfo(HWND hClient)
 {
 	for (size_t iCont = 0, len = _vContainer.size(); iCont < len; ++iCont)
 	{
-		if (_vContainer[iCont]->updateInfo(hClient) == TRUE)
+		if (_vContainer[iCont]->updateInfo(hClient))
 		{
 			break;
 		}
@@ -700,7 +700,7 @@ void DockingManager::setActiveTab(int iCont, int iItem)
 	_vContainer[_iContMap[iCont]]->setActiveTb(iItem);
 }
 
-void DockingManager::showDockableDlg(HWND hDlg, BOOL view) 
+void DockingManager::showDockableDlg(HWND hDlg, bool view) 
 {
 	tTbData *pTbData = NULL;
 
@@ -715,7 +715,7 @@ void DockingManager::showDockableDlg(HWND hDlg, BOOL view)
 	}
 }
 
-void DockingManager::showDockableDlg(TCHAR* pszName, BOOL view)
+void DockingManager::showDockableDlg(TCHAR* pszName, bool view)
 {
 	tTbData *pTbData = NULL;
 
