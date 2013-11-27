@@ -12,7 +12,7 @@
 #ifndef WINMGR_H
 #define WINMGR_H
 
-#pragma once
+#include <cstdint>
 
 // when using screen dimensions, this is infinite
 //const LONG INFINITY = 0x7FFF; // max short

@@ -33,7 +33,7 @@
 #include "Gripper.h"
 
 
-BOOL DockingManager::_isRegistered = FALSE;
+bool DockingManager::_isRegistered = false;
 
 //Window of event handling DockingManager (can only be one)
 static HWND  hWndServer = NULL;
@@ -73,7 +73,7 @@ LRESULT CALLBACK FocusWndProc(int nCode, WPARAM wParam, LPARAM lParam)
 
 DockingManager::DockingManager()
 {
-	_isInitialized = FALSE;
+	_isInitialized = false;
 	_hImageList    = NULL;
 	memset(_iContMap, -1, CONT_MAP_MAX * sizeof(int));
 
@@ -125,7 +125,7 @@ void DockingManager::init(HINSTANCE hInst, HWND hWnd, Window ** ppWin)
 		{
 			throw std::runtime_error("DockingManager::init : RegisterClass() function failed");
 		}
-		_isRegistered = TRUE;
+		_isRegistered = true;
 	}
 
 	_hSelf = ::CreateWindowEx(
@@ -173,7 +173,7 @@ void DockingManager::init(HINSTANCE hInst, HWND hWnd, Window ** ppWin)
 
 	_dockData.hWnd = _hSelf;
 
-	_isInitialized = TRUE;
+	_isInitialized = true;
 }
 
 void DockingManager::destroy() 
@@ -211,12 +211,12 @@ void DockingManager::updateContainerInfo(HWND hClient)
 	}
 }
 
-void DockingManager::showContainer(HWND hCont, BOOL view) 
+void DockingManager::showContainer(HWND hCont, bool floating) 
 {
 	for (size_t iCont = 0, len = _vContainer.size(); iCont < len; ++iCont)
 	{
 		if (_vContainer[iCont]->getHSelf() == hCont)
-			showContainer(iCont, view);
+			showContainer(iCont, floating);
 	}
 }
 
@@ -367,7 +367,7 @@ LRESULT DockingManager::runProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 
 		case DMM_CLOSE:
 		{
-			tTbData	TbData	= *((DockingCont*)lParam)->getDataOfActiveTb();
+			tTbData TbData = *((DockingCont*)lParam)->getDataOfActiveTb();
 			return SendNotify(TbData.hClient, DMN_CLOSE);
 		}
 
@@ -420,7 +420,7 @@ void DockingManager::reSizeTo(RECT & rc)
 	// prepare size of work area
 	_rcWork = rc;
 
-	if (_isInitialized == FALSE)
+	if (_isInitialized == false)
 		return;
 
 	// set top container
@@ -762,7 +762,7 @@ int DockingManager::getDockedContSize(int iCont)
 		return -1;
 }
 
-DockingCont* DockingManager::toggleActiveTb(DockingCont* pContSrc, UINT message, BOOL bNew, LPRECT prcFloat)
+DockingCont* DockingManager::toggleActiveTb(DockingCont* pContSrc, UINT message, bool bNew, LPRECT prcFloat)
 {
 	tTbData      TbData    = *pContSrc->getDataOfActiveTb();
 	int          iContSrc  = GetContainer(pContSrc);
@@ -776,7 +776,7 @@ DockingCont* DockingManager::toggleActiveTb(DockingCont* pContSrc, UINT message,
 		TbData.rcFloat = *prcFloat;
 	}
 
-	if ((isCont == false) || (bNew == TRUE))
+	if (!isCont || bNew)
 	{
 		// find an empty container
 		int iContNew = FindEmptyContainer();
@@ -789,7 +789,7 @@ DockingCont* DockingManager::toggleActiveTb(DockingCont* pContSrc, UINT message,
 			pContTgt->doDialog(true, true);
 
 			// change only on toggling
-			if ((bNew == FALSE) || (!pContSrc->isFloating()))
+			if ((bNew == false) || (!pContSrc->isFloating()))
 				TbData.iPrevCont = iContSrc;
 
 			pContTgt->createToolbar(TbData);

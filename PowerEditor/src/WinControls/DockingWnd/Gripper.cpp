@@ -43,7 +43,7 @@
 #endif
 
 
-BOOL Gripper::_isRegistered = FALSE;
+bool Gripper::_isRegistered = false;
 
 static HWND  hWndServer   = NULL;
 static HHOOK hookMouse    = NULL;
@@ -146,7 +146,7 @@ void Gripper::startGrip(DockingCont* pCont, DockingManager* pDockMgr)
 		{
 			throw std::runtime_error("Gripper::startGrip : RegisterClass() function failed");
 		}
-		_isRegistered = TRUE;
+		_isRegistered = true;
 	}
 
 	_hSelf = ::CreateWindowEx(
@@ -377,7 +377,7 @@ void Gripper::onButtonUp()
 			if ((!_pCont->isFloating()) || 
 				((_pCont->isFloating()) && (::SendMessage(_hTabSource, TCM_GETITEMCOUNT, 0, 0) > 1)))
 			{
-				pContMove = _pDockMgr->toggleActiveTb(_pCont, DMM_FLOAT, TRUE, &rc);
+				pContMove = _pDockMgr->toggleActiveTb(_pCont, DMM_FLOAT, true, &rc);
 			}
 		}
 		else if (!_pCont->isFloating())

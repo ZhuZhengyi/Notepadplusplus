@@ -170,7 +170,7 @@ private:
 	HBRUSH _hbrush;
 
 	// is class registered
-	static BOOL _isRegistered;
+	static bool _isRegistered;
 };
 
 #endif // GRIPPER_H

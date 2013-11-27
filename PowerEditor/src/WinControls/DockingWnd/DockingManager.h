@@ -63,11 +63,11 @@ public :
 		_ppMainWindow = ppWin;
 	};
 
-	void showContainer(HWND hCont, BOOL view = TRUE);
+	void showContainer(HWND hCont, bool floating = true);
 
-	void showContainer(UINT uCont, BOOL view = TRUE)
+	void showContainer(UINT uCont, bool floating = true)
 	{
-		_vContainer[uCont]->doDialog((view == TRUE));
+		_vContainer[uCont]->doDialog(floating);
 		onSize();
 	}
 
@@ -77,7 +77,7 @@ public :
 	void showDockableDlg(HWND hDlg, bool view);
 	void showDockableDlg(TCHAR* pszName, bool view);
 
-	DockingCont* toggleActiveTb(DockingCont* pContSrc, UINT message, BOOL bNew = FALSE, LPRECT rcFloat = NULL);
+	DockingCont* toggleActiveTb(DockingCont* pContSrc, UINT message, bool bNew = false, LPRECT rcFloat = NULL);
 	DockingCont* toggleVisTb(DockingCont* pContSrc, UINT message, LPRECT rcFloat = NULL);
 	void         toggleActiveTb(DockingCont* pContSrc, DockingCont* pContTgt);
 	void         toggleVisTb(DockingCont* pContSrc, DockingCont* pContTgt);
@@ -137,8 +137,8 @@ private:
 	HIMAGELIST                  _hImageList;
 	vector<DockingCont*>        _vContainer;
 	tDockMgr                    _dockData;
-	static BOOL                 _isRegistered;
-	BOOL                        _isInitialized;
+	static bool                 _isRegistered;
+	bool                        _isInitialized;
 	int                         _iContMap[CONT_MAP_MAX];
 	vector<DockingSplitter *>   _vSplitter;
 };
