@@ -729,7 +729,8 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPa
 			int nbFileNames = lParam;
 
 			int j = 0;
-			if (Message != NPPM_GETOPENFILENAMESSECOND) {
+			if (Message != NPPM_GETOPENFILENAMESSECOND)
+			{
 				for (int i = 0 ; i < _mainDocTab.nbItem() && j < nbFileNames ; ++i)
 				{
 					BufferID id = _mainDocTab.getBufferByIndex(i);
@@ -737,7 +738,9 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPa
 					lstrcpy(fileNames[j++], buf->getFullPathName());
 				}
 			}
-			if (Message != NPPM_GETOPENFILENAMESPRIMARY) {
+
+			if (Message != NPPM_GETOPENFILENAMESPRIMARY)
+			{
 				for (int i = 0 ; i < _subDocTab.nbItem() && j < nbFileNames ; ++i)
 				{
 					BufferID id = _subDocTab.getBufferByIndex(i);
@@ -750,7 +753,9 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPa
 
 		case WM_GETTASKLISTINFO :
 		{
-			if (!wParam) return 0;
+			if (!wParam)
+				return 0;
+
 			TaskListInfo * tli = (TaskListInfo *)wParam;
 			getTaskListInfo(tli);
 
@@ -1235,21 +1240,26 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPa
 		{
 			if (wParam == MODELESSDIALOGADD)
 			{
-				for (size_t i = 0, len = _hModelessDlgs.size() ; i < len ; ++i)
-					if (_hModelessDlgs[i] == (HWND)lParam)
+				for (HWND& modelessDlg : _hModelessDlgs)
+				{
+					if (modelessDlg == (HWND)lParam)
 						return NULL;
+				}
+
 				_hModelessDlgs.push_back((HWND)lParam);
 				return lParam;
 			}
 			else if (wParam == MODELESSDIALOGREMOVE)
 			{
-				for (size_t i = 0, len = _hModelessDlgs.size(); i < len ; ++i)
+				for (size_t i = 0, len = _hModelessDlgs.size(); i < len; ++i)
+				{
 					if (_hModelessDlgs[i] == (HWND)lParam)
 					{
 						vector<HWND>::iterator hDlg = _hModelessDlgs.begin() + i;
 						_hModelessDlgs.erase(hDlg);
 						return NULL;
 					}
+				}
 				return lParam;
 			}
 			return TRUE;
@@ -1265,23 +1275,28 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPa
 			{
 				if ((HWND(wParam) == _mainEditView.getHSelf()) || (HWND(wParam) == _subEditView.getHSelf()))
 				{
-					if ((HWND(wParam) == _mainEditView.getHSelf())) {
+					if ((HWND(wParam) == _mainEditView.getHSelf()))
+					{
 						switchEditViewTo(MAIN_VIEW);
 					} else {
 						switchEditViewTo(SUB_VIEW);
 					}
+
 					POINT p;
 					::GetCursorPos(&p);
 					ContextMenu scintillaContextmenu;
 					vector<MenuItemUnit> & tmp = pNppParam->getContextMenuItems();
 					vector<bool> isEnable;
-					for (size_t i = 0, len = tmp.size(); i < len ; ++i)
+					for (MenuItemUnit& unit : tmp)
 					{
-						isEnable.push_back((::GetMenuState(_mainMenuHandle, tmp[i]._cmdID, MF_BYCOMMAND)&MF_DISABLED) == 0);
+						isEnable.push_back((::GetMenuState(_mainMenuHandle, unit._cmdID, MF_BYCOMMAND)&MF_DISABLED) == 0);
 					}
+
 					scintillaContextmenu.create(_pPublicInterface->getHSelf(), tmp);
-					for (size_t i = 0, len = isEnable.size(); i < len ; ++i)
+					for (size_t i = 0, len = isEnable.size(); i < len; ++i)
+					{
 						scintillaContextmenu.enableItem(tmp[i]._cmdID, isEnable[i]);
+					}
 
 					scintillaContextmenu.display(p);
 					return TRUE;
@@ -1620,17 +1635,17 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPa
 			TCHAR *moduleName = (TCHAR *)lParam;
 			TCHAR *windowName = (TCHAR *)wParam;
 			vector<DockingCont *> dockContainer = _dockingManager.getContainerInfo();
-			for (size_t i = 0, len = dockContainer.size(); i < len ; ++i)
+			for (DockingCont* dc : dockContainer)
 			{
-				vector<tTbData *> tbData = dockContainer[i]->getDataOfAllTb();
-				for (size_t j = 0, len2 = tbData.size() ; j < len2 ; ++j)
+				vector<tTbData *> tbData = dc->getDataOfAllTb();
+				for (tTbData* tblData : tbData)
 				{
-					if (generic_stricmp(moduleName, tbData[j]->pszModuleName) == 0)
+					if (generic_stricmp(moduleName, tblData->pszModuleName) == 0)
 					{
 						if (!windowName)
-							return (LRESULT)tbData[j]->hClient;
-						else if (generic_stricmp(windowName, tbData[j]->pszName) == 0)
-							return (LRESULT)tbData[j]->hClient;
+							return (LRESULT)tblData->hClient;
+						else if (generic_stricmp(windowName, tblData->pszName) == 0)
+							return (LRESULT)tblData->hClient;
 					}
 				}
 			}

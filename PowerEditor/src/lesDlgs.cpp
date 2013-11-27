@@ -55,7 +55,9 @@ int ValueDlg::doDialog(POINT p, bool isRTL)
 
 int ValueDlg::reSizeValueBox()
 {
-	if (_nbNumber == DEFAULT_NB_NUMBER) return 0;
+	if (_nbNumber == DEFAULT_NB_NUMBER)
+		return 0;
+
 	RECT rect;
 	POINT p;
 

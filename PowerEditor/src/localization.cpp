@@ -882,7 +882,8 @@ void NativeLangSpeaker::changeShortcutLang()
 		int index, id;
 		if (element->Attribute("index", &index) && element->Attribute("id", &id))
 		{
-			if (index > -1 && index < mainSize) { //valid index only
+			if (index > -1 && index < mainSize) //valid index only
+			{
 				const char *name = element->Attribute("name");
 				CommandShortcut & csc = mainshortcuts[index];
 				if (csc.getID() == (unsigned long)id) 

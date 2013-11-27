@@ -40,12 +40,12 @@ void Notepad_plus::macroPlayback(Macro macro)
 {
 	_pEditView->execute(SCI_BEGINUNDOACTION);
 
-	for (Macro::iterator step = macro.begin(); step != macro.end(); ++step)
+	for (recordedMacroStep& step : macro)
 	{
-		if (step->isPlayable())
-			step->PlayBack(this->_pPublicInterface, _pEditView);
+		if (step.isPlayable())
+			step.PlayBack(this->_pPublicInterface, _pEditView);
 		else
-			_findReplaceDlg.execSavedCommand(step->message, step->lParameter, step->sParameter);
+			_findReplaceDlg.execSavedCommand(step.message, step.lParameter, step.sParameter);
 	}
 
 	_pEditView->execute(SCI_ENDUNDOACTION);
@@ -76,9 +76,9 @@ void Notepad_plus::command(int id)
 			if (_pFileSwitcherPanel)
 			{
 				vector<SwitcherFileInfo> files = _pFileSwitcherPanel->getSelectedFiles(id == IDM_FILESWITCHER_FILESCLOSEOTHERS);
-				for (size_t i = 0, len = files.size(); i < len; ++i)
+				for (SwitcherFileInfo& file : files)
 				{
-					fileClose((BufferID)files[i]._bufID, files[i]._iView);
+					fileClose((BufferID)file._bufID, file._iView);
 				}
 				if (id == IDM_FILESWITCHER_FILESCLOSEOTHERS)
 				{
@@ -1635,14 +1635,16 @@ void Notepad_plus::command(int id)
 					int answer = _nativeLangSpeaker.messageBox("LoseUndoAbilityWarning",
 						NULL,
 						TEXT("You should save the current modification.\rAll the saved modifications can not be undone.\r\rContinue?"),
-						TEXT("Lose Undo Ability Waning"),
+						TEXT("Lose Undo Ability Warning"),
 						MB_YESNO);
 					if (answer == IDYES)
 					{
 						// Do nothing
 					}
 					else
+					{
 						return;
+					}
 				}
 
 				buf->setEncoding(-1);
@@ -1741,7 +1743,9 @@ void Notepad_plus::command(int id)
 					_pEditView->execute(SCI_EMPTYUNDOBUFFER);
 				}
 				else
+				{
 					return;
+				}
 			}
 
 			if (_pEditView->execute(SCI_CANUNDO) == TRUE)
@@ -1750,7 +1754,7 @@ void Notepad_plus::command(int id)
 				int answer = _nativeLangSpeaker.messageBox("LoseUndoAbilityWarning",
 					NULL,
 					TEXT("You should save the current modification.\rAll the saved modifications can not be undone.\r\rContinue?"),
-					TEXT("Lose Undo Ability Waning"),
+					TEXT("Lose Undo Ability Warning"),
 					MB_YESNO);
 				
 				if (answer == IDYES)
@@ -1758,7 +1762,9 @@ void Notepad_plus::command(int id)
 					// Do nothing
 				}
 				else
+				{
 					return;
+				}
 			}
 
 			if (!buf->isDirty())
@@ -1936,82 +1942,6 @@ void Notepad_plus::command(int id)
 			}
 			break;
 		}
-		/*
-		case (IDM_FORMAT_WIN_1250  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_WIN_1251  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_WIN_1252  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_WIN_1253  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_WIN_1254  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_WIN_1255  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_WIN_1256  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_WIN_1257  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_WIN_1258  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_ISO_8859_1   + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_ISO_8859_2   + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_ISO_8859_3   + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_ISO_8859_4   + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_ISO_8859_5   + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_ISO_8859_6   + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_ISO_8859_7   + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_ISO_8859_8   + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_ISO_8859_9   + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_ISO_8859_10  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_ISO_8859_11  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_ISO_8859_13  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_ISO_8859_14  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_ISO_8859_15  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_ISO_8859_16  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_DOS_437  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_DOS_720  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_DOS_737  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_DOS_775  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_DOS_850  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_DOS_852  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_DOS_855  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_DOS_857  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_DOS_858  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_DOS_860  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_DOS_861  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_DOS_862  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_DOS_863  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_DOS_865  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_DOS_866  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_DOS_869  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_BIG5  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_GB2312  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_SHIFT_JIS  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_KOREAN_WIN  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_EUC_KR  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_TIS_620  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_MAC_CYRILLIC  + IDM_FORMAT_CONVERT): 
-		case (IDM_FORMAT_KOI8U_CYRILLIC  + IDM_FORMAT_CONVERT):
-		case (IDM_FORMAT_KOI8R_CYRILLIC  + IDM_FORMAT_CONVERT):
-		{
-			int index = id - IDM_FORMAT_CONVERT - IDM_FORMAT_ENCODE;
-
-			EncodingMapper *em = EncodingMapper::getInstance();
-			int newEncoding = em->getEncodingFromIndex(index);
-			if (newEncoding == -1)
-			{
-				return;
-			}
-
-			Buffer *buf = _pEditView->getCurrentBuffer();
-			UniMode um = buf->getUnicodeMode();
-			int oldEncoding = buf->getEncoding();
-
-			if (oldEncoding == newEncoding)
-				return;
-
-			if (oldEncoding != -1)
-			{
-				//do warning
-			}
-			buf->setEncoding(newEncoding);
-
-			break;
-		}
-*/
 
 		case IDM_SETTING_IMPORTPLUGIN :
 		{
@@ -2091,7 +2021,6 @@ void Notepad_plus::command(int id)
 		{
 			//if (contion)
 			{
-				generic_string warning, title;
 				_nativeLangSpeaker.messageBox("ContextMenuXmlEditWarning",
 					_pPublicInterface->getHSelf(),
 					TEXT("Editing contextMenu.xml allows you to modify your Notepad++ popup context menu.\rYou have to restart your Notepad++ to take effect after modifying contextMenu.xml."),
@@ -2129,7 +2058,8 @@ void Notepad_plus::command(int id)
 			if (_pEditView->getHSelf() == wnd)
 			{
 				view_to_focus = otherView();
-				if (!viewVisible(view_to_focus)) view_to_focus = _activeView;
+				if (!viewVisible(view_to_focus))
+					view_to_focus = _activeView;
 			}
 			else
 			{
@@ -2170,6 +2100,7 @@ void Notepad_plus::command(int id)
 					return;
 				}
 			}
+
 			if (doAboutDlg)
 			{
 				bool isFirstTime = !_aboutDlg.isCreated();
@@ -2479,7 +2410,8 @@ void Notepad_plus::command(int id)
 			if (id > IDM_FILEMENU_LASTONE && id < (IDM_FILEMENU_LASTONE + _lastRecentFileList.getMaxNbLRF() + 1))
 			{
 				BufferID lastOpened = doOpen(_lastRecentFileList.getItem(id).c_str());
-				if (lastOpened != BUFFER_INVALID) {
+				if (lastOpened != BUFFER_INVALID)
+				{
 					switchToFile(lastOpened);
 				}
 			}
@@ -2517,20 +2449,14 @@ void Notepad_plus::command(int id)
 			{
 				_pluginsManager.relayNppMessages(WM_COMMAND, id, 0);
 			}
-/*UNLOAD 
-			else if ((id >= ID_PLUGINS_REMOVING) && (id < ID_PLUGINS_REMOVING_END))
-			{
-				int i = id - ID_PLUGINS_REMOVING;
-				_pluginsManager.unloadPlugin(i, _pPublicInterface->getHSelf());
-			}
-*/
 			else if ((id >= IDM_WINDOW_MRU_FIRST) && (id <= IDM_WINDOW_MRU_LIMIT))
 			{
 				activateDoc(id-IDM_WINDOW_MRU_FIRST);
 			}
 	}
 	
-	if (_recordingMacro) 
+	if (_recordingMacro)
+	{
 		switch (id)
 		{
 			case IDM_FILE_NEW :
@@ -2665,4 +2591,5 @@ void Notepad_plus::command(int id)
 				_macro.push_back(recordedMacroStep(id));
 				break;
 		}
+	}
 }

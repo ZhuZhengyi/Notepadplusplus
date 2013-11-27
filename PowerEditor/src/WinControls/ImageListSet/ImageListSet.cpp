@@ -92,13 +92,13 @@ void ToolBarIcons::reInit(int size)
 	ImageList_SetIconSize(getHotLst(), size, size);
 	ImageList_SetIconSize(getDisableLst(), size, size);
 
-	for (size_t i = 0, len = _tbiis.size(); i < len; ++i)
+	for (ToolBarButtonUnit& id : _tbiis)
 	{
-		if (_tbiis[i]._defaultIcon != -1)
+		if (id._defaultIcon != -1)
 		{
-			_iconListVector[HLIST_DEFAULT].addIcon(_tbiis[i]._defaultIcon);
-			_iconListVector[HLIST_HOT].addIcon(_tbiis[i]._hotIcon);
-			_iconListVector[HLIST_DISABLE].addIcon(_tbiis[i]._grayIcon);
+			_iconListVector[HLIST_DEFAULT].addIcon(id._defaultIcon);
+			_iconListVector[HLIST_HOT].addIcon(id._hotIcon);
+			_iconListVector[HLIST_DISABLE].addIcon(id._grayIcon);
 		}
 	}
 }
