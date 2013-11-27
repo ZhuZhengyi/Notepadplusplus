@@ -267,33 +267,33 @@ FunctionParser * FunctionParsersManager::getParser(const AssociationInfo & assoI
 	else
 		return NULL;
 
-	for (size_t i = 0, len = _associationMap.size(); i < len; ++i)
+	for (AssociationInfo& ai : _associationMap)
 	{
 		switch (choice)
 		{
 			case checkLangID:
 			{
-				if (assoInfo._langID == _associationMap[i]._langID)
-					return _parsers[_associationMap[i]._id];
+				if (assoInfo._langID == ai._langID)
+					return _parsers[ai._id];
 			}
 			break;
 
 			case checkUserDefined:
 			{
-				if (assoInfo._userDefinedLangName == _associationMap[i]._userDefinedLangName)
-					return _parsers[_associationMap[i]._id];
+				if (assoInfo._userDefinedLangName == ai._userDefinedLangName)
+					return _parsers[ai._id];
 			}
 			break;
 
 			case checkExt:
 			{
-				if (assoInfo._ext == _associationMap[i]._ext)
-					return _parsers[_associationMap[i]._id];
+				if (assoInfo._ext == ai._ext)
+					return _parsers[ai._id];
 			}
 			break;
-
 		}
 	}
+
 	return NULL;
 }
 
@@ -568,9 +568,9 @@ void FunctionParser::getCommentZones(vector< pair<int, int> > & commentZone, siz
 
 bool FunctionParser::isInZones(int pos2Test, const std::vector< std::pair<int, int> > & zones)
 {
-	for (size_t i = 0, len = zones.size(); i < len; ++i)
+	for (const std::pair<int, int>& zone : zones)
 	{
-		if (pos2Test >= zones[i].first && pos2Test < zones[i].second)
+		if (pos2Test >= zone.first && pos2Test < zone.second)
 		{
 			return true;
 		}
@@ -613,9 +613,10 @@ void FunctionZoneParser::parse(std::vector<foundInfo> & foundInfos, size_t begin
 	vector< pair<int, int> > classZones, commentZones, nonCommentZones;
 	getCommentZones(commentZones, begin, end, ppEditView);
 	getInvertZones(nonCommentZones, commentZones, begin, end);
-	for (size_t i = 0, len = nonCommentZones.size(); i < len; ++i)
+
+	for (pair<int, int>& nonCommentZone : nonCommentZones)
 	{
-		classParse(foundInfos, classZones, commentZones, nonCommentZones[i].first, nonCommentZones[i].second, ppEditView, classStructName);
+		classParse(foundInfos, classZones, commentZones, nonCommentZone.first, nonCommentZone.second, ppEditView, classStructName);
 	}
 }
 
@@ -624,9 +625,10 @@ void FunctionUnitParser::parse(std::vector<foundInfo> & foundInfos, size_t begin
 	vector< pair<int, int> > commentZones, nonCommentZones;
 	getCommentZones(commentZones, begin, end, ppEditView);
 	getInvertZones(nonCommentZones, commentZones, begin, end);
-	for (size_t i = 0, len = nonCommentZones.size(); i < len; ++i)
+
+	for (pair<int, int>& nonCommentZone : nonCommentZones)
 	{
-		funcParse(foundInfos, nonCommentZones[i].first, nonCommentZones[i].second, ppEditView, classStructName);
+		funcParse(foundInfos, nonCommentZone.first, nonCommentZone.second, ppEditView, classStructName);
 	}
 }
 
@@ -643,16 +645,16 @@ struct SortZones
 
 void FunctionMixParser::parse(std::vector<foundInfo> & foundInfos, size_t begin, size_t end, ScintillaEditView **ppEditView, generic_string classStructName)
 {
-	vector< pair<int, int> > commentZones, scannedZones, nonCommentZones, nonScannedZones;
+	vector<pair<int, int>> commentZones, scannedZones, nonCommentZones, nonScannedZones;
 	getCommentZones(commentZones, begin, end, ppEditView);
 
 	classParse(foundInfos, scannedZones, commentZones, begin, end, ppEditView, classStructName);
 
 	// the second level
-	for (size_t i = 0, len = scannedZones.size(); i < len; ++i)
+	for (pair<int, int>& scannedZone : scannedZones)
 	{
-		vector< pair<int, int> > temp;
-		classParse(foundInfos, temp, commentZones, scannedZones[i].first, scannedZones[i].second, ppEditView, classStructName);
+		vector<pair<int, int>> temp;
+		classParse(foundInfos, temp, commentZones, scannedZone.first, scannedZone.second, ppEditView, classStructName);
 	}
 	// invert scannedZones
 	getInvertZones(nonScannedZones, scannedZones, begin, end);
@@ -660,9 +662,9 @@ void FunctionMixParser::parse(std::vector<foundInfo> & foundInfos, size_t begin,
 	// for each nonScannedZones, search functions
 	if (_funcUnitPaser)
 	{
-		for (size_t i = 0, len = nonScannedZones.size(); i < len; ++i)
+		for (pair<int, int>& nonScannedZone : nonScannedZones)
 		{
-			_funcUnitPaser->funcParse(foundInfos, nonScannedZones[i].first, nonScannedZones[i].second, ppEditView, classStructName);
+			_funcUnitPaser->funcParse(foundInfos, nonScannedZone.first, nonScannedZone.second, ppEditView, classStructName);
 		}
 	}
 }

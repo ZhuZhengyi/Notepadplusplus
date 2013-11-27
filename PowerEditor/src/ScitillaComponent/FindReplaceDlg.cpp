@@ -123,13 +123,13 @@ int Searching::convertExtendedToString(const TCHAR * query, TCHAR * result, int 
 
 bool Searching::readBase(const TCHAR * str, int * value, int base, int size)
 {
-	int i = 0, temp = 0;
+	int temp = 0;
 	*value = 0;
 	TCHAR max = '0' + (TCHAR)base - 1;
-	TCHAR current;
-	while(i < size)
+
+	for (int i = 0; i < size; i++)
 	{
-		current = str[i];
+		TCHAR current = str[i];
 		if (current >= 'A')
 		{
 			current &= 0xdf;
@@ -149,8 +149,8 @@ bool Searching::readBase(const TCHAR * str, int * value, int base, int size)
 		{
 			return false;
 		}
-		++i;
 	}
+
 	*value = temp;
 	return true;
 }
@@ -347,17 +347,20 @@ void FindReplaceDlg::fillComboHistory(int id, const vector<generic_string> & str
 	bool isUnicode = false;
 	HWND hCombo = ::GetDlgItem(_hSelf, id);
 
-	for (vector<generic_string>::const_reverse_iterator i = strings.rbegin() ; i != strings.rend(); ++i)
+	for (auto i = strings.rbegin() ; i != strings.rend(); ++i)
 	{
 		addText2Combo(i->c_str(), hCombo, isUnicode);
 	}
+
 	::SendMessage(hCombo, CB_SETCURSEL, 0, 0); // select first item
 }
 
 
 void FindReplaceDlg::saveFindHistory()
 {
-	if (! isCreated()) return;
+	if (! isCreated())
+		return;
+
 	FindHistory& findHistory = (NppParameters::getInstance())->getFindHistory();
 
 	saveComboHistory(IDD_FINDINFILES_DIR_COMBO, findHistory._nbMaxFindHistoryPath, findHistory._findHistoryPaths);
@@ -513,9 +516,12 @@ void Finder::gotoNextFoundResult(int direction)
 	int currentPos = _scintView.execute(SCI_GETCURRENTPOS);
 	int lno = _scintView.execute(SCI_LINEFROMPOSITION, currentPos);
 	int total_lines = _scintView.execute(SCI_GETLINECOUNT);
-	if (total_lines <= 1) return;
+	if (total_lines <= 1)
+		return;
 
-	if (lno == total_lines - 1) lno--; // last line doesn't belong to any search, use last search
+	// last line doesn't belong to any search, use last search
+	if (lno == total_lines - 1)
+		lno--;
 
 	int init_lno = lno;
 	int max_lno = _scintView.execute(SCI_GETLASTCHILD, lno, searchHeaderLevel);
@@ -531,7 +537,9 @@ void Finder::gotoNextFoundResult(int direction)
 		assert(min_lno >= 0);
 	}
 
-	if (min_lno < 0) min_lno = lno; // when lno is a search header line
+	// when lno is a search header line
+	if (min_lno < 0)
+		min_lno = lno;
 
 	assert(min_lno <= max_lno);
 
@@ -545,7 +553,9 @@ void Finder::gotoNextFoundResult(int direction)
 		lno += increment;
 		if      (lno > max_lno) lno = min_lno;
 		else if (lno < min_lno) lno = max_lno;
-		if (lno == init_lno) break;
+
+		if (lno == init_lno)
+			break;
 	}
 
 	if ((_scintView.execute(SCI_GETFOLDLEVEL, lno) & SC_FOLDLEVELHEADERFLAG) == 0)
@@ -1316,7 +1326,7 @@ bool FindReplaceDlg::processFindNext(const TCHAR *txt2find, const FindOption *op
 		return false;
 	}
 
-	start =	posFind;
+	start = posFind;
 	end = int((*_ppEditView)->execute(SCI_GETTARGETEND));
 
 	setStatusbarMessage(TEXT(""), FSNoMessage);
@@ -1837,10 +1847,14 @@ void FindReplaceDlg::findAllIn(InWhat op)
 			focusOnFinder();
 		}
 		else
+		{
 			getFocus(); // no hits
+		}
 	}
 	else // error - search folder doesn't exist
+	{
 		::SendMessage(_hSelf, WM_NEXTDLGCTL, (WPARAM)::GetDlgItem(_hSelf, IDD_FINDINFILES_DIR_COMBO), TRUE);
+	}
 }
 
 
@@ -2472,11 +2486,9 @@ void Finder::removeAll()
 
 void Finder::openAll()
 {
-	size_t sz = _pMainFoundInfos->size();
-
-	for (size_t i = 0; i < sz; ++i)
+	for (FoundInfo& fi : *_pMainFoundInfos)
 	{
-		::SendMessage(::GetParent(_hParent), WM_DOOPEN, 0, (LPARAM)_pMainFoundInfos->at(i)._fullPath.c_str());
+		::SendMessage(::GetParent(_hParent), WM_DOOPEN, 0, (LPARAM)fi._fullPath.c_str());
 	}
 }
 
@@ -2752,20 +2764,20 @@ BOOL CALLBACK FindIncrementDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 				return TRUE;
 
 				case IDC_INCFINDMATCHCASE:
-					{
-						FindOption fo;
-						fo._isWholeWord = false;
+				{
+					FindOption fo;
+					fo._isWholeWord = false;
 					fo._incrementalType = FirstIncremental;
-						fo._isMatchCase = (BST_CHECKED == ::SendDlgItemMessage(_hSelf, IDC_INCFINDMATCHCASE, BM_GETCHECK, 0, 0));
+					fo._isMatchCase = (BST_CHECKED == ::SendDlgItemMessage(_hSelf, IDC_INCFINDMATCHCASE, BM_GETCHECK, 0, 0));
 
-						generic_string str2Search = _pFRDlg->getTextFromCombo(::GetDlgItem(_hSelf, IDC_INCFINDTEXT), isUnicode);
+					generic_string str2Search = _pFRDlg->getTextFromCombo(::GetDlgItem(_hSelf, IDC_INCFINDTEXT), isUnicode);
 					bool isFound = _pFRDlg->processFindNext(str2Search.c_str(), &fo, &findStatus);
 					setFindStatus(findStatus);
-						if (!isFound)
-						{
-							CharacterRange range = (*(_pFRDlg->_ppEditView))->getSelection();
-							(*(_pFRDlg->_ppEditView))->execute(SCI_SETSEL, (WPARAM)-1, range.cpMin);
-						}
+					if (!isFound)
+					{
+						CharacterRange range = (*(_pFRDlg->_ppEditView))->getSelection();
+						(*(_pFRDlg->_ppEditView))->execute(SCI_SETSEL, (WPARAM)-1, range.cpMin);
+					}
 				}
 
 				case IDC_INCFINDHILITEALL :

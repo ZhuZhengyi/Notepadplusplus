@@ -54,7 +54,9 @@ void FunctionListPanel::addEntry(const TCHAR *nodeName, const TCHAR *displayText
 		}
 	}
 	else
+	{
 		itemParent = root;
+	}
 
 	_treeView.addItem(displayText, itemParent, INDEX_LEAF, posStr);
 }
@@ -160,16 +162,18 @@ generic_string FunctionListPanel::parseSubLevel(size_t begin, size_t end, std::v
 void FunctionListPanel::addInStateArray(TreeStateNode tree2Update, const TCHAR *searchText, bool isSorted)
 {
 	bool found = false;
-	for (size_t i = 0, len = _treeParams.size(); i < len; ++i)
+
+	for (TreeParams& treeParam : _treeParams)
 	{
-		if (_treeParams[i]._treeState._extraData == tree2Update._extraData)
+		if (treeParam._treeState._extraData == tree2Update._extraData)
 		{
-			_treeParams[i]._searchParameters._text2Find = searchText;
-			_treeParams[i]._searchParameters._doSort = isSorted;
-			_treeParams[i]._treeState = tree2Update;
+			treeParam._searchParameters._text2Find = searchText;
+			treeParam._searchParameters._doSort = isSorted;
+			treeParam._treeState = tree2Update;
 			found = true;
 		}
 	}
+
 	if (!found)
 	{
 		TreeParams params;
@@ -182,19 +186,25 @@ void FunctionListPanel::addInStateArray(TreeStateNode tree2Update, const TCHAR *
 
 TreeParams* FunctionListPanel::getFromStateArray(generic_string fullFilePath)
 {
-	for (size_t i = 0, len = _treeParams.size(); i < len; ++i)
+	for (TreeParams& treeParam : _treeParams)
 	{
-		if (_treeParams[i]._treeState._extraData == fullFilePath)
-			return &_treeParams[i];
+		if (treeParam._treeState._extraData == fullFilePath)
+		{
+			return &treeParam;
+		}
 	}
+
 	return NULL;
 }
 
 void FunctionListPanel::sortOrUnsort()
 {
 	bool doSort = shouldSort();
+
 	if (doSort)
+	{
 		_pTreeView->sort(_pTreeView->getRoot());
+	}
 	else
 	{
 		TCHAR text2search[MAX_PATH] ;
@@ -256,26 +266,27 @@ void FunctionListPanel::reload()
 		_treeView.addItem(fn, NULL, INDEX_ROOT, TEXT("-1"));
 	}
 
-	for (size_t i = 0, len = fi.size(); i < len; ++i)
+	for (foundInfo& ffi : fi)
 	{
 		// no 2 level
 		bool b = false;
 		if (b)
 		{
 			generic_string entryName = TEXT("");
-			if (fi[i]._pos2 != -1)
+			if (ffi._pos2 != -1)
 			{
-				entryName = fi[i]._data2;
+				entryName = ffi._data2;
 				entryName += TEXT("=>");
 			}
-			entryName += fi[i]._data;
-			addEntry(NULL, entryName.c_str(), fi[i]._pos);
+			entryName += ffi._data;
+			addEntry(NULL, entryName.c_str(), ffi._pos);
 		}
 		else
 		{
-			addEntry(fi[i]._data2.c_str(), fi[i]._data.c_str(), fi[i]._pos);
+			addEntry(ffi._data2.c_str(), ffi._data.c_str(), ffi._pos);
 		}
 	}
+
 	HTREEITEM root = _treeView.getRoot();
 	const TCHAR *fullFilePath = ((*_ppEditView)->getCurrentBuffer())->getFullPathName();
 	if (root)
@@ -696,5 +707,6 @@ BOOL CALLBACK FunctionListPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 		default :
 			return DockingDlgInterface::run_dlgProc(message, wParam, lParam);
 	}
+
 	return DockingDlgInterface::run_dlgProc(message, wParam, lParam);
 }

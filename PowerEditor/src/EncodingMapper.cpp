@@ -146,13 +146,13 @@ int EncodingMapper::getEncodingFromString(const char *encodingAlias) const
 	if (isInListA(encodingAlias, "utf-8 utf8"))
 		return SC_CP_UTF8;
 
-	size_t nbItem = sizeof(encodings)/sizeof(EncodingUnit);
 	int enc = -1;
-	for (size_t i = 0 ; i < nbItem ; ++i)
+
+	for (EncodingUnit& encoding : encodings)
 	{
-		if (isInListA(encodingAlias, encodings[i]._aliasList))
+		if (isInListA(encodingAlias, encoding._aliasList))
 		{
-			enc = encodings[i]._codePage;
+			enc = encoding._codePage;
 			break;
 		}
 	}
